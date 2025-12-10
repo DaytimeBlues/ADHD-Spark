@@ -20,7 +20,7 @@ Built on research from:
 
 Open `spark.html` in any browser. No build step required.
 
-Or visit: [Live Demo](https://spark-adhd.web.app)
+Or visit: **[Live Demo](https://gen-lang-client-0511073879.web.app)**
 
 ## Install as App
 
