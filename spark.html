@@ -206,11 +206,28 @@
       background: #6200EA;
       border-radius: 2px;
     }
+
+    .update-toast {
+      backdrop-filter: blur(8px);
+    }
   </style>
 </head>
 
 <body class="dark-theme">
   <div id="root"></div>
+  <div id="update-toast" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-md">
+    <div
+      class="update-toast flex items-center justify-between gap-3 rounded-2xl bg-caddi-dark/90 px-4 py-3 shadow-2xl border border-white/10 text-white">
+      <div>
+        <p class="font-bold text-sm">Update available</p>
+        <p class="text-xs opacity-80">Tap to refresh and load the latest improvements.</p>
+      </div>
+      <button id="update-reload"
+        class="btn-juice px-4 py-2 rounded-xl bg-caddi-orange text-white font-semibold text-sm">
+        Reload
+      </button>
+    </div>
+  </div>
 
   <script type="text/babel">
     const { useState, useEffect, useRef, useCallback } = React;
@@ -310,6 +327,7 @@
       pomodoroTarget: 'spark_pomodoro_target',
       brainDraft: 'spark_brain_draft',
       brainQueue: 'spark_brain_queue',
+      offlineQueue: 'spark_offline_queue',
     };
 
     const saveState = (key, value) => {
@@ -472,6 +490,193 @@
     const haptic = (pattern = [50]) => {
       try { navigator.vibrate?.(pattern); } catch (e) { }
     };
+
+    // ============================================
+    // TOAST + BANNER MESSAGING
+    // ============================================
+    const toastBus = {
+      listeners: new Set(),
+      push(toast) { this.listeners.forEach(fn => fn(toast)); },
+      subscribe(fn) { this.listeners.add(fn); return () => this.listeners.delete(fn); }
+    };
+
+    const pushToast = (message, tone = 'info') => {
+      const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+      toastBus.push({ id, message, tone });
+    };
+
+    const ToastHost = () => {
+      const [toasts, setToasts] = useState([]);
+
+      useEffect(() => toastBus.subscribe(toast => setToasts(prev => [...prev, toast])), []);
+
+      useEffect(() => {
+        if (toasts.length === 0) return;
+        const timers = toasts.map(t => setTimeout(() =>
+          setToasts(prev => prev.filter(p => p.id !== t.id)), 4000)
+        );
+        return () => timers.forEach(clearTimeout);
+      }, [toasts]);
+
+      return (
+        <div className="fixed bottom-4 inset-x-0 flex justify-center pointer-events-none z-50">
+          <div className="space-y-2 w-full max-w-md px-4">
+            {toasts.map(toast => (
+              <div
+                key={toast.id}
+                className={`p-3 rounded-xl shadow-lg text-sm font-semibold pointer-events-auto transition transform bg-caddi-dark text-white border-2 ${toast.tone === 'error' ? 'border-red-400' : 'border-caddi-purple'}`}
+              >
+                {toast.message}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    const Banner = ({ message, onClose }) => {
+      if (!message) return null;
+      return (
+        <div className="fixed top-0 inset-x-0 bg-caddi-blue text-white text-sm font-semibold py-3 px-4 flex items-center justify-between z-40 shadow-lg">
+          <span>{message}</span>
+          <button onClick={onClose} className="text-white opacity-80 hover:opacity-100">✕</button>
+        </div>
+      );
+    };
+
+    // ============================================
+    // NOTIFICATION + SYNC MANAGERS
+    // ============================================
+    const ACTION_EVENT = 'spark-notification-action';
+    const emitNotificationAction = (action) => {
+      window.dispatchEvent(new CustomEvent(ACTION_EVENT, { detail: action }));
+    };
+
+    const subscribeNotificationActions = (handler) => {
+      const listener = (event) => handler(event.detail);
+      window.addEventListener(ACTION_EVENT, listener);
+      return () => window.removeEventListener(ACTION_EVENT, listener);
+    };
+
+    class NotificationManager {
+      constructor() {
+        this.registrationPromise = null;
+        this.onDenied = null;
+        this.permission = typeof Notification !== 'undefined' ? Notification.permission : 'denied';
+      }
+
+      setOnDenied(callback) { this.onDenied = callback; }
+
+      async init() {
+        if ('serviceWorker' in navigator) {
+          this.registrationPromise = navigator.serviceWorker.register('./sw.js');
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data?.type === 'notification-action') emitNotificationAction(event.data.action);
+            if (event.data?.type === 'perform-sync') offlineSync.flushQueue();
+          });
+        }
+      }
+
+      async ensurePermission() {
+        if (typeof Notification === 'undefined') {
+          this.onDenied?.('Notifications not supported in this browser.');
+          pushToast('Notifications not supported here. We will keep you updated in-app.', 'error');
+          return 'denied';
+        }
+
+        if (this.permission === 'granted') return 'granted';
+
+        const permission = await Notification.requestPermission();
+        this.permission = permission;
+        if (permission !== 'granted') {
+          this.onDenied?.('Notifications are blocked. In-app alerts enabled.');
+          pushToast('Notifications blocked. We will use banners and toasts instead.', 'error');
+        }
+        return permission;
+      }
+
+      async showNotification(title, options) {
+        const permission = await this.ensurePermission();
+        if (permission !== 'granted') return;
+
+        try {
+          const registration = await this.registrationPromise;
+          if (registration?.showNotification) {
+            await registration.showNotification(title, options);
+            return;
+          }
+        } catch (e) { }
+
+        try {
+          const notification = new Notification(title, options);
+          notification.onclick = () => emitNotificationAction('default');
+        } catch (e) { }
+      }
+
+      async sendIgniteComplete(duration) {
+        const supportsActions = typeof Notification !== 'undefined' && 'actions' in Notification.prototype;
+        await this.showNotification('Momentum achieved', {
+          body: `Your ${duration} min focus block wrapped up.`,
+          actions: supportsActions ? [
+            { action: 'start-break', title: 'Start break' },
+            { action: 'add-5', title: 'Add 5 min' },
+          ] : [],
+          data: { type: 'ignite-complete' },
+        });
+      }
+    }
+
+    const notificationManager = new NotificationManager();
+
+    class OfflineSyncManager {
+      constructor() {
+        this.queue = loadState(STORAGE_KEYS.offlineQueue, []);
+        this.retryTimer = null;
+        window.addEventListener('online', () => this.flushQueue());
+      }
+
+      persist() { saveState(STORAGE_KEYS.offlineQueue, this.queue); }
+
+      recordEdit(kind, payload) {
+        this.queue.push({ kind, payload, timestamp: Date.now() });
+        this.persist();
+        if (navigator.onLine) {
+          this.flushQueue();
+        } else {
+          pushToast('Saved offline. Will sync when back online.', 'info');
+          this.scheduleBackgroundSync();
+        }
+      }
+
+      async scheduleBackgroundSync() {
+        try {
+          const registration = await notificationManager.registrationPromise;
+          if (registration?.sync) {
+            await registration.sync.register('spark-offline-sync');
+            return;
+          }
+        } catch (e) { }
+        this.retryTimer = setTimeout(() => this.flushQueue(), 30000);
+      }
+
+      async flushQueue() {
+        if (this.queue.length === 0) return;
+        if (!navigator.onLine) return;
+
+        const pending = [...this.queue];
+        this.queue = [];
+        this.persist();
+
+        pending.forEach(item => {
+          // Simulate remote sync; real implementation would POST to API.
+          setTimeout(() => {
+            pushToast(`${item.kind === 'calendar' ? 'Calendar' : 'Tasks'} refreshed.`, 'info');
+          }, 500);
+        });
+      }
+    }
+
+    const offlineSync = new OfflineSyncManager();
 
     // ============================================
     // CONFETTI PARTICLES
@@ -1168,6 +1373,31 @@
       }, [isRunning]);
 
       useEffect(() => {
+        if (!isComplete) return;
+        notificationManager.sendIgniteComplete(selectedDuration);
+        offlineSync.recordEdit('calendar', { type: 'ignite-session', duration: selectedDuration });
+      }, [isComplete, selectedDuration]);
+
+      useEffect(() => subscribeNotificationActions((action) => {
+        if (action === 'start-break') {
+          exitToHome();
+          setMode('anchor');
+        }
+        if (action === 'add-5') {
+          const newDuration = selectedDuration + 5;
+          setSelectedDuration(newDuration);
+          setRemaining(newDuration * 60);
+          setIsComplete(false);
+          setShowConfetti(false);
+          setIsRunning(true);
+          saveState(STORAGE_KEYS.igniteDuration, newDuration);
+          saveState(STORAGE_KEYS.igniteRemaining, newDuration * 60);
+          saveState(STORAGE_KEYS.igniteRunning, true);
+          saveState(STORAGE_KEYS.igniteStartTime, Date.now());
+        }
+      }), [selectedDuration]);
+
+      useEffect(() => {
         if (!isRunning || isComplete) return;
 
         const interval = setInterval(() => {
@@ -1203,7 +1433,12 @@
       };
 
       const startTimer = () => {
+        notificationManager.ensurePermission();
+        setIsComplete(false);
+        setShowConfetti(false);
         setIsRunning(true);
+        saveState(STORAGE_KEYS.igniteRemaining, remaining);
+        saveState(STORAGE_KEYS.igniteRunning, true);
         saveState(STORAGE_KEYS.igniteStartTime, Date.now());
         haptic([100]);
       };
@@ -1710,6 +1945,13 @@
     const App = () => {
       const [mode, setMode] = useState(() => loadState(STORAGE_KEYS.currentMode, 'home'));
       const [isDark, setIsDark] = useState(() => loadState(STORAGE_KEYS.theme, true));
+      const [banner, setBanner] = useState(null);
+
+      useEffect(() => {
+        notificationManager.setOnDenied((message) => setBanner(message));
+        notificationManager.init();
+        offlineSync.flushQueue();
+      }, []);
 
       useEffect(() => {
         saveState(STORAGE_KEYS.currentMode, mode);
@@ -1744,7 +1986,9 @@
 
       return (
         <div className="font-sans antialiased">
+          <Banner message={banner} onClose={() => setBanner(null)} />
           {renderMode()}
+          <ToastHost />
         </div>
       );
     };
@@ -1754,6 +1998,58 @@
     // ============================================
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
+  </script>
+
+  <script>
+    (function registerServiceWorker() {
+      if (!('serviceWorker' in navigator)) return;
+
+      const toast = document.getElementById('update-toast');
+      const reloadButton = document.getElementById('update-reload');
+      let refreshing = false;
+
+      const showToast = (waitingWorker) => {
+        if (!toast || !reloadButton) return;
+        toast.classList.remove('hidden');
+        reloadButton.onclick = () => {
+          waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+        };
+      };
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          const listenForWaiting = (worker) => {
+            if (worker && worker.state === 'installed') {
+              showToast(worker);
+            }
+          };
+
+          if (registration.waiting) {
+            listenForWaiting(registration.waiting);
+          }
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                listenForWaiting(newWorker);
+              }
+            });
+          });
+        })
+        .catch(() => {
+          // Ignore registration errors to avoid impacting the app experience
+        });
+    })();
   </script>
 </body>
 
