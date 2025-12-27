@@ -784,8 +784,11 @@
           throw new Error('Not signed in');
         }
 
+        // Get or create today's task list
+        const tasklistId = await this.getOrCreateTodayList();
+
         const response = await gapi.client.tasks.tasks.insert({
-          tasklist: '@default',
+          tasklist: tasklistId,
           resource: {
             title,
             due: due || undefined,
@@ -793,6 +796,35 @@
           },
         });
         return response.result;
+      }
+
+      getTodayListName() {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = now.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
+      async getOrCreateTodayList() {
+        const listName = this.getTodayListName();
+
+        // Check if list already exists
+        const listsResponse = await gapi.client.tasks.tasklists.list();
+        const lists = listsResponse.result.items || [];
+        const existingList = lists.find(list => list.title === listName);
+
+        if (existingList) {
+          return existingList.id;
+        }
+
+        // Create new list for today
+        const createResponse = await gapi.client.tasks.tasklists.insert({
+          resource: { title: listName },
+        });
+
+        pushToast(`Created task list: ${listName}`, 'info');
+        return createResponse.result.id;
       }
 
       async getTodayEvents() {
