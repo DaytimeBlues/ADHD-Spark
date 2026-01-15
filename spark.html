@@ -1086,6 +1086,47 @@
         return target && phase !== 'finished';
       };
 
+      const downloadData = () => {
+        try {
+          // Collect all localStorage data
+          const exportData = {
+            exportDate: new Date().toISOString(),
+            version: '1.0',
+            data: {}
+          };
+
+          // Export all STORAGE_KEYS
+          Object.entries(STORAGE_KEYS).forEach(([key, storageKey]) => {
+            const value = localStorage.getItem(storageKey);
+            if (value !== null) {
+              try {
+                exportData.data[key] = JSON.parse(value);
+              } catch (e) {
+                exportData.data[key] = value;
+              }
+            }
+          });
+
+          // Create downloadable file
+          const dataStr = JSON.stringify(exportData, null, 2);
+          const dataBlob = new Blob([dataStr], { type: 'application/json' });
+          const url = URL.createObjectURL(dataBlob);
+          
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `spark-data-${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+
+          pushToast('Data exported successfully!', 'info');
+          haptic([50]);
+        } catch (error) {
+          pushToast('Failed to export data', 'error');
+        }
+      };
+
       return (
         <div className={`min-h-screen flex flex-col justify-center p-6 fade-in ${isDark ? 'bg-caddi-charcoal' : 'bg-caddi-cream'}`}>
           <AmbientParticles />
@@ -1178,6 +1219,17 @@
             </div>
 
             <QuoteDisplay quote={getRandomQuote('ignite')} isDark={isDark} />
+
+            {/* Data Export Button */}
+            <div className="mt-6 text-center">
+              <button
+                onClick={downloadData}
+                className={`text-xs font-medium opacity-50 hover:opacity-100 transition-opacity ${isDark ? 'text-caddi-light' : 'text-caddi-charcoal'}`}
+                title="Export all your data to a JSON file"
+              >
+                📥 Download JSON
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -1796,6 +1848,16 @@
       const [isComplete, setIsComplete] = useState(false);
       const [showConfetti, setShowConfetti] = useState(false);
       const [quote] = useState(() => getRandomQuote('ignite'));
+      const wakeLockRef = useRef(null); // Holds WakeLockSentinel or null
+
+      // Helper function to release wake lock
+      const releaseWakeLock = useCallback(() => {
+        if (wakeLockRef.current) {
+          wakeLockRef.current.release()
+            .then(() => { wakeLockRef.current = null; })
+            .catch(() => { /* Release failed - already released or unsupported */ });
+        }
+      }, []);
 
       useEffect(() => {
         if (isRunning && !isComplete) {
@@ -1804,9 +1866,23 @@
           if (!loadState(STORAGE_KEYS.igniteStartTime, null)) {
             saveState(STORAGE_KEYS.igniteStartTime, Date.now() - ((TOTAL_TIME - remaining) * 1000));
           }
+          // Request wake lock to prevent screen from sleeping during timer
+          if ('wakeLock' in navigator) {
+            navigator.wakeLock.request('screen')
+              .then(wakeLock => {
+                wakeLockRef.current = wakeLock;
+              })
+              .catch(() => {
+                // Wake lock not available or denied - continue without it
+              });
+          }
         }
-        return () => { if (!isRunning) brownNoise.stop(); };
-      }, [isRunning]);
+        return () => {
+          if (!isRunning) brownNoise.stop();
+          // Release wake lock when timer is not running
+          releaseWakeLock();
+        };
+      }, [isRunning, releaseWakeLock]);
 
       useEffect(() => {
         if (!isComplete) return;
@@ -1849,6 +1925,8 @@
               soundFX.chime();
               updateStreak();
               clearModeState();
+              // Release wake lock when timer completes
+              releaseWakeLock();
               return 0;
             }
             return next;
@@ -1882,6 +1960,8 @@
       const exitToHome = () => {
         brownNoise.stop();
         clearModeState();
+        // Release wake lock when exiting
+        releaseWakeLock();
         setMode('home');
       };
 

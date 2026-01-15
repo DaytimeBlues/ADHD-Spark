@@ -42,12 +42,14 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // StaleWhileRevalidate for app shell assets
-    if (
-        request.destination === 'document' ||
-        request.destination === 'script' ||
-        request.destination === 'style'
-    ) {
+    // NetworkFirst for HTML documents to prevent stale app versions
+    if (request.destination === 'document') {
+        event.respondWith(networkFirst(request, RUNTIME_CACHE));
+        return;
+    }
+
+    // StaleWhileRevalidate for scripts and styles
+    if (request.destination === 'script' || request.destination === 'style') {
         event.respondWith(staleWhileRevalidate(request, RUNTIME_CACHE));
         return;
     }
