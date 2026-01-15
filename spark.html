@@ -1848,7 +1848,16 @@
       const [isComplete, setIsComplete] = useState(false);
       const [showConfetti, setShowConfetti] = useState(false);
       const [quote] = useState(() => getRandomQuote('ignite'));
-      const wakeLockRef = useRef(null);
+      const wakeLockRef = useRef(null); // Holds WakeLockSentinel or null
+
+      // Helper function to release wake lock
+      const releaseWakeLock = useCallback(() => {
+        if (wakeLockRef.current) {
+          wakeLockRef.current.release()
+            .then(() => { wakeLockRef.current = null; })
+            .catch(() => { /* Release failed - already released or unsupported */ });
+        }
+      }, []);
 
       useEffect(() => {
         if (isRunning && !isComplete) {
@@ -1864,20 +1873,16 @@
                 wakeLockRef.current = wakeLock;
               })
               .catch(() => {
-                // Wake lock not available or denied - silently continue
+                // Wake lock not available or denied - continue without it
               });
           }
         }
         return () => {
           if (!isRunning) brownNoise.stop();
           // Release wake lock when timer is not running
-          if (wakeLockRef.current) {
-            wakeLockRef.current.release()
-              .then(() => { wakeLockRef.current = null; })
-              .catch(() => { });
-          }
+          releaseWakeLock();
         };
-      }, [isRunning]);
+      }, [isRunning, releaseWakeLock]);
 
       useEffect(() => {
         if (!isComplete) return;
@@ -1921,11 +1926,7 @@
               updateStreak();
               clearModeState();
               // Release wake lock when timer completes
-              if (wakeLockRef.current) {
-                wakeLockRef.current.release()
-                  .then(() => { wakeLockRef.current = null; })
-                  .catch(() => { });
-              }
+              releaseWakeLock();
               return 0;
             }
             return next;
@@ -1960,11 +1961,7 @@
         brownNoise.stop();
         clearModeState();
         // Release wake lock when exiting
-        if (wakeLockRef.current) {
-          wakeLockRef.current.release()
-            .then(() => { wakeLockRef.current = null; })
-            .catch(() => { });
-        }
+        releaseWakeLock();
         setMode('home');
       };
 
