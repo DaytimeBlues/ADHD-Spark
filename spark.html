@@ -7,16 +7,34 @@
   <title>Spark — Behavioral Activation</title>
   <meta name="description" content="Break inertia. Start moving. A tool for the inattentive mind.">
   <meta name="theme-color" content="#1a1a2e">
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://apis.google.com https://accounts.google.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https://lh3.googleusercontent.com;
+    connect-src 'self' https://accounts.google.com https://content.googleapis.com https://tasks.googleapis.com https://www.googleapis.com;
+    frame-src https://accounts.google.com;
+    base-uri 'self';
+  ">
 
   <!-- PWA Manifest -->
   <link rel="manifest"
     href="data:application/json,%7B%22name%22%3A%22Spark%22%2C%22short_name%22%3A%22Spark%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231a1a2e%22%2C%22theme_color%22%3A%22%236200EA%22%7D">
 
   <!-- CDN Dependencies -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"
+    integrity="sha384-tMH8h3BGESGckSAVGZ82T9n90ztNXxvdwvdM6UoR56cYcf+0iGXBliJ29D+wZ/x8"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"
+    integrity="sha384-bm7MnzvK++ykSwVJ2tynSE5TRdN+xL418osEVF2DE/L/gfWHj91J2Sphe582B1Bh"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.28.6/babel.min.js"
+    integrity="sha384-JPppEYE7ZC9vFS/7cNjjowtWnUZ23GWT7OnRptB9bRQlXx1ufYwKfNbS2DrBYZ4a"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.5"
+    integrity="sha384-r6SdLxFNrT+/0GxN95fN1TNyyrDk6jn1RDdlObV9p18XpAqc6VdBqhS+f6v6v6v"
+    crossorigin="anonymous"></script>
 
   <!-- Google API -->
   <script src="https://apis.google.com/js/api.js" async defer></script>
