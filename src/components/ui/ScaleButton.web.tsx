@@ -1,12 +1,12 @@
 /**
  * ScaleButton.web.tsx
  * Web-specific implementation: NO Reanimated import.
- * Uses simple TouchableOpacity with opacity feedback instead of scale animation.
+ * Uses simple Pressable with opacity feedback instead of scale animation.
  * This file is automatically resolved by webpack when Platform.OS === 'web'
  * due to resolve.extensions order: ['.web.tsx', '.tsx']
  */
 import React from "react";
-import { TouchableOpacity, StyleProp, ViewStyle, View } from "react-native";
+import { Pressable, StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 
 interface ScaleButtonProps {
     onPress: () => void;
@@ -23,14 +23,23 @@ const ScaleButton = ({
     testID,
 }: ScaleButtonProps) => {
     return (
-        <TouchableOpacity
-            activeOpacity={0.7}
+        <Pressable
             onPress={onPress}
             testID={testID}
+            style={({ pressed }) => [
+                style,
+                pressed && styles.pressed,
+            ]}
         >
-            <View style={style}>{children}</View>
-        </TouchableOpacity>
+            {children}
+        </Pressable>
     );
 };
+
+const styles = StyleSheet.create({
+    pressed: {
+        opacity: 0.7,
+    },
+});
 
 export default ScaleButton;

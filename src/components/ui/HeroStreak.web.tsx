@@ -16,22 +16,16 @@ interface HeroStreakProps {
     streak: number;
 }
 
-// Static pulse circle for web (no animation)
+// Animated pulse circle for web using CSS keyframes
 const PulseCircle = ({ index }: { index: number }) => {
-    // Stagger opacity and scale slightly for visual depth
-    const scales = [1.0, 1.2, 1.4];
-    const opacities = [0.3, 0.2, 0.1];
-
+    // Use nativeID to apply CSS animation class (react-native-web converts to id)
+    // We need to use a wrapper div with className for CSS animation
     return (
         <View
             testID="pulse-circle"
-            style={[
-                styles.pulse,
-                {
-                    opacity: opacities[index] || 0.2,
-                    transform: [{ scale: scales[index] || 1.2 }],
-                },
-            ]}
+            // @ts-ignore - nativeID maps to id on web
+            nativeID={`pulse-circle-${index + 1}`}
+            style={styles.pulse}
         />
     );
 };

@@ -37,6 +37,6 @@ export const typography = StyleSheet.create({
         fontSize: 72,
         lineHeight: 76,
         color: colors.text,
-        fontVariant: ["tabular-nums"],
+        fontVariant: "tabular-nums" as any,
     },
 });
