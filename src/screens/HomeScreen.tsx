@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import { colors, spacing, radius } from "../theme";
 
 const HomeScreen = ({ navigation }: any) => {
   const [streak, setStreak] = useState(0);
@@ -26,126 +25,157 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const modes = [
-    { id: "ignite", name: "Ignite", icon: "🔥", desc: "5-min focus timer" },
+    {
+      id: "ignite",
+      name: "Ignite",
+      icon: "fire",
+      desc: "5-min focus timer",
+      color: "#FF6B6B",
+    },
     {
       id: "fogcutter",
       name: "Fog Cutter",
-      icon: "💨",
+      icon: "weather-windy",
       desc: "Break tasks down",
+      color: "#4ECDC4",
     },
-    { id: "pomodoro", name: "Pomodoro", icon: "🍅", desc: "Classic timer" },
-    { id: "anchor", name: "Anchor", icon: "⚓", desc: "Breathing exercises" },
-    { id: "checkin", name: "Check In", icon: "📊", desc: "Mood & energy" },
-    { id: "crisis", name: "Crisis Mode", icon: "🆘", desc: "Safety resources" },
+    {
+      id: "pomodoro",
+      name: "Pomodoro",
+      icon: "timer-cog",
+      desc: "Classic timer",
+      color: "#FFBD69",
+    },
+    {
+      id: "anchor",
+      name: "Anchor",
+      icon: "anchor",
+      desc: "Breathing exercises",
+      color: "#45B7D1",
+    },
+    {
+      id: "checkin",
+      name: "Check In",
+      icon: "chart-bar",
+      desc: "Mood & energy",
+      color: "#A06EE1",
+    },
+    {
+      id: "crisis",
+      name: "Crisis Mode",
+      icon: "alert-octagon",
+      desc: "Safety resources",
+      color: colors.danger,
+    },
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Spark</Text>
-          <View style={styles.streakContainer}>
-            <Text style={styles.streakEmoji}>🔥</Text>
-            <Text style={styles.streakText}>
-              {streak} day{streak !== 1 ? "s" : ""} streak
-            </Text>
-          </View>
+    <Screen scroll>
+      <View style={styles.header}>
+        <ScreenHeader title="Spark" />
+        <View style={styles.streakContainer}>
+          <Icon
+            name="fire"
+            size={18}
+            color="#FF6B6B"
+            style={styles.streakIcon}
+          />
+          <AppText variant="sectionTitle" style={styles.streakText}>
+            {streak} day{streak !== 1 ? "s" : ""} streak
+          </AppText>
         </View>
+      </View>
 
-        <View style={styles.modesGrid}>
-          {modes.map((mode) => (
-            <TouchableOpacity
-              key={mode.id}
-              style={styles.modeCard}
-              onPress={() => {
-                if (mode.id === "checkin") {
-                  navigation.navigate("CheckIn");
-                } else if (mode.id === "crisis") {
-                  navigation.navigate("Crisis");
-                } else if (mode.id === "fogcutter") {
-                  navigation.navigate("FogCutter");
-                } else if (mode.id === "pomodoro") {
-                  navigation.navigate("Pomodoro");
-                } else if (mode.id === "anchor") {
-                  navigation.navigate("Anchor");
-                } else {
-                  navigation.navigate("Focus");
-                }
-              }}
-            >
-              <Text style={styles.modeIcon}>{mode.icon}</Text>
-              <Text style={styles.modeName}>{mode.name}</Text>
-              <Text style={styles.modeDesc}>{mode.desc}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <View style={styles.modesGrid}>
+        {modes.map((mode) => (
+          <TouchableOpacity
+            key={mode.id}
+            testID={`mode-${mode.id}`}
+            activeOpacity={0.7}
+            style={styles.cardWrapper}
+            onPress={() => {
+              if (mode.id === "checkin") {
+                navigation.navigate("CheckIn");
+              } else if (mode.id === "crisis") {
+                navigation.navigate("Crisis");
+              } else if (mode.id === "fogcutter") {
+                navigation.navigate("FogCutter");
+              } else if (mode.id === "pomodoro") {
+                navigation.navigate("Pomodoro");
+              } else if (mode.id === "anchor") {
+                navigation.navigate("Anchor");
+              } else {
+                navigation.navigate("Focus");
+              }
+            }}
+          >
+            <Card style={styles.modeCard}>
+              <Icon
+                name={mode.icon}
+                size={36}
+                color={mode.color}
+                style={styles.modeIcon}
+              />
+              <AppText variant="sectionTitle" style={styles.modeName}>
+                {mode.name}
+              </AppText>
+              <AppText variant="smallMuted" style={styles.modeDesc}>
+                {mode.desc}
+              </AppText>
+            </Card>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
-  },
-  content: {
-    padding: 16,
-  },
   header: {
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 8,
+    marginBottom: spacing[16],
   },
   streakContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#2D2D44",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing[16],
+    paddingVertical: spacing[8],
+    borderRadius: radius.pill,
     alignSelf: "flex-start",
+    marginTop: -spacing[8], // Pull up slightly to group with header
+    marginBottom: spacing[16],
   },
-  streakEmoji: {
-    fontSize: 18,
-    marginRight: 8,
+  streakIcon: {
+    marginRight: spacing[8],
   },
   streakText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 14,
   },
   modesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    marginHorizontal: -spacing[8], // Offset card margins
+  },
+  cardWrapper: {
+    width: "50%",
+    paddingHorizontal: spacing[8],
+    marginBottom: spacing[16],
   },
   modeCard: {
-    width: "48%",
-    backgroundColor: "#2D2D44",
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: spacing[24],
+    minHeight: 150,
   },
   modeIcon: {
-    fontSize: 32,
-    marginBottom: 8,
+    marginBottom: spacing[12],
   },
   modeName: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 4,
+    marginBottom: spacing[4],
   },
   modeDesc: {
-    color: "#888",
-    fontSize: 12,
     textAlign: "center",
+    paddingHorizontal: spacing[4],
   },
 });
 

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import Button from "../components/ui/Button";
+import { colors, spacing, radius } from "../theme";
 
 const CalendarScreen = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -52,27 +52,35 @@ const CalendarScreen = () => {
     .map((_, i) => i + 1);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Calendar</Text>
+    <Screen>
+      <ScreenHeader title="Calendar" />
 
+      <Card style={styles.calendarCard}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={prevMonth} style={styles.navButton}>
-            <Text style={styles.navButtonText}>‹</Text>
-          </TouchableOpacity>
-          <Text style={styles.monthText}>
+          <Button
+            label="‹"
+            variant="ghost"
+            size="md"
+            onPress={prevMonth}
+            style={styles.navButton}
+          />
+          <AppText variant="sectionTitle" style={styles.monthText}>
             {months[currentDate.getMonth()]} {currentDate.getFullYear()}
-          </Text>
-          <TouchableOpacity onPress={nextMonth} style={styles.navButton}>
-            <Text style={styles.navButtonText}>›</Text>
-          </TouchableOpacity>
+          </AppText>
+          <Button
+            label="›"
+            variant="ghost"
+            size="md"
+            onPress={nextMonth}
+            style={styles.navButton}
+          />
         </View>
 
         <View style={styles.weekdays}>
           {days.map((day) => (
-            <Text key={day} style={styles.weekdayText}>
+            <AppText key={day} variant="smallMuted" style={styles.weekdayText}>
               {day}
-            </Text>
+            </AppText>
           ))}
         </View>
 
@@ -90,69 +98,57 @@ const CalendarScreen = () => {
             return (
               <TouchableOpacity
                 key={day}
+                activeOpacity={0.7}
                 style={[styles.dayCell, isToday && styles.todayCell]}
               >
-                <Text style={[styles.dayText, isToday && styles.todayText]}>
+                <AppText
+                  style={[styles.dayText, isToday && styles.todayText]}
+                >
                   {day}
-                </Text>
+                </AppText>
               </TouchableOpacity>
             );
           })}
         </View>
+      </Card>
 
-        <View style={styles.legend}>
-          <View style={styles.legendItem}>
-            <View style={[styles.legendDot, styles.todayDot]} />
-            <Text style={styles.legendText}>Today</Text>
-          </View>
+      <View style={styles.legend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendDot, styles.todayDot]} />
+          <AppText variant="smallMuted">Today</AppText>
         </View>
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 24,
+  calendarCard: {
+    padding: spacing[12],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 24,
+    marginBottom: spacing[24],
   },
   navButton: {
-    padding: 8,
-  },
-  navButtonText: {
-    color: "#FFFFFF",
-    fontSize: 32,
+    width: 44,
+    height: 44,
   },
   monthText: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 18,
   },
   weekdays: {
     flexDirection: "row",
-    marginBottom: 8,
+    marginBottom: spacing[12],
+    paddingHorizontal: spacing[4],
   },
   weekdayText: {
     flex: 1,
     textAlign: "center",
-    color: "#888",
-    fontSize: 12,
     fontWeight: "600",
   },
   daysGrid: {
@@ -164,39 +160,34 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: radius.md,
   },
   dayText: {
-    color: "#FFFFFF",
     fontSize: 14,
   },
   todayCell: {
-    backgroundColor: "#6200EA",
-    borderRadius: 20,
+    backgroundColor: colors.accent,
   },
   todayText: {
     fontWeight: "bold",
   },
   legend: {
     flexDirection: "row",
-    marginTop: 24,
+    marginTop: spacing[24],
+    paddingHorizontal: spacing[8],
   },
   legendItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 24,
   },
   legendDot: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: 8,
+    marginRight: spacing[8],
   },
   todayDot: {
-    backgroundColor: "#6200EA",
-  },
-  legendText: {
-    color: "#888",
-    fontSize: 14,
+    backgroundColor: colors.accent,
   },
 });
 

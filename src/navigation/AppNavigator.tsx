@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeScreen from "../screens/HomeScreen";
 import IgniteScreen from "../screens/IgniteScreen";
 import FogCutterScreen from "../screens/FogCutterScreen";
@@ -11,6 +11,7 @@ import CalendarScreen from "../screens/CalendarScreen";
 import AnchorScreen from "../screens/AnchorScreen";
 import CheckInScreen from "../screens/CheckInScreen";
 import CrisisScreen from "../screens/CrisisScreen";
+import { colors } from "../theme";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,34 +27,50 @@ const HomeStack = () => (
 const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused }) => {
+      tabBarIcon: ({ focused, color, size }) => {
         const icons: Record<string, string> = {
-          Home: "🏠",
-          Focus: "🔥",
-          Tasks: "📝",
-          Calendar: "📅",
+          Home: focused ? "home" : "home-outline",
+          Focus: focused ? "fire" : "fire-outline",
+          Tasks: focused ? "clipboard-text" : "clipboard-text-outline",
+          Calendar: focused ? "calendar" : "calendar-outline",
         };
         return (
-          <Text style={{ fontSize: 24 }}>
-            {focused ? icons[route.name] : icons[route.name]}
-          </Text>
+          <Icon name={icons[route.name]} size={28} color={color} />
         );
       },
-      tabBarActiveTintColor: "#6200EA",
-      tabBarInactiveTintColor: "#888",
+      tabBarActiveTintColor: colors.accent,
+      tabBarInactiveTintColor: colors.textMuted,
       headerShown: false,
       tabBarStyle: {
-        backgroundColor: "#1A1A2E",
+        backgroundColor: colors.background,
         borderTopWidth: 0,
-        height: 60,
+        height: 64,
         paddingBottom: 8,
+        elevation: 0,
+        shadowOpacity: 0,
       },
     })}
   >
-    <Tab.Screen name="Home" component={HomeStack} />
-    <Tab.Screen name="Focus" component={IgniteScreen} />
-    <Tab.Screen name="Tasks" component={BrainDumpScreen} />
-    <Tab.Screen name="Calendar" component={CalendarScreen} />
+    <Tab.Screen
+      name="Home"
+      component={HomeStack}
+      options={{ tabBarTestID: "tab-home" }}
+    />
+    <Tab.Screen
+      name="Focus"
+      component={IgniteScreen}
+      options={{ tabBarTestID: "tab-focus" }}
+    />
+    <Tab.Screen
+      name="Tasks"
+      component={BrainDumpScreen}
+      options={{ tabBarTestID: "tab-tasks" }}
+    />
+    <Tab.Screen
+      name="Calendar"
+      component={CalendarScreen}
+      options={{ tabBarTestID: "tab-calendar" }}
+    />
   </Tab.Navigator>
 );
 

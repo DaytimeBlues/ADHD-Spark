@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import { colors, spacing, radius } from "../theme";
 
 const CheckInScreen = () => {
   const [mood, setMood] = useState<number | null>(null);
@@ -53,84 +52,83 @@ const CheckInScreen = () => {
   const recommendation = getRecommendation();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Check In</Text>
-        <Text style={styles.subtitle}>How are you feeling?</Text>
+    <Screen scroll>
+      <ScreenHeader title="Check In" subtitle="How are you feeling?" />
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Mood</Text>
-          <View style={styles.options}>
-            {moods.map((m) => (
-              <TouchableOpacity
-                key={m.value}
-                style={[styles.option, mood === m.value && styles.selected]}
-                onPress={() => setMood(m.value)}
+      <Card style={styles.sectionCard}>
+        <AppText variant="sectionTitle" style={styles.sectionTitle}>
+          Mood
+        </AppText>
+        <View style={styles.options}>
+          {moods.map((m) => (
+            <TouchableOpacity
+              key={m.value}
+              activeOpacity={0.7}
+              style={[styles.option, mood === m.value && styles.selected]}
+              onPress={() => setMood(m.value)}
+            >
+              <AppText style={styles.emoji}>{m.emoji}</AppText>
+              <AppText
+                variant="smallMuted"
+                style={[styles.label, mood === m.value && styles.selectedLabel]}
               >
-                <Text style={styles.emoji}>{m.emoji}</Text>
-                <Text style={styles.label}>{m.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {m.label}
+              </AppText>
+            </TouchableOpacity>
+          ))}
         </View>
+      </Card>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Energy</Text>
-          <View style={styles.options}>
-            {energyLevels.map((e) => (
-              <TouchableOpacity
-                key={e.value}
-                style={[styles.option, energy === e.value && styles.selected]}
-                onPress={() => setEnergy(e.value)}
+      <Card style={styles.sectionCard}>
+        <AppText variant="sectionTitle" style={styles.sectionTitle}>
+          Energy
+        </AppText>
+        <View style={styles.options}>
+          {energyLevels.map((e) => (
+            <TouchableOpacity
+              key={e.value}
+              activeOpacity={0.7}
+              style={[styles.option, energy === e.value && styles.selected]}
+              onPress={() => setEnergy(e.value)}
+            >
+              <AppText style={styles.emoji}>{e.emoji}</AppText>
+              <AppText
+                variant="smallMuted"
+                style={[
+                  styles.label,
+                  energy === e.value && styles.selectedLabel,
+                ]}
               >
-                <Text style={styles.emoji}>{e.emoji}</Text>
-                <Text style={styles.label}>{e.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {e.label}
+              </AppText>
+            </TouchableOpacity>
+          ))}
         </View>
+      </Card>
 
-        {recommendation && (
-          <View style={styles.recommendation}>
-            <Text style={styles.recommendationTitle}>
-              {recommendation.title}
-            </Text>
-            <Text style={styles.recommendationText}>{recommendation.desc}</Text>
-          </View>
-        )}
-      </View>
-    </SafeAreaView>
+      {recommendation && (
+        <Card style={styles.recommendationBox}>
+          <AppText variant="sectionTitle" style={styles.recommendationTitle}>
+            {recommendation.title}
+          </AppText>
+          <AppText style={styles.recommendationText}>
+            {recommendation.desc}
+          </AppText>
+        </Card>
+      )}
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#888",
-    marginBottom: 32,
-  },
-  section: {
-    marginBottom: 24,
+  sectionCard: {
+    padding: spacing[16],
+    marginBottom: spacing[24],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   sectionTitle: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
+    marginBottom: spacing[16],
   },
   options: {
     flexDirection: "row",
@@ -138,37 +136,39 @@ const styles = StyleSheet.create({
   },
   option: {
     alignItems: "center",
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "#2D2D44",
+    paddingVertical: spacing[12],
+    borderRadius: radius.input,
+    backgroundColor: colors.background,
     width: "18%",
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   selected: {
-    backgroundColor: "#6200EA",
+    backgroundColor: colors.accent,
+    borderColor: colors.accent,
   },
   emoji: {
     fontSize: 24,
-    marginBottom: 4,
+    marginBottom: spacing[4],
   },
   label: {
-    color: "#888",
     fontSize: 10,
   },
-  recommendation: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 16,
-    padding: 20,
-    marginTop: 16,
+  selectedLabel: {
+    color: colors.text,
+  },
+  recommendationBox: {
+    backgroundColor: colors.surface2,
+    padding: spacing[20],
+    borderWidth: 1,
+    borderColor: colors.accent,
   },
   recommendationTitle: {
-    color: "#6200EA",
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 8,
+    color: colors.accent,
+    marginBottom: spacing[8],
   },
   recommendationText: {
-    color: "#FFFFFF",
-    fontSize: 16,
+    lineHeight: 24,
   },
 });
 

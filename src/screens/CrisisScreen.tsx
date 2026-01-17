@@ -1,12 +1,10 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  Linking,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Linking } from "react-native";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import { colors, spacing, radius } from "../theme";
 
 const CrisisScreen = () => {
   const crisisLines = [
@@ -55,120 +53,109 @@ const CrisisScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Crisis Mode</Text>
-        <Text style={styles.subtitle}>
-          You\'re not alone. Help is available.
-        </Text>
+    <Screen scroll>
+      <ScreenHeader
+        title="Crisis Mode"
+        subtitle="You're not alone. Help is available."
+        titleStyle={{ color: colors.danger }}
+      />
 
-        <Text style={styles.sectionTitle}>Immediate Help</Text>
-        {crisisLines.map((line) => (
-          <TouchableOpacity
-            key={line.name}
-            style={styles.crisisButton}
-            onPress={() => handleCall(line.url)}
-          >
-            <Text style={styles.crisisButtonText}>{line.name}</Text>
-            <Text style={styles.crisisButtonSubtext}>{line.number}</Text>
-          </TouchableOpacity>
-        ))}
+      <AppText variant="sectionTitle" style={styles.sectionTitle}>
+        Immediate Help
+      </AppText>
+      {crisisLines.map((line) => (
+        <TouchableOpacity
+          key={line.name}
+          activeOpacity={0.8}
+          onPress={() => handleCall(line.url)}
+          style={styles.crisisButtonWrapper}
+        >
+          <Card style={styles.crisisCard}>
+            <AppText variant="sectionTitle" style={styles.whiteText}>
+              {line.name}
+            </AppText>
+            <AppText style={styles.whiteTextMuted}>{line.number}</AppText>
+          </Card>
+        </TouchableOpacity>
+      ))}
 
-        <Text style={[styles.sectionTitle, { marginTop: 24 }]}>
-          Coping Strategies
-        </Text>
-        {copingStrategies.map((strategy) => (
-          <View key={strategy.title} style={styles.strategyCard}>
-            <Text style={styles.strategyEmoji}>{strategy.emoji}</Text>
-            <View style={styles.strategyContent}>
-              <Text style={styles.strategyTitle}>{strategy.title}</Text>
-              <Text style={styles.strategyDesc}>{strategy.desc}</Text>
-            </View>
+      <AppText
+        variant="sectionTitle"
+        style={[styles.sectionTitle, { marginTop: spacing[32] }]}
+      >
+        Coping Strategies
+      </AppText>
+      {copingStrategies.map((strategy) => (
+        <Card key={strategy.title} style={styles.strategyCard}>
+          <AppText style={styles.strategyEmoji}>{strategy.emoji}</AppText>
+          <View style={styles.strategyContent}>
+            <AppText variant="sectionTitle" style={styles.strategyTitle}>
+              {strategy.title}
+            </AppText>
+            <AppText variant="smallMuted" style={styles.strategyDesc}>
+              {strategy.desc}
+            </AppText>
           </View>
-        ))}
+        </Card>
+      ))}
 
-        <Text style={styles.reminder}>
-          If you\'re in immediate danger, call 911 or go to your nearest
-          emergency room.
-        </Text>
-      </View>
-    </SafeAreaView>
+      <AppText variant="smallMuted" style={styles.reminder}>
+        If you're in immediate danger, call 911 or go to your nearest emergency
+        room.
+      </AppText>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FF6B6B",
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#888",
-    marginBottom: 24,
-  },
   sectionTitle: {
+    marginBottom: spacing[16],
+  },
+  crisisButtonWrapper: {
+    marginBottom: spacing[12],
+  },
+  crisisCard: {
+    backgroundColor: colors.danger,
+    padding: spacing[20],
+    borderColor: colors.danger,
+  },
+  whiteText: {
     color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
+    marginBottom: spacing[4],
   },
-  crisisButton: {
-    backgroundColor: "#FF6B6B",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
-  },
-  crisisButtonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  crisisButtonSubtext: {
-    color: "rgba(255,255,255,0.8)",
+  whiteTextMuted: {
+    color: "rgba(255, 255, 255, 0.8)",
     fontSize: 16,
   },
   strategyCard: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
     flexDirection: "row",
+    padding: spacing[16],
+    marginBottom: spacing[12],
     alignItems: "flex-start",
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   strategyEmoji: {
     fontSize: 28,
-    marginRight: 16,
+    marginRight: spacing[16],
   },
   strategyContent: {
     flex: 1,
   },
   strategyTitle: {
-    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 4,
+    marginBottom: spacing[4],
   },
   strategyDesc: {
-    color: "#888",
-    fontSize: 14,
+    lineHeight: 20,
   },
   reminder: {
-    color: "#888",
-    fontSize: 14,
     textAlign: "center",
-    marginTop: 24,
+    marginTop: spacing[32],
+    marginBottom: spacing[16],
     fontStyle: "italic",
+    paddingHorizontal: spacing[16],
   },
 });
 

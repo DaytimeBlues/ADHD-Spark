@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import Button from "../components/ui/Button";
+import { colors, spacing, radius } from "../theme";
 
 type BreathingPattern = "478" | "box" | "energize";
 
@@ -95,14 +95,15 @@ const AnchorScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Anchor</Text>
-        <Text style={styles.subtitle}>Breathing exercises</Text>
+    <Screen style={styles.container}>
+      <ScreenHeader title="Anchor" subtitle="Breathing exercises" />
 
-        {pattern && (
+      <View style={styles.centerContent}>
+        {pattern ? (
           <View style={styles.activeContainer}>
-            <Text style={styles.patternName}>{patterns[pattern].name}</Text>
+            <AppText variant="sectionTitle" style={styles.patternName}>
+              {patterns[pattern].name}
+            </AppText>
             <View style={styles.breathingCircle}>
               <View
                 style={[
@@ -110,130 +111,101 @@ const AnchorScreen = () => {
                   { transform: [{ scale: getCircleScale() }] },
                 ]}
               />
-              <Text style={styles.phaseText}>{getPhaseText()}</Text>
-              <Text style={styles.countText}>{count}</Text>
+              <AppText variant="sectionTitle" style={styles.phaseText}>
+                {getPhaseText()}
+              </AppText>
+              <AppText variant="timer" style={styles.countText}>
+                {count}
+              </AppText>
             </View>
-            <TouchableOpacity style={styles.stopButton} onPress={stopPattern}>
-              <Text style={styles.stopButtonText}>Stop</Text>
-            </TouchableOpacity>
+            <Button
+              label="Stop"
+              variant="danger"
+              onPress={stopPattern}
+              style={styles.stopButton}
+            />
           </View>
-        )}
-
-        {!pattern && (
+        ) : (
           <View style={styles.patternsContainer}>
             {(Object.keys(patterns) as BreathingPattern[]).map((p) => (
               <TouchableOpacity
                 key={p}
-                style={styles.patternButton}
+                activeOpacity={0.7}
                 onPress={() => startPattern(p)}
               >
-                <Text style={styles.patternButtonText}>{patterns[p].name}</Text>
-                <Text style={styles.patternDetails}>
-                  {patterns[p].inhale}-
-                  {patterns[p].hold > 0 ? patterns[p].hold + "-" : ""}
-                  {patterns[p].exhale}
-                  {patterns[p].wait > 0 ? "-" + patterns[p].wait : ""}
-                </Text>
+                <Card style={styles.patternCard}>
+                  <AppText variant="sectionTitle" style={styles.patternTitle}>
+                    {patterns[p].name}
+                  </AppText>
+                  <AppText variant="smallMuted">
+                    {patterns[p].inhale}-
+                    {patterns[p].hold > 0 ? patterns[p].hold + "-" : ""}
+                    {patterns[p].exhale}
+                    {patterns[p].wait > 0 ? "-" + patterns[p].wait : ""}
+                  </AppText>
+                </Card>
               </TouchableOpacity>
             ))}
           </View>
         )}
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
+    justifyContent: "flex-start",
   },
-  content: {
+  centerContent: {
     flex: 1,
-    padding: 16,
-    alignItems: "center",
     justifyContent: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    position: "absolute",
-    top: 60,
-    left: 16,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#888",
-    position: "absolute",
-    top: 92,
-    left: 16,
+    alignItems: "center",
+    width: "100%",
   },
   activeContainer: {
     alignItems: "center",
+    width: "100%",
   },
   patternName: {
-    color: "#6200EA",
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 48,
+    color: colors.accent,
+    marginBottom: spacing[32],
   },
   breathingCircle: {
-    width: 200,
-    height: 200,
+    width: 240,
+    height: 240,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 48,
+    marginBottom: spacing[48],
   },
   circle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: "#6200EA",
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: colors.accent,
+    opacity: 0.2, // Subtle background circle
     position: "absolute",
   },
   phaseText: {
-    color: "#FFFFFF",
-    fontSize: 24,
-    fontWeight: "600",
-    zIndex: 1,
+    marginBottom: spacing[8],
   },
   countText: {
-    color: "#FFFFFF",
-    fontSize: 48,
-    fontWeight: "bold",
-    zIndex: 1,
+    fontSize: 64,
   },
   stopButton: {
-    backgroundColor: "#FF6B6B",
-    paddingHorizontal: 48,
-    paddingVertical: 16,
-    borderRadius: 30,
-  },
-  stopButtonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
+    width: "60%",
   },
   patternsContainer: {
     width: "100%",
   },
-  patternButton: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
+  patternCard: {
     alignItems: "center",
+    paddingVertical: spacing[24],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  patternButtonText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  patternDetails: {
-    color: "#888",
-    fontSize: 14,
+  patternTitle: {
+    marginBottom: spacing[4],
   },
 });
 

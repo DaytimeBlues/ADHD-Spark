@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  SafeAreaView,
   FlatList,
 } from "react-native";
+import Screen from "../components/ui/Screen";
+import ScreenHeader from "../components/ui/ScreenHeader";
+import Card from "../components/ui/Card";
+import AppText from "../components/ui/AppText";
+import Button from "../components/ui/Button";
+import { colors, spacing, radius } from "../theme";
 
 interface Task {
   id: string;
@@ -57,21 +61,25 @@ const FogCutterScreen = () => {
     index: number;
   }) => (
     <View style={styles.microStep}>
-      <Text style={styles.stepNumber}>{index + 1}</Text>
-      <Text style={styles.stepText}>{item}</Text>
+      <AppText variant="smallMuted" style={styles.stepNumber}>
+        {index + 1}
+      </AppText>
+      <AppText style={styles.stepText}>{item}</AppText>
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Fog Cutter</Text>
-        <Text style={styles.subtitle}>Break big tasks into tiny steps</Text>
+    <Screen>
+      <ScreenHeader
+        title="Fog Cutter"
+        subtitle="Break big tasks into tiny steps"
+      />
 
+      <View style={styles.inputArea}>
         <TextInput
           style={styles.input}
           placeholder="What feels overwhelming?"
-          placeholderTextColor="#666"
+          placeholderTextColor={colors.textFaint}
           value={task}
           onChangeText={setTask}
         />
@@ -80,141 +88,134 @@ const FogCutterScreen = () => {
           <TextInput
             style={styles.stepInput}
             placeholder="Add a micro-step..."
-            placeholderTextColor="#666"
+            placeholderTextColor={colors.textFaint}
             value={newStep}
             onChangeText={setNewStep}
             onSubmitEditing={addMicroStep}
           />
-          <TouchableOpacity style={styles.addButton} onPress={addMicroStep}>
-            <Text style={styles.addButtonText}>+</Text>
-          </TouchableOpacity>
+          <Button
+            label="+"
+            size="md"
+            onPress={addMicroStep}
+            style={styles.addButton}
+          />
         </View>
 
         {microSteps.length > 0 && (
-          <View style={styles.previewContainer}>
-            <Text style={styles.previewTitle}>Micro-steps for "{task}":</Text>
+          <Card style={styles.previewContainer}>
+            <AppText variant="smallMuted" style={styles.previewTitle}>
+              Steps for "{task || "this task"}":
+            </AppText>
             <FlatList
               data={microSteps}
               renderItem={renderMicroStep}
               keyExtractor={(_, index) => index.toString()}
               scrollEnabled={false}
             />
-          </View>
+          </Card>
         )}
 
-        <TouchableOpacity
-          style={[
-            styles.saveButton,
-            microSteps.length === 0 && styles.disabled,
-          ]}
+        <Button
+          label="Save Task"
+          disabled={microSteps.length === 0 || !task.trim()}
           onPress={addTask}
-          disabled={microSteps.length === 0}
-        >
-          <Text style={styles.saveButtonText}>Save Task</Text>
-        </TouchableOpacity>
+          style={styles.saveButton}
+        />
+      </View>
 
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => toggleTask(item.id)}
+          >
+            <Card
               style={[
                 styles.taskCard,
                 item.completed && styles.taskCardCompleted,
               ]}
-              onPress={() => toggleTask(item.id)}
             >
-              <Text
+              <AppText
+                variant="sectionTitle"
                 style={[styles.taskText, item.completed && styles.completed]}
               >
                 {item.text}
-              </Text>
+              </AppText>
               <View style={styles.stepCount}>
-                <Text style={styles.stepCountText}>
-                  {item.microSteps.length} steps
-                </Text>
+                <AppText variant="smallMuted" style={styles.stepCountText}>
+                  {item.microSteps.length} micro-steps
+                </AppText>
               </View>
-            </TouchableOpacity>
-          )}
-          style={styles.taskList}
-        />
-      </View>
-    </SafeAreaView>
+            </Card>
+          </TouchableOpacity>
+        )}
+        style={styles.taskList}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          tasks.length > 0 ? (
+            <AppText variant="sectionTitle" style={styles.listHeader}>
+              Active Tasks
+            </AppText>
+          ) : null
+        }
+      />
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1A1A2E",
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#888",
-    marginBottom: 24,
+  inputArea: {
+    marginBottom: spacing[24],
   },
   input: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 12,
-    padding: 16,
-    color: "#FFFFFF",
+    backgroundColor: colors.surface,
+    borderRadius: radius.input,
+    padding: spacing[16],
+    color: colors.text,
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: spacing[12],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   addStepRow: {
     flexDirection: "row",
-    marginBottom: 24,
+    marginBottom: spacing[16],
   },
   stepInput: {
     flex: 1,
-    backgroundColor: "#2D2D44",
-    borderRadius: 12,
-    padding: 16,
-    color: "#FFFFFF",
+    backgroundColor: colors.surface,
+    borderRadius: radius.input,
+    padding: spacing[16],
+    color: colors.text,
     fontSize: 14,
-    marginRight: 12,
+    marginRight: spacing[12],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   addButton: {
-    backgroundColor: "#6200EA",
-    width: 50,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  addButtonText: {
-    color: "#FFFFFF",
-    fontSize: 24,
-    fontWeight: "bold",
+    width: 56,
+    height: 56,
   },
   previewContainer: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    padding: spacing[16],
+    marginBottom: spacing[16],
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface2,
   },
   previewTitle: {
-    color: "#888",
-    fontSize: 14,
-    marginBottom: 12,
+    marginBottom: spacing[12],
   },
   microStep: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: spacing[8],
   },
   stepNumber: {
-    backgroundColor: "#6200EA",
-    color: "#FFFFFF",
+    backgroundColor: colors.accent,
+    color: colors.text,
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -222,57 +223,45 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: 12,
     fontWeight: "bold",
-    marginRight: 12,
+    marginRight: spacing[12],
+    overflow: "hidden",
   },
   stepText: {
-    color: "#FFFFFF",
-    fontSize: 14,
+    flex: 1,
   },
   saveButton: {
-    backgroundColor: "#6200EA",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  saveButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
+    marginBottom: spacing[16],
   },
   taskList: {
     flex: 1,
   },
+  listHeader: {
+    marginBottom: spacing[16],
+    marginTop: spacing[8],
+  },
   taskCard: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    marginBottom: spacing[12],
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   taskCardCompleted: {
     opacity: 0.5,
   },
   taskText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 8,
+    marginBottom: spacing[8],
   },
   completed: {
     textDecorationLine: "line-through",
+    color: colors.textMuted,
   },
   stepCount: {
-    backgroundColor: "#1A1A2E",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing[12],
+    paddingVertical: spacing[4],
+    borderRadius: radius.pill,
     alignSelf: "flex-start",
   },
   stepCountText: {
-    color: "#888",
     fontSize: 12,
   },
 });
