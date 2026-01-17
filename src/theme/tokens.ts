@@ -1,13 +1,32 @@
 export const colors = {
-    background: "#1A1A2E",
+    background: "#1A1A2E", // Deep Dark Blue
     surface: "#2D2D44",
-    surface2: "#3D2D64",
+    surfaceHighlight: "#3D3D58",
+
+    // Glassmorphism
+    glass: {
+        background: "rgba(255, 255, 255, 0.05)",
+        border: "rgba(255, 255, 255, 0.1)",
+        text: "rgba(255, 255, 255, 0.9)",
+        textMuted: "rgba(255, 255, 255, 0.6)",
+    },
+
+    // Semantic Palette (Spark)
+    palette: {
+        ignite: "#FF6B6B",    // Red/Coral
+        fogcutter: "#4ECDC4", // Teal
+        pomodoro: "#FFBD69",  // Orange
+        anchor: "#45B7D1",    // Blue
+        checkin: "#A06EE1",   // Purple
+        crisis: "#EF476F",    // Pink/Red Warning
+    },
+
     text: "#FFFFFF",
     textMuted: "#888888",
     textFaint: "#666666",
-    accent: "#6200EA",
+    accent: "#A06EE1", // Updated to cleaner Purple
     danger: "#FF6B6B",
-    border: "#444444",
+    border: "rgba(255,255,255,0.1)", // Subtle border
 } as const;
 
 export const spacing = {
