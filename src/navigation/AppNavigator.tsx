@@ -30,7 +30,7 @@ const TabNavigator = () => (
       tabBarIcon: ({ focused, color, size }) => {
         const icons: Record<string, string> = {
           Home: focused ? "home" : "home-outline",
-          Focus: focused ? "fire" : "fire-outline",
+          Focus: focused ? "lightning-bolt" : "lightning-bolt-outline",
           Tasks: focused ? "clipboard-text" : "clipboard-text-outline",
           Calendar: focused ? "calendar" : "calendar-outline",
         };
