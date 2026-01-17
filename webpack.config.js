@@ -7,7 +7,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[contenthash].js',
-        publicPath: '/spark-adhd/',
+        publicPath: process.env.NODE_ENV === 'production' ? '/spark-adhd/' : '/',
     },
     resolve: {
         extensions: ['.web.tsx', '.web.ts', '.web.js', '.tsx', '.ts', '.js'],
