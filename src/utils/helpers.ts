@@ -1,14 +1,12 @@
 export const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins.toString().padStart(2, "0")}:${secs
-    .toString()
-    .padStart(2, "0")}`;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
 export const calculateStreak = (
   lastUseDate: Date | null,
-  currentStreak: number
+  currentStreak: number,
 ): number => {
   if (!lastUseDate) return 1;
 
@@ -19,7 +17,7 @@ export const calculateStreak = (
   lastUse.setHours(0, 0, 0, 0);
 
   const diffDays = Math.floor(
-    (today.getTime() - lastUse.getTime()) / (1000 * 60 * 60 * 24)
+    (today.getTime() - lastUse.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   if (diffDays === 0) return currentStreak;
@@ -32,14 +30,6 @@ export const generateId = (): string => {
 };
 
 export const getDayName = (date: Date): string => {
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   return days[date.getDay()];
 };

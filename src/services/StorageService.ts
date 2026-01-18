@@ -1,11 +1,11 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STORAGE_KEYS = {
-  streakCount: "streakCount",
-  lastUseDate: "lastUseDate",
-  theme: "theme",
-  tasks: "tasks",
-  brainDump: "brainDump",
+  streakCount: 'streakCount',
+  lastUseDate: 'lastUseDate',
+  theme: 'theme',
+  tasks: 'tasks',
+  brainDump: 'brainDump',
 };
 
 const StorageService = {
@@ -13,7 +13,7 @@ const StorageService = {
     try {
       return await AsyncStorage.getItem(key);
     } catch (error) {
-      console.error("Storage get error:", error);
+      console.error('Storage get error:', error);
       return null;
     }
   },
@@ -23,7 +23,7 @@ const StorageService = {
       await AsyncStorage.setItem(key, value);
       return true;
     } catch (error) {
-      console.error("Storage set error:", error);
+      console.error('Storage set error:', error);
       return false;
     }
   },
@@ -33,7 +33,7 @@ const StorageService = {
       await AsyncStorage.removeItem(key);
       return true;
     } catch (error) {
-      console.error("Storage remove error:", error);
+      console.error('Storage remove error:', error);
       return false;
     }
   },
@@ -43,7 +43,7 @@ const StorageService = {
       const value = await this.get(key);
       return value ? JSON.parse(value) : null;
     } catch (error) {
-      console.error("Storage getJSON error:", error);
+      console.error('Storage getJSON error:', error);
       return null;
     }
   },
@@ -52,7 +52,7 @@ const StorageService = {
     try {
       return await this.set(key, JSON.stringify(value));
     } catch (error) {
-      console.error("Storage setJSON error:", error);
+      console.error('Storage setJSON error:', error);
       return false;
     }
   },

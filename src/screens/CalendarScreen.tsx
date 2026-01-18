@@ -1,28 +1,18 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import Screen from "../components/ui/Screen";
-import ScreenHeader from "../components/ui/ScreenHeader";
-import Card from "../components/ui/Card";
-import AppText from "../components/ui/AppText";
-import Button from "../components/ui/Button";
-import { colors, spacing, radius } from "../theme";
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 
 const CalendarScreen = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
   const getDaysInMonth = (date: Date) => {
@@ -34,63 +24,47 @@ const CalendarScreen = () => {
   };
 
   const prevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
   };
 
   const nextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
 
   const daysInMonth = getDaysInMonth(currentDate);
   const firstDay = getFirstDayOfMonth(currentDate);
-  const daysArray = Array(daysInMonth)
-    .fill(0)
-    .map((_, i) => i + 1);
+  const daysArray = Array(daysInMonth).fill(0).map((_, i) => i + 1);
 
   return (
-    <Screen>
-      <ScreenHeader title="Calendar" />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Calendar</Text>
 
-      <Card style={styles.calendarCard}>
         <View style={styles.header}>
-          <Button
-            label="‹"
-            variant="ghost"
-            size="md"
-            onPress={prevMonth}
-            style={styles.navButton}
-          />
-          <AppText variant="sectionTitle" style={styles.monthText}>
+          <TouchableOpacity onPress={prevMonth} style={styles.navButton}>
+            <Text style={styles.navButtonText}>‹</Text>
+          </TouchableOpacity>
+          <Text style={styles.monthText}>
             {months[currentDate.getMonth()]} {currentDate.getFullYear()}
-          </AppText>
-          <Button
-            label="›"
-            variant="ghost"
-            size="md"
-            onPress={nextMonth}
-            style={styles.navButton}
-          />
+          </Text>
+          <TouchableOpacity onPress={nextMonth} style={styles.navButton}>
+            <Text style={styles.navButtonText}>›</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.weekdays}>
-          {days.map((day) => (
-            <AppText key={day} variant="smallMuted" style={styles.weekdayText}>
+          {days.map(day => (
+            <Text key={day} style={styles.weekdayText}>
               {day}
-            </AppText>
+            </Text>
           ))}
         </View>
 
         <View style={styles.daysGrid}>
-          {Array(firstDay)
-            .fill(0)
-            .map((_, i) => (
-              <View key={`empty-${i}`} style={styles.dayCell} />
-            ))}
-          {daysArray.map((day) => {
+          {Array(firstDay).fill(0).map((_, i) => (
+            <View key={`empty-${i}`} style={styles.dayCell} />
+          ))}
+          {daysArray.map(day => {
             const isToday =
               day === new Date().getDate() &&
               currentDate.getMonth() === new Date().getMonth() &&
@@ -98,96 +72,112 @@ const CalendarScreen = () => {
             return (
               <TouchableOpacity
                 key={day}
-                activeOpacity={0.7}
-                style={[styles.dayCell, isToday && styles.todayCell]}
-              >
-                <AppText
-                  style={[styles.dayText, isToday && styles.todayText]}
-                >
+                style={[styles.dayCell, isToday && styles.todayCell]}>
+                <Text style={[styles.dayText, isToday && styles.todayText]}>
                   {day}
-                </AppText>
+                </Text>
               </TouchableOpacity>
             );
           })}
         </View>
-      </Card>
 
-      <View style={styles.legend}>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, styles.todayDot]} />
-          <AppText variant="smallMuted">Today</AppText>
+        <View style={styles.legend}>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, styles.todayDot]} />
+            <Text style={styles.legendText}>Today</Text>
+          </View>
         </View>
       </View>
-    </Screen>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  calendarCard: {
-    padding: spacing[12],
-    borderWidth: 1,
-    borderColor: colors.border,
+  container: {
+    flex: 1,
+    backgroundColor: '#1A1A2E',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 24,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: spacing[24],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
   },
   navButton: {
-    width: 44,
-    height: 44,
+    padding: 8,
+  },
+  navButtonText: {
+    color: '#FFFFFF',
+    fontSize: 32,
   },
   monthText: {
-    fontSize: 18,
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: '600',
   },
   weekdays: {
-    flexDirection: "row",
-    marginBottom: spacing[12],
-    paddingHorizontal: spacing[4],
+    flexDirection: 'row',
+    marginBottom: 8,
   },
   weekdayText: {
     flex: 1,
-    textAlign: "center",
-    fontWeight: "600",
+    textAlign: 'center',
+    color: '#888',
+    fontSize: 12,
+    fontWeight: '600',
   },
   daysGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   dayCell: {
-    width: "14.28%",
+    width: '14.28%',
     aspectRatio: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: radius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dayText: {
+    color: '#FFFFFF',
     fontSize: 14,
   },
   todayCell: {
-    backgroundColor: colors.accent,
+    backgroundColor: '#6200EA',
+    borderRadius: 20,
   },
   todayText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   legend: {
-    flexDirection: "row",
-    marginTop: spacing[24],
-    paddingHorizontal: spacing[8],
+    flexDirection: 'row',
+    marginTop: 24,
   },
   legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 24,
   },
   legendDot: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    marginRight: spacing[8],
+    marginRight: 8,
   },
   todayDot: {
-    backgroundColor: colors.accent,
+    backgroundColor: '#6200EA',
+  },
+  legendText: {
+    color: '#888',
+    fontSize: 14,
   },
 });
 

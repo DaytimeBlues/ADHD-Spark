@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, FlatList, TouchableOpacity } from "react-native";
-import Screen from "../components/ui/Screen";
-import ScreenHeader from "../components/ui/ScreenHeader";
-import Card from "../components/ui/Card";
-import AppText from "../components/ui/AppText";
-import Button from "../components/ui/Button";
-import { colors, spacing, radius } from "../theme";
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
 
 interface DumpItem {
   id: string;
@@ -14,7 +16,7 @@ interface DumpItem {
 }
 
 const BrainDumpScreen = () => {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [items, setItems] = useState<DumpItem[]>([]);
 
   const addItem = () => {
@@ -25,138 +27,150 @@ const BrainDumpScreen = () => {
         createdAt: new Date(),
       };
       setItems([newItem, ...items]);
-      setInput("");
+      setInput('');
     }
   };
 
   const deleteItem = (id: string) => {
-    setItems(items.filter((item) => item.id !== id));
+    setItems(items.filter(item => item.id !== id));
   };
 
   const clearAll = () => {
     setItems([]);
   };
 
-  const renderItem = ({ item }: { item: DumpItem }) => (
-    <Card style={styles.itemCard}>
-      <AppText style={styles.itemText}>{item.text}</AppText>
-      <TouchableOpacity
-        onPress={() => deleteItem(item.id)}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      >
-        <AppText style={styles.deleteIcon}>✕</AppText>
+  const renderItem = ({item}: {item: DumpItem}) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{item.text}</Text>
+      <TouchableOpacity onPress={() => deleteItem(item.id)}>
+        <Text style={styles.deleteText}>✕</Text>
       </TouchableOpacity>
-    </Card>
+    </View>
   );
 
   return (
-    <Screen>
-      <ScreenHeader title="Brain Dump" subtitle="Clear your mind, capture everything" />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Brain Dump</Text>
+        <Text style={styles.subtitle}>Clear your mind, capture everything</Text>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="What's on your mind?"
-          placeholderTextColor={colors.textFaint}
-          value={input}
-          onChangeText={setInput}
-          onSubmitEditing={addItem}
-          multiline
-        />
-        <Button
-          label="Dump"
-          size="md"
-          onPress={addItem}
-          style={styles.addButton}
-        />
-      </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="What's on your mind?"
+            placeholderTextColor="#666"
+            value={input}
+            onChangeText={setInput}
+            onSubmitEditing={addItem}
+            multiline
+          />
+          <TouchableOpacity style={styles.addButton} onPress={addItem}>
+            <Text style={styles.addButtonText}>Dump</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.listHeader}>
-        <AppText variant="sectionTitle">Capture List</AppText>
         {items.length > 0 && (
-          <TouchableOpacity onPress={clearAll}>
-            <AppText style={styles.clearText}>Clear All</AppText>
+          <TouchableOpacity style={styles.clearButton} onPress={clearAll}>
+            <Text style={styles.clearButtonText}>Clear All</Text>
           </TouchableOpacity>
         )}
-      </View>
 
-      <FlatList
-        data={items}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <AppText variant="smallMuted" style={styles.emptyText}>
+        <FlatList
+          data={items}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
               Your brain is empty... for now
-            </AppText>
-          </View>
-        }
-      />
-    </Screen>
+            </Text>
+          }
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1A1A2E',
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 24,
+  },
   inputContainer: {
-    flexDirection: "row",
-    marginBottom: spacing[24],
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    marginBottom: 16,
   },
   input: {
     flex: 1,
-    backgroundColor: colors.surface,
-    borderRadius: radius.input,
-    padding: spacing[16],
-    color: colors.text,
+    backgroundColor: '#2D2D44',
+    borderRadius: 12,
+    padding: 16,
+    color: '#FFFFFF',
     fontSize: 16,
-    marginRight: spacing[12],
-    minHeight: 56,
-    borderWidth: 1,
-    borderColor: colors.border,
+    marginRight: 12,
+    minHeight: 50,
   },
   addButton: {
-    height: 56,
-    paddingHorizontal: spacing[24],
+    backgroundColor: '#6200EA',
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    justifyContent: 'center',
   },
-  listHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing[16],
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
-  clearText: {
-    color: colors.danger,
+  clearButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 16,
+  },
+  clearButtonText: {
+    color: '#FF6B6B',
     fontSize: 14,
-    fontWeight: "600",
   },
   listContent: {
-    paddingBottom: spacing[32],
+    flexGrow: 1,
   },
-  itemCard: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: spacing[12],
-    borderWidth: 1,
-    borderColor: colors.border,
+  item: {
+    backgroundColor: '#2D2D44',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   itemText: {
     flex: 1,
-    marginRight: spacing[12],
+    color: '#FFFFFF',
+    fontSize: 16,
   },
-  deleteIcon: {
-    color: colors.danger,
+  deleteText: {
+    color: '#FF6B6B',
     fontSize: 18,
-    fontWeight: "bold",
-  },
-  emptyContainer: {
-    marginTop: spacing[48],
-    alignItems: "center",
+    marginLeft: 12,
   },
   emptyText: {
-    textAlign: "center",
+    color: '#666',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 48,
   },
 });
 

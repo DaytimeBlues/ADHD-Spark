@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet } from "react-native";
-import Screen from "../components/ui/Screen";
-import ScreenHeader from "../components/ui/ScreenHeader";
-import AppText from "../components/ui/AppText";
-import Button from "../components/ui/Button";
-import { colors, spacing } from "../theme";
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 
 const PomodoroScreen = () => {
   const [isWorking, setIsWorking] = useState(true);
@@ -24,18 +25,16 @@ const PomodoroScreen = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const startTimer = () => {
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
+      setTimeLeft(prev => {
         if (prev <= 1) {
           if (isWorking) {
-            setSessions((s) => s + 1);
+            setSessions(s => s + 1);
             setIsWorking(false);
             return 300;
           } else {
@@ -65,108 +64,140 @@ const PomodoroScreen = () => {
   };
 
   return (
-    <Screen style={styles.container}>
-      <ScreenHeader
-        title="Pomodoro"
-        subtitle={isWorking ? "Focus Time" : "Take a Break"}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Pomodoro</Text>
+        <Text style={styles.subtitle}>
+          {isWorking ? 'Focus Time' : 'Take a Break'}
+        </Text>
 
-      <View style={styles.topInfo}>
-        <AppText variant="sectionTitle" style={styles.sessionsText}>
-          Sessions completed: {sessions}
-        </AppText>
-      </View>
+        <View style={styles.sessionsContainer}>
+          <Text style={styles.sessionsText}>
+            Sessions completed: {sessions}
+          </Text>
+        </View>
 
-      <View style={styles.timerWrapper}>
-        <View
-          style={[
-            styles.phaseIndicator,
-            { backgroundColor: isWorking ? colors.danger : "#4CAF50" },
-          ]}
-        />
-        <AppText variant="timer" style={styles.timerText}>
-          {formatTime(timeLeft)}
-        </AppText>
-        <AppText variant="sectionTitle" style={styles.phaseLabel}>
-          {isWorking ? "Focus" : "Break"}
-        </AppText>
-      </View>
-
-      <View style={styles.bottomControls}>
-        <View style={styles.mainActions}>
-          {!isRunning ? (
-            <Button
-              label="Start"
-              onPress={startTimer}
-              style={styles.actionButton}
-            />
-          ) : (
-            <Button
-              label="Pause"
-              variant="danger"
-              onPress={pauseTimer}
-              style={styles.actionButton}
-            />
-          )}
-          <Button
-            label="Reset"
-            variant="secondary"
-            onPress={resetTimer}
-            style={styles.resetButton}
+        <View style={styles.timerContainer}>
+          <View
+            style={[
+              styles.phaseIndicator,
+              {backgroundColor: isWorking ? '#FF6B6B' : '#4CAF50'},
+            ]}
           />
+          <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
+          <Text style={styles.phaseText}>
+            {isWorking ? 'Focus' : 'Break'}
+          </Text>
+        </View>
+
+        <View style={styles.controls}>
+          {!isRunning ? (
+            <TouchableOpacity style={styles.startButton} onPress={startTimer}>
+              <Text style={styles.startButtonText}>Start</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.pauseButton} onPress={pauseTimer}>
+              <Text style={styles.pauseButtonText}>Pause</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
+            <Text style={styles.resetButtonText}>Reset</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </Screen>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between",
+    flex: 1,
+    backgroundColor: '#1A1A2E',
   },
-  topInfo: {
-    alignItems: "center",
-    marginTop: -spacing[16],
-    marginBottom: spacing[24],
+  content: {
+    flex: 1,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#888',
+    marginBottom: 16,
+  },
+  sessionsContainer: {
+    marginBottom: 32,
   },
   sessionsText: {
-    color: colors.accent,
+    color: '#6200EA',
     fontSize: 16,
+    fontWeight: '600',
   },
-  timerWrapper: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: -spacing[48],
+  timerContainer: {
+    alignItems: 'center',
+    marginBottom: 48,
   },
   phaseIndicator: {
-    width: 240,
-    height: 240,
-    borderRadius: 120,
-    position: "absolute",
-    opacity: 0.15,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    position: 'absolute',
+    opacity: 0.2,
   },
-  timerText: {
-    fontSize: 80,
-    marginBottom: spacing[12],
+  timer: {
+    fontSize: 64,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontVariant: ['tabular-nums'],
   },
-  phaseLabel: {
-    color: colors.textMuted,
-    fontSize: 20,
+  phaseText: {
+    fontSize: 18,
+    color: '#888',
+    marginTop: 8,
   },
-  bottomControls: {
-    marginBottom: spacing[16],
+  controls: {
+    flexDirection: 'row',
   },
-  mainActions: {
-    flexDirection: "row",
-    marginBottom: spacing[8],
+  startButton: {
+    backgroundColor: '#FF6B6B',
+    paddingHorizontal: 48,
+    paddingVertical: 16,
+    borderRadius: 30,
+    marginRight: 16,
   },
-  actionButton: {
-    flex: 2,
-    marginRight: spacing[12],
+  startButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  pauseButton: {
+    backgroundColor: '#FF6B6B',
+    paddingHorizontal: 40,
+    paddingVertical: 16,
+    borderRadius: 30,
+    marginRight: 16,
+  },
+  pauseButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
   resetButton: {
-    flex: 1,
+    backgroundColor: '#2D2D44',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 30,
+  },
+  resetButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

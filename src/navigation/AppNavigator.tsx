@@ -1,23 +1,22 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "../screens/HomeScreen";
-import IgniteScreen from "../screens/IgniteScreen";
-import FogCutterScreen from "../screens/FogCutterScreen";
-import PomodoroScreen from "../screens/PomodoroScreen";
-import BrainDumpScreen from "../screens/BrainDumpScreen";
-import CalendarScreen from "../screens/CalendarScreen";
-import AnchorScreen from "../screens/AnchorScreen";
-import CheckInScreen from "../screens/CheckInScreen";
-import CrisisScreen from "../screens/CrisisScreen";
-import { colors } from "../theme";
+import React from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import HomeScreen from '../screens/HomeScreen';
+import IgniteScreen from '../screens/IgniteScreen';
+import FogCutterScreen from '../screens/FogCutterScreen';
+import PomodoroScreen from '../screens/PomodoroScreen';
+import BrainDumpScreen from '../screens/BrainDumpScreen';
+import CalendarScreen from '../screens/CalendarScreen';
+import AnchorScreen from '../screens/AnchorScreen';
+import CheckInScreen from '../screens/CheckInScreen';
+import CrisisScreen from '../screens/CrisisScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="HomeMain" component={HomeScreen} />
     <Stack.Screen name="CheckIn" component={CheckInScreen} />
     <Stack.Screen name="Crisis" component={CrisisScreen} />
@@ -26,56 +25,39 @@ const HomeStack = () => (
 
 const TabNavigator = () => (
   <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
+    screenOptions={({route}) => ({
+      tabBarIcon: ({focused}) => {
         const icons: Record<string, string> = {
-          Home: focused ? "home" : "home-outline",
-          Focus: focused ? "lightning-bolt" : "lightning-bolt-outline",
-          Tasks: focused ? "clipboard-text" : "clipboard-text-outline",
-          Calendar: focused ? "calendar" : "calendar-outline",
+          Home: '🏠',
+          Focus: '🔥',
+          Tasks: '📝',
+          Calendar: '📅',
         };
         return (
-          <Icon name={icons[route.name]} size={28} color={color} />
+          <Text style={{fontSize: 24}}>
+            {focused ? icons[route.name] : icons[route.name]}
+          </Text>
         );
       },
-      tabBarActiveTintColor: colors.accent,
-      tabBarInactiveTintColor: colors.textMuted,
+      tabBarActiveTintColor: '#6200EA',
+      tabBarInactiveTintColor: '#888',
       headerShown: false,
       tabBarStyle: {
-        backgroundColor: colors.background,
+        backgroundColor: '#1A1A2E',
         borderTopWidth: 0,
-        height: 64,
+        height: 60,
         paddingBottom: 8,
-        elevation: 0,
-        shadowOpacity: 0,
       },
-    })}
-  >
-    <Tab.Screen
-      name="Home"
-      component={HomeStack}
-      options={{ tabBarTestID: "tab-home" }}
-    />
-    <Tab.Screen
-      name="Focus"
-      component={IgniteScreen}
-      options={{ tabBarTestID: "tab-focus" }}
-    />
-    <Tab.Screen
-      name="Tasks"
-      component={BrainDumpScreen}
-      options={{ tabBarTestID: "tab-tasks" }}
-    />
-    <Tab.Screen
-      name="Calendar"
-      component={CalendarScreen}
-      options={{ tabBarTestID: "tab-calendar" }}
-    />
+    })}>
+    <Tab.Screen name="Home" component={HomeStack} />
+    <Tab.Screen name="Focus" component={IgniteScreen} />
+    <Tab.Screen name="Tasks" component={BrainDumpScreen} />
+    <Tab.Screen name="Calendar" component={CalendarScreen} />
   </Tab.Navigator>
 );
 
 const AppNavigator = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="Main" component={TabNavigator} />
     <Stack.Screen name="FogCutter" component={FogCutterScreen} />
     <Stack.Screen name="Pomodoro" component={PomodoroScreen} />
