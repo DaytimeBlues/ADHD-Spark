@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import {formatTime} from '../utils/helpers';
 
 interface UseTimerOptions {
   initialTime: number;
@@ -50,12 +51,6 @@ const useTimer = ({initialTime, onComplete, autoStart = false}: UseTimerOptions)
 
   const setTime = useCallback((time: number) => {
     setTimeLeft(time);
-  }, []);
-
-  const formatTime = useCallback((seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }, []);
 
   return {

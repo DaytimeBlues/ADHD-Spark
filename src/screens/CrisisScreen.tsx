@@ -6,7 +6,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Linking,
+  Platform,
+  ScrollView,
 } from 'react-native';
+import { Tokens } from '../theme/tokens';
 
 const CrisisScreen = () => {
   const crisisLines = [
@@ -28,36 +31,42 @@ const CrisisScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Crisis Mode</Text>
-        <Text style={styles.subtitle}>You\'re not alone. Help is available.</Text>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <View style={styles.webWrapper}>
+          <Text style={styles.title}>Crisis Mode</Text>
+          <Text style={styles.subtitle}>You're not alone. Help is available.</Text>
 
-        <Text style={styles.sectionTitle}>Immediate Help</Text>
-        {crisisLines.map(line => (
-          <TouchableOpacity
-            key={line.name}
-            style={styles.crisisButton}
-            onPress={() => handleCall(line.url)}>
-            <Text style={styles.crisisButtonText}>{line.name}</Text>
-            <Text style={styles.crisisButtonSubtext}>{line.number}</Text>
-          </TouchableOpacity>
-        ))}
+          <Text style={styles.sectionTitle}>Immediate Help</Text>
+          {crisisLines.map(line => (
+            <TouchableOpacity
+              key={line.name}
+              style={styles.crisisButton}
+              activeOpacity={0.8}
+              onPress={() => handleCall(line.url)}>
+              <Text style={styles.crisisButtonText}>{line.name}</Text>
+              <Text style={styles.crisisButtonSubtext}>{line.number}</Text>
+            </TouchableOpacity>
+          ))}
 
-        <Text style={[styles.sectionTitle, {marginTop: 24}]}>Coping Strategies</Text>
-        {copingStrategies.map(strategy => (
-          <View key={strategy.title} style={styles.strategyCard}>
-            <Text style={styles.strategyEmoji}>{strategy.emoji}</Text>
-            <View style={styles.strategyContent}>
-              <Text style={styles.strategyTitle}>{strategy.title}</Text>
-              <Text style={styles.strategyDesc}>{strategy.desc}</Text>
+          <Text style={[styles.sectionTitle, styles.strategiesHeader]}>Coping Strategies</Text>
+          {copingStrategies.map(strategy => (
+            <View key={strategy.title} style={styles.strategyCard}>
+              <Text style={styles.strategyEmoji}>{strategy.emoji}</Text>
+              <View style={styles.strategyContent}>
+                <Text style={styles.strategyTitle}>{strategy.title}</Text>
+                <Text style={styles.strategyDesc}>{strategy.desc}</Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
 
-        <Text style={styles.reminder}>
-          If you\'re in immediate danger, call 911 or go to your nearest emergency room.
-        </Text>
-      </View>
+          <Text style={styles.reminder}>
+            If you're in immediate danger, call 911 or go to your nearest emergency room.
+          </Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -65,76 +74,100 @@ const CrisisScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Tokens.colors.neutral[800],
   },
-  content: {
+  scrollView: {
     flex: 1,
-    padding: 16,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: Tokens.spacing[16],
+  },
+  webWrapper: {
+    width: '100%',
+    maxWidth: Tokens.layout.maxWidth.prose,
+    alignSelf: 'center',
   },
   title: {
-    fontSize: 28,
+    fontSize: Tokens.type['3xl'],
     fontWeight: 'bold',
-    color: '#FF6B6B',
-    marginBottom: 4,
+    color: Tokens.colors.danger[200],
+    marginBottom: Tokens.spacing[4],
   },
   subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 24,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.neutral[200],
+    marginBottom: Tokens.spacing[24],
+    lineHeight: Tokens.type.base * 1.5,
   },
   sectionTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: Tokens.spacing[12],
+  },
+  strategiesHeader: {
+    marginTop: Tokens.spacing[24],
   },
   crisisButton: {
-    backgroundColor: '#FF6B6B',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
+    backgroundColor: Tokens.colors.danger[500],
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[24],
+    marginBottom: Tokens.spacing[12],
+    minHeight: Tokens.layout.minTapTargetComfortable,
+    justifyContent: 'center',
+    ...Platform.select({
+      web: {
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease',
+      },
+    }),
   },
   crisisButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Tokens.spacing[4],
   },
   crisisButtonSubtext: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 16,
+    color: Tokens.colors.neutral[50],
+    fontSize: Tokens.type.base,
+    opacity: 0.9,
   },
   strategyCard: {
-    backgroundColor: '#2D2D44',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: Tokens.colors.neutral[600],
+    borderRadius: Tokens.radii.md,
+    padding: Tokens.spacing[16],
+    marginBottom: Tokens.spacing[12],
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center', // Aligned center for better visual balance
   },
   strategyEmoji: {
-    fontSize: 28,
-    marginRight: 16,
+    fontSize: Tokens.type['3xl'],
+    marginRight: Tokens.spacing[16],
   },
   strategyContent: {
     flex: 1,
   },
   strategyTitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.base,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Tokens.spacing[4],
   },
   strategyDesc: {
-    color: '#888',
-    fontSize: 14,
+    color: Tokens.colors.neutral[200],
+    fontSize: Tokens.type.sm,
+    lineHeight: Tokens.type.sm * 1.4,
   },
   reminder: {
-    color: '#888',
-    fontSize: 14,
+    color: Tokens.colors.neutral[300],
+    fontSize: Tokens.type.sm,
     textAlign: 'center',
-    marginTop: 24,
+    marginTop: Tokens.spacing[24],
+    marginBottom: Tokens.spacing[24],
     fontStyle: 'italic',
+    paddingHorizontal: Tokens.spacing[16],
   },
 });
 

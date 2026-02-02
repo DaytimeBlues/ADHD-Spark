@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
+import {Tokens} from '../theme/tokens';
 
 type BreathingPattern = '478' | 'box' | 'energize';
 
@@ -81,47 +83,51 @@ const AnchorScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Anchor</Text>
-        <Text style={styles.subtitle}>Breathing exercises</Text>
-
-        {pattern && (
-          <View style={styles.activeContainer}>
-            <Text style={styles.patternName}>{patterns[pattern].name}</Text>
-            <View style={styles.breathingCircle}>
-              <View
-                style={[
-                  styles.circle,
-                  {transform: [{scale: getCircleScale()}]},
-                ]}
-              />
-              <Text style={styles.phaseText}>{getPhaseText()}</Text>
-              <Text style={styles.countText}>{count}</Text>
-            </View>
-            <TouchableOpacity style={styles.stopButton} onPress={stopPattern}>
-              <Text style={styles.stopButtonText}>Stop</Text>
-            </TouchableOpacity>
+      <View style={styles.scrollContent}>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Anchor</Text>
+            <Text style={styles.subtitle}>Breathing exercises</Text>
           </View>
-        )}
 
-        {!pattern && (
-          <View style={styles.patternsContainer}>
-            {(Object.keys(patterns) as BreathingPattern[]).map(p => (
-              <TouchableOpacity
-                key={p}
-                style={styles.patternButton}
-                onPress={() => startPattern(p)}>
-                <Text style={styles.patternButtonText}>
-                  {patterns[p].name}
-                </Text>
-                <Text style={styles.patternDetails}>
-                  {patterns[p].inhale}-{patterns[p].hold > 0 ? patterns[p].hold + '-' : ''}{patterns[p].exhale}
-                  {patterns[p].wait > 0 ? '-' + patterns[p].wait : ''}
-                </Text>
+          {pattern && (
+            <View style={styles.activeContainer}>
+              <Text style={styles.patternName}>{patterns[pattern].name}</Text>
+              <View style={styles.breathingCircle}>
+                <View
+                  style={[
+                    styles.circle,
+                    {transform: [{scale: getCircleScale()}]},
+                  ]}
+                />
+                <Text style={styles.phaseText}>{getPhaseText()}</Text>
+                <Text style={styles.countText}>{count}</Text>
+              </View>
+              <TouchableOpacity style={styles.stopButton} onPress={stopPattern}>
+                <Text style={styles.stopButtonText}>Stop</Text>
               </TouchableOpacity>
-            ))}
-          </View>
-        )}
+            </View>
+          )}
+
+          {!pattern && (
+            <View style={styles.patternsContainer}>
+              {(Object.keys(patterns) as BreathingPattern[]).map(p => (
+                <TouchableOpacity
+                  key={p}
+                  style={styles.patternButton}
+                  onPress={() => startPattern(p)}>
+                  <Text style={styles.patternButtonText}>
+                    {patterns[p].name}
+                  </Text>
+                  <Text style={styles.patternDetails}>
+                    {patterns[p].inhale}-{patterns[p].hold > 0 ? patterns[p].hold + '-' : ''}{patterns[p].exhale}
+                    {patterns[p].wait > 0 ? '-' + patterns[p].wait : ''}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -130,95 +136,118 @@ const AnchorScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Tokens.colors.neutral[900],
+  },
+  scrollContent: {
+    flex: 1,
+    alignItems: 'center', // Centers content for web
   },
   content: {
     flex: 1,
-    padding: 16,
+    width: '100%',
+    maxWidth: Tokens.layout.maxWidth.prose,
+    padding: Tokens.spacing[16],
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+  header: {
     position: 'absolute',
-    top: 60,
-    left: 16,
+    top: Tokens.spacing[24],
+    left: Tokens.spacing[16],
+    width: '100%',
+  },
+  title: {
+    fontSize: Tokens.type['3xl'],
+    fontWeight: 'bold',
+    color: Tokens.colors.neutral[0],
+    marginBottom: Tokens.spacing[4],
   },
   subtitle: {
-    fontSize: 16,
-    color: '#888',
-    position: 'absolute',
-    top: 92,
-    left: 16,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.neutral[300],
   },
   activeContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   patternName: {
-    color: '#6200EA',
-    fontSize: 20,
+    color: Tokens.colors.brand[600],
+    fontSize: Tokens.type.xl,
     fontWeight: '600',
-    marginBottom: 48,
+    marginBottom: Tokens.spacing[48],
   },
   breathingCircle: {
     width: 200,
     height: 200,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 48,
+    marginBottom: Tokens.spacing[48],
   },
   circle: {
     width: 120,
     height: 120,
-    borderRadius: 60,
-    backgroundColor: '#6200EA',
+    borderRadius: 60, // Keep circular
+    backgroundColor: Tokens.colors.brand[600],
     position: 'absolute',
   },
   phaseText: {
-    color: '#FFFFFF',
-    fontSize: 24,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type['2xl'],
     fontWeight: '600',
     zIndex: 1,
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 4,
   },
   countText: {
-    color: '#FFFFFF',
-    fontSize: 48,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type['5xl'],
     fontWeight: 'bold',
     zIndex: 1,
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 4,
   },
   stopButton: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 48,
-    paddingVertical: 16,
-    borderRadius: 30,
+    backgroundColor: Tokens.colors.danger[500],
+    paddingHorizontal: Tokens.spacing[48],
+    paddingVertical: Tokens.spacing[16],
+    borderRadius: Tokens.radii.pill,
+    minHeight: Tokens.layout.minTapTargetComfortable,
+    justifyContent: 'center',
+    ...Tokens.elevation.sm,
   },
   stopButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
   },
   patternsContainer: {
     width: '100%',
+    maxWidth: 400, // Limit width of buttons for better look on wide screens
   },
   patternButton: {
-    backgroundColor: '#2D2D44',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
+    backgroundColor: Tokens.colors.neutral[800],
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[24], // 20 -> 24 for better touch area
+    marginBottom: Tokens.spacing[12],
     alignItems: 'center',
+    minHeight: 80, // Ensure substantial target
+    justifyContent: 'center',
+    ...Tokens.elevation.sm,
   },
   patternButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: Tokens.spacing[4],
   },
   patternDetails: {
-    color: '#888',
-    fontSize: 14,
+    color: Tokens.colors.neutral[300],
+    fontSize: Tokens.type.sm,
   },
 });
 
 export default AnchorScreen;
+

@@ -66,3 +66,5 @@ export const metroTheme: MetroThemeType = {
   spacing: MetroSpacing,
   type: MetroTypography,
 };
+
+export { Tokens, type TokensType } from './tokens';

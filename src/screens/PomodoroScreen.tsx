@@ -5,9 +5,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
+import {formatTime} from '../utils/helpers';
+import {Tokens} from '../theme/tokens';
 
 const PomodoroScreen = () => {
   const [isWorking, setIsWorking] = useState(true);
@@ -57,12 +60,6 @@ const PomodoroScreen = () => {
       sessions,
     });
   }, [isWorking, timeLeft, sessions]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const startTimer = () => {
     setIsRunning(true);
@@ -119,7 +116,11 @@ const PomodoroScreen = () => {
           <View
             style={[
               styles.phaseIndicator,
-              {backgroundColor: isWorking ? '#FF6B6B' : '#4CAF50'},
+              {
+                backgroundColor: isWorking
+                  ? Tokens.colors.danger[500]
+                  : Tokens.colors.success[500],
+              },
             ]}
           />
           <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
@@ -130,16 +131,16 @@ const PomodoroScreen = () => {
 
         <View style={styles.controls}>
           {!isRunning ? (
-            <TouchableOpacity style={styles.startButton} onPress={startTimer}>
-              <Text style={styles.startButtonText}>Start</Text>
+            <TouchableOpacity style={styles.primaryButton} onPress={startTimer}>
+              <Text style={styles.primaryButtonText}>Start</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={styles.pauseButton} onPress={pauseTimer}>
-              <Text style={styles.pauseButtonText}>Pause</Text>
+            <TouchableOpacity style={styles.primaryButton} onPress={pauseTimer}>
+              <Text style={styles.primaryButtonText}>Pause</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
-            <Text style={styles.resetButtonText}>Reset</Text>
+          <TouchableOpacity style={styles.secondaryButton} onPress={resetTimer}>
+            <Text style={styles.secondaryButtonText}>Reset</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -150,91 +151,91 @@ const PomodoroScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Tokens.colors.neutral[900],
+    alignItems: 'center',
   },
   content: {
     flex: 1,
-    padding: 16,
+    padding: Tokens.spacing[16],
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    maxWidth: Tokens.layout.maxWidth.prose,
   },
   title: {
-    fontSize: 28,
+    fontSize: Tokens.type['3xl'],
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
+    color: Tokens.colors.neutral[0],
+    marginBottom: Tokens.spacing[4],
   },
   subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 16,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.neutral[300],
+    marginBottom: Tokens.spacing[16],
   },
   sessionsContainer: {
-    marginBottom: 32,
+    marginBottom: Tokens.spacing[32],
   },
   sessionsText: {
-    color: '#6200EA',
-    fontSize: 16,
+    color: Tokens.colors.brand[500],
+    fontSize: Tokens.type.base,
     fontWeight: '600',
   },
   timerContainer: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: Tokens.spacing[48],
+    justifyContent: 'center',
   },
   phaseIndicator: {
     width: 200,
     height: 200,
-    borderRadius: 100,
+    borderRadius: Tokens.radii.pill,
     position: 'absolute',
     opacity: 0.2,
   },
   timer: {
-    fontSize: 64,
+    fontSize: Tokens.type.mega,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: Tokens.colors.neutral[0],
     fontVariant: ['tabular-nums'],
+    textAlign: 'center',
   },
   phaseText: {
-    fontSize: 18,
-    color: '#888',
-    marginTop: 8,
+    fontSize: Tokens.type.lg,
+    color: Tokens.colors.neutral[300],
+    marginTop: Tokens.spacing[8],
   },
   controls: {
     flexDirection: 'row',
+    gap: Tokens.spacing[16],
   },
-  startButton: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 48,
-    paddingVertical: 16,
-    borderRadius: 30,
-    marginRight: 16,
+  primaryButton: {
+    backgroundColor: Tokens.colors.danger[500],
+    paddingHorizontal: Tokens.spacing[48],
+    paddingVertical: Tokens.spacing[16],
+    borderRadius: Tokens.radii.pill,
+    minHeight: Tokens.layout.minTapTarget,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Tokens.elevation.sm,
   },
-  startButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+  primaryButtonText: {
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
   },
-  pauseButton: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 40,
-    paddingVertical: 16,
-    borderRadius: 30,
-    marginRight: 16,
+  secondaryButton: {
+    backgroundColor: Tokens.colors.neutral[700],
+    paddingHorizontal: Tokens.spacing[24],
+    paddingVertical: Tokens.spacing[16],
+    borderRadius: Tokens.radii.pill,
+    minHeight: Tokens.layout.minTapTarget,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  pauseButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  resetButton: {
-    backgroundColor: '#2D2D44',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    borderRadius: 30,
-  },
-  resetButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+  secondaryButtonText: {
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
   },
 });

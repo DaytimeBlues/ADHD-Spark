@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import { Tokens } from '../theme/tokens';
 
 const CheckInScreen = () => {
   const [mood, setMood] = useState<number | null>(null);
@@ -45,46 +46,48 @@ const CheckInScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Check In</Text>
-        <Text style={styles.subtitle}>How are you feeling?</Text>
+      <View style={styles.webContainer}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Check In</Text>
+          <Text style={styles.subtitle}>How are you feeling?</Text>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Mood</Text>
-          <View style={styles.options}>
-            {moods.map(m => (
-              <TouchableOpacity
-                key={m.value}
-                style={[styles.option, mood === m.value && styles.selected]}
-                onPress={() => setMood(m.value)}>
-                <Text style={styles.emoji}>{m.emoji}</Text>
-                <Text style={styles.label}>{m.label}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Mood</Text>
+            <View style={styles.options}>
+              {moods.map(m => (
+                <TouchableOpacity
+                  key={m.value}
+                  style={[styles.option, mood === m.value && styles.selected]}
+                  onPress={() => setMood(m.value)}>
+                  <Text style={styles.emoji}>{m.emoji}</Text>
+                  <Text style={styles.label}>{m.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Energy</Text>
+            <View style={styles.options}>
+              {energyLevels.map(e => (
+                <TouchableOpacity
+                  key={e.value}
+                  style={[styles.option, energy === e.value && styles.selected]}
+                  onPress={() => setEnergy(e.value)}>
+                  <Text style={styles.emoji}>{e.emoji}</Text>
+                  <Text style={styles.label}>{e.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {recommendation && (
+            <View style={styles.recommendation}>
+              <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
+              <Text style={styles.recommendationText}>{recommendation.desc}</Text>
+            </View>
+          )}
         </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Energy</Text>
-          <View style={styles.options}>
-            {energyLevels.map(e => (
-              <TouchableOpacity
-                key={e.value}
-                style={[styles.option, energy === e.value && styles.selected]}
-                onPress={() => setEnergy(e.value)}>
-                <Text style={styles.emoji}>{e.emoji}</Text>
-                <Text style={styles.label}>{e.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        {recommendation && (
-          <View style={styles.recommendation}>
-            <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
-            <Text style={styles.recommendationText}>{recommendation.desc}</Text>
-          </View>
-        )}
       </View>
     </SafeAreaView>
   );
@@ -93,31 +96,37 @@ const CheckInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Tokens.colors.neutral[900],
+  },
+  webContainer: {
+    flex: 1,
+    width: '100%',
+    maxWidth: Tokens.layout.maxWidth.content,
+    alignSelf: 'center',
   },
   content: {
     flex: 1,
-    padding: 16,
+    padding: Tokens.spacing[16],
   },
   title: {
-    fontSize: 28,
+    fontSize: Tokens.type['3xl'],
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
+    color: Tokens.colors.neutral[0],
+    marginBottom: Tokens.spacing[4],
   },
   subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 32,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.neutral[200],
+    marginBottom: Tokens.spacing[32],
   },
   section: {
-    marginBottom: 24,
+    marginBottom: Tokens.spacing[24],
   },
   sectionTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: Tokens.spacing[12],
   },
   options: {
     flexDirection: 'row',
@@ -125,37 +134,38 @@ const styles = StyleSheet.create({
   },
   option: {
     alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: '#2D2D44',
+    padding: Tokens.spacing[12],
+    borderRadius: Tokens.radii.md,
+    backgroundColor: Tokens.colors.neutral[600],
     width: '18%',
+    minHeight: Tokens.layout.minTapTarget,
   },
   selected: {
-    backgroundColor: '#6200EA',
+    backgroundColor: Tokens.colors.brand[600],
   },
   emoji: {
-    fontSize: 24,
-    marginBottom: 4,
+    fontSize: Tokens.type['2xl'],
+    marginBottom: Tokens.spacing[4],
   },
   label: {
-    color: '#888',
-    fontSize: 10,
+    color: Tokens.colors.neutral[200],
+    fontSize: Tokens.type.xs,
   },
   recommendation: {
-    backgroundColor: '#2D2D44',
-    borderRadius: 16,
-    padding: 20,
-    marginTop: 16,
+    backgroundColor: Tokens.colors.neutral[600],
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[24], // 20 -> 24 (closest token)
+    marginTop: Tokens.spacing[16],
   },
   recommendationTitle: {
-    color: '#6200EA',
-    fontSize: 20,
+    color: Tokens.colors.brand[600],
+    fontSize: Tokens.type.xl,
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: Tokens.spacing[8],
   },
   recommendationText: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.base,
   },
 });
 

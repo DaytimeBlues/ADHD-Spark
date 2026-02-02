@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
-import { MetroButton } from '../components/metro/MetroButton';
-import { MetroPalette, MetroSpacing, MetroTypography } from '../theme/metroTheme';
+import {formatTime} from '../utils/helpers';
+import {Tokens} from '../theme/tokens';
 
 const IgniteScreen = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -58,19 +58,15 @@ const IgniteScreen = () => {
     });
   }, [timeLeft, isPlaying]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const startTimer = () => {
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           setIsRunning(false);
-          if (intervalRef.current) clearInterval(intervalRef.current);
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+          }
           SoundService.playCompletionSound();
           return 0;
         }
@@ -123,36 +119,41 @@ const IgniteScreen = () => {
 
         <View style={styles.controls}>
           {!isRunning ? (
-            <MetroButton
-              title="Start"
-              onPress={startTimer}
-              accentColor={MetroPalette.blue}
-              style={styles.controlBtn}
-            />
+            <TouchableOpacity
+              style={[styles.button, styles.primaryButton]}
+              onPress={startTimer}>
+              <Text style={styles.primaryButtonText}>Start</Text>
+            </TouchableOpacity>
           ) : (
-            <MetroButton
-              title="Pause"
-              onPress={pauseTimer}
-              accentColor={MetroPalette.red}
-              style={styles.controlBtn}
-            />
+            <TouchableOpacity
+              style={[styles.button, styles.dangerButton]}
+              onPress={pauseTimer}>
+              <Text style={styles.dangerButtonText}>Pause</Text>
+            </TouchableOpacity>
           )}
 
-          <MetroButton
-            title="Reset"
-            onPress={resetTimer}
-            variant="outline"
-            style={styles.controlBtn}
-          />
+          <TouchableOpacity
+            style={[styles.button, styles.outlineButton]}
+            onPress={resetTimer}>
+            <Text style={styles.outlineButtonText}>Reset</Text>
+          </TouchableOpacity>
         </View>
 
-        <MetroButton
-          title={isPlaying ? '🔊 Brown Noise On' : '🔇 Brown Noise Off'}
-          onPress={toggleSound}
-          variant={isPlaying ? 'filled' : 'outline'}
-          accentColor={MetroPalette.purple}
-          style={styles.soundButton}
-        />
+        <TouchableOpacity
+          style={[
+            styles.soundButton,
+            isPlaying ? styles.soundButtonActive : styles.soundButtonInactive,
+          ]}
+          onPress={toggleSound}>
+          <Text
+            style={
+              isPlaying
+                ? styles.soundButtonTextActive
+                : styles.soundButtonTextInactive
+            }>
+            {isPlaying ? '🔊 Brown Noise On' : '🔇 Brown Noise Off'}
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -161,57 +162,119 @@ const IgniteScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: MetroPalette.black,
+    backgroundColor: Tokens.colors.neutral[900],
+    alignItems: 'center',
   },
   content: {
     flex: 1,
-    padding: MetroSpacing.l,
+    padding: Tokens.spacing[24],
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    maxWidth: Tokens.layout.maxWidth.prose,
   },
   title: {
-    fontFamily: MetroTypography.fontFamily,
-    fontSize: MetroTypography.sizes.display,
-    fontWeight: MetroTypography.weights.light,
-    color: MetroPalette.white,
-    marginBottom: MetroSpacing.unit,
-    letterSpacing: MetroTypography.letterSpacing.display,
+    fontSize: Tokens.type['5xl'],
+    fontWeight: '300',
+    color: Tokens.colors.neutral[0],
+    marginBottom: Tokens.spacing[4],
+    letterSpacing: -1,
   },
   subtitle: {
-    fontFamily: MetroTypography.fontFamily,
-    fontSize: MetroTypography.sizes.h3,
-    color: MetroPalette.gray,
-    marginBottom: MetroSpacing.xxl,
+    fontSize: Tokens.type.xl,
+    color: Tokens.colors.neutral[300],
+    marginBottom: Tokens.spacing[48],
   },
   timerContainer: {
     alignItems: 'center',
-    marginBottom: MetroSpacing.xxl,
+    marginBottom: Tokens.spacing[48],
   },
   timer: {
-    fontFamily: MetroTypography.fontFamily,
-    fontSize: 96,
-    fontWeight: MetroTypography.weights.light,
-    color: MetroPalette.white,
+    fontSize: Tokens.type.giga,
+    fontWeight: '300',
+    color: Tokens.colors.neutral[0],
     fontVariant: ['tabular-nums'],
     letterSpacing: -2,
+    textAlign: 'center',
   },
   status: {
-    fontFamily: MetroTypography.fontFamily,
-    fontSize: MetroTypography.sizes.h3,
-    color: MetroPalette.blue,
-    marginTop: MetroSpacing.m,
+    fontSize: Tokens.type.xl,
+    color: Tokens.colors.brand[400],
+    marginTop: Tokens.spacing[16],
   },
   controls: {
     flexDirection: 'row',
-    marginBottom: MetroSpacing.xl,
+    marginBottom: Tokens.spacing[32],
     justifyContent: 'center',
+    gap: Tokens.spacing[16],
+    flexWrap: 'wrap',
   },
-  controlBtn: {
-    marginHorizontal: MetroSpacing.s,
+  button: {
+    paddingHorizontal: Tokens.spacing[32],
+    paddingVertical: Tokens.spacing[16],
+    borderRadius: Tokens.radii.pill,
+    minHeight: Tokens.layout.minTapTarget,
+    justifyContent: 'center',
+    alignItems: 'center',
     minWidth: 120,
+    ...Tokens.elevation.sm,
+  },
+  primaryButton: {
+    backgroundColor: Tokens.colors.brand[500],
+  },
+  primaryButtonText: {
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
+    fontWeight: '600',
+  },
+  dangerButton: {
+    backgroundColor: Tokens.colors.danger[500],
+  },
+  dangerButtonText: {
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.lg,
+    fontWeight: '600',
+  },
+  outlineButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral[500],
+    elevation: 0, // override elevation for outline
+    shadowOpacity: 0,
+  },
+  outlineButtonText: {
+    color: Tokens.colors.neutral[200],
+    fontSize: Tokens.type.lg,
+    fontWeight: '600',
   },
   soundButton: {
-    minWidth: 200,
+    minWidth: 220,
+    paddingHorizontal: Tokens.spacing[24],
+    paddingVertical: Tokens.spacing[16],
+    borderRadius: Tokens.radii.pill,
+    borderWidth: 1,
+    minHeight: Tokens.layout.minTapTarget,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  soundButtonActive: {
+    backgroundColor: Tokens.colors.brand[600],
+    borderColor: Tokens.colors.brand[600],
+    ...Tokens.elevation.sm,
+  },
+  soundButtonInactive: {
+    backgroundColor: 'transparent',
+    borderColor: Tokens.colors.brand[400],
+  },
+  soundButtonTextActive: {
+    color: Tokens.colors.neutral[0],
+    fontSize: Tokens.type.base,
+    fontWeight: '600',
+  },
+  soundButtonTextInactive: {
+    color: Tokens.colors.brand[300],
+    fontSize: Tokens.type.base,
+    fontWeight: '600',
   },
 });
 

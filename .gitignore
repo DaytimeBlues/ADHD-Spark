@@ -26,3 +26,9 @@ Thumbs.db
 test-results/
 playwright-report/
 coverage/
+
+# Local scratch / restore files
+temp_tokens.ts
+tokens_restore.ts
+home_restore.tsx
+home_restore_utf8.ts
