@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
-import {formatTime} from '../utils/helpers';
-import {Tokens} from '../theme/tokens';
+import { formatTime } from '../utils/helpers';
+import { LinearButton } from '../components/ui/LinearButton';
+import { Tokens } from '../theme/tokens';
 
 const PomodoroScreen = () => {
   const [isWorking, setIsWorking] = useState(true);
@@ -118,8 +119,8 @@ const PomodoroScreen = () => {
               styles.phaseIndicator,
               {
                 backgroundColor: isWorking
-                  ? Tokens.colors.danger[500]
-                  : Tokens.colors.success[500],
+                  ? Tokens.colors.error.main
+                  : Tokens.colors.success.main,
               },
             ]}
           />
@@ -131,17 +132,29 @@ const PomodoroScreen = () => {
 
         <View style={styles.controls}>
           {!isRunning ? (
-            <TouchableOpacity style={styles.primaryButton} onPress={startTimer}>
-              <Text style={styles.primaryButtonText}>Start</Text>
-            </TouchableOpacity>
+            <LinearButton
+              title="Start"
+              onPress={startTimer}
+              variant="primary"
+              size="lg"
+              style={styles.controlBtn}
+            />
           ) : (
-            <TouchableOpacity style={styles.primaryButton} onPress={pauseTimer}>
-              <Text style={styles.primaryButtonText}>Pause</Text>
-            </TouchableOpacity>
+            <LinearButton
+              title="Pause"
+              onPress={pauseTimer}
+              variant="secondary"
+              size="lg"
+              style={styles.controlBtn}
+            />
           )}
-          <TouchableOpacity style={styles.secondaryButton} onPress={resetTimer}>
-            <Text style={styles.secondaryButtonText}>Reset</Text>
-          </TouchableOpacity>
+          <LinearButton
+            title="Reset"
+            onPress={resetTimer}
+            variant="ghost"
+            size="lg"
+            style={styles.controlBtn}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -151,92 +164,74 @@ const PomodoroScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[900],
+    backgroundColor: Tokens.colors.neutral.darkest,
     alignItems: 'center',
   },
   content: {
     flex: 1,
-    padding: Tokens.spacing[16],
+    padding: Tokens.spacing[4],
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    maxWidth: Tokens.layout.maxWidth.prose,
+    maxWidth: 680,
   },
   title: {
-    fontSize: Tokens.type['3xl'],
-    fontWeight: 'bold',
-    color: Tokens.colors.neutral[0],
-    marginBottom: Tokens.spacing[4],
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    color: Tokens.colors.neutral[300],
-    marginBottom: Tokens.spacing[16],
+    color: Tokens.colors.text.secondary,
+    marginBottom: Tokens.spacing[6],
   },
   sessionsContainer: {
-    marginBottom: Tokens.spacing[32],
+    marginBottom: Tokens.spacing[8],
   },
   sessionsText: {
-    color: Tokens.colors.brand[500],
-    fontSize: Tokens.type.base,
+    fontFamily: 'Inter',
+    color: Tokens.colors.indigo.primary,
+    fontSize: Tokens.type.sm,
     fontWeight: '600',
   },
   timerContainer: {
     alignItems: 'center',
-    marginBottom: Tokens.spacing[48],
+    marginBottom: Tokens.spacing[12],
     justifyContent: 'center',
   },
   phaseIndicator: {
-    width: 200,
-    height: 200,
-    borderRadius: Tokens.radii.pill,
+    width: 240,
+    height: 240,
+    borderRadius: Tokens.radii.full,
     position: 'absolute',
-    opacity: 0.2,
+    opacity: 0.1,
   },
   timer: {
-    fontSize: Tokens.type.mega,
-    fontWeight: 'bold',
-    color: Tokens.colors.neutral[0],
+    fontFamily: 'Inter',
+    fontSize: 84,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
     fontVariant: ['tabular-nums'],
     textAlign: 'center',
+    letterSpacing: -2,
   },
   phaseText: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.lg,
-    color: Tokens.colors.neutral[300],
-    marginTop: Tokens.spacing[8],
+    color: Tokens.colors.text.tertiary,
+    marginTop: Tokens.spacing[2],
   },
   controls: {
     flexDirection: 'row',
-    gap: Tokens.spacing[16],
+    gap: Tokens.spacing[3],
+    marginTop: Tokens.spacing[8],
   },
-  primaryButton: {
-    backgroundColor: Tokens.colors.danger[500],
-    paddingHorizontal: Tokens.spacing[48],
-    paddingVertical: Tokens.spacing[16],
-    borderRadius: Tokens.radii.pill,
-    minHeight: Tokens.layout.minTapTarget,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...Tokens.elevation.sm,
-  },
-  primaryButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.lg,
-    fontWeight: '600',
-  },
-  secondaryButton: {
-    backgroundColor: Tokens.colors.neutral[700],
-    paddingHorizontal: Tokens.spacing[24],
-    paddingVertical: Tokens.spacing[16],
-    borderRadius: Tokens.radii.pill,
-    minHeight: Tokens.layout.minTapTarget,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  secondaryButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.lg,
-    fontWeight: '600',
+  controlBtn: {
+    minWidth: 120,
   },
 });
 

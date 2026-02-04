@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,8 +10,9 @@ import {
   Platform,
 } from 'react-native';
 import StorageService from '../services/StorageService';
-import {generateId} from '../utils/helpers';
-import {Tokens} from '../theme/tokens';
+import { generateId } from '../utils/helpers';
+import { LinearButton } from '../components/ui/LinearButton';
+import { Tokens } from '../theme/tokens';
 
 interface Task {
   id: string;
@@ -71,11 +72,11 @@ const FogCutterScreen = () => {
 
   const toggleTask = (id: string) => {
     setTasks(prevTasks =>
-      prevTasks.map(t => (t.id === id ? {...t, completed: !t.completed} : t)),
+      prevTasks.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
     );
   };
 
-  const renderMicroStep = ({item, index}: {item: string; index: number}) => (
+  const renderMicroStep = ({ item, index }: { item: string; index: number }) => (
     <View style={styles.microStep}>
       <Text style={styles.stepNumber}>{index + 1}</Text>
       <Text style={styles.stepText}>{item}</Text>
@@ -92,7 +93,7 @@ const FogCutterScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="What feels overwhelming?"
-            placeholderTextColor={Tokens.colors.neutral[300]}
+            placeholderTextColor={Tokens.colors.text.tertiary}
             value={task}
             onChangeText={setTask}
           />
@@ -101,14 +102,17 @@ const FogCutterScreen = () => {
             <TextInput
               style={styles.stepInput}
               placeholder="Add a micro-step..."
-              placeholderTextColor={Tokens.colors.neutral[300]}
+              placeholderTextColor={Tokens.colors.text.tertiary}
               value={newStep}
               onChangeText={setNewStep}
               onSubmitEditing={addMicroStep}
             />
-            <TouchableOpacity style={styles.addButton} onPress={addMicroStep}>
-              <Text style={styles.addButtonText}>+</Text>
-            </TouchableOpacity>
+            <LinearButton
+              title="+"
+              onPress={addMicroStep}
+              variant="secondary"
+              style={styles.addButton}
+            />
           </View>
 
           {microSteps.length > 0 && (
@@ -125,17 +129,18 @@ const FogCutterScreen = () => {
             </View>
           )}
 
-          <TouchableOpacity
-            style={[styles.saveButton, microSteps.length === 0 && styles.disabled]}
+          <LinearButton
+            title="Save Task"
             onPress={addTask}
-            disabled={microSteps.length === 0}>
-            <Text style={styles.saveButtonText}>Save Task</Text>
-          </TouchableOpacity>
+            disabled={microSteps.length === 0}
+            size="lg"
+            style={styles.saveButton}
+          />
 
           <FlatList
             data={tasks}
             keyExtractor={item => item.id}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
                   styles.taskCard,
@@ -163,149 +168,142 @@ const FogCutterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[900],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   scrollContent: {
     flex: 1,
-    alignItems: 'center', // Centers the content for web
+    alignItems: 'center',
   },
   content: {
     flex: 1,
     width: '100%',
-    maxWidth: Tokens.layout.maxWidth.prose,
-    padding: Tokens.spacing[16],
+    maxWidth: 680,
+    padding: Tokens.spacing[4],
   },
   title: {
-    fontSize: Tokens.type['3xl'],
-    fontWeight: 'bold',
-    color: Tokens.colors.neutral[0],
-    marginBottom: Tokens.spacing[4],
+    fontFamily: 'Inter',
+    fontSize: 28,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    color: Tokens.colors.neutral[300],
-    marginBottom: Tokens.spacing[24],
+    color: Tokens.colors.text.secondary,
+    marginBottom: Tokens.spacing[6],
   },
   input: {
-    backgroundColor: Tokens.colors.neutral[800],
+    backgroundColor: Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    color: Tokens.colors.neutral[0],
+    paddingHorizontal: Tokens.spacing[4],
+    color: Tokens.colors.text.primary,
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    marginBottom: Tokens.spacing[16],
-    height: Tokens.layout.minTapTargetComfortable,
+    marginBottom: Tokens.spacing[4],
+    height: 44,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   addStepRow: {
     flexDirection: 'row',
-    marginBottom: Tokens.spacing[24],
+    marginBottom: Tokens.spacing[6],
+    gap: Tokens.spacing[2],
   },
   stepInput: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[800],
+    backgroundColor: Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    color: Tokens.colors.neutral[0],
+    paddingHorizontal: Tokens.spacing[4],
+    color: Tokens.colors.text.primary,
+    fontFamily: 'Inter',
     fontSize: Tokens.type.sm,
-    marginRight: Tokens.spacing[12],
-    height: Tokens.layout.minTapTargetComfortable,
+    height: 44,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   addButton: {
-    backgroundColor: Tokens.colors.brand[600],
-    width: Tokens.layout.minTapTargetComfortable,
-    height: Tokens.layout.minTapTargetComfortable,
-    borderRadius: Tokens.radii.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type['2xl'],
-    fontWeight: 'bold',
+    width: 44,
+    height: 44,
   },
   previewContainer: {
-    backgroundColor: Tokens.colors.neutral[800],
-    borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    marginBottom: Tokens.spacing[16],
-    ...Tokens.elevation.sm,
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[4],
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   previewTitle: {
-    color: Tokens.colors.neutral[300],
-    fontSize: Tokens.type.sm,
-    marginBottom: Tokens.spacing[12],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.xs,
+    marginBottom: Tokens.spacing[3],
   },
   microStep: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Tokens.spacing[8],
+    paddingVertical: Tokens.spacing[2],
   },
   stepNumber: {
-    backgroundColor: Tokens.colors.brand[600],
-    color: Tokens.colors.neutral[0],
-    width: 24,
-    height: 24,
+    backgroundColor: Tokens.colors.indigo.subtle,
+    color: Tokens.colors.indigo.primary,
+    width: 22,
+    height: 22,
     borderRadius: Tokens.radii.md,
     textAlign: 'center',
-    lineHeight: 24,
-    fontSize: Tokens.type.xs,
+    lineHeight: 22,
+    fontSize: Tokens.type.xxs,
     fontWeight: 'bold',
-    marginRight: Tokens.spacing[12],
+    marginRight: Tokens.spacing[3],
   },
   stepText: {
-    color: Tokens.colors.neutral[0],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.sm,
   },
   saveButton: {
-    backgroundColor: Tokens.colors.brand[600],
-    paddingVertical: Tokens.spacing[16], // Increased to ensure height > 44
-    borderRadius: Tokens.radii.md,
-    alignItems: 'center',
-    marginBottom: Tokens.spacing[24],
-    minHeight: Tokens.layout.minTapTargetComfortable,
-    justifyContent: 'center',
-    ...Tokens.elevation.sm,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  saveButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.base,
-    fontWeight: '600',
+    marginBottom: Tokens.spacing[6],
   },
   taskList: {
     flex: 1,
   },
   taskCard: {
-    backgroundColor: Tokens.colors.neutral[800],
-    borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    marginBottom: Tokens.spacing[12],
-    ...Tokens.elevation.sm,
-    minHeight: 60, // Ensure decent click area
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[3],
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    minHeight: 60,
   },
   taskCardCompleted: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
   taskText: {
-    color: Tokens.colors.neutral[0],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
     fontWeight: '600',
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[2],
   },
   completed: {
     textDecorationLine: 'line-through',
   },
   stepCount: {
-    backgroundColor: Tokens.colors.neutral[900],
-    paddingHorizontal: Tokens.spacing[12],
-    paddingVertical: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darkest,
+    paddingHorizontal: Tokens.spacing[2],
+    paddingVertical: Tokens.spacing[1],
     borderRadius: Tokens.radii.md,
     alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   stepCountText: {
-    color: Tokens.colors.neutral[300],
-    fontSize: Tokens.type.xs,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xxs,
   },
 });
 

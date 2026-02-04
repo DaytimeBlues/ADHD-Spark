@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,19 +14,20 @@ import {
 } from 'react-native';
 import StorageService from '../services/StorageService';
 import OverlayService from '../services/OverlayService';
-import {generateId} from '../utils/helpers';
+import { generateId } from '../utils/helpers';
 // We remove MetroButton to use a custom button aligned with new design
+import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 
-const INPUT_HEIGHT = Tokens.spacing[32] + Tokens.spacing[24];
+const INPUT_HEIGHT = 40;
 const HIT_SLOP = {
-  top: Tokens.spacing[12],
-  bottom: Tokens.spacing[12],
-  left: Tokens.spacing[12],
-  right: Tokens.spacing[12],
+  top: Tokens.spacing[2],
+  bottom: Tokens.spacing[2],
+  left: Tokens.spacing[2],
+  right: Tokens.spacing[2],
 };
-const ITEM_BORDER_WIDTH = Tokens.spacing[4];
-const ITEM_LINE_HEIGHT = Tokens.spacing[24];
+const ITEM_BORDER_WIDTH = 2;
+const ITEM_LINE_HEIGHT = 20;
 
 interface DumpItem {
   id: string;
@@ -39,7 +40,7 @@ const BrainDumpScreen = () => {
   const [items, setItems] = useState<DumpItem[]>([]);
 
   // On web, layout animation is CSS based usually, but we keep RN logic for now
-  
+
   const loadItems = async () => {
     const storedItems = await StorageService.getJSON<DumpItem[]>(
       StorageService.STORAGE_KEYS.brainDump,
@@ -51,7 +52,7 @@ const BrainDumpScreen = () => {
     const normalized = storedItems.filter(item => {
       return Boolean(item?.id && item?.text && item?.createdAt);
     });
-    
+
     // Animate initial load
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setItems(normalized);
@@ -94,10 +95,10 @@ const BrainDumpScreen = () => {
     setItems([]);
   };
 
-  const renderItem = ({item}: {item: DumpItem}) => (
+  const renderItem = ({ item }: { item: DumpItem }) => (
     <View style={styles.item}>
       <Text style={styles.itemText}>{item.text}</Text>
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => deleteItem(item.id)}
         style={styles.deleteButton}
         hitSlop={HIT_SLOP}
@@ -110,8 +111,8 @@ const BrainDumpScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.centerContainer}>
-        <View style={[styles.contentWrapper, { maxWidth: Tokens.layout.maxWidth.prose }]}>
-          
+        <View style={styles.contentWrapper}>
+
           <View style={styles.header}>
             <Text style={styles.title}>Brain Dump</Text>
             <Text style={styles.subtitle}>Unload your thoughts. We'll keep them safe.</Text>
@@ -122,7 +123,7 @@ const BrainDumpScreen = () => {
               <TextInput
                 style={styles.input}
                 placeholder="What's on your mind?"
-                placeholderTextColor={Tokens.colors.neutral[400]}
+                placeholderTextColor={Tokens.colors.text.tertiary}
                 value={input}
                 onChangeText={setInput}
                 onSubmitEditing={addItem}
@@ -131,15 +132,12 @@ const BrainDumpScreen = () => {
                 {...(Platform.OS === 'web' ? { style: [styles.input, { outlineWidth: 0 }] } : {})}
               />
             </View>
-            <Pressable 
-              style={({pressed}) => [
-                styles.addButton,
-                pressed && { opacity: 0.8, transform: [{scale: 0.98}] }
-              ]}
+            <LinearButton
+              title="Add"
               onPress={addItem}
-            >
-              <Text style={styles.addButtonText}>Add</Text>
-            </Pressable>
+              size="md"
+              style={styles.addButton}
+            />
           </View>
 
           {items.length > 0 && (
@@ -175,7 +173,7 @@ const BrainDumpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[900],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   centerContainer: {
     flex: 1,
@@ -184,120 +182,115 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     width: '100%',
-    padding: Tokens.spacing[16],
+    maxWidth: 680,
+    padding: Tokens.spacing[4],
   },
   header: {
-    marginBottom: Tokens.spacing[32],
-    marginTop: Tokens.spacing[16],
+    marginBottom: Tokens.spacing[8],
+    marginTop: Tokens.spacing[4],
   },
   title: {
-    fontSize: Tokens.type['4xl'],
+    fontFamily: 'Inter',
+    fontSize: 28,
     fontWeight: '700',
-    color: Tokens.colors.neutral[0],
-    marginBottom: Tokens.spacing[8],
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    color: Tokens.colors.neutral[400],
+    color: Tokens.colors.text.secondary,
   },
   // Input
   inputSection: {
     flexDirection: 'row',
-    marginBottom: Tokens.spacing[24],
-    gap: Tokens.spacing[12],
-    // For older RN fallback if gap not supported
+    marginBottom: Tokens.spacing[6],
+    gap: Tokens.spacing[3],
   },
   inputWrapper: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[800],
-    borderRadius: Tokens.radii.lg,
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.md,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral[700],
-    minHeight: INPUT_HEIGHT, // Touch target friendly
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    minHeight: INPUT_HEIGHT,
     justifyContent: 'center',
   },
   input: {
-    padding: Tokens.spacing[16],
-    color: Tokens.colors.neutral[50],
+    paddingHorizontal: Tokens.spacing[3],
+    color: Tokens.colors.text.primary,
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     minHeight: INPUT_HEIGHT,
-    textAlignVertical: 'center', // Android
+    textAlignVertical: 'center',
   },
   addButton: {
-    backgroundColor: Tokens.colors.brand[600],
-    borderRadius: Tokens.radii.lg,
-    paddingHorizontal: Tokens.spacing[24],
-    justifyContent: 'center',
-    alignItems: 'center',
     minHeight: INPUT_HEIGHT,
-    ...Tokens.elevation.sm,
-    ...(Platform.OS === 'web' ? { cursor: 'pointer' } : {}),
-  },
-  addButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontWeight: '600',
-    fontSize: Tokens.type.base,
+    paddingHorizontal: Tokens.spacing[4],
   },
   // Actions
   actionsBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Tokens.spacing[16],
-    paddingHorizontal: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[4],
+    paddingHorizontal: Tokens.spacing[1],
   },
   countText: {
-    color: Tokens.colors.neutral[500],
-    fontSize: Tokens.type.sm,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xs,
   },
   clearText: {
-    color: Tokens.colors.danger[200], // Softer red for dark mode
-    fontSize: Tokens.type.sm,
+    fontFamily: 'Inter',
+    color: Tokens.colors.error.main,
+    fontSize: Tokens.type.xs,
     fontWeight: '600',
   },
   // List
   listContent: {
-    paddingBottom: Tokens.spacing[64],
+    paddingBottom: Tokens.spacing[16],
   },
   item: {
-    backgroundColor: Tokens.colors.neutral[800],
+    backgroundColor: Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    marginBottom: Tokens.spacing[12],
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[3],
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderLeftWidth: ITEM_BORDER_WIDTH,
-    borderLeftColor: Tokens.colors.brand[500],
-    ...Tokens.elevation.sm,
+    borderLeftColor: Tokens.colors.indigo.primary,
   },
   itemText: {
     flex: 1,
-    color: Tokens.colors.neutral[100],
+    color: Tokens.colors.text.primary,
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     lineHeight: ITEM_LINE_HEIGHT,
-    marginRight: Tokens.spacing[16],
+    marginRight: Tokens.spacing[4],
   },
   deleteButton: {
-    padding: Tokens.spacing[8],
+    padding: Tokens.spacing[2],
   },
   deleteText: {
-    color: Tokens.colors.neutral[500],
-    fontSize: Tokens.type.lg,
+    color: Tokens.colors.text.tertiary,
+    fontSize: 14,
   },
   // Empty
   emptyState: {
     alignItems: 'center',
-    marginTop: Tokens.spacing[48],
+    marginTop: Tokens.spacing[12],
     opacity: 0.5,
   },
   emptyIcon: {
-    fontSize: Tokens.type.mega,
-    marginBottom: Tokens.spacing[16],
-    color: Tokens.colors.neutral[700],
+    fontSize: 64,
+    marginBottom: Tokens.spacing[4],
   },
   emptyText: {
-    color: Tokens.colors.neutral[400],
-    fontSize: Tokens.type.lg,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.base,
   },
 });
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OverlayService from '../services/OverlayService';
 import { Tokens } from '../theme/tokens';
-import ModeCard, {type ModeCardMode} from '../components/home/ModeCard';
+import ModeCard, { type ModeCardMode } from '../components/home/ModeCard';
 
 // -- Constants --
 const ANIMATION_DURATION = 500;
@@ -22,13 +22,13 @@ const ANIMATION_STAGGER = 60;
 const ENTRANCE_OFFSET_Y = Tokens.spacing[48];
 
 // -- Types --
-type Mode = {id: string} & ModeCardMode;
+type Mode = { id: string } & ModeCardMode;
 
-const HomeScreen = ({navigation}: any) => {
+const HomeScreen = ({ navigation }: any) => {
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const { width } = useWindowDimensions();
-  
+
   // Responsive layout logic
   const isWeb = Platform.OS === 'web';
   const numColumns = isWeb && width > 768 ? 3 : 2;
@@ -36,12 +36,12 @@ const HomeScreen = ({navigation}: any) => {
 
   const modes = useMemo(
     () => [
-      {id: 'ignite', name: 'Ignite', icon: '🔥', desc: '5-min focus timer', accent: Tokens.colors.brand[500]},
-      {id: 'fogcutter', name: 'Fog Cutter', icon: '💨', desc: 'Break tasks down', accent: Tokens.colors.brand[400]},
-      {id: 'pomodoro', name: 'Pomodoro', icon: '🍅', desc: 'Classic timer', accent: Tokens.colors.danger[500]},
-      {id: 'anchor', name: 'Anchor', icon: '⚓', desc: 'Breathing exercises', accent: Tokens.colors.success[500]},
-      {id: 'checkin', name: 'Check In', icon: '📊', desc: 'Mood & energy', accent: Tokens.colors.warning[500]},
-      {id: 'crisis', name: 'Crisis Mode', icon: '🆘', desc: 'Safety resources', accent: Tokens.colors.danger[800]},
+      { id: 'ignite', name: 'Ignite', icon: '🔥', desc: '5-min focus timer', accent: Tokens.colors.brand[500] },
+      { id: 'fogcutter', name: 'Fog Cutter', icon: '💨', desc: 'Break tasks down', accent: Tokens.colors.brand[400] },
+      { id: 'pomodoro', name: 'Pomodoro', icon: '🍅', desc: 'Classic timer', accent: Tokens.colors.danger[500] },
+      { id: 'anchor', name: 'Anchor', icon: '⚓', desc: 'Breathing exercises', accent: Tokens.colors.success[500] },
+      { id: 'checkin', name: 'Check In', icon: '📊', desc: 'Mood & energy', accent: Tokens.colors.warning[500] },
+      { id: 'crisis', name: 'Crisis Mode', icon: '🆘', desc: 'Safety resources', accent: Tokens.colors.danger[800] },
     ],
     [],
   );
@@ -52,7 +52,7 @@ const HomeScreen = ({navigation}: any) => {
   useEffect(() => {
     loadStreak();
     checkOverlayPermission();
-    
+
     // Trigger entrance animation
     const animations = modes.map((_, i) => {
       return Animated.parallel([
@@ -70,7 +70,7 @@ const HomeScreen = ({navigation}: any) => {
         }),
       ]);
     });
-    
+
     Animated.stagger(ANIMATION_STAGGER, animations).start();
   }, []);
 
@@ -126,7 +126,7 @@ const HomeScreen = ({navigation}: any) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.maxWidthWrapper}>
-          
+
           <View style={styles.header}>
             <View>
               <Text style={styles.title}>Spark</Text>
@@ -147,7 +147,7 @@ const HomeScreen = ({navigation}: any) => {
                 <Text style={styles.overlayDesc}>Keep tasks visible over other apps</Text>
               </View>
               <Switch
-                trackColor={{false: Tokens.colors.neutral[600], true: Tokens.colors.brand[500]}}
+                trackColor={{ false: Tokens.colors.neutral[600], true: Tokens.colors.brand[500] }}
                 thumbColor={Tokens.colors.neutral[0]}
                 ios_backgroundColor={Tokens.colors.neutral[700]}
                 onValueChange={toggleOverlay}
@@ -180,89 +180,89 @@ const HomeScreen = ({navigation}: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[900],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   scrollContent: {
     flexGrow: 1,
-    padding: Tokens.spacing[16],
-    alignItems: 'center', // Center the max-width wrapper
+    padding: Tokens.spacing[6],
+    alignItems: 'center',
   },
   maxWidthWrapper: {
     width: '100%',
-    maxWidth: Tokens.layout.maxWidth.content,
+    maxWidth: 960,
   },
   header: {
-    marginBottom: Tokens.spacing[32],
+    marginBottom: Tokens.spacing[8],
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingTop: Tokens.spacing[16],
+    alignItems: 'center',
+    paddingTop: Tokens.spacing[4],
   },
   title: {
-    fontFamily: 'System', 
-    fontSize: Tokens.type['5xl'],
-    fontWeight: '700', // Bold
-    color: Tokens.colors.neutral[0],
-    letterSpacing: -1,
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: Tokens.type.lg,
-    color: Tokens.colors.neutral[400],
-    marginTop: Tokens.spacing[4],
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.text.secondary,
+    marginTop: Tokens.spacing[1],
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Tokens.colors.neutral[800],
-    paddingHorizontal: Tokens.spacing[12],
-    paddingVertical: Tokens.spacing[8],
-    borderRadius: Tokens.radii.pill,
+    backgroundColor: Tokens.colors.neutral.dark,
+    paddingHorizontal: Tokens.spacing[3],
+    paddingVertical: Tokens.spacing[2],
+    borderRadius: Tokens.radii.full,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral[700],
+    borderColor: Tokens.colors.neutral.border,
   },
   streakEmoji: {
-    fontSize: Tokens.type.xl,
-    marginRight: Tokens.spacing[4],
+    fontSize: 18,
+    marginRight: Tokens.spacing[2],
   },
   streakText: {
-    fontSize: Tokens.type.lg,
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.sm,
     fontWeight: '600',
-    color: Tokens.colors.neutral[100],
+    color: Tokens.colors.text.primary,
   },
-  // Overlay Card
   overlayCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Tokens.spacing[32],
-    padding: Tokens.spacing[16],
-    backgroundColor: Tokens.colors.neutral[800],
+    marginBottom: Tokens.spacing[8],
+    padding: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.lg,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral[700],
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   overlayTextContainer: {
     flex: 1,
-    marginRight: Tokens.spacing[16],
+    marginRight: Tokens.spacing[4],
   },
   overlayTitle: {
-    fontSize: Tokens.type.lg,
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.base,
     fontWeight: '600',
-    color: Tokens.colors.neutral[100],
-    marginBottom: Tokens.spacing[4],
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
   },
   overlayDesc: {
-    fontSize: Tokens.type.sm,
-    color: Tokens.colors.neutral[400],
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
   },
-  // Grid
   modesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    rowGap: Tokens.spacing[16], // Works in RN 0.71+ (and Web)
-    // fallback for older RN:
-    // marginTop: -Tokens.spacing[16], 
+    rowGap: Tokens.spacing[4],
   },
 });
 

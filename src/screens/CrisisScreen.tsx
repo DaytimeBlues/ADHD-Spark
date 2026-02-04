@@ -9,20 +9,22 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import { LinearButton } from '../components/ui/LinearButton';
+import { LinearCard } from '../components/ui/LinearCard';
 import { Tokens } from '../theme/tokens';
 
 const CrisisScreen = () => {
   const crisisLines = [
-    {name: 'National Suicide Prevention Lifeline', number: '988', url: 'tel:988'},
-    {name: 'Crisis Text Line', number: 'Text HOME to 741741', url: 'sms:741741'},
-    {name: 'SAMHSA National Helpline', number: '1-800-662-4357', url: 'tel:18006624357'},
+    { name: 'National Suicide Prevention Lifeline', number: '988', url: 'tel:988' },
+    { name: 'Crisis Text Line', number: 'Text HOME to 741741', url: 'sms:741741' },
+    { name: 'SAMHSA National Helpline', number: '1-800-662-4357', url: 'tel:18006624357' },
   ];
 
   const copingStrategies = [
-    {emoji: '🌊', title: 'Ride the Wave', desc: 'Emotions pass like waves. This too shall pass.'},
-    {emoji: '👁️', title: '5-4-3-2-1 Grounding', desc: 'Name 5 things you see, 4 you hear, 3 you feel, 2 you smell, 1 you taste.'},
-    {emoji: '💨', title: 'Box Breathing', desc: 'Inhale 4s, hold 4s, exhale 4s, hold 4s. Repeat.'},
-    {emoji: '📱', title: 'Reach Out', desc: 'Call or text someone you trust. You don\'t have to be alone.'},
+    { emoji: '🌊', title: 'Ride the Wave', desc: 'Emotions pass like waves. This too shall pass.' },
+    { emoji: '👁️', title: '5-4-3-2-1 Grounding', desc: 'Name 5 things you see, 4 you hear, 3 you feel, 2 you smell, 1 you taste.' },
+    { emoji: '💨', title: 'Box Breathing', desc: 'Inhale 4s, hold 4s, exhale 4s, hold 4s. Repeat.' },
+    { emoji: '📱', title: 'Reach Out', desc: 'Call or text someone you trust. You don\'t have to be alone.' },
   ];
 
   const handleCall = (url: string) => {
@@ -31,7 +33,7 @@ const CrisisScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
@@ -41,25 +43,31 @@ const CrisisScreen = () => {
 
           <Text style={styles.sectionTitle}>Immediate Help</Text>
           {crisisLines.map(line => (
-            <TouchableOpacity
+            <LinearButton
               key={line.name}
+              title={line.name}
+              onPress={() => handleCall(line.url)}
+              variant="error"
+              size="lg"
               style={styles.crisisButton}
-              activeOpacity={0.8}
-              onPress={() => handleCall(line.url)}>
-              <Text style={styles.crisisButtonText}>{line.name}</Text>
-              <Text style={styles.crisisButtonSubtext}>{line.number}</Text>
-            </TouchableOpacity>
+              textStyle={styles.crisisBtnText}
+            />
           ))}
 
           <Text style={[styles.sectionTitle, styles.strategiesHeader]}>Coping Strategies</Text>
           {copingStrategies.map(strategy => (
-            <View key={strategy.title} style={styles.strategyCard}>
-              <Text style={styles.strategyEmoji}>{strategy.emoji}</Text>
-              <View style={styles.strategyContent}>
-                <Text style={styles.strategyTitle}>{strategy.title}</Text>
-                <Text style={styles.strategyDesc}>{strategy.desc}</Text>
+            <LinearCard
+              key={strategy.title}
+              style={styles.strategyCard}
+            >
+              <View style={styles.strategyInner}>
+                <Text style={styles.strategyEmoji}>{strategy.emoji}</Text>
+                <View style={styles.strategyContent}>
+                  <Text style={styles.strategyTitle}>{strategy.title}</Text>
+                  <Text style={styles.strategyDesc}>{strategy.desc}</Text>
+                </View>
               </View>
-            </View>
+            </LinearCard>
           ))}
 
           <Text style={styles.reminder}>
@@ -74,100 +82,90 @@ const CrisisScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[800],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    padding: Tokens.spacing[16],
+    padding: Tokens.spacing[4],
   },
   webWrapper: {
     width: '100%',
-    maxWidth: Tokens.layout.maxWidth.prose,
+    maxWidth: 680,
     alignSelf: 'center',
   },
   title: {
-    fontSize: Tokens.type['3xl'],
-    fontWeight: 'bold',
-    color: Tokens.colors.danger[200],
-    marginBottom: Tokens.spacing[4],
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: '700',
+    color: Tokens.colors.error.main,
+    marginBottom: Tokens.spacing[1],
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    color: Tokens.colors.neutral[200],
-    marginBottom: Tokens.spacing[24],
-    lineHeight: Tokens.type.base * 1.5,
+    color: Tokens.colors.text.secondary,
+    marginBottom: Tokens.spacing[8],
+    lineHeight: 24,
   },
   sectionTitle: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.lg,
-    fontWeight: '600',
-    marginBottom: Tokens.spacing[12],
-  },
-  strategiesHeader: {
-    marginTop: Tokens.spacing[24],
-  },
-  crisisButton: {
-    backgroundColor: Tokens.colors.danger[500],
-    borderRadius: Tokens.radii.lg,
-    padding: Tokens.spacing[24],
-    marginBottom: Tokens.spacing[12],
-    minHeight: Tokens.layout.minTapTargetComfortable,
-    justifyContent: 'center',
-    ...Platform.select({
-      web: {
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease',
-      },
-    }),
-  },
-  crisisButtonText: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.lg,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type.base,
     fontWeight: '600',
     marginBottom: Tokens.spacing[4],
   },
-  crisisButtonSubtext: {
-    color: Tokens.colors.neutral[50],
-    fontSize: Tokens.type.base,
-    opacity: 0.9,
+  strategiesHeader: {
+    marginTop: Tokens.spacing[8],
+  },
+  crisisButton: {
+    marginBottom: Tokens.spacing[3],
+    minHeight: 64,
+  },
+  crisisBtnText: {
+    fontSize: Tokens.type.lg,
+    fontWeight: '700',
   },
   strategyCard: {
-    backgroundColor: Tokens.colors.neutral[600],
-    borderRadius: Tokens.radii.md,
-    padding: Tokens.spacing[16],
-    marginBottom: Tokens.spacing[12],
+    marginBottom: Tokens.spacing[3],
+    padding: 0, // Handled by inner
+  },
+  strategyInner: {
     flexDirection: 'row',
-    alignItems: 'center', // Aligned center for better visual balance
+    alignItems: 'center',
+    padding: Tokens.spacing[4],
   },
   strategyEmoji: {
-    fontSize: Tokens.type['3xl'],
-    marginRight: Tokens.spacing[16],
+    fontSize: 32,
+    marginRight: Tokens.spacing[4],
   },
   strategyContent: {
     flex: 1,
   },
   strategyTitle: {
-    color: Tokens.colors.neutral[0],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
     fontWeight: '600',
-    marginBottom: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[1],
   },
   strategyDesc: {
-    color: Tokens.colors.neutral[200],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.sm,
-    lineHeight: Tokens.type.sm * 1.4,
+    lineHeight: 20,
   },
   reminder: {
-    color: Tokens.colors.neutral[300],
-    fontSize: Tokens.type.sm,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xs,
     textAlign: 'center',
-    marginTop: Tokens.spacing[24],
-    marginBottom: Tokens.spacing[24],
+    marginTop: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[8],
     fontStyle: 'italic',
-    paddingHorizontal: Tokens.spacing[16],
   },
 });
 

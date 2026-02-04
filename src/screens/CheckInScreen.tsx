@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import { LinearCard } from '../components/ui/LinearCard';
 import { Tokens } from '../theme/tokens';
 
 const CheckInScreen = () => {
@@ -13,33 +14,33 @@ const CheckInScreen = () => {
   const [energy, setEnergy] = useState<number | null>(null);
 
   const moods = [
-    {emoji: '😢', label: 'Low', value: 1},
-    {emoji: '😕', label: 'Down', value: 2},
-    {emoji: '😐', label: 'Neutral', value: 3},
-    {emoji: '🙂', label: 'Good', value: 4},
-    {emoji: '😊', label: 'Great', value: 5},
+    { emoji: '😢', label: 'Low', value: 1 },
+    { emoji: '😕', label: 'Down', value: 2 },
+    { emoji: '😐', label: 'Neutral', value: 3 },
+    { emoji: '🙂', label: 'Good', value: 4 },
+    { emoji: '😊', label: 'Great', value: 5 },
   ];
 
   const energyLevels = [
-    {emoji: '🔋', label: 'Drained', value: 1},
-    {emoji: '🔋', label: 'Low', value: 2},
-    {emoji: '🔋', label: 'Medium', value: 3},
-    {emoji: '🔋', label: 'High', value: 4},
-    {emoji: '🔋', label: 'Full', value: 5},
+    { emoji: '🔋', label: 'Drained', value: 1 },
+    { emoji: '🔋', label: 'Low', value: 2 },
+    { emoji: '🔋', label: 'Medium', value: 3 },
+    { emoji: '🔋', label: 'High', value: 4 },
+    { emoji: '🔋', label: 'Full', value: 5 },
   ];
 
   const getRecommendation = () => {
     if (mood === null || energy === null) return null;
     if (mood <= 2 && energy <= 2) {
-      return {title: '🌱 Gentle Start', desc: 'Try the Anchor breathing exercise to ground yourself.'};
+      return { title: '🌱 Gentle Start', desc: 'Try the Anchor breathing exercise to ground yourself.' };
     }
     if (mood >= 4 && energy >= 4) {
-      return {title: '🚀 Ride the Wave', desc: 'Perfect time for a Ignite focus session!'};
+      return { title: '🚀 Ride the Wave', desc: 'Perfect time for a Ignite focus session!' };
     }
     if (energy <= 2) {
-      return {title: '💪 Micro Task', desc: 'Try Fog Cutter with just one micro-step.'};
+      return { title: '💪 Micro Task', desc: 'Try Fog Cutter with just one micro-step.' };
     }
-    return {title: '📝 Brain Dump', desc: 'Clear your mind before starting.'};
+    return { title: '📝 Brain Dump', desc: 'Clear your mind before starting.' };
   };
 
   const recommendation = getRecommendation();
@@ -57,6 +58,7 @@ const CheckInScreen = () => {
               {moods.map(m => (
                 <TouchableOpacity
                   key={m.value}
+                  activeOpacity={0.7}
                   style={[styles.option, mood === m.value && styles.selected]}
                   onPress={() => setMood(m.value)}>
                   <Text style={styles.emoji}>{m.emoji}</Text>
@@ -72,6 +74,7 @@ const CheckInScreen = () => {
               {energyLevels.map(e => (
                 <TouchableOpacity
                   key={e.value}
+                  activeOpacity={0.7}
                   style={[styles.option, energy === e.value && styles.selected]}
                   onPress={() => setEnergy(e.value)}>
                   <Text style={styles.emoji}>{e.emoji}</Text>
@@ -82,10 +85,13 @@ const CheckInScreen = () => {
           </View>
 
           {recommendation && (
-            <View style={styles.recommendation}>
-              <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
+            <LinearCard
+              title={recommendation.title}
+              subtitle="Recommendation"
+              style={styles.recommendation}
+            >
               <Text style={styles.recommendationText}>{recommendation.desc}</Text>
-            </View>
+            </LinearCard>
           )}
         </View>
       </View>
@@ -96,76 +102,81 @@ const CheckInScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral[900],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   webContainer: {
     flex: 1,
     width: '100%',
-    maxWidth: Tokens.layout.maxWidth.content,
+    maxWidth: 680,
     alignSelf: 'center',
   },
   content: {
     flex: 1,
-    padding: Tokens.spacing[16],
+    padding: Tokens.spacing[4],
   },
   title: {
-    fontSize: Tokens.type['3xl'],
-    fontWeight: 'bold',
-    color: Tokens.colors.neutral[0],
-    marginBottom: Tokens.spacing[4],
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontFamily: 'Inter',
     fontSize: Tokens.type.base,
-    color: Tokens.colors.neutral[200],
-    marginBottom: Tokens.spacing[32],
+    color: Tokens.colors.text.secondary,
+    marginBottom: Tokens.spacing[12],
   },
   section: {
-    marginBottom: Tokens.spacing[24],
+    marginBottom: Tokens.spacing[8],
   },
   sectionTitle: {
-    color: Tokens.colors.neutral[0],
-    fontSize: Tokens.type.lg,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type.base,
     fontWeight: '600',
-    marginBottom: Tokens.spacing[12],
+    marginBottom: Tokens.spacing[4],
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: Tokens.spacing[2],
   },
   option: {
     alignItems: 'center',
-    padding: Tokens.spacing[12],
+    padding: Tokens.spacing[3],
     borderRadius: Tokens.radii.md,
-    backgroundColor: Tokens.colors.neutral[600],
+    backgroundColor: Tokens.colors.neutral.darker,
     width: '18%',
-    minHeight: Tokens.layout.minTapTarget,
+    minHeight: 80,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    justifyContent: 'center',
   },
   selected: {
-    backgroundColor: Tokens.colors.brand[600],
+    borderColor: Tokens.colors.indigo.primary,
+    backgroundColor: Tokens.colors.neutral.dark,
   },
   emoji: {
-    fontSize: Tokens.type['2xl'],
-    marginBottom: Tokens.spacing[4],
+    fontSize: 24,
+    marginBottom: Tokens.spacing[2],
   },
   label: {
-    color: Tokens.colors.neutral[200],
-    fontSize: Tokens.type.xs,
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.xxs,
+    textAlign: 'center',
+    fontWeight: '500',
   },
   recommendation: {
-    backgroundColor: Tokens.colors.neutral[600],
-    borderRadius: Tokens.radii.lg,
-    padding: Tokens.spacing[24], // 20 -> 24 (closest token)
-    marginTop: Tokens.spacing[16],
-  },
-  recommendationTitle: {
-    color: Tokens.colors.brand[600],
-    fontSize: Tokens.type.xl,
-    fontWeight: '600',
-    marginBottom: Tokens.spacing[8],
+    marginTop: Tokens.spacing[4],
   },
   recommendationText: {
-    color: Tokens.colors.neutral[0],
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
+    lineHeight: 24,
   },
 });
 

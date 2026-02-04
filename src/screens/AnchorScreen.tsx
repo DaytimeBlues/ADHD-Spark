@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import {Tokens} from '../theme/tokens';
+import { LinearButton } from '../components/ui/LinearButton';
+import { Tokens } from '../theme/tokens';
 
 type BreathingPattern = '478' | 'box' | 'energize';
 
@@ -18,10 +19,10 @@ const AnchorScreen = () => {
   const [isActive, setIsActive] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const patterns: Record<BreathingPattern, {name: string; inhale: number; hold: number; exhale: number; wait: number}> = {
-    '478': {name: '4-7-8 Relax', inhale: 4, hold: 7, exhale: 8, wait: 0},
-    'box': {name: 'Box Breathing', inhale: 4, hold: 4, exhale: 4, wait: 4},
-    'energize': {name: 'Energize', inhale: 6, hold: 0, exhale: 2, wait: 0},
+  const patterns: Record<BreathingPattern, { name: string; inhale: number; hold: number; exhale: number; wait: number }> = {
+    '478': { name: '4-7-8 Relax', inhale: 4, hold: 7, exhale: 8, wait: 0 },
+    'box': { name: 'Box Breathing', inhale: 4, hold: 4, exhale: 4, wait: 4 },
+    'energize': { name: 'Energize', inhale: 6, hold: 0, exhale: 2, wait: 0 },
   };
 
   useEffect(() => {
@@ -97,15 +98,19 @@ const AnchorScreen = () => {
                 <View
                   style={[
                     styles.circle,
-                    {transform: [{scale: getCircleScale()}]},
+                    { transform: [{ scale: getCircleScale() }] },
                   ]}
                 />
                 <Text style={styles.phaseText}>{getPhaseText()}</Text>
                 <Text style={styles.countText}>{count}</Text>
               </View>
-              <TouchableOpacity style={styles.stopButton} onPress={stopPattern}>
-                <Text style={styles.stopButtonText}>Stop</Text>
-              </TouchableOpacity>
+              <LinearButton
+                title="Stop"
+                onPress={stopPattern}
+                variant="error"
+                size="lg"
+                style={styles.stopButton}
+              />
             </View>
           )}
 
@@ -197,7 +202,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     zIndex: 1,
     textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowOffset: {width: 0, height: 1},
+    textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
   },
   countText: {
@@ -206,7 +211,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     zIndex: 1,
     textShadowColor: 'rgba(0,0,0,0.5)',
-    textShadowOffset: {width: 0, height: 1},
+    textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
   },
   stopButton: {

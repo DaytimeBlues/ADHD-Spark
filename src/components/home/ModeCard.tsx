@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Animated, Platform, Pressable, StyleSheet, Text, View, ViewStyle} from 'react-native';
-import {Tokens} from '../../theme/tokens';
+import React, { useState } from 'react';
+import { Animated, Platform, Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Tokens } from '../../theme/tokens';
 
 export type ModeCardMode = {
   name: string;
@@ -16,19 +16,19 @@ export type ModeCardProps = {
   animatedStyle?: any;
 };
 
-const CARD_MIN_HEIGHT = Tokens.spacing[96] + Tokens.spacing[64];
-const DOT_SIZE = Tokens.spacing[8];
-const ICON_SIZE = Tokens.type['4xl'];
+const CARD_MIN_HEIGHT = Spacing[40];
+const DOT_SIZE = Spacing[2];
+const ICON_SIZE = 32;
 
-export default function ModeCard({mode, onPress, style, animatedStyle}: ModeCardProps) {
+export default function ModeCard({ mode, onPress, style, animatedStyle }: ModeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const hoverStyle =
     Platform.OS === 'web' && isHovered
       ? {
-          transform: [{scale: 1.02}],
-          shadowOpacity: 0.3,
-        }
+        borderColor: mode.accent,
+        backgroundColor: Tokens.colors.neutral.dark,
+      }
       : {};
 
   return (
@@ -37,20 +37,16 @@ export default function ModeCard({mode, onPress, style, animatedStyle}: ModeCard
         onPress={onPress}
         onHoverIn={() => setIsHovered(true)}
         onHoverOut={() => setIsHovered(false)}
-        style={({pressed}) => [
+        style={({ pressed }) => [
           styles.card,
-          {
-            borderColor: mode.accent,
-            backgroundColor: Tokens.colors.neutral[800],
-          },
-          Platform.OS === 'web' && {cursor: 'pointer'},
-          pressed && {transform: [{scale: 0.98}]},
+          Platform.OS === 'web' && { cursor: 'pointer' },
+          pressed && { transform: [{ scale: 0.98 }] },
           hoverStyle,
         ]}
       >
         <View style={styles.cardHeader}>
           <Text style={styles.cardIcon}>{mode.icon}</Text>
-          <View style={[styles.accentDot, {backgroundColor: mode.accent}]} />
+          <View style={[styles.accentDot, { backgroundColor: mode.accent }]} />
         </View>
 
         <View style={styles.cardContent}>
@@ -66,18 +62,19 @@ export default function ModeCard({mode, onPress, style, animatedStyle}: ModeCard
 
 const styles = StyleSheet.create({
   card: {
-    padding: Tokens.spacing[24],
-    borderRadius: Tokens.radii.xl,
+    padding: Tokens.spacing[4],
+    borderRadius: Tokens.radii.lg,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral[700],
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    backgroundColor: Tokens.colors.neutral.darker,
     minHeight: CARD_MIN_HEIGHT,
     justifyContent: 'space-between',
-    ...Tokens.elevation.sm,
-  },
+    transition: 'all 0.15s ease',
+  } as any,
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cardIcon: {
     fontSize: ICON_SIZE,
@@ -85,20 +82,22 @@ const styles = StyleSheet.create({
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
-    borderRadius: Tokens.radii.pill,
+    borderRadius: Tokens.radii.full,
   },
   cardContent: {
-    marginTop: Tokens.spacing[16],
+    marginTop: Tokens.spacing[3],
   },
   cardTitle: {
-    fontSize: Tokens.type.xl,
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.base,
     fontWeight: '600',
-    color: Tokens.colors.neutral[50],
-    marginBottom: Tokens.spacing[4],
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[1],
   },
   cardDesc: {
-    fontSize: Tokens.type.sm,
-    color: Tokens.colors.neutral[400],
-    lineHeight: Tokens.type.xl,
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    lineHeight: 18,
   },
 });
