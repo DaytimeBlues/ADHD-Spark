@@ -2,6 +2,7 @@
   "name": "spark-adhd-rn",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://DaytimeBlues.github.io/spark-adhd-backup",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -16,7 +17,9 @@
     "e2e:ui": "playwright test --ui",
     "test:e2e:android": "detox test -c android.debug",
     "build:android": "cd android && ./gradlew assembleDebug",
-    "build:release": "cd android && ./gradlew assembleRelease"
+    "build:release": "cd android && ./gradlew assembleRelease",
+    "predeploy": "npm run build:web",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
@@ -49,6 +52,7 @@
     "babel-loader": "^10.0.0",
     "detox": "^20.24.1",
     "eslint": "^8.57.0",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.6",
     "jest": "^29.7.0",
     "prettier": "3.3.2",
