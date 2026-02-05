@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation }: any) => {
       { id: 'pomodoro', name: 'Pomodoro', icon: 'timer-sand', desc: 'Classic timer', accent: Tokens.colors.error.main },
       { id: 'anchor', name: 'Anchor', icon: 'anchor', desc: 'Breathing exercises', accent: Tokens.colors.success.main },
       { id: 'checkin', name: 'Check In', icon: 'chart-bar', desc: 'Mood & energy', accent: Tokens.colors.warning.main },
-      { id: 'crisis', name: 'Crisis Mode', icon: 'alert-circle', desc: 'Safety resources', accent: Tokens.colors.error.main },
+      { id: 'cbtguide', name: 'CBT Guide', icon: 'brain', desc: 'Evidence-based strategies', accent: Tokens.colors.info.main },
     ],
     [],
   );
@@ -115,7 +115,7 @@ const HomeScreen = ({ navigation }: any) => {
 
   const handlePress = (modeId: string) => {
     if (modeId === 'checkin') navigation.navigate('CheckIn');
-    else if (modeId === 'crisis') navigation.navigate('Crisis');
+    else if (modeId === 'cbtguide') navigation.navigate('CBTGuide');
     else if (modeId === 'fogcutter') navigation.navigate('FogCutter');
     else if (modeId === 'pomodoro') navigation.navigate('Pomodoro');
     else if (modeId === 'anchor') navigation.navigate('Anchor');
@@ -129,24 +129,28 @@ const HomeScreen = ({ navigation }: any) => {
 
           <View style={styles.header}>
             <View>
-              <Text style={styles.title}>Spark</Text>
+              <Text style={styles.title} testID="home-title" accessibilityLabel="home-title">
+                Spark
+              </Text>
               <Text style={styles.subtitle}>Ready to focus?</Text>
             </View>
-            <View style={styles.streakBadge}>
+            <View style={styles.streakBadge} testID="home-streak-badge" accessibilityLabel="home-streak-badge">
               <Text style={styles.streakEmoji}>🔥</Text>
-              <Text style={styles.streakText}>
+              <Text style={styles.streakText} testID="home-streak" accessibilityLabel="home-streak">
                 {streak} day{streak !== 1 ? 's' : ''} streak
               </Text>
             </View>
           </View>
 
           {Platform.OS === 'android' && (
-            <View style={styles.overlayCard}>
+            <View style={styles.overlayCard} testID="home-overlay-card" accessibilityLabel="home-overlay-card">
               <View style={styles.overlayTextContainer}>
                 <Text style={styles.overlayTitle}>Floating Bubble</Text>
                 <Text style={styles.overlayDesc}>Keep tasks visible over other apps</Text>
               </View>
               <Switch
+                testID="home-overlay-toggle"
+                accessibilityLabel="home-overlay-toggle"
                 trackColor={{ false: Tokens.colors.neutral[600], true: Tokens.colors.brand[500] }}
                 thumbColor={Tokens.colors.neutral[0]}
                 ios_backgroundColor={Tokens.colors.neutral[700]}
@@ -162,6 +166,7 @@ const HomeScreen = ({ navigation }: any) => {
                 key={mode.id}
                 mode={mode}
                 onPress={() => handlePress(mode.id)}
+                testID={`mode-${mode.id}`}
                 style={{ width: cardWidth }}
                 animatedStyle={{
                   opacity: fadeAnims[index],

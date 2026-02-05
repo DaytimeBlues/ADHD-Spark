@@ -8,32 +8,38 @@ test.describe('Home Screen', () => {
     test('should load without crash', async ({ page }) => {
         await page.goto('/');
 
-        // Original App Title
-        await expect(page.locator('text=Spark').first()).toBeVisible();
+        // App Title
+        await expect(page.getByTestId('home-title')).toBeVisible();
     });
 
     test('should display streak summary', async ({ page }) => {
         await page.goto('/');
 
-        // Original App Streak Text format
-        await expect(page.locator('text=streak').first()).toBeVisible();
+        // Streak text format (e.g. "0 days streak" or "1 day streak")
+        await expect(page.getByTestId('home-streak')).toBeVisible();
+        await expect(page.getByTestId('home-streak')).toHaveText(/\b\d+\s+day(s)?\s+streak\b/);
     });
 
     test('should display mode cards', async ({ page }) => {
         await page.goto('/');
 
-        // Original Mode Names
-        await expect(page.locator('text=Ignite').first()).toBeVisible();
-        await expect(page.locator('text=Pomodoro').first()).toBeVisible();
-        await expect(page.locator('text=Anchor').first()).toBeVisible();
+        // Current Mode Names
+        await expect(page.getByTestId('mode-ignite')).toBeVisible();
+        await expect(page.getByTestId('mode-fogcutter')).toBeVisible();
+        await expect(page.getByTestId('mode-pomodoro')).toBeVisible();
+        await expect(page.getByTestId('mode-anchor')).toBeVisible();
+        await expect(page.getByTestId('mode-checkin')).toBeVisible();
+        await expect(page.getByTestId('mode-crisis')).toBeVisible();
     });
 
     test('should display bottom tab navigation', async ({ page }) => {
         await page.goto('/');
 
-        // Original Tab Labels
-        await expect(page.locator('text=Home').first()).toBeVisible();
-        await expect(page.locator('text=Calendar').first()).toBeVisible();
+        // Current Tab Labels
+        await expect(page.getByText('Home', { exact: true })).toBeVisible();
+        await expect(page.getByText('Focus', { exact: true })).toBeVisible();
+        await expect(page.getByText('Tasks', { exact: true })).toBeVisible();
+        await expect(page.getByText('Calendar', { exact: true })).toBeVisible();
     });
 });
 

@@ -15,13 +15,14 @@ export type ModeCardProps = {
   onPress: () => void;
   style?: ViewStyle;
   animatedStyle?: any;
+  testID?: string;
 };
 
 const CARD_MIN_HEIGHT = 140;
 const DOT_SIZE = 8;
 const ICON_SIZE = 28;
 
-export default function ModeCard({ mode, onPress, style, animatedStyle }: ModeCardProps) {
+export default function ModeCard({ mode, onPress, style, animatedStyle, testID }: ModeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const hoverStyle =
@@ -35,6 +36,8 @@ export default function ModeCard({ mode, onPress, style, animatedStyle }: ModeCa
   return (
     <Animated.View style={[animatedStyle, style]}>
       <Pressable
+        testID={testID}
+        accessibilityLabel={testID}
         onPress={onPress}
         onHoverIn={() => setIsHovered(true)}
         onHoverOut={() => setIsHovered(false)}

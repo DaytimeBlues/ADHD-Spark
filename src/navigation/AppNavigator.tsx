@@ -1,7 +1,7 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text} from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import IgniteScreen from '../screens/IgniteScreen';
 import FogCutterScreen from '../screens/FogCutterScreen';
@@ -10,25 +10,25 @@ import BrainDumpScreen from '../screens/BrainDumpScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import AnchorScreen from '../screens/AnchorScreen';
 import CheckInScreen from '../screens/CheckInScreen';
-import CrisisScreen from '../screens/CrisisScreen';
+import CBTGuideScreen from '../screens/CBTGuideScreen';
 
-import {MetroPalette, MetroTypography} from '../theme/metroTheme';
+import { MetroPalette, MetroTypography } from '../theme/metroTheme';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="HomeMain" component={HomeScreen} />
     <Stack.Screen name="CheckIn" component={CheckInScreen} />
-    <Stack.Screen name="Crisis" component={CrisisScreen} />
+    <Stack.Screen name="CBTGuide" component={CBTGuideScreen} />
   </Stack.Navigator>
 );
 
 const TabNavigator = () => (
   <Tab.Navigator
-    screenOptions={({route}) => ({
-      tabBarIcon: ({focused}) => {
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused }) => {
         const icons: Record<string, string> = {
           Home: '🏠',
           Focus: '🔥',
@@ -71,7 +71,7 @@ const TabNavigator = () => (
 );
 
 const AppNavigator = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Main" component={TabNavigator} />
     <Stack.Screen name="FogCutter" component={FogCutterScreen} />
     <Stack.Screen name="Pomodoro" component={PomodoroScreen} />
