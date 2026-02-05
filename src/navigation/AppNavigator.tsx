@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../screens/HomeScreen';
 import IgniteScreen from '../screens/IgniteScreen';
 import FogCutterScreen from '../screens/FogCutterScreen';
@@ -11,8 +11,7 @@ import CalendarScreen from '../screens/CalendarScreen';
 import AnchorScreen from '../screens/AnchorScreen';
 import CheckInScreen from '../screens/CheckInScreen';
 import CBTGuideScreen from '../screens/CBTGuideScreen';
-
-import { MetroPalette, MetroTypography } from '../theme/metroTheme';
+import { Tokens } from '../theme/tokens';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,37 +29,34 @@ const TabNavigator = () => (
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused }) => {
         const icons: Record<string, string> = {
-          Home: '🏠',
-          Focus: '🔥',
-          Tasks: '📝',
-          Calendar: '📅',
+          Home: 'home',
+          Focus: 'fire',
+          Tasks: 'text-box-outline',
+          Calendar: 'calendar',
         };
         return (
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: MetroTypography.fontFamily,
-              color: focused ? MetroPalette.blue : MetroPalette.gray,
-            }}>
-            {icons[route.name]}
-          </Text>
+          <Icon
+            name={icons[route.name]}
+            size={24}
+            color={focused ? Tokens.colors.indigo.primary : Tokens.colors.text.tertiary}
+          />
         );
       },
-      tabBarActiveTintColor: MetroPalette.blue,
-      tabBarInactiveTintColor: MetroPalette.gray,
+      tabBarActiveTintColor: Tokens.colors.indigo.primary,
+      tabBarInactiveTintColor: Tokens.colors.text.tertiary,
       headerShown: false,
       tabBarStyle: {
-        backgroundColor: MetroPalette.darkGray,
+        backgroundColor: Tokens.colors.neutral.darker,
         borderTopWidth: 0,
         height: 60,
         paddingBottom: 8,
-        elevation: 0, // Android shadow removal
-        shadowOpacity: 0, // iOS shadow removal
+        elevation: 0,
+        shadowOpacity: 0,
       },
       tabBarLabelStyle: {
-        fontFamily: MetroTypography.fontFamily,
+        fontFamily: 'Inter',
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: '600',
       },
     })}>
     <Tab.Screen name="Home" component={HomeStack} />
