@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useReducer } from 'react';
 import {
   View,
   Text,
@@ -13,20 +13,29 @@ import { formatTime } from '../utils/helpers';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 
+type PomodoroState = {
+  isWorking: boolean;
+  timeLeft: number;
+  sessions: number;
+};
+
 const PomodoroScreen = () => {
   const [isWorking, setIsWorking] = useState(true);
   const [timeLeft, setTimeLeft] = useState(1500);
   const [isRunning, setIsRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isWorkingRef = useRef(isWorking);
+
+  useEffect(() => {
+    isWorkingRef.current = isWorking;
+  }, [isWorking]);
 
   useEffect(() => {
     const loadState = async () => {
-      const storedState = await StorageService.getJSON<{
-        isWorking: boolean;
-        timeLeft: number;
-        sessions: number;
-      }>(StorageService.STORAGE_KEYS.pomodoroState);
+      const storedState = await StorageService.getJSON<PomodoroState>(
+        StorageService.STORAGE_KEYS.pomodoroState,
+      );
 
       if (!storedState) {
         return;
@@ -67,7 +76,7 @@ const PomodoroScreen = () => {
     intervalRef.current = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
-          if (isWorking) {
+          if (isWorkingRef.current) {
             setSessions(s => s + 1);
             setIsWorking(false);
             SoundService.playCompletionSound();

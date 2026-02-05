@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Animated, Platform, Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Tokens } from '../../theme/tokens';
 
 export type ModeCardMode = {
@@ -16,9 +17,9 @@ export type ModeCardProps = {
   animatedStyle?: any;
 };
 
-const CARD_MIN_HEIGHT = Spacing[40];
-const DOT_SIZE = Spacing[2];
-const ICON_SIZE = 32;
+const CARD_MIN_HEIGHT = 140;
+const DOT_SIZE = 8;
+const ICON_SIZE = 28;
 
 export default function ModeCard({ mode, onPress, style, animatedStyle }: ModeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -45,7 +46,9 @@ export default function ModeCard({ mode, onPress, style, animatedStyle }: ModeCa
         ]}
       >
         <View style={styles.cardHeader}>
-          <Text style={styles.cardIcon}>{mode.icon}</Text>
+          <View style={[styles.iconContainer, { backgroundColor: `${mode.accent}15` }]}>
+            <Icon name={mode.icon} size={ICON_SIZE} color={mode.accent} />
+          </View>
           <View style={[styles.accentDot, { backgroundColor: mode.accent }]} />
         </View>
 
@@ -74,10 +77,14 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
-  cardIcon: {
-    fontSize: ICON_SIZE,
+  iconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: Tokens.radii.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   accentDot: {
     width: DOT_SIZE,
