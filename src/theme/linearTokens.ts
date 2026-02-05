@@ -1,8 +1,23 @@
 // Linear Design Tokens for spark-adhd-backup
 // Based on Linear.app's minimalist, developer-centric aesthetic
+// Extended to support both named keys and numbered scales for backward compatibility
 
 export const LinearColors = {
-    // Brand
+    // Brand - numbered scale for backward compatibility
+    brand: {
+        50: '#EEF2FF',
+        100: '#E0E7FF',
+        200: '#C7D2FE',
+        300: '#A5B4FC',
+        400: '#818CF8',
+        500: '#5E6AD2',  // Primary
+        600: '#4E5AC2',
+        700: '#3E4AB2',
+        800: '#3730A3',
+        900: '#312E81',
+    },
+
+    // Indigo (alias for brand)
     indigo: {
         primary: '#5E6AD2',
         hover: '#4E5AC2',
@@ -10,13 +25,40 @@ export const LinearColors = {
         subtle: 'rgba(94, 106, 210, 0.1)',
     },
 
-    // Dark Mode Palette
+    // Danger/Error - numbered scale
+    danger: {
+        50: '#FEF2F2',
+        100: '#FEE2E2',
+        200: '#FECACA',
+        300: '#FCA5A5',
+        400: '#F87171',
+        500: '#EF4444',
+        600: '#DC2626',
+        700: '#B91C1C',
+        800: '#991B1B',
+        900: '#7F1D1D',
+    },
+
+    // Dark Mode Palette - with numbered scale aliases
     neutral: {
-        darkest: '#111111',  // Woodsmoke - Deep background
-        darker: '#1A1A1A',   // Oslo Gray - Elevated surfaces
-        dark: '#2A2A2A',     // Slate - Cards, panels
-        border: '#333333',   // Borders, dividers
+        // Named keys (original)
+        darkest: '#111111',
+        darker: '#1A1A1A',
+        dark: '#2A2A2A',
+        border: '#333333',
         borderSubtle: '#252525',
+        // Numbered scale (backward compatibility)
+        0: '#FFFFFF',
+        50: '#FAFAFA',
+        100: '#F4F4F5',
+        200: '#E4E4E7',
+        300: '#A0A0A0',
+        400: '#707070',
+        500: '#4A4A4A',
+        600: '#333333',
+        700: '#2A2A2A',
+        800: '#1A1A1A',
+        900: '#111111',
     },
 
     // Text - Dark Mode
@@ -50,7 +92,7 @@ export const LinearColors = {
 export const LinearSpacing = {
     0: 0,
     1: 4,
-    2: 8,   // Base unit
+    2: 8,
     3: 12,
     4: 16,
     5: 20,
@@ -60,32 +102,46 @@ export const LinearSpacing = {
     12: 48,
     16: 64,
     20: 80,
+    // Extended spacing (backward compatibility)
+    24: 96,
+    32: 128,
+    48: 192,
 } as const;
 
 export const LinearRadii = {
     none: 0,
-    sm: 4,     // Badges, tags
-    md: 6,     // Buttons, inputs
-    lg: 8,     // Cards, modals
-    xl: 12,    // Large containers
+    sm: 4,
+    md: 6,
+    lg: 8,
+    xl: 12,
     full: 9999,
+    // Alias for backward compatibility
+    pill: 9999,
 } as const;
 
 export const LinearTypography = {
-    // We use system font names that fallback to Inter if linked/available
     fontFamily: {
         sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         mono: 'SF Mono, Monaco, Inconsolata, "Fira Mono", monospace',
     },
     size: {
+        // Original named sizes
         h1: 32,
         h2: 24,
         h3: 20,
         h4: 18,
-        base: 14, // Linear's default UI size
+        base: 14,
         sm: 13,
         xs: 12,
         xxs: 11,
+        // Extended sizes (backward compatibility)
+        lg: 16,
+        xl: 18,
+        '2xl': 24,
+        '3xl': 30,
+        '4xl': 36,
+        '5xl': 48,
+        giga: 72,
     },
     weight: {
         regular: '400' as const,
