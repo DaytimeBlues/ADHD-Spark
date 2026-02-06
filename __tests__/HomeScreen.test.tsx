@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react-native";
+import { act, render, screen } from "@testing-library/react-native";
 import React from "react";
 import HomeScreen from "../src/screens/HomeScreen";
 
@@ -26,17 +26,33 @@ const mockNavigation = {
 
 
 describe("HomeScreen", () => {
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
+  const renderHomeScreen = () => {
+    const result = render(<HomeScreen navigation={mockNavigation} />);
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+    return result;
+  };
+
   it("renders correctly", () => {
-    render(<HomeScreen navigation={mockNavigation} />);
+    renderHomeScreen();
     expect(screen.getByText("Spark")).toBeTruthy();
   });
 
   it("displays mode cards", () => {
-    render(<HomeScreen navigation={mockNavigation} />);
+    renderHomeScreen();
     expect(screen.getByText("Ignite")).toBeTruthy();
     expect(screen.getByText("Fog Cutter")).toBeTruthy();
     expect(screen.getByText("Pomodoro")).toBeTruthy();
@@ -44,7 +60,7 @@ describe("HomeScreen", () => {
   });
 
   it("shows streak container", () => {
-    render(<HomeScreen navigation={mockNavigation} />);
+    renderHomeScreen();
     expect(screen.getByText(/0 days? streak/i)).toBeTruthy();
   });
 });
