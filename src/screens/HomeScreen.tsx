@@ -147,10 +147,10 @@ const HomeScreen = ({ navigation }: any) => {
           </View>
 
           {isOverlayEnabled !== null && Platform.OS === 'android' && (
-            <View style={styles.overlayToggleSection}>
+            <View style={styles.overlayCard}>
               <View>
-                <Text style={styles.overlayToggleTitle}>Focus Overlay</Text>
-                <Text style={styles.overlayToggleDesc}>Block apps during deep work</Text>
+                <Text style={styles.overlayTitle}>Focus Overlay</Text>
+                <Text style={styles.overlayDesc}>Block apps during deep work</Text>
               </View>
               <Switch
                 testID="home-overlay-toggle"
