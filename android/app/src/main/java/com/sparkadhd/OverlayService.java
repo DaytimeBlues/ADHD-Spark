@@ -150,7 +150,7 @@ public class OverlayService extends Service {
     return new NotificationCompat.Builder(this, CHANNEL_ID)
       .setContentTitle("Spark tasks")
       .setContentText("Bubble is running")
-      .setSmallIcon(R.mipmap.ic_launcher)
+      .setSmallIcon(android.R.drawable.ic_dialog_info)
       .setOngoing(true)
       .build();
   }
