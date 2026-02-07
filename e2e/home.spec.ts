@@ -32,6 +32,15 @@ test.describe('Home Screen', () => {
         await expect(page.getByTestId('mode-cbtguide')).toBeVisible();
     });
 
+
+
+    test('should navigate to Fog Cutter from home card', async ({ page }) => {
+        await page.goto('/');
+
+        await page.getByTestId('mode-fogcutter').click();
+        await expect(page.getByPlaceholder('What feels overwhelming?')).toBeVisible();
+    });
+
     test('should display bottom tab navigation', async ({ page }) => {
         await page.goto('/');
 

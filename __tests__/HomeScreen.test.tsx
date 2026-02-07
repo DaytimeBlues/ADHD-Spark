@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react-native";
+import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import React from "react";
 import HomeScreen from "../src/screens/HomeScreen";
 
@@ -68,5 +68,11 @@ describe("HomeScreen", () => {
   it("shows streak container", () => {
     renderHomeScreen();
     expect(screen.getByText(/0 days? streak/i)).toBeTruthy();
+  });
+
+  it("navigates to FogCutter when its card is pressed", () => {
+    renderHomeScreen();
+    fireEvent.press(screen.getByTestId("mode-fogcutter"));
+    expect(mockNavigation.navigate).toHaveBeenCalledWith("FogCutter");
   });
 });

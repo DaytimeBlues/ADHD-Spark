@@ -9,6 +9,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=120000 -Dorg.gradle.internal.http.socketTimeout=120000"
 
     steps:
       - name: Checkout

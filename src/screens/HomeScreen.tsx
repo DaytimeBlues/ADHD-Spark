@@ -117,13 +117,28 @@ const HomeScreen = ({ navigation }: any) => {
     }
   };
 
+  const navigateByRouteName = (routeName: string) => {
+    let currentNavigator: any = navigation;
+
+    while (currentNavigator) {
+      const routeNames = currentNavigator.getState?.()?.routeNames;
+      if (Array.isArray(routeNames) && routeNames.includes(routeName)) {
+        currentNavigator.navigate(routeName);
+        return;
+      }
+      currentNavigator = currentNavigator.getParent?.();
+    }
+
+    navigation.navigate(routeName);
+  };
+
   const handlePress = (modeId: string) => {
-    if (modeId === 'checkin') navigation.navigate('CheckIn');
-    else if (modeId === 'cbtguide') navigation.navigate('CBTGuide');
-    else if (modeId === 'fogcutter') navigation.navigate('FogCutter');
-    else if (modeId === 'pomodoro') navigation.navigate('Pomodoro');
-    else if (modeId === 'anchor') navigation.navigate('Anchor');
-    else navigation.navigate('Focus'); // ignite -> Focus
+    if (modeId === 'checkin') navigateByRouteName('CheckIn');
+    else if (modeId === 'cbtguide') navigateByRouteName('CBTGuide');
+    else if (modeId === 'fogcutter') navigateByRouteName('FogCutter');
+    else if (modeId === 'pomodoro') navigateByRouteName('Pomodoro');
+    else if (modeId === 'anchor') navigateByRouteName('Anchor');
+    else navigateByRouteName('Focus'); // ignite -> Focus
   };
 
   return (
