@@ -5,6 +5,8 @@ plugins {
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
+def hermesEnabled = true
+
 android {
     namespace "com.sparkadhd"
     compileSdkVersion 34
