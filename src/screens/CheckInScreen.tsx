@@ -30,6 +30,8 @@ const CheckInScreen = () => {
     { emoji: '🔥', label: 'Full', value: 5 },
   ];
 
+  const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+
   const getRecommendation = () => {
     if (mood === null || energy === null) {
       return null;
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
   webContainer: {
     flex: 1,
     width: '100%',
-    maxWidth: 680,
+    maxWidth: Tokens.layout.maxWidth.prose,
     alignSelf: 'center',
   },
   content: {
@@ -154,17 +156,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: 32,
+    fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
-    marginBottom: Tokens.spacing[1],
+    marginBottom: Tokens.spacing[2],
     letterSpacing: -1,
+    textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[10],
+    textAlign: 'center',
   },
   section: {
     marginBottom: Tokens.spacing[8],
@@ -175,21 +179,21 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.sm,
     fontWeight: '600',
     marginBottom: Tokens.spacing[4],
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   options: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: Tokens.spacing[2],
+    flexWrap: 'wrap',
+    gap: Tokens.spacing[3],
   },
   option: {
+    flexGrow: 1,
+    flexBasis: 100,
     alignItems: 'center',
     padding: Tokens.spacing[2],
     borderRadius: Tokens.radii.xl,
     backgroundColor: Tokens.colors.neutral.darker,
-    width: '18%',
-    minHeight: 90,
+    minHeight: 100,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     justifyContent: 'center',
@@ -203,6 +207,11 @@ const styles = StyleSheet.create({
   optionHovered: {
     borderColor: Tokens.colors.text.tertiary,
     transform: [{ translateY: -2 }],
+    ...Platform.select({
+      web: {
+        boxShadow: HOVER_SHADOW,
+      },
+    }),
   },
   optionPressed: {
     transform: [{ scale: Tokens.motion.scales.press }],
@@ -211,11 +220,11 @@ const styles = StyleSheet.create({
   selected: {
     borderColor: Tokens.colors.brand[500],
     backgroundColor: Tokens.colors.brand[900],
-    transform: [{ translateY: -2 }],
-    ...Tokens.elevation.sm,
+    transform: [{ translateY: -4 }],
+    ...Tokens.elevation.md,
     ...Platform.select({
       web: {
-        boxShadow: `0 4px 12px ${Tokens.colors.brand[900]}`,
+        boxShadow: `0 8px 24px -4px ${Tokens.colors.brand[900]}`,
       },
     }),
   },

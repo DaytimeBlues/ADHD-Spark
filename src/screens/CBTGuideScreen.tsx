@@ -171,13 +171,26 @@ const styles = StyleSheet.create({
   },
   maxWidthWrapper: {
     width: '100%',
-    maxWidth: 680,
+    maxWidth: Tokens.layout.maxWidth.prose,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Tokens.spacing[8],
     paddingTop: Tokens.spacing[2],
+  },
+  headerTitle: {
+    fontFamily: 'Inter',
+    fontSize: Tokens.type['4xl'],
+    fontWeight: '800',
+    color: Tokens.colors.text.primary,
+    letterSpacing: -1,
+  },
+  headerSubtitle: {
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.text.secondary,
+    marginTop: 2,
   },
   backButton: {
     marginRight: Tokens.spacing[4],
@@ -199,7 +212,7 @@ const styles = StyleSheet.create({
   backButtonHovered: {
     backgroundColor: Tokens.colors.neutral.dark,
     borderColor: Tokens.colors.text.tertiary,
-    transform: [{ scale: 1.05 }],
+    transform: [{ scale: Tokens.motion.scales.hover }],
   },
   backButtonPressed: {
     backgroundColor: Tokens.colors.neutral.darkest,
@@ -210,19 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: -2,
-  },
-  headerTitle: {
-    fontFamily: 'Inter',
-    fontSize: 28,
-    fontWeight: '800',
-    color: Tokens.colors.text.primary,
-    letterSpacing: -1,
-  },
-  headerSubtitle: {
-    fontFamily: 'Inter',
-    fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
-    marginTop: 2,
   },
   introCard: {
     backgroundColor: Tokens.colors.neutral.darker,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
       web: {
-        transition: 'transform 0.2s ease, border-color 0.2s ease',
+        transition: Tokens.motion.transitions.base,
       },
     }),
   },
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   },
   featureButtonHovered: {
     borderColor: Tokens.colors.brand[500],
-    transform: [{ translateY: -1 }],
+    transform: [{ translateY: -2 }],
   },
   featureButtonPressed: {
     transform: [{ scale: Tokens.motion.scales.press }],

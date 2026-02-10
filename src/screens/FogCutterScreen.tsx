@@ -109,6 +109,9 @@ const FogCutterScreen = () => {
           </View>
 
           <View style={styles.creationCard}>
+            <View style={styles.creationHeader}>
+              <Text style={styles.cardTitle}>Decompose a Task</Text>
+            </View>
             <TextInput
               style={[
                 styles.input,
@@ -228,37 +231,62 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     width: '100%',
-    maxWidth: 680,
+    maxWidth: Tokens.layout.maxWidth.prose,
     padding: Tokens.spacing[6],
   },
   header: {
     marginBottom: Tokens.spacing[8],
+    alignItems: 'center',
+    width: '100%',
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: Tokens.type.h1,
+    fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
     letterSpacing: -1,
+    textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
+    textAlign: 'center',
+    maxWidth: 400,
   },
   creationCard: {
     marginBottom: Tokens.spacing[8],
+    backgroundColor: Tokens.colors.neutral.darker,
+    padding: Tokens.spacing[6],
+    borderRadius: Tokens.radii.xl,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    ...Platform.select({
+      web: {
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+      },
+    }),
+  },
+  creationHeader: {
+    marginBottom: Tokens.spacing[5],
+  },
+  cardTitle: {
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.sm,
+    fontWeight: '600',
+    color: Tokens.colors.text.secondary,
+    letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: Tokens.colors.neutral.darkest,
     borderRadius: Tokens.radii.lg,
     paddingHorizontal: Tokens.spacing[4],
     color: Tokens.colors.text.primary,
     fontFamily: 'Inter',
-    fontSize: Tokens.type.lg,
+    fontSize: Tokens.type.base,
     marginBottom: Tokens.spacing[4],
-    height: 56,
+    height: 52,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
@@ -267,6 +295,7 @@ const styles = StyleSheet.create({
   },
   inputFocused: {
     borderColor: Tokens.colors.brand[500],
+    backgroundColor: Tokens.colors.neutral.dark,
     ...Platform.select({
       web: { boxShadow: FOCUS_RING_SHADOW },
     }),
@@ -278,7 +307,7 @@ const styles = StyleSheet.create({
   },
   stepInput: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: Tokens.colors.neutral.darkest,
     borderRadius: Tokens.radii.lg,
     paddingHorizontal: Tokens.spacing[4],
     color: Tokens.colors.text.primary,

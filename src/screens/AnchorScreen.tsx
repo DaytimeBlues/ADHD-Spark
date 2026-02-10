@@ -229,27 +229,31 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: Tokens.type.h1,
+    fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
     letterSpacing: -1,
+    textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
+    textAlign: 'center',
+    maxWidth: 400,
   },
   activeContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
     flex: 1,
+    minHeight: 400,
   },
   patternName: {
     fontFamily: 'Inter',
     color: Tokens.colors.brand[400],
-    fontSize: Tokens.type.xl,
+    fontSize: Tokens.type['2xl'],
     fontWeight: '600',
     marginBottom: Tokens.spacing[8],
     letterSpacing: -0.5,
@@ -259,7 +263,7 @@ const styles = StyleSheet.create({
     height: BREATHING_CIRCLE_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: Tokens.spacing[12],
+    marginBottom: Tokens.spacing[16],
     position: 'relative',
   },
   circle: {
@@ -296,6 +300,7 @@ const styles = StyleSheet.create({
   patternsContainer: {
     width: '100%',
     gap: Tokens.spacing[4],
+    maxWidth: 500,
   },
   patternButton: {
     backgroundColor: Tokens.colors.neutral.darker,

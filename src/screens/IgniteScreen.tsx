@@ -212,23 +212,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    marginBottom: Tokens.spacing[12],
+    marginBottom: Tokens.spacing[8],
     alignItems: 'center',
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: Tokens.type['5xl'],
+    fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1.5,
-    textTransform: 'uppercase',
+    letterSpacing: -1,
+    textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Inter',
-    fontSize: Tokens.type.lg,
-    color: Tokens.colors.text.tertiary,
-    letterSpacing: -0.5,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.text.secondary,
+    textAlign: 'center',
+    maxWidth: 400,
+    lineHeight: 24,
   },
   timerCard: {
     alignItems: 'center',
@@ -270,12 +272,16 @@ const styles = StyleSheet.create({
   soundToggle: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Tokens.spacing[4],
+    paddingVertical: Tokens.spacing[3],
+    paddingHorizontal: Tokens.spacing[5],
     borderRadius: Tokens.radii.full,
     borderWidth: 1,
-    minWidth: 200,
+    minWidth: 180,
     justifyContent: 'center',
     gap: Tokens.spacing[3],
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    marginTop: Tokens.spacing[8],
     ...Platform.select({
       web: {
         transition: Tokens.motion.transitions.base,
@@ -286,10 +292,14 @@ const styles = StyleSheet.create({
   soundToggleActive: {
     backgroundColor: Tokens.colors.brand[900],
     borderColor: Tokens.colors.brand[500],
+    ...Platform.select({
+      web: {
+        boxShadow: `0 0 20px ${Tokens.colors.brand[900]}`,
+      },
+    }),
   },
   soundToggleInactive: {
-    backgroundColor: 'transparent',
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    // defaults handled in base style
   },
   soundToggleHovered: {
     transform: [{ translateY: -2 }],

@@ -30,6 +30,8 @@ const HIT_SLOP = {
   right: Tokens.spacing[4],
 };
 
+const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+
 const CATEGORY_ORDER: Array<SortedItem['category']> = [
   'task',
   'event',
@@ -283,8 +285,9 @@ const BrainDumpScreen = () => {
             <Pressable
               onPress={handleRecordPress}
               disabled={recordingState === 'processing'}
-              style={({ pressed }) => [
+              style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
                 styles.recordButton,
+                hovered && styles.recordButtonHovered,
                 recordingState === 'recording' && styles.recordButtonActive,
                 recordingState === 'processing' && styles.recordButtonProcessing,
                 pressed && styles.recordButtonPressed,
@@ -392,7 +395,7 @@ const styles = StyleSheet.create({
   contentWrapper: {
     flex: 1,
     width: '100%',
-    maxWidth: 680,
+    maxWidth: Tokens.layout.maxWidth.prose,
     padding: Tokens.spacing[6],
   },
   header: {
@@ -400,7 +403,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Inter',
-    fontSize: 32,
+    fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
@@ -462,112 +465,125 @@ const styles = StyleSheet.create({
     paddingHorizontal: Tokens.spacing[2],
     alignItems: 'center',
   },
+  actionsRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Tokens.spacing[4],
+  },
+  actionButton: {
+    paddingVertical: Tokens.spacing[2],
+    paddingHorizontal: Tokens.spacing[3],
+    borderRadius: Tokens.radii.md,
+    ...Platform.select({
+      web: { transition: Tokens.motion.transitions.base },
+    }),
+  },
+  actionButtonDisabled: {
+    opacity: 0.5,
+    pointerEvents: 'none',
+  },
+  clearHovered: {
+    backgroundColor: Tokens.colors.neutral.dark,
+  },
+  clearPressed: {
+    backgroundColor: Tokens.colors.neutral.darkest,
+    opacity: 0.8,
+    transform: [{ scale: Tokens.motion.scales.press }],
+  },
   countText: {
     fontFamily: 'Inter',
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
     fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   clearText: {
     fontFamily: 'Inter',
     color: Tokens.colors.error.main,
     fontSize: Tokens.type.xs,
     fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   aiSortText: {
     fontFamily: 'Inter',
     color: Tokens.colors.brand[400],
     fontSize: Tokens.type.xs,
     fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
-  actionsRight: {
-    flexDirection: 'row',
-    gap: Tokens.spacing[3],
-  },
-  actionButton: {
-    minHeight: Tokens.layout.minTapTargetComfortable,
-    minWidth: Tokens.layout.minTapTargetComfortable,
-    justifyContent: 'center',
-    paddingHorizontal: Tokens.spacing[2],
-  },
-  actionButtonDisabled: {
-    opacity: 0.6,
-  },
+
+  // Sorted Section
   sortedSection: {
+    marginTop: Tokens.spacing[6],
     marginBottom: Tokens.spacing[6],
-    borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
-    borderRadius: Tokens.radii.lg,
-    padding: Tokens.spacing[4],
+    padding: Tokens.spacing[5],
     backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.xl,
+    borderWidth: 1,
+    borderColor: Tokens.colors.brand[500] + '30',
   },
   sortedTitle: {
     fontFamily: 'Inter',
-    color: Tokens.colors.text.primary,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.lg,
     fontWeight: '700',
-    marginBottom: Tokens.spacing[3],
+    color: Tokens.colors.text.primary,
+    marginBottom: Tokens.spacing[4],
+    letterSpacing: -0.5,
   },
   sortedGroup: {
-    marginBottom: Tokens.spacing[3],
+    marginBottom: Tokens.spacing[5],
   },
   sortedCategory: {
     fontFamily: 'Inter',
-    color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.xs,
-    fontWeight: '600',
-    marginBottom: Tokens.spacing[2],
-    letterSpacing: 0.6,
+    fontWeight: '700',
+    color: Tokens.colors.brand[400],
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[3],
+    opacity: 0.9,
   },
   sortedItemRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    gap: Tokens.spacing[2],
-    marginBottom: Tokens.spacing[2],
+    alignItems: 'flex-start',
+    paddingVertical: Tokens.spacing[2],
+    marginBottom: Tokens.spacing[1],
   },
   sortedItemText: {
     flex: 1,
-    color: Tokens.colors.text.primary,
     fontFamily: 'Inter',
     fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: 20,
+    marginRight: Tokens.spacing[3],
   },
   priorityBadge: {
-    borderRadius: Tokens.radii.full,
     paddingHorizontal: Tokens.spacing[2],
-    paddingVertical: Tokens.spacing[1],
+    paddingVertical: 2,
+    borderRadius: Tokens.radii.sm,
+    minWidth: 50,
+    alignItems: 'center',
   },
   priorityText: {
     fontFamily: 'Inter',
-    fontSize: Tokens.type.xs,
-    textTransform: 'uppercase',
+    fontSize: 10,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    textTransform: 'uppercase',
+    color: '#FFFFFF',
   },
   priorityHigh: {
-    backgroundColor: `${Tokens.colors.error.main}55`,
+    backgroundColor: Tokens.colors.error.main,
   },
   priorityMedium: {
-    backgroundColor: `${Tokens.colors.warning.main}55`,
+    backgroundColor: Tokens.colors.warning.main,
   },
   priorityLow: {
-    backgroundColor: `${Tokens.colors.success.main}55`,
+    backgroundColor: Tokens.colors.brand[500],
   },
-  clearHovered: {
-    opacity: 0.8,
-  },
-  clearPressed: {
-    opacity: 0.6,
-  },
-  // List
+  
   listContent: {
-    paddingBottom: Tokens.spacing[16],
+    paddingBottom: 120,
   },
   item: {
     backgroundColor: Tokens.colors.neutral.darker,
@@ -582,7 +598,7 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
       web: {
-        transition: 'all 0.2s ease',
+        transition: Tokens.motion.transitions.base,
       },
     }),
   },
@@ -610,6 +626,7 @@ const styles = StyleSheet.create({
   },
   deleteButtonPressed: {
     backgroundColor: Tokens.colors.error.subtle,
+    transform: [{ scale: Tokens.motion.scales.press }],
   },
   deleteText: {
     color: Tokens.colors.text.tertiary,
@@ -648,6 +665,20 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.border,
     minWidth: 160,
     justifyContent: 'center',
+    ...Platform.select({
+      web: {
+        transition: Tokens.motion.transitions.base,
+        cursor: 'pointer',
+      },
+    }),
+  },
+  recordButtonHovered: {
+    transform: [{ translateY: -2 }],
+    ...Platform.select({
+      web: {
+        boxShadow: HOVER_SHADOW,
+      },
+    }),
   },
   recordButtonActive: {
     backgroundColor: Tokens.colors.error.main + '20', // Subtle red
@@ -658,7 +689,7 @@ const styles = StyleSheet.create({
   },
   recordButtonPressed: {
     opacity: 0.8,
-    transform: [{ scale: 0.98 }],
+    transform: [{ scale: Tokens.motion.scales.press }],
   },
   recordIcon: {
     fontSize: 20,
