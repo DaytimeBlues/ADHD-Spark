@@ -7,6 +7,8 @@ const { OverlayModule } = NativeModules as {
     updateCount: (count: number) => void;
     canDrawOverlays: () => Promise<boolean>;
     requestOverlayPermission: () => Promise<boolean>;
+    collapseOverlay?: () => void;
+    isExpanded?: () => Promise<boolean>;
   };
 };
 
@@ -50,6 +52,23 @@ const OverlayService = {
       return;
     }
     OverlayModule?.updateCount?.(count);
+  },
+
+  collapseOverlay() {
+    if (Platform.OS !== "android") {
+      return;
+    }
+    OverlayModule?.collapseOverlay?.();
+  },
+
+  async isExpanded(): Promise<boolean> {
+    if (Platform.OS !== "android") {
+      return false;
+    }
+    if (!OverlayModule?.isExpanded) {
+      return false;
+    }
+    return OverlayModule.isExpanded();
   },
 };
 

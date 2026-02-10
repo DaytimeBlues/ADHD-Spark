@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,10 +12,12 @@ import {
   UIManager,
   ActivityIndicator,
 } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import StorageService from '../services/StorageService';
 import RecordingService from '../services/RecordingService';
 import PlaudService from '../services/PlaudService';
 import OverlayService from '../services/OverlayService';
+import AISortService, { SortedItem } from '../services/AISortService';
 import { generateId } from '../utils/helpers';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
@@ -28,6 +30,15 @@ const HIT_SLOP = {
   right: Tokens.spacing[4],
 };
 
+const CATEGORY_ORDER: Array<SortedItem['category']> = [
+  'task',
+  'event',
+  'reminder',
+  'worry',
+  'thought',
+  'idea',
+];
+
 interface DumpItem {
   id: string;
   text: string;
@@ -38,12 +49,23 @@ interface DumpItem {
 
 type RecordingState = 'idle' | 'recording' | 'processing';
 
+type BrainDumpRouteParams = {
+  autoRecord?: boolean;
+};
+
+type BrainDumpRoute = RouteProp<Record<'Tasks', BrainDumpRouteParams>, 'Tasks'>;
+
 const BrainDumpScreen = () => {
+  const route = useRoute<BrainDumpRoute>();
   const [input, setInput] = useState('');
   const [items, setItems] = useState<DumpItem[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingError, setRecordingError] = useState<string | null>(null);
+  const [isSorting, setIsSorting] = useState(false);
+  const [sortingError, setSortingError] = useState<string | null>(null);
+  const [sortedItems, setSortedItems] = useState<SortedItem[]>([]);
+  const hasAutoRecorded = useRef(false);
 
   const loadItems = async () => {
     const storedItems = await StorageService.getJSON<DumpItem[]>(
@@ -75,6 +97,15 @@ const BrainDumpScreen = () => {
     OverlayService.updateCount(items.length);
   }, [items]);
 
+  useEffect(() => {
+    if (!route.params?.autoRecord || hasAutoRecorded.current) {
+      return;
+    }
+
+    hasAutoRecorded.current = true;
+    handleRecordPress();
+  }, [handleRecordPress, route.params?.autoRecord]);
+
   const addItem = () => {
     if (input.trim()) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -86,6 +117,8 @@ const BrainDumpScreen = () => {
       };
       setItems((prevItems) => [newItem, ...prevItems]);
       setInput('');
+      setSortedItems([]);
+      setSortingError(null);
     }
   };
 
@@ -136,11 +169,58 @@ const BrainDumpScreen = () => {
   const deleteItem = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setSortedItems([]);
+    setSortingError(null);
   };
 
   const clearAll = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setItems([]);
+    setSortedItems([]);
+    setSortingError(null);
+  };
+
+  const handleAISort = async () => {
+    setSortingError(null);
+    setIsSorting(true);
+
+    try {
+      const sorted = await AISortService.sortItems(items.map((item) => item.text));
+      setSortedItems(sorted);
+    } catch (error) {
+      setSortingError(
+        error instanceof Error ? error.message : 'AI sort is currently unavailable.',
+      );
+      setSortedItems([]);
+    } finally {
+      setIsSorting(false);
+    }
+  };
+
+  const groupedSortedItems = useMemo(() => {
+    const grouped = new Map<string, SortedItem[]>();
+    sortedItems.forEach((item) => {
+      const existing = grouped.get(item.category) ?? [];
+      existing.push(item);
+      grouped.set(item.category, existing);
+    });
+
+    return CATEGORY_ORDER
+      .map((category) => ({
+        category,
+        items: grouped.get(category) ?? [],
+      }))
+      .filter((entry) => entry.items.length > 0);
+  }, [sortedItems]);
+
+  const getPriorityStyle = (priority: SortedItem['priority']) => {
+    if (priority === 'high') {
+      return styles.priorityHigh;
+    }
+    if (priority === 'medium') {
+      return styles.priorityMedium;
+    }
+    return styles.priorityLow;
   };
 
   const renderItem = ({ item }: { item: DumpItem }) => (
@@ -231,15 +311,51 @@ const BrainDumpScreen = () => {
           {items.length > 0 && (
             <View style={styles.actionsBar}>
               <Text style={styles.countText}>{items.length} items</Text>
-              <Pressable
-                onPress={clearAll}
-                style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
-                  hovered && styles.clearHovered,
-                  pressed && styles.clearPressed,
-                ]}
-              >
-                <Text style={styles.clearText}>Clear All</Text>
-              </Pressable>
+              <View style={styles.actionsRight}>
+                <Pressable
+                  onPress={handleAISort}
+                  disabled={isSorting}
+                  style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                    isSorting && styles.actionButtonDisabled,
+                  ]}
+                >
+                  <Text style={styles.aiSortText}>{isSorting ? 'Sorting...' : 'AI Sort'}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={clearAll}
+                  style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                  ]}
+                >
+                  <Text style={styles.clearText}>Clear All</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+
+          {sortingError && <Text style={styles.errorText}>{sortingError}</Text>}
+
+          {groupedSortedItems.length > 0 && (
+            <View style={styles.sortedSection}>
+              <Text style={styles.sortedTitle}>AI Suggestions</Text>
+              {groupedSortedItems.map(({ category, items: categoryItems }) => (
+                <View key={category} style={styles.sortedGroup}>
+                  <Text style={styles.sortedCategory}>{category.toUpperCase()}</Text>
+                  {categoryItems.map((item, index) => (
+                    <View key={`${category}-${index}-${item.text}`} style={styles.sortedItemRow}>
+                      <Text style={styles.sortedItemText}>{item.text}</Text>
+                      <View style={[styles.priorityBadge, getPriorityStyle(item.priority)]}>
+                        <Text style={styles.priorityText}>{item.priority}</Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              ))}
             </View>
           )}
 
@@ -361,6 +477,87 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 1,
+  },
+  aiSortText: {
+    fontFamily: 'Inter',
+    color: Tokens.colors.brand[400],
+    fontSize: Tokens.type.xs,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  actionsRight: {
+    flexDirection: 'row',
+    gap: Tokens.spacing[3],
+  },
+  actionButton: {
+    minHeight: Tokens.layout.minTapTargetComfortable,
+    minWidth: Tokens.layout.minTapTargetComfortable,
+    justifyContent: 'center',
+    paddingHorizontal: Tokens.spacing[2],
+  },
+  actionButtonDisabled: {
+    opacity: 0.6,
+  },
+  sortedSection: {
+    marginBottom: Tokens.spacing[6],
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderRadius: Tokens.radii.lg,
+    padding: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darker,
+  },
+  sortedTitle: {
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type.sm,
+    fontWeight: '700',
+    marginBottom: Tokens.spacing[3],
+  },
+  sortedGroup: {
+    marginBottom: Tokens.spacing[3],
+  },
+  sortedCategory: {
+    fontFamily: 'Inter',
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.xs,
+    fontWeight: '600',
+    marginBottom: Tokens.spacing[2],
+    letterSpacing: 0.6,
+  },
+  sortedItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: Tokens.spacing[2],
+    marginBottom: Tokens.spacing[2],
+  },
+  sortedItemText: {
+    flex: 1,
+    color: Tokens.colors.text.primary,
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.sm,
+  },
+  priorityBadge: {
+    borderRadius: Tokens.radii.full,
+    paddingHorizontal: Tokens.spacing[2],
+    paddingVertical: Tokens.spacing[1],
+  },
+  priorityText: {
+    fontFamily: 'Inter',
+    fontSize: Tokens.type.xs,
+    textTransform: 'uppercase',
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+  },
+  priorityHigh: {
+    backgroundColor: `${Tokens.colors.error.main}55`,
+  },
+  priorityMedium: {
+    backgroundColor: `${Tokens.colors.warning.main}55`,
+  },
+  priorityLow: {
+    backgroundColor: `${Tokens.colors.success.main}55`,
   },
   clearHovered: {
     opacity: 0.8,

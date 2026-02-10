@@ -60,6 +60,20 @@ public class OverlayModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void collapseOverlay() {
+    OverlayService service = OverlayService.getInstance();
+    if (service != null) {
+      service.collapseMenuFromJs();
+    }
+  }
+
+  @ReactMethod
+  public void isExpanded(Promise promise) {
+    OverlayService service = OverlayService.getInstance();
+    promise.resolve(service != null && service.isExpanded());
+  }
+
+  @ReactMethod
   public void canDrawOverlays(Promise promise) {
     boolean canDraw = Settings.canDrawOverlays(reactContext);
     promise.resolve(canDraw);

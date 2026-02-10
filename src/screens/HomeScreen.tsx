@@ -16,10 +16,9 @@ import {
 import OverlayService from '../services/OverlayService';
 import StorageService from '../services/StorageService';
 import { Tokens } from '../theme/tokens';
-import ModeCard from '../components/home/ModeCard';
+import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
 import { ROUTES } from '../navigation/routes';
 
-// -- Constants --
 const ANIMATION_DURATION = 500;
 const ANIMATION_STAGGER = 80;
 const ENTRANCE_OFFSET_Y = 30;
@@ -27,6 +26,8 @@ const ENTRANCE_OFFSET_Y = 30;
 type NavigatorState = {
   routeNames?: string[];
 };
+
+type Mode = { id: string } & ModeCardMode;
 
 type NavigationNode = {
   navigate: (routeName: string) => void;
@@ -39,11 +40,10 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const { width } = useWindowDimensions();
 
-  // Responsive layout logic
   const isWeb = Platform.OS === 'web';
-  const cardWidth = isWeb && width > 768 ? '31%' : '47%'; // spacing handled by flex/justify
+  const cardWidth = isWeb && width > 768 ? '31%' : '47%';
 
-  const modes = useMemo(
+  const modes = useMemo<Mode[]>(
     () => [
       {
         id: 'ignite',
@@ -91,7 +91,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     [],
   );
 
-  // Animation refs
   const fadeAnims = useRef(modes.map(() => new Animated.Value(0))).current;
   const slideAnims = useRef(
     modes.map(() => new Animated.Value(ENTRANCE_OFFSET_Y)),
@@ -101,7 +100,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     loadStreak();
     checkOverlayPermission();
 
-    // Trigger entrance animation
     const animations = modes.map((_, i) => {
       return Animated.parallel([
         Animated.timing(fadeAnims[i], {
@@ -178,9 +176,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const loadStreak = async () => {
     try {
-      const streakCount = await StorageService.get(
-        StorageService.STORAGE_KEYS.streakCount,
-      );
+      const streakCount = await StorageService.get(StorageService.STORAGE_KEYS.streakCount);
       const parsed = streakCount ? parseInt(streakCount, 10) : 0;
       setStreak(Number.isNaN(parsed) ? 0 : parsed);
     } catch (e) {
@@ -250,26 +246,25 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
             </View>
           </View>
 
-          {isOverlayEnabled !== null && Platform.OS === 'android' && (
-            <View style={styles.overlayToggleSection}>
+          {Platform.OS === 'android' && (
+            <View style={[styles.overlayCard, isOverlayEnabled && styles.overlayCardActive]}>
               <View>
-                <Text style={styles.overlayToggleTitle}>Focus Overlay</Text>
-                <Text style={styles.overlayToggleDesc}>
-                  Show task count while you focus
-                </Text>
+                <Text style={styles.overlayTitle}>Focus Overlay</Text>
+                <Text style={styles.overlayDesc}>Show task count while you focus</Text>
               </View>
-              <Switch
-                testID="home-overlay-toggle"
-                accessibilityLabel="home-overlay-toggle"
-                trackColor={{
-                  false: Tokens.colors.neutral[600],
-                  true: Tokens.colors.brand[500],
-                }}
-                thumbColor={Tokens.colors.neutral[0]}
-                ios_backgroundColor={Tokens.colors.neutral[700]}
-                onValueChange={toggleOverlay}
-                value={isOverlayEnabled}
-              />
+              <View style={styles.overlaySwitchHitTarget}>
+                <Switch
+                  testID="home-overlay-toggle"
+                  accessibilityRole="switch"
+                  accessibilityLabel="home-overlay-toggle"
+                  accessibilityState={{ checked: isOverlayEnabled }}
+                  trackColor={{ false: Tokens.colors.neutral[600], true: Tokens.colors.brand[500] }}
+                  thumbColor={Tokens.colors.neutral[0]}
+                  ios_backgroundColor={Tokens.colors.neutral[700]}
+                  onValueChange={toggleOverlay}
+                  value={isOverlayEnabled}
+                />
+              </View>
             </View>
           )}
 
@@ -323,7 +318,7 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.h1,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: -0.5, // Tighter for headers
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontFamily: 'Inter',
@@ -352,28 +347,38 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Tokens.colors.text.primary,
   },
-  overlayToggleSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  overlayCard: {
+    minHeight: Tokens.layout.minTapTargetComfortable,
     marginBottom: Tokens.spacing[8],
     padding: Tokens.spacing[4],
     backgroundColor: Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.lg,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  overlayToggleTitle: {
+  overlayCardActive: {
+    borderColor: Tokens.colors.brand[500],
+  },
+  overlayTitle: {
     fontFamily: 'Inter',
     fontSize: Tokens.type.base,
     fontWeight: '600',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[1],
   },
-  overlayToggleDesc: {
+  overlayDesc: {
     fontFamily: 'Inter',
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.secondary,
+  },
+  overlaySwitchHitTarget: {
+    minWidth: Tokens.layout.minTapTargetComfortable,
+    minHeight: Tokens.layout.minTapTargetComfortable,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modesGrid: {
     flexDirection: 'row',
