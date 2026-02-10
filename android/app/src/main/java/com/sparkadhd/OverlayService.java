@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -21,6 +22,8 @@ import androidx.core.app.NotificationCompat;
 public class OverlayService extends Service {
   private static final String CHANNEL_ID = "spark_overlay";
   private static final int NOTIFICATION_ID = 1001;
+  private static final String PREFS_NAME = "spark_overlay_prefs";
+  private static final String KEY_LAST_COUNT = "last_count";
   private static OverlayService instance;
 
   private WindowManager windowManager;
@@ -51,7 +54,12 @@ public class OverlayService extends Service {
   public void onDestroy() {
     super.onDestroy();
     if (bubbleView != null) {
-      windowManager.removeView(bubbleView);
+      try {
+        if (bubbleView.isAttachedToWindow()) {
+          windowManager.removeView(bubbleView);
+        }
+      } catch (IllegalArgumentException ignored) {
+      }
       bubbleView = null;
     }
     instance = null;
@@ -69,7 +77,9 @@ public class OverlayService extends Service {
     bubbleLayout.gravity = Gravity.CENTER;
 
     countView = new TextView(this);
-    countView.setText("0");
+    int persistedCount = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+      .getInt(KEY_LAST_COUNT, 0);
+    countView.setText(String.valueOf(persistedCount));
     countView.setTextColor(0xFFFFFFFF);
     countView.setTextSize(16f);
     countView.setGravity(Gravity.CENTER);
@@ -127,12 +137,19 @@ public class OverlayService extends Service {
       }
     });
 
-    windowManager.addView(bubbleView, params);
+    try {
+      windowManager.addView(bubbleView, params);
+    } catch (SecurityException | RuntimeException exception) {
+      stopSelf();
+    }
   }
 
   private void setCount(int count) {
+    SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    preferences.edit().putInt(KEY_LAST_COUNT, count).apply();
+
     if (countView != null) {
-      countView.setText(String.valueOf(count));
+      countView.post(() -> countView.setText(String.valueOf(count)));
     }
   }
 

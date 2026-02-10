@@ -36,7 +36,12 @@
 
         <service
             android:name=".OverlayService"
-            android:exported="false" />
+            android:foregroundServiceType="specialUse"
+            android:exported="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="overlay_display" />
+        </service>
     </application>
 
 </manifest>

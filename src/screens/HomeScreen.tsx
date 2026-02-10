@@ -10,45 +10,92 @@ import {
   Animated,
   Easing,
   useWindowDimensions,
+  AppState,
+  AppStateStatus,
 } from 'react-native';
 import OverlayService from '../services/OverlayService';
 import StorageService from '../services/StorageService';
 import { Tokens } from '../theme/tokens';
-import ModeCard, { type ModeCardMode } from '../components/home/ModeCard';
+import ModeCard from '../components/home/ModeCard';
+import { ROUTES } from '../navigation/routes';
 
 // -- Constants --
 const ANIMATION_DURATION = 500;
 const ANIMATION_STAGGER = 80;
 const ENTRANCE_OFFSET_Y = 30;
 
-// -- Types --
-type Mode = { id: string } & ModeCardMode;
+type NavigatorState = {
+  routeNames?: string[];
+};
 
-const HomeScreen = ({ navigation }: any) => {
+type NavigationNode = {
+  navigate: (routeName: string) => void;
+  getState?: () => NavigatorState | undefined;
+  getParent?: () => NavigationNode | undefined;
+};
+
+const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const { width } = useWindowDimensions();
 
   // Responsive layout logic
   const isWeb = Platform.OS === 'web';
-  const numColumns = isWeb && width > 768 ? 3 : 2;
   const cardWidth = isWeb && width > 768 ? '31%' : '47%'; // spacing handled by flex/justify
 
   const modes = useMemo(
     () => [
-      { id: 'ignite', name: 'Ignite', icon: 'fire', desc: '5-min focus timer', accent: Tokens.colors.indigo.primary },
-      { id: 'fogcutter', name: 'Fog Cutter', icon: 'weather-windy', desc: 'Break tasks down', accent: Tokens.colors.info.main },
-      { id: 'pomodoro', name: 'Pomodoro', icon: 'timer-sand', desc: 'Classic timer', accent: Tokens.colors.error.main },
-      { id: 'anchor', name: 'Anchor', icon: 'anchor', desc: 'Breathing exercises', accent: Tokens.colors.success.main },
-      { id: 'checkin', name: 'Check In', icon: 'chart-bar', desc: 'Mood & energy', accent: Tokens.colors.warning.main },
-      { id: 'cbtguide', name: 'CBT Guide', icon: 'brain', desc: 'Evidence-based strategies', accent: Tokens.colors.info.main },
+      {
+        id: 'ignite',
+        name: 'Ignite',
+        icon: 'fire',
+        desc: '5-min focus timer',
+        accent: Tokens.colors.indigo.primary,
+      },
+      {
+        id: 'fogcutter',
+        name: 'Fog Cutter',
+        icon: 'weather-windy',
+        desc: 'Break tasks down',
+        accent: Tokens.colors.info.main,
+      },
+      {
+        id: 'pomodoro',
+        name: 'Pomodoro',
+        icon: 'timer-sand',
+        desc: 'Classic timer',
+        accent: Tokens.colors.error.main,
+      },
+      {
+        id: 'anchor',
+        name: 'Anchor',
+        icon: 'anchor',
+        desc: 'Breathing exercises',
+        accent: Tokens.colors.success.main,
+      },
+      {
+        id: 'checkin',
+        name: 'Check In',
+        icon: 'chart-bar',
+        desc: 'Mood & energy',
+        accent: Tokens.colors.warning.main,
+      },
+      {
+        id: 'cbtguide',
+        name: 'CBT Guide',
+        icon: 'brain',
+        desc: 'Evidence-based strategies',
+        accent: Tokens.colors.info.main,
+      },
     ],
     [],
   );
 
   // Animation refs
   const fadeAnims = useRef(modes.map(() => new Animated.Value(0))).current;
-  const slideAnims = useRef(modes.map(() => new Animated.Value(ENTRANCE_OFFSET_Y))).current;
+  const slideAnims = useRef(
+    modes.map(() => new Animated.Value(ENTRANCE_OFFSET_Y)),
+  ).current;
 
   useEffect(() => {
     loadStreak();
@@ -73,7 +120,7 @@ const HomeScreen = ({ navigation }: any) => {
     });
 
     Animated.stagger(ANIMATION_STAGGER, animations).start();
-  }, []);
+  }, [fadeAnims, modes, slideAnims]);
 
   const checkOverlayPermission = async () => {
     if (Platform.OS === 'android') {
@@ -82,8 +129,29 @@ const HomeScreen = ({ navigation }: any) => {
     }
   };
 
+  useEffect(() => {
+    if (Platform.OS !== 'android') {
+      return;
+    }
+
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      (nextState: AppStateStatus) => {
+        if (nextState === 'active') {
+          checkOverlayPermission();
+        }
+      },
+    );
+
+    return () => {
+      appStateSubscription.remove();
+    };
+  }, []);
+
   const toggleOverlay = async (value: boolean) => {
-    if (Platform.OS !== 'android') return;
+    if (Platform.OS !== 'android') {
+      return;
+    }
 
     if (value) {
       const hasPermission = await OverlayService.canDrawOverlays();
@@ -92,7 +160,10 @@ const HomeScreen = ({ navigation }: any) => {
         setIsOverlayEnabled(true);
       } else {
         const granted = await OverlayService.requestOverlayPermission();
-        if (granted) {
+        const hasPermissionAfterRequest =
+          granted || (await OverlayService.canDrawOverlays());
+
+        if (hasPermissionAfterRequest) {
           OverlayService.startOverlay();
           setIsOverlayEnabled(true);
         } else {
@@ -118,7 +189,7 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const navigateByRouteName = (routeName: string) => {
-    let currentNavigator: any = navigation;
+    let currentNavigator: NavigationNode | undefined = navigation;
 
     while (currentNavigator) {
       const routeNames = currentNavigator.getState?.()?.routeNames;
@@ -133,44 +204,67 @@ const HomeScreen = ({ navigation }: any) => {
   };
 
   const handlePress = (modeId: string) => {
-    if (modeId === 'checkin') navigateByRouteName('CheckIn');
-    else if (modeId === 'cbtguide') navigateByRouteName('CBTGuide');
-    else if (modeId === 'fogcutter') navigateByRouteName('FogCutter');
-    else if (modeId === 'pomodoro') navigateByRouteName('Pomodoro');
-    else if (modeId === 'anchor') navigateByRouteName('Anchor');
-    else navigateByRouteName('Focus'); // ignite -> Focus
+    if (modeId === 'checkin') {
+      navigateByRouteName(ROUTES.CHECK_IN);
+    } else if (modeId === 'cbtguide') {
+      navigateByRouteName(ROUTES.CBT_GUIDE);
+    } else if (modeId === 'fogcutter') {
+      navigateByRouteName(ROUTES.FOG_CUTTER);
+    } else if (modeId === 'pomodoro') {
+      navigateByRouteName(ROUTES.POMODORO);
+    } else if (modeId === 'anchor') {
+      navigateByRouteName(ROUTES.ANCHOR);
+    } else {
+      navigateByRouteName(ROUTES.FOCUS);
+    } // ignite -> Focus
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.maxWidthWrapper}>
-
           <View style={styles.header}>
             <View>
-              <Text style={styles.title} testID="home-title" accessibilityLabel="home-title">
+              <Text
+                style={styles.title}
+                testID="home-title"
+                accessibilityLabel="home-title"
+              >
                 Spark
               </Text>
               <Text style={styles.subtitle}>Ready to focus?</Text>
             </View>
-            <View style={styles.streakBadge} testID="home-streak-badge" accessibilityLabel="home-streak-badge">
+            <View
+              style={styles.streakBadge}
+              testID="home-streak-badge"
+              accessibilityLabel="home-streak-badge"
+            >
               <Text style={styles.streakEmoji}>🔥</Text>
-              <Text style={styles.streakText} testID="home-streak" accessibilityLabel="home-streak">
+              <Text
+                style={styles.streakText}
+                testID="home-streak"
+                accessibilityLabel="home-streak"
+              >
                 {streak} day{streak !== 1 ? 's' : ''} streak
               </Text>
             </View>
           </View>
 
           {isOverlayEnabled !== null && Platform.OS === 'android' && (
-            <View style={styles.overlayCard}>
+            <View style={styles.overlayToggleSection}>
               <View>
-                <Text style={styles.overlayTitle}>Focus Overlay</Text>
-                <Text style={styles.overlayDesc}>Block apps during deep work</Text>
+                <Text style={styles.overlayToggleTitle}>Focus Overlay</Text>
+                <Text style={styles.overlayToggleDesc}>
+                  Show task count while you focus
+                </Text>
               </View>
               <Switch
                 testID="home-overlay-toggle"
                 accessibilityLabel="home-overlay-toggle"
-                trackColor={{ false: Tokens.colors.neutral[600], true: Tokens.colors.brand[500] }}
+                trackColor={{
+                  false: Tokens.colors.neutral[600],
+                  true: Tokens.colors.brand[500],
+                }}
                 thumbColor={Tokens.colors.neutral[0]}
                 ios_backgroundColor={Tokens.colors.neutral[700]}
                 onValueChange={toggleOverlay}
@@ -197,7 +291,6 @@ const HomeScreen = ({ navigation }: any) => {
               </Animated.View>
             ))}
           </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>

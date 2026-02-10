@@ -8,9 +8,10 @@
 
 | Key | Value |
 |-----|-------|
-| **Repo Name** | `spark-adhd` |
+| **Repo Name** | `spark-adhd-backup` |
 | **Goal** | Speed of delivery (not learning a new stack) |
-| **Primary Platforms** | Web (GitHub Pages), Android, iOS |
+| **Primary Platforms** | Web/PWA first (Android Chrome priority) |
+| **Secondary Platforms** | Native Android bridge (optional, feature-gated) |
 | **Deployment** | GitHub Pages (responsive PWA) |
 
 ### Tech Stack
@@ -22,10 +23,11 @@
 | **Navigation** | React Navigation 6 (Stack + Bottom Tabs) |
 | **State** | React `useState` / `useContext` (upgrade to Redux Toolkit if complexity grows) |
 | **Persistence** | `@react-native-async-storage/async-storage` (local-only) |
-| **OAuth** | `@react-native-google-signin/google-signin` (for Google Tasks/Calendar/Keep APIs) |
 | **Bundler (Web)** | Webpack |
 | **Testing** | Jest + RTL (unit), Playwright (web E2E), Detox (native E2E) |
 | **CI/CD** | GitHub Actions → GitHub Pages |
+
+> Native Android testing and Android Studio workflows are only required when changing native modules (`android/`, overlay bridge/services, or native permissions/build logic).
 
 ### Secrets Configuration
 
@@ -224,8 +226,9 @@ interface PomodoroState extends TimerState {
 
 | Layout | Purpose |
 |--------|---------|
-| `MainTabNavigator` | Bottom tabs for primary navigation |
-| Screen wrapper | Consistent padding, SafeAreaView, gradient background |
+| `WebNavBar` (web) | Top navigation optimized for mobile browser UX |
+| Bottom tabs (native) | Primary navigation for native shell only |
+| Screen wrapper | Consistent padding, SafeAreaView, token-driven dark theme |
 
 ### Page Hierarchy
 
@@ -250,29 +253,17 @@ interface PomodoroState extends TimerState {
 | `Card` | (to create) | Glassmorphic card with 8px grid |
 | `TimerDisplay` | (to create) | Shared timer UI for Ignite/Pomodoro |
 
-### Design Tokens (from AGENTS.md)
+### Design Tokens
 
-```css
-/* Colors */
---bg-deep: #1a1a2e;
---surface: rgba(255, 255, 255, 0.05);
---primary: #A06EE1;
---border: rgba(255, 255, 255, 0.1);
+Canonical source:
+- `src/theme/tokens.ts`
+- `docs/DESIGN_RULES.md`
 
-/* Spacing (8pt grid) */
---space-1: 8px;
---space-2: 16px;
---space-3: 24px;
---space-4: 32px;
-
-/* Radius */
---radius-button: 100px;  /* Pill buttons */
---radius-card: 16px;
-
-/* Effects */
---glass-blur: blur(12px);
---glass-bg: rgba(255, 255, 255, 0.05);
-```
+Rules:
+- No hardcoded hex values in UI code when token exists.
+- No ad-hoc spacing/typography/radii values.
+- Web + Android Chrome behavior is the primary visual target.
+- Token examples in this file are informational only; `tokens.ts` is authoritative.
 
 ---
 
@@ -296,7 +287,7 @@ npm run e2e          # Playwright E2E (web)
 
 1. **Build**: `npm run build:web` → outputs to `dist/`
 2. **Deploy**: GitHub Actions workflow pushes `dist/` to `gh-pages` branch
-3. **URL**: `https://daytimeblues.github.io/spark-adhd/`
+3. **URL**: `https://DaytimeBlues.github.io/spark-adhd-backup`
 
 ### Recommended GitHub Action
 

@@ -1,5 +1,6 @@
 package com.sparkadhd;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -7,17 +8,29 @@ import android.provider.Settings;
 
 import androidx.core.content.ContextCompat;
 
+import com.facebook.react.bridge.BaseActivityEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
 public class OverlayModule extends ReactContextBaseJavaModule {
+  private static final int OVERLAY_PERMISSION_REQUEST_CODE = 4242;
   private final ReactApplicationContext reactContext;
+  private Promise pendingPermissionPromise;
+  private final BaseActivityEventListener activityEventListener = new BaseActivityEventListener() {
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+      if (requestCode == OVERLAY_PERMISSION_REQUEST_CODE) {
+        resolvePendingPermissionPromise();
+      }
+    }
+  };
 
   public OverlayModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
+    this.reactContext.addActivityEventListener(activityEventListener);
   }
 
   @Override
@@ -59,12 +72,38 @@ public class OverlayModule extends ReactContextBaseJavaModule {
       return;
     }
 
+    if (pendingPermissionPromise != null) {
+      promise.reject("E_OVERLAY_REQUEST_IN_PROGRESS", "Overlay permission request already in progress");
+      return;
+    }
+
+    Activity currentActivity = getCurrentActivity();
+    if (currentActivity == null) {
+      promise.reject("E_ACTIVITY_UNAVAILABLE", "Activity is not available to request overlay permission");
+      return;
+    }
+
     Intent intent = new Intent(
       Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
       Uri.parse("package:" + reactContext.getPackageName())
     );
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    reactContext.startActivity(intent);
-    promise.resolve(false);
+    pendingPermissionPromise = promise;
+
+    try {
+      currentActivity.startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+    } catch (Exception exception) {
+      pendingPermissionPromise = null;
+      promise.reject("E_OVERLAY_PERMISSION_REQUEST_FAILED", exception);
+    }
+  }
+
+  private void resolvePendingPermissionPromise() {
+    if (pendingPermissionPromise == null) {
+      return;
+    }
+
+    boolean canDraw = Settings.canDrawOverlays(reactContext);
+    pendingPermissionPromise.resolve(canDraw);
+    pendingPermissionPromise = null;
   }
 }
