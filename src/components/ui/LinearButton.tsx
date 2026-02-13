@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Colors, Spacing, TypeScale, Radii, Tokens } from '../../theme/tokens';
+import HapticsService from '../../services/HapticsService';
 
 interface LinearButtonProps {
   title: string;
@@ -67,9 +68,14 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
     }
   };
 
+  const handlePress = () => {
+    HapticsService.tap();
+    onPress();
+  };
+
   return (
     <Pressable
-      onPress={onPress}
+      onPress={handlePress}
       disabled={disabled || loading}
       style={({
         pressed,
@@ -102,7 +108,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
             textStyle,
           ]}
         >
-          {title}
+          {title.toUpperCase()}
         </Text>
       )}
     </Pressable>
@@ -111,13 +117,14 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: Radii.md,
+    borderRadius: Radii.none, // Sharp corners
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     ...Platform.select({
       web: {
         cursor: 'pointer',
+        transition: Tokens.motion.transitions.fast,
       },
     }),
   },
@@ -141,9 +148,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.indigo.primary,
   },
   secondary: {
-    backgroundColor: Colors.neutral.dark,
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: Colors.neutral.border,
+    borderStyle: 'dashed', // Industrial feel
   },
   ghost: {
     backgroundColor: 'transparent',
@@ -157,25 +165,28 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -1 }],
     ...Platform.select({
       web: {
-        filter: 'brightness(1.1)',
+        filter: 'brightness(1.2)',
+        backgroundColor: Colors.neutral.glass,
       },
     }),
   },
   pressed: {
-    opacity: 0.8,
+    opacity: 0.9,
     transform: [{ scale: Tokens.motion.scales.press }],
   },
   disabled: {
     opacity: 0.5,
+    backgroundColor: Colors.neutral.dark,
+    borderColor: Colors.neutral.borderSubtle,
   },
   text: {
-    fontFamily: 'Inter',
-    fontWeight: '500',
-    fontSize: TypeScale.base,
-    letterSpacing: -0.1,
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontWeight: '700',
+    fontSize: TypeScale.sm, // Slightly smaller for uppercase
+    letterSpacing: 1, // Wider spacing for uppercase
   },
   smText: {
-    fontSize: TypeScale.sm,
+    fontSize: TypeScale.xs,
   },
   primaryText: {
     color: Colors.text.primary,

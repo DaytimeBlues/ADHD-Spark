@@ -18,12 +18,12 @@ const PATTERNS: Record<
   BreathingPattern,
   { name: string; inhale: number; hold: number; exhale: number; wait: number }
 > = {
-  '478': { name: '4-7-8 Relax', inhale: 4, hold: 7, exhale: 8, wait: 0 },
-  box: { name: 'Box Breathing', inhale: 4, hold: 4, exhale: 4, wait: 4 },
-  energize: { name: 'Energize', inhale: 6, hold: 0, exhale: 2, wait: 0 },
+  '478': { name: '4-7-8 RELAX', inhale: 4, hold: 7, exhale: 8, wait: 0 },
+  box: { name: 'BOX BREATHING', inhale: 4, hold: 4, exhale: 4, wait: 4 },
+  energize: { name: 'ENERGIZE', inhale: 6, hold: 0, exhale: 2, wait: 0 },
 };
 
-const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 const CIRCLE_TRANSITION = 'transform 1s ease-in-out';
 const BREATHING_CIRCLE_SIZE = 240;
 const INNER_CIRCLE_SIZE = 140;
@@ -100,13 +100,13 @@ const AnchorScreen = () => {
   const getPhaseText = () => {
     switch (phase) {
       case 'inhale':
-        return 'Breathe In';
+        return 'BREATHE IN';
       case 'hold':
-        return 'Hold';
+        return 'HOLD';
       case 'exhale':
-        return 'Breathe Out';
+        return 'BREATHE OUT';
       case 'wait':
-        return 'Rest';
+        return 'REST';
       default:
         return '';
     }
@@ -132,9 +132,9 @@ const AnchorScreen = () => {
       <View style={styles.scrollContent}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>Anchor</Text>
+            <Text style={styles.title}>ANCHOR</Text>
             <Text style={styles.subtitle}>
-              Breathing exercises for calm and focus.
+              BREATHING EXERCISES FOR CALM AND FOCUS.
             </Text>
           </View>
 
@@ -238,21 +238,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     textAlign: 'center',
     maxWidth: 400,
     lineHeight: 24,
+    letterSpacing: 1,
   },
   activeContainer: {
     alignItems: 'center',
@@ -266,11 +267,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   patternName: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.brand[400],
     fontSize: Tokens.type['2xl'],
     fontWeight: '600',
-    letterSpacing: -0.5,
+    letterSpacing: 1,
   },
   breathingCircle: {
     width: BREATHING_CIRCLE_SIZE,
@@ -294,15 +295,16 @@ const styles = StyleSheet.create({
     }),
   },
   phaseText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type['2xl'],
     fontWeight: '700',
     zIndex: 1,
     marginBottom: Tokens.spacing[2],
+    letterSpacing: 1,
   },
   countText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.mono,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type['5xl'],
     fontWeight: '800',
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
   },
   patternButton: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     padding: Tokens.spacing[5],
     flexDirection: 'row',
     alignItems: 'center',
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
   patternIcon: {
     width: Tokens.spacing[12],
     height: Tokens.spacing[12],
-    borderRadius: Tokens.radii.full,
+    borderRadius: 0, // Sharp
     backgroundColor: Tokens.colors.neutral.dark,
     alignItems: 'center',
     justifyContent: 'center',
@@ -360,14 +362,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   patternButtonText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.lg,
     fontWeight: '600',
     marginBottom: 4,
+    letterSpacing: 1,
   },
   patternDetails: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.sm,
   },

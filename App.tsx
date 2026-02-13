@@ -59,7 +59,7 @@ const App = () => {
 
   const content = (
     <NavigationContainer ref={navigationRef}>
-      <StatusBar barStyle="light-content" backgroundColor="#111111" />
+      <StatusBar barStyle="light-content" backgroundColor={Tokens.colors.neutral.darkest} />
       <AppNavigator />
     </NavigationContainer>
   );

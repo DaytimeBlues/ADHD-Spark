@@ -1,31 +1,30 @@
-// Linear Design Tokens for spark-adhd-backup
-// Based on Linear.app's minimalist, developer-centric aesthetic
-// Extended to support both named keys and numbered scales for backward compatibility
+// Spark Industrial Design Tokens
+// "Nothing" Aesthetic: Monochrome, Red Accent, Dot Matrix, Raw.
 
 export const LinearColors = {
-    // Brand - numbered scale for backward compatibility
+    // Brand - Red Accent (Nothing Style)
     brand: {
-        50: '#EEF2FF',
-        100: '#E0E7FF',
-        200: '#C7D2FE',
-        300: '#A5B4FC',
-        400: '#818CF8',
-        500: '#5E6AD2',  // Primary
-        600: '#4E5AC2',
-        700: '#3E4AB2',
-        800: '#3730A3',
-        900: '#312E81',
+        50: '#FFF0F0',
+        100: '#FFE0E0',
+        200: '#FFC0C0',
+        300: '#FF9090',
+        400: '#FF5050',
+        500: '#D81313',  // Primary Accent (Sharp Red)
+        600: '#B00F0F',
+        700: '#900C0C',
+        800: '#700909',
+        900: '#500505',
     },
 
-    // Indigo (alias for brand)
+    // Alias indigo to red for backward compatibility but using new aesthetic
     indigo: {
-        primary: '#5E6AD2',
-        hover: '#4E5AC2',
-        active: '#3E4AB2',
-        subtle: 'rgba(94, 106, 210, 0.1)',
+        primary: '#D81313',
+        hover: '#B00F0F',
+        active: '#900C0C',
+        subtle: 'rgba(216, 19, 19, 0.1)',
     },
 
-    // Danger/Error - numbered scale
+    // Danger/Error
     danger: {
         50: '#FEF2F2',
         100: '#FEE2E2',
@@ -39,53 +38,58 @@ export const LinearColors = {
         900: '#7F1D1D',
     },
 
-    // Dark Mode Palette - with numbered scale aliases
+    // Monochrome Palette (Pure Black/White/Gray)
     neutral: {
-        // Named keys (original)
-        darkest: '#111111',
-        darker: '#1A1A1A',
-        dark: '#2A2A2A',
-        border: '#333333',
-        borderSubtle: '#252525',
-        // Numbered scale (backward compatibility)
+        // Named keys
+        darkest: '#000000',      // Pure Black
+        darker: '#0A0A0A',       // Almost Black
+        dark: '#141414',         // Surface
+        border: '#333333',       // Strong Border
+        borderSubtle: '#222222', // Subtle Border
+        
+        // Glass Tokens
+        glass: 'rgba(255, 255, 255, 0.03)',
+        glassStroke: 'rgba(255, 255, 255, 0.1)',
+        
+        // Numbered scale
         0: '#FFFFFF',
         50: '#FAFAFA',
-        100: '#F4F4F5',
-        200: '#E4E4E7',
-        300: '#A0A0A0',
-        400: '#707070',
-        500: '#4A4A4A',
-        600: '#333333',
-        700: '#2A2A2A',
-        800: '#1A1A1A',
-        900: '#111111',
+        100: '#F0F0F0',
+        200: '#E0E0E0',
+        300: '#C0C0C0',
+        400: '#A0A0A0',
+        500: '#808080',
+        600: '#606060',
+        700: '#404040',
+        800: '#202020',
+        900: '#000000',
     },
 
-    // Text - Dark Mode
+    // Text
     text: {
         primary: '#FFFFFF',
-        secondary: '#A0A0A0',
-        tertiary: '#707070',
-        disabled: '#4A4A4A',
-        link: '#5E6AD2',
+        secondary: '#888888',
+        tertiary: '#555555',
+        disabled: '#333333',
+        link: '#D81313',
     },
 
     // Semantic
     success: {
-        main: '#10B981',
-        subtle: 'rgba(16, 185, 129, 0.1)',
+        main: '#00FF00', // Terminal Green
+        subtle: 'rgba(0, 255, 0, 0.1)',
     },
     warning: {
-        main: '#F59E0B',
-        subtle: 'rgba(245, 158, 11, 0.1)',
+        main: '#FFD700', // Industrial Yellow
+        subtle: 'rgba(255, 215, 0, 0.1)',
     },
     error: {
-        main: '#EF4444',
-        subtle: 'rgba(239, 68, 68, 0.1)',
+        main: '#FF0000',
+        subtle: 'rgba(255, 0, 0, 0.1)',
     },
     info: {
-        main: '#3B82F6',
-        subtle: 'rgba(59, 130, 246, 0.1)',
+        main: '#FFFFFF',
+        subtle: 'rgba(255, 255, 255, 0.1)',
     },
 } as const;
 
@@ -102,7 +106,6 @@ export const LinearSpacing = {
     12: 48,
     16: 64,
     20: 80,
-    // Extended spacing (backward compatibility)
     24: 96,
     32: 128,
     48: 192,
@@ -110,22 +113,20 @@ export const LinearSpacing = {
 
 export const LinearRadii = {
     none: 0,
-    sm: 4,
-    md: 6,
-    lg: 8,
-    xl: 12,
-    full: 9999,
-    // Alias for backward compatibility
+    sm: 2,    // Tiny softness for inner elements
+    md: 0,    // Sharp
+    lg: 0,    // Sharp
+    xl: 0,    // Sharp
+    full: 9999, // Keep pills for status badges only
     pill: 9999,
 } as const;
 
 export const LinearTypography = {
     fontFamily: {
-        sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+        sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         mono: 'SF Mono, Monaco, Inconsolata, "Fira Mono", monospace',
     },
     size: {
-        // Original named sizes
         h1: 32,
         h2: 24,
         h3: 20,
@@ -134,7 +135,7 @@ export const LinearTypography = {
         sm: 13,
         xs: 12,
         xxs: 11,
-        // Extended sizes (backward compatibility)
+        // Extended
         lg: 16,
         xl: 18,
         '2xl': 24,
@@ -150,9 +151,9 @@ export const LinearTypography = {
         bold: '700' as const,
     },
     lineHeight: {
-        tight: 1.25,
-        normal: 1.5,
-        relaxed: 1.75,
+        tight: 1.1,
+        normal: 1.4,
+        relaxed: 1.6,
     },
 } as const;
 
@@ -166,16 +167,16 @@ export const LinearElevation = {
     },
     sm: {
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
+        shadowOffset: { width: 2, height: 2 }, // Hard shadow
+        shadowOpacity: 0.5,
+        shadowRadius: 0, // Zero radius for retro/sharp feel
         elevation: 2,
     },
     md: {
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 6,
+        shadowOffset: { width: 4, height: 4 }, // Hard shadow
+        shadowOpacity: 0.8,
+        shadowRadius: 0,
         elevation: 6,
     },
 } as const;

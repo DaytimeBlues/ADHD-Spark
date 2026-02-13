@@ -19,9 +19,9 @@ import { Tokens } from '../theme/tokens';
 import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
 import { ROUTES } from '../navigation/routes';
 
-const ANIMATION_DURATION = 500;
-const ANIMATION_STAGGER = 80;
-const ENTRANCE_OFFSET_Y = 30;
+const ANIMATION_DURATION = 300; // Faster
+const ANIMATION_STAGGER = 50; // Faster
+const ENTRANCE_OFFSET_Y = 15; // Subtle slide
 
 type NavigatorState = {
   routeNames?: string[];
@@ -49,43 +49,43 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         id: 'ignite',
         name: 'Ignite',
         icon: 'fire',
-        desc: '5-min focus timer',
+        desc: '5-MIN FOCUS TIMER',
         accent: Tokens.colors.indigo.primary,
       },
       {
         id: 'fogcutter',
         name: 'Fog Cutter',
         icon: 'weather-windy',
-        desc: 'Break tasks down',
-        accent: Tokens.colors.info.main,
+        desc: 'BREAK TASKS DOWN',
+        accent: Tokens.colors.indigo.primary, // Unified accent
       },
       {
         id: 'pomodoro',
         name: 'Pomodoro',
         icon: 'timer-sand',
-        desc: 'Classic timer',
-        accent: Tokens.colors.error.main,
+        desc: 'CLASSIC TIMER',
+        accent: Tokens.colors.indigo.primary,
       },
       {
         id: 'anchor',
         name: 'Anchor',
         icon: 'anchor',
-        desc: 'Breathing exercises',
-        accent: Tokens.colors.success.main,
+        desc: 'BREATHING EXERCISES',
+        accent: Tokens.colors.indigo.primary,
       },
       {
         id: 'checkin',
         name: 'Check In',
         icon: 'chart-bar',
-        desc: 'Mood & energy',
-        accent: Tokens.colors.warning.main,
+        desc: 'MOOD & ENERGY',
+        accent: Tokens.colors.indigo.primary,
       },
       {
         id: 'cbtguide',
         name: 'CBT Guide',
         icon: 'brain',
-        desc: 'Evidence-based strategies',
-        accent: Tokens.colors.info.main,
+        desc: 'EVIDENCE-BASED STRATEGIES',
+        accent: Tokens.colors.indigo.primary,
       },
     ],
     [],
@@ -106,13 +106,13 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
           toValue: 1,
           duration: ANIMATION_DURATION,
           useNativeDriver: true,
-          easing: Easing.out(Easing.cubic),
+          easing: Easing.linear, // Linear for industrial feel
         }),
         Animated.timing(slideAnims[i], {
           toValue: 0,
           duration: ANIMATION_DURATION,
           useNativeDriver: true,
-          easing: Easing.out(Easing.back(1.2)),
+          easing: Easing.out(Easing.cubic),
         }),
       ]);
     });
@@ -226,9 +226,9 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 testID="home-title"
                 accessibilityLabel="home-title"
               >
-                Spark
+                SPARK
               </Text>
-              <Text style={styles.subtitle}>Ready to focus?</Text>
+              <Text style={styles.subtitle}>READY TO FOCUS?</Text>
             </View>
             <View
               style={styles.streakBadge}
@@ -241,7 +241,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 testID="home-streak"
                 accessibilityLabel="home-streak"
               >
-                {streak} day{streak !== 1 ? 's' : ''} streak
+                {streak} {streak !== 1 ? 'DAYS' : 'DAY'}
               </Text>
             </View>
           </View>
@@ -249,8 +249,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
           {Platform.OS === 'android' && (
             <View style={[styles.overlayCard, isOverlayEnabled && styles.overlayCardActive]}>
               <View>
-                <Text style={styles.overlayTitle}>Focus Overlay</Text>
-                <Text style={styles.overlayDesc}>Show task count while you focus</Text>
+                <Text style={styles.overlayTitle}>FOCUS OVERLAY</Text>
+                <Text style={styles.overlayDesc}>SHOW TASK COUNT WHILE YOU FOCUS</Text>
               </View>
               <View style={styles.overlaySwitchHitTarget}>
                 <Switch
@@ -314,45 +314,49 @@ const styles = StyleSheet.create({
     paddingTop: Tokens.spacing[4],
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.h1,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: -0.5,
+    letterSpacing: 2, // Wide industrial
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     marginTop: Tokens.spacing[1],
-    letterSpacing: 0.2,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: 'transparent',
     paddingHorizontal: Tokens.spacing[3],
     paddingVertical: Tokens.spacing[2],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
+    borderStyle: 'dotted', // Dotted border
     borderColor: Tokens.colors.neutral.border,
   },
   streakEmoji: {
-    fontSize: 18,
+    fontSize: 16,
     marginRight: Tokens.spacing[2],
   },
   streakText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
-    fontWeight: '600',
+    fontWeight: '700',
     color: Tokens.colors.text.primary,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   overlayCard: {
     minHeight: Tokens.layout.minTapTargetComfortable,
     marginBottom: Tokens.spacing[8],
     padding: Tokens.spacing[4],
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     flexDirection: 'row',
@@ -363,16 +367,18 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.brand[500],
   },
   overlayTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
-    fontWeight: '600',
+    fontWeight: '700',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[1],
+    letterSpacing: 1,
   },
   overlayDesc: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.secondary,
+    letterSpacing: 0.5,
   },
   overlaySwitchHitTarget: {
     minWidth: Tokens.layout.minTapTargetComfortable,
@@ -389,3 +395,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+

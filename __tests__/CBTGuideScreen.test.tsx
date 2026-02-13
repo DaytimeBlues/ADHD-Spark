@@ -23,29 +23,29 @@ describe('CBTGuideScreen', () => {
 
   it('renders correctly with title', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
-    expect(screen.getByText('CBT for ADHD')).toBeTruthy();
-    expect(screen.getByText('Evidence-based strategies')).toBeTruthy();
+    expect(screen.getByText('CBT FOR ADHD')).toBeTruthy();
+    expect(screen.getByText('EVIDENCE-BASED STRATEGIES')).toBeTruthy();
   });
 
   it('displays CADDI pillars', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
-    expect(screen.getByText('Behavioral Activation')).toBeTruthy();
-    expect(screen.getByText('Organization')).toBeTruthy();
-    expect(screen.getByText('Mindfulness')).toBeTruthy();
+    expect(screen.getByText('BEHAVIORAL ACTIVATION')).toBeTruthy();
+    expect(screen.getByText('ORGANIZATION')).toBeTruthy();
+    expect(screen.getByText('MINDFULNESS')).toBeTruthy();
   });
 
   it('shows feature buttons', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
-    expect(screen.getByText('Ignite Timer')).toBeTruthy();
-    expect(screen.getByText('Pomodoro')).toBeTruthy();
-    expect(screen.getByText('Fog Cutter')).toBeTruthy();
-    expect(screen.getByText('Brain Dump')).toBeTruthy();
-    expect(screen.getByText('Anchor Breathing')).toBeTruthy();
+    expect(screen.getByText('IGNITE TIMER')).toBeTruthy();
+    expect(screen.getByText('POMODORO')).toBeTruthy();
+    expect(screen.getByText('FOG CUTTER')).toBeTruthy();
+    expect(screen.getByText('BRAIN DUMP')).toBeTruthy();
+    expect(screen.getByText('ANCHOR BREATHING')).toBeTruthy();
   });
 
   it('renders intro card about CADDI', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
-    expect(screen.getByText(/About CADDI/i)).toBeTruthy();
+    expect(screen.getByText(/ABOUT CADDI/i)).toBeTruthy();
     expect(
       screen.getByText(/Behavioral Activation, Organization, and Mindfulness/i),
     ).toBeTruthy();

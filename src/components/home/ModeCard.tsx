@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Animated, Platform, Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Tokens } from '../../theme/tokens';
+import HapticsService from '../../services/HapticsService';
 
 export type ModeCardMode = {
   name: string;
@@ -19,7 +20,7 @@ export type ModeCardProps = {
 };
 
 const CARD_MIN_HEIGHT = 140;
-const DOT_SIZE = 8;
+const DOT_SIZE = 4; // Smaller, sharper dots
 const ICON_SIZE = 28;
 
 export default function ModeCard({ mode, onPress, style, animatedStyle, testID }: ModeCardProps) {
@@ -29,22 +30,26 @@ export default function ModeCard({ mode, onPress, style, animatedStyle, testID }
   const hoverStyle =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? ({
-        borderColor: mode.accent,
-        backgroundColor: `${Tokens.colors.neutral.dark}E6`, // 90% opacity for glass effect
-        boxShadow: `0 0 25px ${mode.accent}25`, // Subtle colored glow
-        transform: [{ scale: 1.02 }],
+        borderColor: Tokens.colors.indigo.primary, // Red accent
+        backgroundColor: Tokens.colors.neutral.dark,
+        transform: [{ scale: 1 }], // No scale, just color change
       } as any)
       : {};
 
   const focusStyle =
     Platform.OS === 'web' && isFocused
       ? {
-        outlineColor: mode.accent,
+        outlineColor: Tokens.colors.indigo.primary,
         outlineStyle: 'solid',
         outlineWidth: 2,
-        outlineOffset: 4,
+        outlineOffset: 2,
       }
       : {};
+
+  const handlePress = () => {
+    HapticsService.tap();
+    onPress();
+  };
 
   return (
     <Animated.View style={[animatedStyle, style]}>
@@ -52,7 +57,7 @@ export default function ModeCard({ mode, onPress, style, animatedStyle, testID }
         testID={testID}
         accessibilityLabel={testID}
         accessibilityRole="button"
-        onPress={onPress}
+        onPress={handlePress}
         onHoverIn={() => setIsHovered(true)}
         onHoverOut={() => setIsHovered(false)}
         onFocus={() => setIsFocused(true)}
@@ -61,22 +66,36 @@ export default function ModeCard({ mode, onPress, style, animatedStyle, testID }
           styles.card,
           Platform.OS === 'web' && {
             cursor: 'pointer',
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: Tokens.motion.transitions.fast, // Fast linear
           },
-          pressed && { transform: [{ scale: 0.98 }] },
+          pressed && { opacity: 0.9 }, // Subtle press
           hoverStyle,
           focusStyle as any,
         ]}
       >
         <View style={styles.cardHeader}>
-          <View style={[styles.iconContainer, { backgroundColor: `${mode.accent}20` }]}>
-            <Icon name={mode.icon} size={ICON_SIZE} color={mode.accent} />
+          {/* Dot Matrix Icon Container Style */}
+          <View style={[styles.iconContainer, { 
+              backgroundColor: 'transparent',
+              borderColor: isHovered ? Tokens.colors.indigo.primary : Tokens.colors.neutral.border 
+            }]}>
+            <Icon 
+              name={mode.icon} 
+              size={ICON_SIZE} 
+              color={isHovered ? Tokens.colors.indigo.primary : Tokens.colors.text.primary} 
+            />
           </View>
-          <View style={[styles.accentDot, { backgroundColor: mode.accent, boxShadow: `0 0 10px ${mode.accent}` } as any]} />
+          
+          {/* Status Dot */}
+          <View style={[styles.accentDot, { 
+            backgroundColor: isHovered ? Tokens.colors.indigo.primary : Tokens.colors.neutral.borderSubtle
+          }]} />
         </View>
 
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>{mode.name}</Text>
+          <Text style={[styles.cardTitle, isHovered && { color: Tokens.colors.indigo.primary }]}>
+            {mode.name.toUpperCase()}
+          </Text>
           <Text style={styles.cardDesc} numberOfLines={2}>
             {mode.desc}
           </Text>
@@ -89,7 +108,7 @@ export default function ModeCard({ mode, onPress, style, animatedStyle, testID }
 const styles = StyleSheet.create({
   card: {
     padding: Tokens.spacing[4],
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     backgroundColor: Tokens.colors.neutral.darker,
@@ -105,33 +124,33 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 48,
     height: 48,
-    borderRadius: Tokens.radii.md,
+    borderRadius: Tokens.radii.none, // Sharp
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
+    borderStyle: 'dotted', // Dot matrix feel
   },
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
-    borderRadius: Tokens.radii.full,
+    borderRadius: 0, // Square dot
   },
   cardContent: {
     marginTop: Tokens.spacing[3],
   },
   cardTitle: {
-    fontFamily: 'Inter',
-    fontSize: Tokens.type.base,
-    fontWeight: '600',
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: Tokens.type.sm,
+    fontWeight: '700',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[1],
-    letterSpacing: -0.5,
+    letterSpacing: 1,
   },
   cardDesc: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.secondary,
     lineHeight: 18,
-    letterSpacing: 0.1,
+    letterSpacing: 0.2,
   },
 });

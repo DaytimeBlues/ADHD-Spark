@@ -29,9 +29,9 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
   const categories: CBTCategory[] = [
     {
       id: 'activation',
-      title: 'Behavioral Activation',
+      title: 'BEHAVIORAL ACTIVATION',
       emoji: '🎯',
-      pillar: 'CADDI Pillar 1',
+      pillar: 'CADDI PILLAR 1',
       description:
         "Can't start? Feeling stuck? These tools help overcome initiation paralysis by taking small steps.",
       features: [
@@ -41,9 +41,9 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
     },
     {
       id: 'organization',
-      title: 'Organization',
+      title: 'ORGANIZATION',
       emoji: '📋',
-      pillar: 'CADDI Pillar 2',
+      pillar: 'CADDI PILLAR 2',
       description:
         'Overwhelmed by chaos? Break tasks down and externalize your working memory to reduce load.',
       features: [
@@ -53,18 +53,18 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
     },
     {
       id: 'mindfulness',
-      title: 'Mindfulness',
+      title: 'MINDFULNESS',
       emoji: '🧘',
-      pillar: 'CADDI Pillar 3',
+      pillar: 'CADDI PILLAR 3',
       description:
         'Racing thoughts? Impulsive reactions? Build awareness and emotional regulation skills.',
       features: [{ name: 'Anchor Breathing', route: 'Anchor' }],
     },
     {
       id: 'tracking',
-      title: 'Self-Tracking',
+      title: 'SELF-TRACKING',
       emoji: '📊',
-      pillar: 'CBT Strategy',
+      pillar: 'CBT STRATEGY',
       description:
         'Recognize patterns in your mood, energy, and productivity over time to learn what works.',
       features: [
@@ -98,15 +98,15 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
               <Text style={styles.backButtonText}>←</Text>
             </Pressable>
             <View>
-              <Text style={styles.headerTitle}>CBT for ADHD</Text>
+              <Text style={styles.headerTitle}>CBT FOR ADHD</Text>
               <Text style={styles.headerSubtitle}>
-                Evidence-based strategies
+                EVIDENCE-BASED STRATEGIES
               </Text>
             </View>
           </View>
 
           <View style={styles.introCard}>
-            <Text style={styles.introTitle}>📚 About CADDI</Text>
+            <Text style={styles.introTitle}>📚 ABOUT CADDI</Text>
             <Text style={styles.introText}>
               CADDI (CBT for ADHD-Inattentive) is a research-backed protocol
               from Karolinska Institute focusing on three pillars: Behavioral
@@ -147,7 +147,7 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                     ]}
                     onPress={() => handleFeaturePress(feature.route)}
                   >
-                    <Text style={styles.featureButtonText}>{feature.name}</Text>
+                    <Text style={styles.featureButtonText}>{feature.name.toUpperCase()}</Text>
                   </Pressable>
                 ))}
               </View>
@@ -180,23 +180,24 @@ const styles = StyleSheet.create({
     paddingTop: Tokens.spacing[2],
   },
   headerTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
-    letterSpacing: -1,
+    letterSpacing: 2,
   },
   headerSubtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     marginTop: 2,
+    letterSpacing: 1,
   },
   backButton: {
     marginRight: Tokens.spacing[4],
     width: 40,
     height: 40,
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     backgroundColor: Tokens.colors.neutral.darker,
     alignItems: 'center',
     justifyContent: 'center',
@@ -226,21 +227,22 @@ const styles = StyleSheet.create({
   },
   introCard: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     padding: Tokens.spacing[6],
     marginBottom: Tokens.spacing[8],
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
   },
   introTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[3],
+    letterSpacing: 1,
   },
   introText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
     lineHeight: 22,
@@ -262,16 +264,16 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   sourceLinkText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.brand[400],
     fontWeight: '600',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   categoryCard: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     padding: Tokens.spacing[6],
     marginBottom: Tokens.spacing[4],
     borderWidth: 1,
@@ -295,15 +297,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   categoryTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: -0.5,
+    letterSpacing: 1,
     marginBottom: 2,
   },
   categoryPillar: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.brand[400],
     fontWeight: '600',
@@ -311,7 +313,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   categoryDescription: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
     lineHeight: 22,
@@ -326,7 +328,7 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.dark,
     paddingVertical: Tokens.spacing[2],
     paddingHorizontal: Tokens.spacing[4],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
@@ -345,10 +347,11 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darker,
   },
   featureButtonText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.primary,
     fontWeight: '600',
+    letterSpacing: 0.5,
   },
 });
 

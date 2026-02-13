@@ -57,7 +57,7 @@ const CalendarScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.webContainer}>
         <View style={styles.content}>
-          <Text style={styles.title}>Calendar</Text>
+          <Text style={styles.title}>CALENDAR</Text>
 
           <View style={styles.calendarCard}>
             <View style={styles.header}>
@@ -78,7 +78,7 @@ const CalendarScreen = () => {
                 <Text style={styles.navButtonText}>‹</Text>
               </Pressable>
               <Text style={styles.monthText}>
-                {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+                {months[currentDate.getMonth()].toUpperCase()} {currentDate.getFullYear()}
               </Text>
               <Pressable
                 onPress={nextMonth}
@@ -145,7 +145,7 @@ const CalendarScreen = () => {
           <View style={styles.legend}>
             <View style={styles.legendItem}>
               <View style={[styles.legendDot, styles.todayDot]} />
-              <Text style={styles.legendText}>Today</Text>
+              <Text style={styles.legendText}>TODAY</Text>
             </View>
           </View>
         </View>
@@ -170,20 +170,20 @@ const styles = StyleSheet.create({
     padding: Tokens.spacing[6],
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: 32,
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[6],
-    letterSpacing: -1,
+    letterSpacing: 2,
   },
   calendarCard: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     padding: Tokens.spacing[6],
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
-    ...Tokens.elevation.sm,
+    ...Tokens.elevation.none,
   },
   header: {
     flexDirection: 'row',
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   navButton: {
     width: 44,
     height: 44,
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Tokens.colors.neutral.dark,
@@ -224,10 +224,11 @@ const styles = StyleSheet.create({
     marginTop: -2,
   },
   monthText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.xl,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   weekdays: {
     flexDirection: 'row',
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: 'transparent',
     ...Platform.select({
@@ -274,17 +275,17 @@ const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
   },
   dayText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.base,
     fontWeight: '500',
   },
   todayCell: {
     backgroundColor: Tokens.colors.brand[600],
-    ...Tokens.elevation.sm,
+    ...Tokens.elevation.none,
     ...Platform.select({
       web: {
-        boxShadow: `0 0 12px ${Tokens.colors.brand[900]}`,
+        boxShadow: `0 0 0 0`,
       },
     }),
   },
@@ -304,17 +305,18 @@ const styles = StyleSheet.create({
   legendDot: {
     width: 8,
     height: 8,
-    borderRadius: Tokens.radii.full,
+    borderRadius: 0, // Sharp
     marginRight: Tokens.spacing[2],
   },
   todayDot: {
     backgroundColor: Tokens.colors.brand[600],
   },
   legendText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: '500',
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 });
 

@@ -30,7 +30,7 @@ const HIT_SLOP = {
   right: Tokens.spacing[4],
 };
 
-const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed
 
 const CATEGORY_ORDER: Array<SortedItem['category']> = [
   'task',
@@ -247,9 +247,9 @@ const BrainDumpScreen = () => {
       <View style={styles.centerContainer}>
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
-            <Text style={styles.title}>Brain Dump</Text>
+            <Text style={styles.title}>BRAIN DUMP</Text>
             <Text style={styles.subtitle}>
-              Unload your thoughts. We'll keep them safe.
+              UNLOAD YOUR THOUGHTS. WE'LL KEEP THEM SAFE.
             </Text>
           </View>
 
@@ -262,7 +262,7 @@ const BrainDumpScreen = () => {
             >
               <TextInput
                 style={styles.input}
-                placeholder="What's on your mind?"
+                placeholder="WHAT'S ON YOUR MIND?"
                 placeholderTextColor={Tokens.colors.text.tertiary}
                 value={input}
                 onChangeText={setInput}
@@ -301,9 +301,9 @@ const BrainDumpScreen = () => {
                 </Text>
               )}
               <Text style={styles.recordText}>
-                {recordingState === 'idle' && 'Record'}
-                {recordingState === 'recording' && 'Stop'}
-                {recordingState === 'processing' && 'Processing...'}
+                {recordingState === 'idle' && 'RECORD'}
+                {recordingState === 'recording' && 'STOP'}
+                {recordingState === 'processing' && 'PROCESSING...'}
               </Text>
             </Pressable>
             {recordingError && (
@@ -313,7 +313,7 @@ const BrainDumpScreen = () => {
 
           {items.length > 0 && (
             <View style={styles.actionsBar}>
-              <Text style={styles.countText}>{items.length} items</Text>
+              <Text style={styles.countText}>{items.length} ITEMS</Text>
               <View style={styles.actionsRight}>
                 <Pressable
                   onPress={handleAISort}
@@ -325,7 +325,7 @@ const BrainDumpScreen = () => {
                     isSorting && styles.actionButtonDisabled,
                   ]}
                 >
-                  <Text style={styles.aiSortText}>{isSorting ? 'Sorting...' : 'AI Sort'}</Text>
+                  <Text style={styles.aiSortText}>{isSorting ? 'SORTING...' : 'AI SORT'}</Text>
                 </Pressable>
                 <Pressable
                   onPress={clearAll}
@@ -335,7 +335,7 @@ const BrainDumpScreen = () => {
                     pressed && styles.clearPressed,
                   ]}
                 >
-                  <Text style={styles.clearText}>Clear All</Text>
+                  <Text style={styles.clearText}>CLEAR ALL</Text>
                 </Pressable>
               </View>
             </View>
@@ -345,7 +345,7 @@ const BrainDumpScreen = () => {
 
           {groupedSortedItems.length > 0 && (
             <View style={styles.sortedSection}>
-              <Text style={styles.sortedTitle}>AI Suggestions</Text>
+              <Text style={styles.sortedTitle}>AI SUGGESTIONS</Text>
               {groupedSortedItems.map(({ category, items: categoryItems }) => (
                 <View key={category} style={styles.sortedGroup}>
                   <Text style={styles.sortedCategory}>{category.toUpperCase()}</Text>
@@ -372,7 +372,7 @@ const BrainDumpScreen = () => {
               <View style={styles.emptyState}>
                 <Text style={styles.emptyIcon}>☁️</Text>
                 <Text style={styles.emptyText}>
-                  Your mind is clear... for now.
+                  YOUR MIND IS CLEAR... FOR NOW.
                 </Text>
               </View>
             }
@@ -402,17 +402,18 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[8],
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
+    letterSpacing: 1,
   },
   // Input
   inputSection: {
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flex: 1,
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     minHeight: INPUT_HEIGHT,
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: Tokens.spacing[4],
     color: Tokens.colors.text.primary,
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     minHeight: INPUT_HEIGHT,
     textAlignVertical: 'center',
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
   actionButton: {
     paddingVertical: Tokens.spacing[2],
     paddingHorizontal: Tokens.spacing[3],
-    borderRadius: Tokens.radii.md,
+    borderRadius: Tokens.radii.none, // Sharp
     ...Platform.select({
       web: { transition: Tokens.motion.transitions.base },
     }),
@@ -491,25 +492,25 @@ const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
   },
   countText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   clearText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.error.main,
     fontSize: Tokens.type.xs,
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   aiSortText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.brand[400],
     fontSize: Tokens.type.xs,
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 
   // Sorted Section
@@ -518,23 +519,23 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[5],
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.brand[500] + '30',
   },
   sortedTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[4],
-    letterSpacing: -0.5,
+    letterSpacing: 1,
   },
   sortedGroup: {
     marginBottom: Tokens.spacing[5],
   },
   sortedCategory: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     color: Tokens.colors.brand[400],
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   },
   sortedItemText: {
     flex: 1,
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
     lineHeight: 20,
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   priorityText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -587,7 +588,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     paddingHorizontal: Tokens.spacing[5],
     paddingVertical: Tokens.spacing[4],
     marginBottom: Tokens.spacing[3],
@@ -605,14 +606,14 @@ const styles = StyleSheet.create({
   itemText: {
     flex: 1,
     color: Tokens.colors.text.primary,
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     lineHeight: 24,
     marginRight: Tokens.spacing[4],
   },
   deleteButton: {
     padding: Tokens.spacing[2],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     width: 36,
     height: 36,
     alignItems: 'center',
@@ -645,9 +646,11 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[4],
   },
   emptyText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.base,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   // Recording
   recordSection: {
@@ -660,7 +663,7 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[6],
     paddingVertical: Tokens.spacing[3],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
     minWidth: 160,
@@ -696,13 +699,14 @@ const styles = StyleSheet.create({
     marginRight: Tokens.spacing[2],
   },
   recordText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     fontWeight: '600',
     color: Tokens.colors.text.primary,
+    letterSpacing: 1,
   },
   errorText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.error.main,
     marginTop: Tokens.spacing[2],

@@ -30,7 +30,7 @@ const CheckInScreen = () => {
     { emoji: '🔥', label: 'Full', value: 5 },
   ];
 
-  const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+  const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed
 
   const getRecommendation = () => {
     if (mood === null || energy === null) {
@@ -38,23 +38,23 @@ const CheckInScreen = () => {
     }
     if (mood <= 2 && energy <= 2) {
       return {
-        title: '🌱 Gentle Start',
+        title: '🌱 GENTLE START',
         desc: 'Try the Anchor breathing exercise to ground yourself.',
       };
     }
     if (mood >= 4 && energy >= 4) {
       return {
-        title: '🚀 Ride the Wave',
+        title: '🚀 RIDE THE WAVE',
         desc: 'Perfect time for a Ignite focus session!',
       };
     }
     if (energy <= 2) {
       return {
-        title: '💪 Micro Task',
+        title: '💪 MICRO TASK',
         desc: 'Try Fog Cutter with just one micro-step.',
       };
     }
-    return { title: '📝 Brain Dump', desc: 'Clear your mind before starting.' };
+    return { title: '📝 BRAIN DUMP', desc: 'Clear your mind before starting.' };
   };
 
   const recommendation = getRecommendation();
@@ -63,11 +63,11 @@ const CheckInScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.webContainer}>
         <View style={styles.content}>
-          <Text style={styles.title}>Check In</Text>
-          <Text style={styles.subtitle}>How are you feeling right now?</Text>
+          <Text style={styles.title}>CHECK IN</Text>
+          <Text style={styles.subtitle}>HOW ARE YOU FEELING RIGHT NOW?</Text>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Mood</Text>
+            <Text style={styles.sectionTitle}>MOOD</Text>
             <View style={styles.options}>
               {moods.map((m) => (
                 <Pressable
@@ -87,7 +87,7 @@ const CheckInScreen = () => {
                       mood === m.value && styles.selectedLabel,
                     ]}
                   >
-                    {m.label}
+                    {m.label.toUpperCase()}
                   </Text>
                 </Pressable>
               ))}
@@ -95,7 +95,7 @@ const CheckInScreen = () => {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Energy</Text>
+            <Text style={styles.sectionTitle}>ENERGY</Text>
             <View style={styles.options}>
               {energyLevels.map((e) => (
                 <Pressable
@@ -115,7 +115,7 @@ const CheckInScreen = () => {
                       energy === e.value && styles.selectedLabel,
                     ]}
                   >
-                    {e.label}
+                    {e.label.toUpperCase()}
                   </Text>
                 </Pressable>
               ))}
@@ -125,7 +125,7 @@ const CheckInScreen = () => {
           {recommendation && (
             <LinearCard
               title={recommendation.title}
-              subtitle="Recommended for you"
+              subtitle="RECOMMENDED FOR YOU"
               style={styles.recommendation}
             >
               <Text style={styles.recommendationText}>
@@ -155,31 +155,32 @@ const styles = StyleSheet.create({
     padding: Tokens.spacing[6],
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     marginBottom: Tokens.spacing[10],
     textAlign: 'center',
+    letterSpacing: 1,
   },
   section: {
     marginBottom: Tokens.spacing[8],
   },
   sectionTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.sm,
     fontWeight: '600',
     marginBottom: Tokens.spacing[4],
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   options: {
     flexDirection: 'row',
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     flexBasis: 100,
     alignItems: 'center',
     padding: Tokens.spacing[2],
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     backgroundColor: Tokens.colors.neutral.darker,
     minHeight: 100,
     borderWidth: 1,
@@ -219,12 +220,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     borderColor: Tokens.colors.brand[500],
-    backgroundColor: Tokens.colors.brand[900],
+    backgroundColor: Tokens.colors.brand[900], // Dark red bg
     transform: [{ translateY: -4 }],
-    ...Tokens.elevation.md,
+    ...Tokens.elevation.none, // Flat
     ...Platform.select({
       web: {
-        boxShadow: `0 8px 24px -4px ${Tokens.colors.brand[900]}`,
+        boxShadow: `0 0 0 0`,
       },
     }),
   },
@@ -233,11 +234,12 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[2],
   },
   label: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
     textAlign: 'center',
     fontWeight: '500',
+    letterSpacing: 0.5,
   },
   selectedLabel: {
     color: Tokens.colors.text.primary,
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[4],
   },
   recommendationText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
     lineHeight: 24,

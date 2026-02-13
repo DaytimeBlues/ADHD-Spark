@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { Colors, Spacing, TypeScale, Radii } from '../../theme/tokens';
+import { Colors, Spacing, TypeScale, Radii, Tokens } from '../../theme/tokens';
 
 interface LinearCardProps {
     children: React.ReactNode;
@@ -23,7 +23,7 @@ export const LinearCard: React.FC<LinearCardProps> = ({
         <View style={[styles.container, style]}>
             {(title || subtitle) && (
                 <View style={[styles.header, headerStyle]}>
-                    {title && <Text style={styles.title}>{title}</Text>}
+                    {title && <Text style={styles.title}>{title.toUpperCase()}</Text>}
                     {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
                 </View>
             )}
@@ -38,7 +38,7 @@ export const LinearCard: React.FC<LinearCardProps> = ({
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.neutral.darker,
-        borderRadius: Radii.lg,
+        borderRadius: Radii.none, // Sharp
         borderWidth: 1,
         borderColor: Colors.neutral.borderSubtle,
         overflow: 'hidden',
@@ -47,19 +47,22 @@ const styles = StyleSheet.create({
         padding: Spacing[4],
         borderBottomWidth: 1,
         borderBottomColor: Colors.neutral.borderSubtle,
+        backgroundColor: Colors.neutral.glass, // Subtle separation
     },
     title: {
-        fontFamily: 'Inter',
-        fontWeight: '600',
-        fontSize: TypeScale.base,
+        fontFamily: Tokens.type.fontFamily.sans,
+        fontWeight: '700',
+        fontSize: TypeScale.sm,
         color: Colors.text.primary,
         marginBottom: Spacing[1],
+        letterSpacing: 1, // Uppercase spacing
     },
     subtitle: {
-        fontFamily: 'Inter',
+        fontFamily: Tokens.type.fontFamily.sans,
         fontWeight: '400',
         fontSize: TypeScale.xs,
         color: Colors.text.secondary,
+        letterSpacing: 0.5,
     },
     content: {
         padding: Spacing[4],
@@ -71,3 +74,4 @@ const styles = StyleSheet.create({
         borderTopColor: Colors.neutral.borderSubtle,
     },
 });
+

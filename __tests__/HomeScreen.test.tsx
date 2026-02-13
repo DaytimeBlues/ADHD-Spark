@@ -54,20 +54,20 @@ describe("HomeScreen", () => {
 
   it("renders correctly", () => {
     renderHomeScreen();
-    expect(screen.getByText("Spark")).toBeTruthy();
+    expect(screen.getByText("SPARK")).toBeTruthy();
   });
 
   it("displays mode cards", () => {
     renderHomeScreen();
-    expect(screen.getByText("Ignite")).toBeTruthy();
-    expect(screen.getByText("Fog Cutter")).toBeTruthy();
-    expect(screen.getByText("Pomodoro")).toBeTruthy();
-    expect(screen.getByText("CBT Guide")).toBeTruthy();
+    expect(screen.getByText("IGNITE")).toBeTruthy();
+    expect(screen.getByText("FOG CUTTER")).toBeTruthy();
+    expect(screen.getByText("POMODORO")).toBeTruthy();
+    expect(screen.getByText("CBT GUIDE")).toBeTruthy();
   });
 
   it("shows streak container", () => {
     renderHomeScreen();
-    expect(screen.getByText(/0 days? streak/i)).toBeTruthy();
+    expect(screen.getByText(/0\s+days?/i)).toBeTruthy();
   });
 
   it("navigates to FogCutter when its card is pressed", () => {

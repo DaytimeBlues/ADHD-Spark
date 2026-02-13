@@ -21,7 +21,7 @@ interface Task {
   microSteps: string[];
 }
 
-const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
+const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 const FOCUS_RING_SHADOW = `0 0 0 2px ${Tokens.colors.brand[900]}`;
 
 const FogCutterScreen = () => {
@@ -102,22 +102,22 @@ const FogCutterScreen = () => {
       <View style={styles.scrollContent}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>Fog Cutter</Text>
+            <Text style={styles.title}>FOG CUTTER</Text>
             <Text style={styles.subtitle}>
-              Break big tasks into tiny steps.
+              BREAK BIG TASKS INTO TINY STEPS.
             </Text>
           </View>
 
           <View style={styles.creationCard}>
             <View style={styles.creationHeader}>
-              <Text style={styles.cardTitle}>Decompose a Task</Text>
+              <Text style={styles.cardTitle}>DECOMPOSE A TASK</Text>
             </View>
             <TextInput
               style={[
                 styles.input,
                 focusedInput === 'main' && styles.inputFocused,
               ]}
-              placeholder="What feels overwhelming?"
+              placeholder="WHAT FEELS OVERWHELMING?"
               placeholderTextColor={Tokens.colors.text.tertiary}
               value={task}
               onChangeText={setTask}
@@ -131,7 +131,7 @@ const FogCutterScreen = () => {
                   styles.stepInput,
                   focusedInput === 'step' && styles.inputFocused,
                 ]}
-                placeholder="Add a micro-step..."
+                placeholder="ADD A MICRO-STEP..."
                 placeholderTextColor={Tokens.colors.text.tertiary}
                 value={newStep}
                 onChangeText={setNewStep}
@@ -150,7 +150,7 @@ const FogCutterScreen = () => {
             {microSteps.length > 0 && (
               <View style={styles.previewContainer}>
                 <Text style={styles.previewTitle}>
-                  Next steps for "{task}":
+                  NEXT STEPS FOR "{task}":
                 </Text>
                 <FlatList
                   data={microSteps}
@@ -170,7 +170,7 @@ const FogCutterScreen = () => {
             />
           </View>
 
-          <Text style={styles.sectionHeader}>Active Tasks</Text>
+          <Text style={styles.sectionHeader}>ACTIVE TASKS</Text>
 
           <FlatList
             data={tasks}
@@ -201,12 +201,12 @@ const FogCutterScreen = () => {
                   >
                     {item.text}
                   </Text>
-                  {item.completed && <Text style={styles.doneBadge}>Done</Text>}
+                  {item.completed && <Text style={styles.doneBadge}>DONE</Text>}
                 </View>
 
                 <View style={styles.stepCount}>
                   <Text style={styles.stepCountText}>
-                    {item.microSteps.length} micro-steps
+                    {item.microSteps.length} MICRO-STEPS
                   </Text>
                 </View>
               </Pressable>
@@ -240,50 +240,47 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     textAlign: 'center',
     maxWidth: 400,
+    letterSpacing: 1,
   },
   creationCard: {
     marginBottom: Tokens.spacing[8],
     backgroundColor: Tokens.colors.neutral.darker,
     padding: Tokens.spacing[6],
-    borderRadius: Tokens.radii.xl,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
-    ...Platform.select({
-      web: {
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-      },
-    }),
   },
   creationHeader: {
     marginBottom: Tokens.spacing[5],
   },
   cardTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     fontWeight: '600',
     color: Tokens.colors.text.secondary,
-    letterSpacing: 0.5,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     paddingHorizontal: Tokens.spacing[4],
     color: Tokens.colors.text.primary,
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     marginBottom: Tokens.spacing[4],
     height: 52,
@@ -308,10 +305,10 @@ const styles = StyleSheet.create({
   stepInput: {
     flex: 1,
     backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none, // Sharp
     paddingHorizontal: Tokens.spacing[4],
     color: Tokens.colors.text.primary,
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     height: Tokens.spacing[12],
     borderWidth: 1,
@@ -329,14 +326,15 @@ const styles = StyleSheet.create({
   },
   previewContainer: {
     backgroundColor: Tokens.colors.neutral.dark,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none,
     padding: Tokens.spacing[5],
     marginBottom: Tokens.spacing[4],
     borderWidth: 1,
+    borderStyle: 'dotted',
     borderColor: Tokens.colors.neutral.borderSubtle,
   },
   previewTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.sm,
     fontWeight: '600',
@@ -354,7 +352,7 @@ const styles = StyleSheet.create({
     color: Tokens.colors.indigo.primary,
     width: Tokens.spacing[6],
     height: Tokens.spacing[6],
-    borderRadius: Tokens.radii.full,
+    borderRadius: 0, // Square
     textAlign: 'center',
     lineHeight: Tokens.spacing[6],
     fontSize: Tokens.type.xs,
@@ -362,7 +360,7 @@ const styles = StyleSheet.create({
     marginRight: Tokens.spacing[3],
   },
   stepText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
   },
@@ -370,7 +368,7 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[2],
   },
   sectionHeader: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
     color: Tokens.colors.text.tertiary,
@@ -386,7 +384,7 @@ const styles = StyleSheet.create({
   },
   taskCard: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.lg,
+    borderRadius: Tokens.radii.none,
     padding: Tokens.spacing[5],
     marginBottom: Tokens.spacing[4],
     borderWidth: 1,
@@ -424,7 +422,7 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[2],
   },
   taskText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.lg,
     fontWeight: '600',
@@ -444,12 +442,13 @@ const styles = StyleSheet.create({
     borderRadius: Tokens.radii.sm,
     overflow: 'hidden',
     marginLeft: Tokens.spacing[2],
+    fontFamily: Tokens.type.fontFamily.mono,
   },
   stepCount: {
     alignSelf: 'flex-start',
   },
   stepCountText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.mono,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.sm,
   },

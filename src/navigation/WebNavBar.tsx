@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Tokens } from '../theme/tokens';
+import HapticsService from '../services/HapticsService';
 
 export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
@@ -40,13 +41,13 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
         <Text
           style={{
             color: Tokens.colors.text.primary,
-            fontFamily: 'Inter',
+            fontFamily: Tokens.type.fontFamily.sans,
             fontSize: Tokens.type.h3,
             fontWeight: '700',
-            letterSpacing: -0.5,
+            letterSpacing: 1,
           }}
         >
-          Spark
+          SPARK
         </Text>
       </View>
 
@@ -54,13 +55,14 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
       <View
         style={{
           flexDirection: 'row',
-          gap: isSmallScreen ? Tokens.spacing[1] : Tokens.spacing[2],
+          gap: isSmallScreen ? Tokens.spacing[1] : Tokens.spacing[4], // Wider gap for desktop
         }}
       >
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
 
           const onPress = () => {
+            HapticsService.tap();
             const event = navigation.emit({
               type: 'tabPress',
               target: route.key,
@@ -80,17 +82,18 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                paddingVertical: Tokens.spacing[3], // Increased for touch target
-                paddingHorizontal: isSmallScreen
-                  ? Tokens.spacing[3]
-                  : Tokens.spacing[4],
-                borderRadius: Tokens.radii.full, // Pill shape
-                backgroundColor: isFocused
-                  ? Tokens.colors.neutral.darker
-                  : pressed
-                    ? Tokens.colors.neutral.dark
-                    : 'transparent',
+                paddingVertical: Tokens.spacing[3],
+                paddingHorizontal: Tokens.spacing[2],
+                backgroundColor: 'transparent', // No background pill
+                borderBottomWidth: 2,
+                borderBottomColor: isFocused ? Tokens.colors.indigo.primary : 'transparent',
                 opacity: pressed ? 0.7 : 1,
+                ...Platform.select({
+                  web: {
+                    cursor: 'pointer',
+                    transition: Tokens.motion.transitions.fast,
+                  },
+                }),
               })}
             >
               <Text
@@ -98,13 +101,13 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
                   color: isFocused
                     ? Tokens.colors.text.primary
                     : Tokens.colors.text.secondary,
-                  fontFamily: 'Inter',
+                  fontFamily: Tokens.type.fontFamily.sans,
                   fontSize: Tokens.type.sm,
                   fontWeight: isFocused ? '700' : '500',
-                  letterSpacing: 0.5, // Slight tracking for premium feel
+                  letterSpacing: 1, // Uppercase
                 }}
               >
-                {route.name}
+                {route.name.toUpperCase()}
               </Text>
             </Pressable>
           );

@@ -115,14 +115,14 @@ const IgniteScreen = () => {
       <View style={styles.centerWrapper}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>Ignite</Text>
-            <Text style={styles.subtitle}>5-Minute Focus Timer</Text>
+            <Text style={styles.title}>IGNITE</Text>
+            <Text style={styles.subtitle}>5-MINUTE FOCUS TIMER</Text>
           </View>
 
           <View style={styles.timerCard}>
             <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
             <Text style={styles.status}>
-              {isRunning ? '🔥 Focus Mode' : 'Ready to Ignite?'}
+              {isRunning ? '🔥 FOCUS MODE' : 'READY TO IGNITE?'}
             </Text>
           </View>
 
@@ -175,7 +175,7 @@ const IgniteScreen = () => {
                   isPlaying ? styles.soundTextActive : styles.soundTextInactive,
                 ]}
               >
-                Brown Noise
+                BROWN NOISE
               </Text>
               <Text
                 style={[
@@ -183,7 +183,7 @@ const IgniteScreen = () => {
                   isPlaying ? styles.soundTextActive : styles.soundTextInactive,
                 ]}
               >
-                {isPlaying ? 'On' : 'Off'}
+                {isPlaying ? 'ON' : 'OFF'}
               </Text>
             </View>
           </Pressable>
@@ -216,21 +216,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     textAlign: 'center',
     maxWidth: 400,
     lineHeight: 24,
+    letterSpacing: 1,
   },
   timerCard: {
     alignItems: 'center',
@@ -239,8 +240,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   timer: {
-    fontFamily: 'Inter',
-    fontSize: HERO_TIMER_SIZE, // Hero size
+    fontFamily: Tokens.type.fontFamily.mono, // Mono for timer
+    fontSize: HERO_TIMER_SIZE,
     fontWeight: '900',
     color: Tokens.colors.text.primary,
     fontVariant: ['tabular-nums'],
@@ -254,11 +255,11 @@ const styles = StyleSheet.create({
     }),
   },
   status: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xl,
     color: Tokens.colors.brand[400],
     fontWeight: '600',
-    letterSpacing: -0.5,
+    letterSpacing: 1,
   },
   controls: {
     width: '100%',
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Tokens.spacing[3],
     paddingHorizontal: Tokens.spacing[5],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     minWidth: 180,
     justifyContent: 'center',
@@ -317,13 +318,15 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type['2xl'],
   },
   soundTitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   soundStatus: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
+    letterSpacing: 1,
   },
   soundTextActive: {
     color: Tokens.colors.brand[100],

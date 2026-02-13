@@ -40,6 +40,6 @@ describe('FogCutterScreen', () => {
     render(<FogCutterScreen />);
 
     expect(await screen.findByText('Draft outline')).toBeTruthy();
-    expect(await screen.findByText('2 micro-steps')).toBeTruthy();
+    expect(await screen.findByText('2 MICRO-STEPS')).toBeTruthy();
   }, 15000);
 });

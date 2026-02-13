@@ -6,7 +6,12 @@ import { Motion } from './motion';
 
 export const Colors = LinearColors;
 export const Spacing = LinearSpacing;
-export const TypeScale = LinearTypography.size;
+export const TypeScale = {
+  ...LinearTypography.size,
+  fontFamily: LinearTypography.fontFamily,
+  weight: LinearTypography.weight,
+  lineHeight: LinearTypography.lineHeight,
+};
 export const Radii = LinearRadii;
 export const Elevation = LinearElevation;
 
@@ -30,4 +35,3 @@ export const Tokens = {
 } as const;
 
 export type TokensType = typeof Tokens;
-

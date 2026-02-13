@@ -15,16 +15,16 @@ type PomodoroState = {
 const TITLE_SIZE = 40;
 const SESSION_BADGE_SIZE = 28;
 const TIMER_CARD_SIZE = 280;
-const TIMER_TEXT_SHADOW = '0 4px 20px rgba(0,0,0,0.5)';
+const TIMER_TEXT_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed shadow
 
 const PHASE_STYLES = {
   focus: {
     bg: 'rgba(239, 68, 68, 0.05)',
-    glow: `0 0 40px ${Tokens.colors.error.subtle}`,
+    glow: `0 0 0 transparent`,
   },
   break: {
     bg: 'rgba(34, 197, 94, 0.05)',
-    glow: `0 0 40px ${Tokens.colors.success.subtle}`,
+    glow: `0 0 0 transparent`,
   },
 };
 
@@ -129,9 +129,9 @@ const PomodoroScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Text style={styles.title}>Pomodoro</Text>
+          <Text style={styles.title}>POMODORO</Text>
           <Text style={styles.subtitle}>
-            {isWorking ? 'Focus Block' : 'Recovery Break'}
+            {isWorking ? 'FOCUS BLOCK' : 'RECOVERY BREAK'}
           </Text>
         </View>
 
@@ -139,7 +139,7 @@ const PomodoroScreen = () => {
           <View style={[styles.phaseIndicator, phaseIndicatorStyle]} />
           <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
           <Text style={[styles.phaseText, phaseTextStyle]}>
-            {isWorking ? '🔥 Focus' : '🌿 Rest'}
+            {isWorking ? '🔥 FOCUS' : '🌿 REST'}
           </Text>
         </View>
 
@@ -147,7 +147,7 @@ const PomodoroScreen = () => {
           <View style={styles.sessionBadge}>
             <Text style={styles.sessionCount}>{sessions}</Text>
           </View>
-          <Text style={styles.sessionLabel}>Completed Sessions</Text>
+          <Text style={styles.sessionLabel}>COMPLETED SESSIONS</Text>
         </View>
 
         <View style={styles.controls}>
@@ -199,19 +199,20 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[10],
   },
   title: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
-    letterSpacing: -1,
+    letterSpacing: 2,
     textAlign: 'center',
   },
   subtitle: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.tertiary,
     textAlign: 'center',
+    letterSpacing: 1,
     ...Platform.select({
       web: { transition: Tokens.motion.transitions.base },
     }),
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[2],
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     gap: Tokens.spacing[3],
@@ -232,22 +233,23 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.brand[900],
     width: SESSION_BADGE_SIZE,
     height: SESSION_BADGE_SIZE,
-    borderRadius: Tokens.radii.full,
+    borderRadius: 0, // Square
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: Tokens.colors.brand[700],
   },
   sessionCount: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.mono,
     color: Tokens.colors.brand[100],
     fontSize: Tokens.type.sm,
     fontWeight: '700',
   },
   sessionLabel: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.sm,
+    letterSpacing: 0.5,
   },
   timerCard: {
     alignItems: 'center',
@@ -256,38 +258,40 @@ const styles = StyleSheet.create({
     width: TIMER_CARD_SIZE,
     height: TIMER_CARD_SIZE,
     position: 'relative',
-    borderRadius: Tokens.radii.full,
+    borderRadius: Tokens.radii.full, // Keep circle for timer
     backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
   },
   phaseIndicator: {
     position: 'absolute',
-    top: -4,
-    left: -4,
-    right: -4,
-    bottom: -4,
+    top: -1,
+    left: -1,
+    right: -1,
+    bottom: -1,
     borderRadius: Tokens.radii.full,
-    borderWidth: 1,
-    opacity: 0.6,
+    borderWidth: 2,
+    opacity: 1,
     ...Platform.select({
       web: { transition: Tokens.motion.transitions.slow },
     }),
   },
   phaseIndicatorFocus: {
     borderColor: Tokens.colors.error.main,
-    backgroundColor: PHASE_STYLES.focus.bg,
+    backgroundColor: 'transparent',
     ...Platform.select({
       web: { boxShadow: PHASE_STYLES.focus.glow },
     }),
   },
   phaseIndicatorBreak: {
     borderColor: Tokens.colors.success.main,
-    backgroundColor: PHASE_STYLES.break.bg,
+    backgroundColor: 'transparent',
     ...Platform.select({
       web: { boxShadow: PHASE_STYLES.break.glow },
     }),
   },
   timer: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.giga,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
@@ -299,7 +303,7 @@ const styles = StyleSheet.create({
     }),
   },
   phaseText: {
-    fontFamily: 'Inter',
+    fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xl,
     fontWeight: '600',
     marginTop: Tokens.spacing[2],

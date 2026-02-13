@@ -98,16 +98,19 @@ const TabNavigator = () => (
       headerShown: false,
       tabBarStyle: {
         backgroundColor: Tokens.colors.neutral.darker,
-        borderTopWidth: 0,
+        borderTopWidth: 1,
+        borderTopColor: Tokens.colors.neutral.borderSubtle,
         height: 60,
         paddingBottom: 8,
         elevation: 0,
         shadowOpacity: 0,
       },
       tabBarLabelStyle: {
-        fontFamily: 'Inter',
-        fontSize: 12,
-        fontWeight: '600',
+        fontFamily: Tokens.type.fontFamily.sans,
+        fontSize: 10,
+        fontWeight: '700',
+        letterSpacing: 1, // Uppercase style
+        textTransform: 'uppercase',
       },
     })}
   >
@@ -128,3 +131,4 @@ const AppNavigator = () => (
 );
 
 export default AppNavigator;
+

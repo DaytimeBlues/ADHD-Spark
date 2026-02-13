@@ -2,26 +2,26 @@ import { Platform } from 'react-native';
 
 export const Motion = {
   durations: {
-    fast: 150,
-    base: 250,
-    slow: 350,
+    fast: 100,
+    base: 150,
+    slow: 200,
   },
   easings: {
-    default: 'ease',
+    default: 'linear',
     out: 'ease-out',
     in: 'ease-in',
     inOut: 'ease-in-out',
   },
-  // Web-specific transition strings
+  // Web-specific transition strings (Fast & Linear)
   transitions: {
-    fast: Platform.select({ web: 'all 0.15s ease', default: undefined }),
-    base: Platform.select({ web: 'all 0.25s ease', default: undefined }),
-    slow: Platform.select({ web: 'all 0.35s ease', default: undefined }),
-    transform: Platform.select({ web: 'transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)', default: undefined }),
+    fast: Platform.select({ web: 'all 0.1s linear', default: undefined }),
+    base: Platform.select({ web: 'all 0.15s linear', default: undefined }),
+    slow: Platform.select({ web: 'all 0.2s linear', default: undefined }),
+    transform: Platform.select({ web: 'transform 0.15s cubic-bezier(0, 0, 0.2, 1)', default: undefined }),
   },
   // Interactive scales
   scales: {
-    press: 0.96,
-    hover: 1.02,
+    press: 0.98,
+    hover: 1.00,
   },
 } as const;
