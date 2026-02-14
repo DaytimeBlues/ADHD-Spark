@@ -70,10 +70,10 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                  styles.navButton,
-                  hovered && styles.navButtonHovered,
-                  pressed && styles.navButtonPressed,
-                ]}
+                    styles.navButton,
+                    hovered && styles.navButtonHovered,
+                    pressed && styles.navButtonPressed,
+                  ]}
               >
                 <Text style={styles.navButtonText}>‹</Text>
               </Pressable>
@@ -89,10 +89,10 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                  styles.navButton,
-                  hovered && styles.navButtonHovered,
-                  pressed && styles.navButtonPressed,
-                ]}
+                    styles.navButton,
+                    hovered && styles.navButtonHovered,
+                    pressed && styles.navButtonPressed,
+                  ]}
               >
                 <Text style={styles.navButtonText}>›</Text>
               </Pressable>
@@ -127,11 +127,11 @@ const CalendarScreen = () => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                      styles.dayCell,
-                      isToday && styles.todayCell,
-                      hovered && !isToday && styles.dayCellHovered,
-                      pressed && !isToday && styles.dayCellPressed,
-                    ]}
+                        styles.dayCell,
+                        isToday && styles.todayCell,
+                        hovered && !isToday && styles.dayCellHovered,
+                        pressed && !isToday && styles.dayCellPressed,
+                      ]}
                   >
                     <Text style={[styles.dayText, isToday && styles.todayText]}>
                       {day}
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: 32,
+    fontSize: Tokens.type.h1,
     fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[6],
@@ -218,8 +218,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: Tokens.colors.text.primary,
-    fontSize: 24,
-    lineHeight: 28,
+    fontSize: Tokens.type.h2,
+    lineHeight: Tokens.type.h2 * 1.2,
     fontWeight: '300',
     marginTop: -2,
   },

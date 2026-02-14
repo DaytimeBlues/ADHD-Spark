@@ -1,6 +1,8 @@
-node_modules
+node_modules/
 android/.gradle
 android/build
+android/local.properties
+android/app/build
 ios/Pods
 ios/build
 
@@ -21,6 +23,7 @@ build/
 .idea/
 .vscode/
 *.swp
+*.lproj
 
 # OS
 .DS_Store
@@ -36,4 +39,4 @@ temp_tokens.ts
 tokens_restore.ts
 home_restore.tsx
 home_restore_utf8.ts
-node_modules
+*.log

@@ -42,12 +42,33 @@ type NavigationNode = {
   getParent?: () => NavigationNode | undefined;
 };
 
+type OverlayEvent = {
+  id: string;
+  timestamp: number;
+  label: string;
+};
+
 const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
     useState(false);
+  const [overlayEvents, setOverlayEvents] = useState<OverlayEvent[]>([]);
   const { width } = useWindowDimensions();
+
+  const addOverlayEvent = useCallback((label: string) => {
+    if (!__DEV__) {
+      return;
+    }
+    setOverlayEvents((prev) => {
+      const newEvent = {
+        id: Date.now().toString() + Math.random(),
+        timestamp: Date.now(),
+        label,
+      };
+      return [newEvent, ...prev].slice(0, 5);
+    });
+  }, []);
 
   const isWeb = Platform.OS === 'web';
   const cardWidth = isWeb && width > 768 ? '31%' : '47%';
@@ -186,6 +207,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       'overlay_permission_requested',
       () => {
         setIsOverlayPermissionRequesting(true);
+        addOverlayEvent('Permission requested');
         AccessibilityInfo.announceForAccessibility(
           'Overlay permission request started',
         );
@@ -196,6 +218,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       'overlay_permission_result',
       ({ granted }) => {
         setIsOverlayPermissionRequesting(false);
+        addOverlayEvent(`Permission result: ${granted ? 'GRANTED' : 'DENIED'}`);
         AccessibilityInfo.announceForAccessibility(
           granted ? 'Overlay permission granted' : 'Overlay permission denied',
         );
@@ -206,6 +229,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       'overlay_permission_timeout',
       () => {
         setIsOverlayPermissionRequesting(false);
+        addOverlayEvent('Permission timeout');
         AccessibilityInfo.announceForAccessibility(
           'Overlay permission request timed out',
         );
@@ -216,6 +240,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       'overlay_permission_error',
       () => {
         setIsOverlayPermissionRequesting(false);
+        addOverlayEvent('Permission error');
         AccessibilityInfo.announceForAccessibility(
           'Overlay permission request failed',
         );
@@ -228,7 +253,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       unsubscribePermissionTimeout?.();
       unsubscribePermissionError?.();
     };
-  }, []);
+  }, [addOverlayEvent]);
 
   const toggleOverlay = useCallback(
     async (value: boolean) => {
@@ -391,6 +416,31 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
             </View>
           )}
 
+          {Platform.OS === 'android' && __DEV__ && (
+            <View style={styles.debugPanel}>
+              <Text style={styles.debugTitle}>OVERLAY EVENT LOG (DEV)</Text>
+              {overlayEvents.length === 0 ? (
+                <Text style={styles.debugText}>No events yet</Text>
+              ) : (
+                overlayEvents.map((event) => (
+                  <Text key={event.id} style={styles.debugText}>
+                    <Text style={styles.debugTime}>
+                      [
+                      {new Date(event.timestamp).toLocaleTimeString([], {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                      })}
+                      ]
+                    </Text>{' '}
+                    {event.label}
+                  </Text>
+                ))
+              )}
+            </View>
+          )}
+
           <View style={styles.modesGrid}>
             {modes.map((mode, index) => (
               <Animated.View
@@ -463,7 +513,7 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.border,
   },
   streakEmoji: {
-    fontSize: 16,
+    fontSize: Tokens.type.lg,
     marginRight: Tokens.spacing[2],
   },
   streakText: {
@@ -529,6 +579,31 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     rowGap: Tokens.spacing[4],
+  },
+  debugPanel: {
+    marginBottom: Tokens.spacing[8],
+    padding: Tokens.spacing[3],
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    borderStyle: 'dashed',
+  },
+  debugTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.tertiary,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  debugText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    marginBottom: 2,
+  },
+  debugTime: {
+    color: Tokens.colors.text.tertiary,
   },
 });
 

@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     }),
   },
   emoji: {
-    fontSize: 28,
+    fontSize: Tokens.type['3xl'],
     marginBottom: Tokens.spacing[2],
   },
   label: {
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
-    lineHeight: 24,
+    lineHeight: Tokens.type.base * 1.5,
   },
 });
 

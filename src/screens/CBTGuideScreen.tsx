@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: Tokens.colors.text.primary,
-    fontSize: 20,
+    fontSize: Tokens.type.h3,
     fontWeight: 'bold',
     marginTop: -2,
   },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: 22,
+    lineHeight: Tokens.type.sm * 1.5,
   },
   sourceLink: {
     marginTop: Tokens.spacing[4],
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[4],
   },
   categoryEmoji: {
-    fontSize: 32,
+    fontSize: Tokens.type.h1,
     marginRight: Tokens.spacing[4],
   },
   categoryTitleContainer: {
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: 22,
+    lineHeight: Tokens.type.sm * 1.5,
     marginBottom: Tokens.spacing[6],
   },
   featuresRow: {

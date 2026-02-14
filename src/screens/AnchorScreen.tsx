@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.secondary,
     textAlign: 'center',
     maxWidth: 400,
-    lineHeight: 24,
+    lineHeight: Tokens.type.base * 1.5,
     letterSpacing: 1,
   },
   activeContainer: {

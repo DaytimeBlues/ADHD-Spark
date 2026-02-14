@@ -301,10 +301,10 @@ const BrainDumpScreen = () => {
           pressed: boolean;
           hovered?: boolean;
         }) => [
-          styles.deleteButton,
-          hovered && styles.deleteButtonHovered,
-          pressed && styles.deleteButtonPressed,
-        ]}
+            styles.deleteButton,
+            hovered && styles.deleteButtonHovered,
+            pressed && styles.deleteButtonPressed,
+          ]}
         hitSlop={HIT_SLOP}
       >
         <Text style={styles.deleteText}>×</Text>
@@ -373,13 +373,13 @@ const BrainDumpScreen = () => {
                 pressed: boolean;
                 hovered?: boolean;
               }) => [
-                styles.recordButton,
-                hovered && styles.recordButtonHovered,
-                recordingState === 'recording' && styles.recordButtonActive,
-                recordingState === 'processing' &&
+                  styles.recordButton,
+                  hovered && styles.recordButtonHovered,
+                  recordingState === 'recording' && styles.recordButtonActive,
+                  recordingState === 'processing' &&
                   styles.recordButtonProcessing,
-                pressed && styles.recordButtonPressed,
-              ]}
+                  pressed && styles.recordButtonPressed,
+                ]}
             >
               {recordingState === 'processing' ? (
                 <ActivityIndicator
@@ -419,11 +419,11 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                    styles.actionButton,
-                    hovered && styles.clearHovered,
-                    pressed && styles.clearPressed,
-                    isSorting && styles.actionButtonDisabled,
-                  ]}
+                      styles.actionButton,
+                      hovered && styles.clearHovered,
+                      pressed && styles.clearPressed,
+                      isSorting && styles.actionButtonDisabled,
+                    ]}
                 >
                   <Text style={styles.aiSortText}>
                     {isSorting ? 'SORTING...' : 'AI SORT'}
@@ -441,10 +441,10 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                    styles.actionButton,
-                    hovered && styles.clearHovered,
-                    pressed && styles.clearPressed,
-                  ]}
+                      styles.actionButton,
+                      hovered && styles.clearHovered,
+                      pressed && styles.clearPressed,
+                    ]}
                 >
                   <Text style={styles.clearText}>CLEAR ALL</Text>
                 </Pressable>
@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: 20,
+    lineHeight: Tokens.type.sm * 1.5,
     marginRight: Tokens.spacing[3],
   },
   priorityBadge: {
@@ -696,10 +696,10 @@ const styles = StyleSheet.create({
   },
   priorityText: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: 10,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
     textTransform: 'uppercase',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
   },
   priorityHigh: {
     backgroundColor: Tokens.colors.error.main,
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
-    lineHeight: 24,
+    lineHeight: Tokens.type.base * 1.5,
     marginRight: Tokens.spacing[4],
   },
   deleteButton: {
@@ -759,7 +759,7 @@ const styles = StyleSheet.create({
   },
   deleteText: {
     color: Tokens.colors.text.tertiary,
-    fontSize: 24,
+    fontSize: Tokens.type.h2,
     fontWeight: '300',
     marginTop: -2,
   },
@@ -770,7 +770,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   emptyIcon: {
-    fontSize: 48,
+    fontSize: Tokens.type['5xl'],
     marginBottom: Tokens.spacing[4],
   },
   emptyText: {
@@ -823,7 +823,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
   },
   recordIcon: {
-    fontSize: 20,
+    fontSize: Tokens.type.h3,
     marginRight: Tokens.spacing[2],
   },
   recordText: {
