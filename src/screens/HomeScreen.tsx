@@ -15,7 +15,6 @@ import {
   Platform,
   Animated,
   Easing,
-  useWindowDimensions,
   AppState,
   AppStateStatus,
   AccessibilityInfo,
@@ -57,7 +56,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
     useState(false);
   const [overlayEvents, setOverlayEvents] = useState<OverlayEvent[]>([]);
-  const { width } = useWindowDimensions();
 
   const handleCopyDiagnostics = useCallback(async () => {
     if (!__DEV__) {
@@ -120,7 +118,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     });
   }, []);
 
-  const isWeb = Platform.OS === 'web';
   const cardWidth = '48%'; // Strict 2-column grid
 
   const modes = useMemo<Mode[]>(

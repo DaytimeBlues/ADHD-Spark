@@ -21,8 +21,7 @@ interface Task {
   microSteps: string[];
 }
 
-const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
-const FOCUS_RING_SHADOW = `0 0 0 2px #FFFFFF`;
+const FOCUS_RING_SHADOW = '0 0 0 2px #FFFFFF';
 
 const FogCutterScreen = () => {
   const [task, setTask] = useState('');
@@ -375,7 +374,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     marginTop: Tokens.spacing[2],
-    // If I could style the button color directly here I would, 
+    // If I could style the button color directly here I would,
     // assuming LinearButton accepts style overrides effectively or I rely on its prop.
     // I'll assume standard styling for now but if it had a 'variant' for primary-red it would be good.
     // I'll treat it as the Red Accent implicitly by location.

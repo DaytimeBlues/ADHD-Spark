@@ -38,7 +38,6 @@ const HIT_SLOP = {
   right: Tokens.spacing[4],
 };
 
-const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed
 const PERSIST_DEBOUNCE_MS = 300;
 const OVERLAY_COUNT_DEBOUNCE_MS = 250;
 
@@ -301,10 +300,10 @@ const BrainDumpScreen = () => {
           pressed: boolean;
           hovered?: boolean;
         }) => [
-            styles.deleteButton,
-            hovered && styles.deleteButtonHovered,
-            pressed && styles.deleteButtonPressed,
-          ]}
+          styles.deleteButton,
+          hovered && styles.deleteButtonHovered,
+          pressed && styles.deleteButtonPressed,
+        ]}
         hitSlop={HIT_SLOP}
       >
         <Text style={styles.deleteText}>×</Text>
@@ -373,19 +372,16 @@ const BrainDumpScreen = () => {
                 pressed: boolean;
                 hovered?: boolean;
               }) => [
-                  styles.recordButton,
-                  hovered && styles.recordButtonHovered,
-                  recordingState === 'recording' && styles.recordButtonActive,
-                  recordingState === 'processing' &&
+                styles.recordButton,
+                hovered && styles.recordButtonHovered,
+                recordingState === 'recording' && styles.recordButtonActive,
+                recordingState === 'processing' &&
                   styles.recordButtonProcessing,
-                  pressed && styles.recordButtonPressed,
-                ]}
+                pressed && styles.recordButtonPressed,
+              ]}
             >
               {recordingState === 'processing' ? (
-                <ActivityIndicator
-                  size="small"
-                  color="#FFFFFF"
-                />
+                <ActivityIndicator size="small" color="#FFFFFF" />
               ) : (
                 <Text style={styles.recordIcon}>
                   {recordingState === 'recording' ? '⏹️' : '🎙️'}
@@ -419,11 +415,11 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                      styles.actionButton,
-                      hovered && styles.clearHovered,
-                      pressed && styles.clearPressed,
-                      isSorting && styles.actionButtonDisabled,
-                    ]}
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                    isSorting && styles.actionButtonDisabled,
+                  ]}
                 >
                   <Text style={styles.aiSortText}>
                     {isSorting ? 'SORTING...' : 'AI SORT'}
@@ -441,10 +437,10 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                      styles.actionButton,
-                      hovered && styles.clearHovered,
-                      pressed && styles.clearPressed,
-                    ]}
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                  ]}
                 >
                   <Text style={styles.clearText}>CLEAR ALL</Text>
                 </Pressable>

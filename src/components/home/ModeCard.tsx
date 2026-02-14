@@ -101,22 +101,13 @@ function ModeCardComponent({
             name={mode.icon}
             size={ICON_SIZE}
             color={
-              isHovered
-                ? Tokens.colors.brand[500]
-                : Tokens.colors.text.primary
+              isHovered ? Tokens.colors.brand[500] : Tokens.colors.text.primary
             }
           />
 
           {/* Status Dot - Red accent only when active/hovered if needed, or remove to be sparse */}
           <View
-            style={[
-              styles.accentDot,
-              {
-                backgroundColor: isHovered
-                  ? Tokens.colors.brand[500]
-                  : 'transparent',
-              },
-            ]}
+            style={[styles.accentDot, isHovered && styles.accentDotActive]}
           />
         </View>
 
@@ -157,6 +148,10 @@ const styles = StyleSheet.create({
     width: DOT_SIZE,
     height: DOT_SIZE,
     borderRadius: 0, // Square
+    backgroundColor: 'transparent',
+  },
+  accentDotActive: {
+    backgroundColor: Tokens.colors.brand[500],
   },
   cardContent: {
     marginTop: Tokens.spacing[3],

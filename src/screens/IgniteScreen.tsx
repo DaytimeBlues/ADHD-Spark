@@ -21,20 +21,13 @@ const IgniteScreen = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const {
-    timeLeft,
-    isRunning,
-    formattedTime,
-    start,
-    pause,
-    reset,
-    setTime,
-  } = useTimer({
-    initialTime: IGNITE_DURATION_SECONDS,
-    onComplete: () => {
-      SoundService.playCompletionSound();
-    },
-  });
+  const { timeLeft, isRunning, formattedTime, start, pause, reset, setTime } =
+    useTimer({
+      initialTime: IGNITE_DURATION_SECONDS,
+      onComplete: () => {
+        SoundService.playCompletionSound();
+      },
+    });
 
   useEffect(() => {
     SoundService.initBrownNoise();
@@ -161,11 +154,11 @@ const IgniteScreen = () => {
               pressed: boolean;
               hovered?: boolean;
             }) => [
-                styles.soundToggle,
-                isPlaying ? styles.soundToggleActive : styles.soundToggleInactive,
-                hovered && styles.soundToggleHovered,
-                pressed && styles.soundTogglePressed,
-              ]}
+              styles.soundToggle,
+              isPlaying ? styles.soundToggleActive : styles.soundToggleInactive,
+              hovered && styles.soundToggleHovered,
+              pressed && styles.soundTogglePressed,
+            ]}
             onPress={toggleSound}
           >
             <Text style={styles.soundIcon}>{isPlaying ? '🔊' : '🔇'}</Text>
