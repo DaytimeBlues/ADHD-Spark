@@ -121,7 +121,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   }, []);
 
   const isWeb = Platform.OS === 'web';
-  const cardWidth = isWeb && width > 768 ? '31%' : '47%';
+  const cardWidth = '48%'; // Strict 2-column grid
 
   const modes = useMemo<Mode[]>(
     () => [
@@ -546,14 +546,14 @@ const styles = StyleSheet.create({
     paddingTop: Tokens.spacing[4],
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.h1,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
     letterSpacing: 2, // Wide industrial
   },
   subtitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
     marginTop: Tokens.spacing[1],
@@ -566,9 +566,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingHorizontal: Tokens.spacing[3],
     paddingVertical: Tokens.spacing[2],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderStyle: 'dashed', // Dashed for industrial feel
+    borderStyle: 'solid',
     borderColor: Tokens.colors.neutral.border,
   },
   streakEmoji: {
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
     marginRight: Tokens.spacing[2],
   },
   streakText: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
@@ -587,23 +587,20 @@ const styles = StyleSheet.create({
     minHeight: Tokens.layout.minTapTargetComfortable,
     marginBottom: Tokens.spacing[8],
     padding: Tokens.spacing[4],
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: Tokens.colors.neutral.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderLeftWidth: 4, // Industrial accent on left
-    borderLeftColor: Tokens.colors.neutral.border,
   },
   overlayCardActive: {
     borderColor: Tokens.colors.brand[500],
-    borderLeftColor: Tokens.colors.brand[500],
-    backgroundColor: Tokens.colors.neutral.dark, // Slightly lighter when active
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   overlayTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.base,
     fontWeight: '700',
     color: Tokens.colors.text.primary,

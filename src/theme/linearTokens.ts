@@ -9,19 +9,19 @@ export const LinearColors = {
         200: '#FFC0C0',
         300: '#FF9090',
         400: '#FF5050',
-        500: '#D81313',  // Primary Accent (Sharp Red)
-        600: '#B00F0F',
-        700: '#900C0C',
-        800: '#700909',
-        900: '#500505',
+        500: '#FF0033',  // Primary Accent (Signal Red)
+        600: '#D8002B',
+        700: '#B00023',
+        800: '#88001B',
+        900: '#600013',
     },
 
     // Alias indigo to red for backward compatibility but using new aesthetic
     indigo: {
-        primary: '#D81313',
-        hover: '#B00F0F',
-        active: '#900C0C',
-        subtle: 'rgba(216, 19, 19, 0.1)',
+        primary: '#FF0033',
+        hover: '#D8002B',
+        active: '#B00023',
+        subtle: 'rgba(255, 0, 51, 0.1)',
     },
 
     // Danger/Error
@@ -44,8 +44,8 @@ export const LinearColors = {
         darkest: '#000000',      // Pure Black
         darker: '#0A0A0A',       // Almost Black
         dark: '#141414',         // Surface
-        border: '#333333',       // Strong Border
-        borderSubtle: '#222222', // Subtle Border
+        border: '#FFFFFF',       // Primary Border (Pure White)
+        borderSubtle: '#444444', // Divider Gray
         
         // Glass Tokens
         glass: 'rgba(255, 255, 255, 0.03)',
@@ -71,7 +71,7 @@ export const LinearColors = {
         secondary: '#888888',
         tertiary: '#555555',
         disabled: '#333333',
-        link: '#D81313',
+        link: '#FF0033',
     },
 
     // Semantic
@@ -113,7 +113,7 @@ export const LinearSpacing = {
 
 export const LinearRadii = {
     none: 0,
-    sm: 2,    // Tiny softness for inner elements
+    sm: 0,    // Sharp
     md: 0,    // Sharp
     lg: 0,    // Sharp
     xl: 0,    // Sharp
@@ -125,6 +125,9 @@ export const LinearTypography = {
     fontFamily: {
         sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         mono: 'SF Mono, Monaco, Inconsolata, "Fira Mono", monospace',
+        // Roles
+        header: 'SF Mono, Monaco, Inconsolata, "Fira Mono", monospace', // Dot-matrix intent
+        body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
     },
     size: {
         h1: 32,
@@ -154,6 +157,12 @@ export const LinearTypography = {
         tight: 1.1,
         normal: 1.4,
         relaxed: 1.6,
+    },
+    letterSpacing: {
+        tight: -0.5,
+        normal: 0,
+        wide: 1, // For uppercase headers
+        widest: 2,
     },
 } as const;
 

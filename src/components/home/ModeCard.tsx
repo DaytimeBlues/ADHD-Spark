@@ -54,9 +54,7 @@ function ModeCardComponent({
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? {
-          borderColor: Tokens.colors.brand[500], // Red accent
-          backgroundColor: Tokens.colors.neutral.dark,
-          transform: [{ translateY: -2 }], // Subtle lift
+          borderColor: Tokens.colors.brand[500],
         }
       : undefined;
 
@@ -91,45 +89,32 @@ function ModeCardComponent({
           styles.card,
           Platform.OS === 'web' && {
             cursor: 'pointer',
-            transition: Tokens.motion.transitions.fast, // Fast linear
+            transition: 'border-color 0.1s linear',
           },
-          pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] }, // Subtle press
+          pressed && { opacity: 0.8 },
           hoverStyle,
           focusStyle,
         ]}
       >
         <View style={styles.cardHeader}>
-          {/* Dot Matrix Icon Container Style */}
-          <View
-            style={[
-              styles.iconContainer,
-              styles.iconContainerTransparent,
-              {
-                borderColor: isHovered
-                  ? Tokens.colors.brand[500]
-                  : Tokens.colors.neutral.border,
-              },
-            ]}
-          >
-            <Icon
-              name={mode.icon}
-              size={ICON_SIZE}
-              color={
-                isHovered
-                  ? Tokens.colors.brand[500]
-                  : Tokens.colors.text.primary
-              }
-            />
-          </View>
+          <Icon
+            name={mode.icon}
+            size={ICON_SIZE}
+            color={
+              isHovered
+                ? Tokens.colors.brand[500]
+                : Tokens.colors.text.primary
+            }
+          />
 
-          {/* Status Dot */}
+          {/* Status Dot - Red accent only when active/hovered if needed, or remove to be sparse */}
           <View
             style={[
               styles.accentDot,
               {
                 backgroundColor: isHovered
                   ? Tokens.colors.brand[500]
-                  : Tokens.colors.neutral.borderSubtle,
+                  : 'transparent',
               },
             ]}
           />
@@ -156,46 +141,33 @@ function ModeCardComponent({
 const styles = StyleSheet.create({
   card: {
     padding: Tokens.spacing[4],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
-    backgroundColor: Tokens.colors.neutral.darker,
+    borderColor: Tokens.colors.neutral.border, // White border
+    backgroundColor: Tokens.colors.neutral.darkest, // Black bg
     minHeight: CARD_MIN_HEIGHT,
     justifyContent: 'space-between',
-    overflow: 'hidden',
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: Tokens.radii.none, // Sharp
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderStyle: 'dotted', // Dot matrix feel
-  },
-  iconContainerTransparent: {
-    backgroundColor: 'transparent',
-  },
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
-    borderRadius: 0, // Square dot
+    borderRadius: 0, // Square
   },
   cardContent: {
     marginTop: Tokens.spacing[3],
   },
   cardTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[1],
-    letterSpacing: 1.5, // Consistent industrial tracking
+    letterSpacing: 1,
   },
   cardDesc: {
     fontFamily: Tokens.type.fontFamily.sans,

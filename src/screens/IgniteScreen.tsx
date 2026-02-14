@@ -14,8 +14,6 @@ import { Tokens } from '../theme/tokens';
 import { LinearButton } from '../components/ui/LinearButton';
 
 const HERO_TIMER_SIZE = 120;
-const GLOW_TEXT_SHADOW = '0 0 40px rgba(255,255,255,0.1)';
-const HOVER_SHADOW = '0 4px 12px rgba(0,0,0,0.2)';
 const IGNITE_DURATION_SECONDS = 5 * 60;
 const PERSIST_INTERVAL_MS = 5000;
 
@@ -132,14 +130,14 @@ const IgniteScreen = () => {
           <View style={styles.controls}>
             {!isRunning ? (
               <LinearButton
-                title="Start Focus"
+                title="START FOCUS"
                 onPress={startTimer}
                 size="lg"
                 style={styles.mainButton}
               />
             ) : (
               <LinearButton
-                title="Pause"
+                title="PAUSE"
                 variant="secondary"
                 onPress={pauseTimer}
                 size="lg"
@@ -148,7 +146,7 @@ const IgniteScreen = () => {
             )}
 
             <LinearButton
-              title="Reset"
+              title="RESET"
               variant="ghost"
               onPress={resetTimer}
               size="md"
@@ -199,7 +197,7 @@ const IgniteScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: '#000000',
   },
   centerWrapper: {
     flex: 1,
@@ -217,52 +215,55 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: Tokens.spacing[8],
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#333333',
+    paddingBottom: Tokens.spacing[4],
+    width: '100%',
   },
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type['4xl'],
-    fontWeight: '800',
-    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type['5xl'],
+    fontWeight: '900',
+    color: '#FFFFFF',
     marginBottom: Tokens.spacing[2],
-    letterSpacing: 2,
+    letterSpacing: -2,
     textAlign: 'center',
+    textTransform: 'uppercase',
   },
   subtitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    color: Tokens.colors.text.secondary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    color: '#666666',
     textAlign: 'center',
-    maxWidth: 400,
-    lineHeight: Tokens.type.base * 1.5,
-    letterSpacing: 1,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
   },
   timerCard: {
     alignItems: 'center',
     marginBottom: Tokens.spacing[12],
     paddingVertical: Tokens.spacing[8],
     width: '100%',
+    borderWidth: 1,
+    borderColor: '#333333',
+    backgroundColor: '#050505',
   },
   timer: {
-    fontFamily: Tokens.type.fontFamily.mono, // Mono for timer
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: HERO_TIMER_SIZE,
-    fontWeight: '900',
-    color: Tokens.colors.text.primary,
+    fontWeight: '400',
+    color: '#FFFFFF',
     fontVariant: ['tabular-nums'],
-    letterSpacing: -6,
+    letterSpacing: -4,
     lineHeight: HERO_TIMER_SIZE,
     marginBottom: Tokens.spacing[4],
-    ...Platform.select({
-      web: {
-        textShadow: GLOW_TEXT_SHADOW,
-      },
-    }),
   },
   status: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.xl,
-    color: Tokens.colors.brand[400],
-    fontWeight: '600',
-    letterSpacing: 1,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.lg,
+    color: '#FF0000', // THE RED ACCENT
+    fontWeight: '700',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
   },
   controls: {
     width: '100%',
@@ -272,70 +273,65 @@ const styles = StyleSheet.create({
   },
   mainButton: {
     width: '100%',
+    borderRadius: 0,
   },
   soundToggle: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Tokens.spacing[3],
-    paddingHorizontal: Tokens.spacing[5],
-    borderRadius: Tokens.radii.none, // Sharp
+    paddingVertical: Tokens.spacing[4],
+    paddingHorizontal: Tokens.spacing[6],
+    borderRadius: 0, // Sharp
     borderWidth: 1,
-    minWidth: 180,
+    minWidth: 200,
     justifyContent: 'center',
-    gap: Tokens.spacing[3],
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    gap: Tokens.spacing[4],
+    backgroundColor: '#000000',
+    borderColor: '#333333',
     marginTop: Tokens.spacing[8],
     ...Platform.select({
       web: {
-        transition: Tokens.motion.transitions.base,
+        transition: 'all 0.2s ease',
         cursor: 'pointer',
       },
     }),
   },
   soundToggleActive: {
-    backgroundColor: Tokens.colors.brand[900],
-    borderColor: Tokens.colors.brand[500],
-    ...Platform.select({
-      web: {
-        boxShadow: `0 0 20px ${Tokens.colors.brand[900]}`,
-      },
-    }),
+    backgroundColor: '#111111',
+    borderColor: '#FFFFFF',
   },
   soundToggleInactive: {
-    // defaults handled in base style
+    // defaults
   },
   soundToggleHovered: {
-    transform: [{ translateY: -2 }],
-    ...Platform.select({
-      web: {
-        boxShadow: HOVER_SHADOW,
-      },
-    }),
+    borderColor: '#666666',
+    transform: [{ translateY: -1 }],
   },
   soundTogglePressed: {
     opacity: 0.8,
-    transform: [{ scale: Tokens.motion.scales.press }],
+    transform: [{ scale: 0.98 }],
   },
   soundIcon: {
-    fontSize: Tokens.type['2xl'],
+    fontSize: Tokens.type.xl,
+    color: '#FFFFFF',
   },
   soundTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.sm,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   soundStatus: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     letterSpacing: 1,
+    marginTop: 2,
   },
   soundTextActive: {
-    color: Tokens.colors.brand[100],
+    color: '#FFFFFF',
   },
   soundTextInactive: {
-    color: Tokens.colors.text.tertiary,
+    color: '#666666',
   },
 });
 

@@ -333,7 +333,7 @@ const BrainDumpScreen = () => {
               <TextInput
                 style={styles.input}
                 placeholder="WHAT'S ON YOUR MIND?"
-                placeholderTextColor={Tokens.colors.text.tertiary}
+                placeholderTextColor="#666666"
                 accessibilityLabel="Add a brain dump item"
                 accessibilityHint="Type a thought and press Add"
                 value={input}
@@ -347,7 +347,7 @@ const BrainDumpScreen = () => {
               />
             </View>
             <LinearButton
-              title="Add"
+              title="ADD"
               onPress={addItem}
               size="lg"
               style={styles.addButton}
@@ -384,7 +384,7 @@ const BrainDumpScreen = () => {
               {recordingState === 'processing' ? (
                 <ActivityIndicator
                   size="small"
-                  color={Tokens.colors.text.primary}
+                  color="#FFFFFF"
                 />
               ) : (
                 <Text style={styles.recordIcon}>
@@ -514,7 +514,7 @@ const BrainDumpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: '#000000',
   },
   centerContainer: {
     flex: 1,
@@ -528,20 +528,25 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: Tokens.spacing[8],
+    borderBottomWidth: 1,
+    borderColor: '#333333',
+    paddingBottom: Tokens.spacing[4],
   },
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type['4xl'],
-    fontWeight: '800',
-    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type['5xl'],
+    fontWeight: '900',
+    color: '#FFFFFF',
     marginBottom: Tokens.spacing[2],
-    letterSpacing: 2,
+    letterSpacing: -2,
+    textTransform: 'uppercase',
   },
   subtitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    color: Tokens.colors.text.secondary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: '#666666',
     letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   // Input
   inputSection: {
@@ -552,30 +557,27 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: '#050505',
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
     minHeight: INPUT_HEIGHT,
     justifyContent: 'center',
     ...Platform.select({
-      web: { transition: Tokens.motion.transitions.base },
+      web: { transition: 'border-color 0.2s ease' },
     }),
   },
   inputWrapperFocused: {
-    borderColor: Tokens.colors.brand[500],
-    ...Platform.select({
-      web: { boxShadow: `0 0 0 2px ${Tokens.colors.brand[900]}` },
-    }),
+    borderColor: '#FFFFFF',
   },
   input: {
     paddingHorizontal: Tokens.spacing[4],
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     minHeight: INPUT_HEIGHT,
     textAlignVertical: 'center',
-    paddingVertical: 0, // Fix alignment
+    paddingVertical: 0,
     ...Platform.select({
       web: { outlineStyle: 'none' },
     }),
@@ -585,6 +587,7 @@ const styles = StyleSheet.create({
     width: 80,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 0,
   },
   // Actions
   actionsBar: {
@@ -602,9 +605,9 @@ const styles = StyleSheet.create({
   actionButton: {
     paddingVertical: Tokens.spacing[2],
     paddingHorizontal: Tokens.spacing[3],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: 0,
     ...Platform.select({
-      web: { transition: Tokens.motion.transitions.base },
+      web: { transition: 'all 0.2s ease' },
     }),
   },
   actionButtonDisabled: {
@@ -612,30 +615,28 @@ const styles = StyleSheet.create({
     pointerEvents: 'none',
   },
   clearHovered: {
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: '#222222',
   },
   clearPressed: {
-    backgroundColor: Tokens.colors.neutral.darkest,
-    opacity: 0.8,
-    transform: [{ scale: Tokens.motion.scales.press }],
+    opacity: 0.7,
   },
   countText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.tertiary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: '#666666',
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   clearText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.error.main,
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: '#CC0000',
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   aiSortText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.brand[400],
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: '#FFFFFF',
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
@@ -646,27 +647,29 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[6],
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[5],
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: '#050505',
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: Tokens.colors.brand[500] + '30',
+    borderStyle: 'dashed',
+    borderColor: '#333333',
   },
   sortedTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.lg,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     marginBottom: Tokens.spacing[4],
     letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   sortedGroup: {
     marginBottom: Tokens.spacing[5],
   },
   sortedCategory: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[400],
+    color: '#666666',
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: Tokens.spacing[3],
@@ -683,57 +686,60 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
+    color: '#CCCCCC',
     lineHeight: Tokens.type.sm * 1.5,
     marginRight: Tokens.spacing[3],
   },
   priorityBadge: {
     paddingHorizontal: Tokens.spacing[2],
     paddingVertical: 2,
-    borderRadius: Tokens.radii.sm,
+    borderRadius: 0,
     minWidth: 50,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   priorityText: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
     textTransform: 'uppercase',
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
   },
   priorityHigh: {
-    backgroundColor: Tokens.colors.error.main,
+    backgroundColor: '#CC0000',
+    borderColor: '#CC0000',
   },
   priorityMedium: {
-    backgroundColor: Tokens.colors.warning.main,
+    backgroundColor: '#333333',
   },
   priorityLow: {
-    backgroundColor: Tokens.colors.brand[500],
+    backgroundColor: '#111111',
   },
 
   listContent: {
     paddingBottom: 120,
   },
   item: {
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: '#000000',
+    borderRadius: 0,
     paddingHorizontal: Tokens.spacing[5],
     paddingVertical: Tokens.spacing[4],
-    marginBottom: Tokens.spacing[3],
+    marginBottom: -1, // Collapse borders
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
     ...Platform.select({
       web: {
-        transition: Tokens.motion.transitions.base,
+        transition: 'all 0.2s ease',
       },
     }),
   },
   itemText: {
     flex: 1,
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     lineHeight: Tokens.type.base * 1.5,
@@ -741,43 +747,43 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     padding: Tokens.spacing[2],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: 0,
     width: 36,
     height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
-      web: { transition: Tokens.motion.transitions.base },
+      web: { transition: 'all 0.2s ease' },
     }),
   },
   deleteButtonHovered: {
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: '#222222',
   },
   deleteButtonPressed: {
-    backgroundColor: Tokens.colors.error.subtle,
-    transform: [{ scale: Tokens.motion.scales.press }],
+    backgroundColor: '#333333',
   },
   deleteText: {
-    color: Tokens.colors.text.tertiary,
-    fontSize: Tokens.type.h2,
+    color: '#666666',
+    fontSize: Tokens.type.h3,
     fontWeight: '300',
-    marginTop: -2,
+    marginTop: -4,
   },
   // Empty
   emptyState: {
     alignItems: 'center',
     marginTop: Tokens.spacing[12],
-    opacity: 0.5,
+    opacity: 0.3,
   },
   emptyIcon: {
     fontSize: Tokens.type['5xl'],
     marginBottom: Tokens.spacing[4],
+    filter: 'grayscale(100%)',
   },
   emptyText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.tertiary,
-    fontSize: Tokens.type.base,
-    letterSpacing: 1,
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: '#666666',
+    fontSize: Tokens.type.sm,
+    letterSpacing: 2,
     textTransform: 'uppercase',
   },
   // Recording
@@ -788,55 +794,51 @@ const styles = StyleSheet.create({
   recordButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: '#000000',
     paddingHorizontal: Tokens.spacing[6],
     paddingVertical: Tokens.spacing[3],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: '#333333',
     minWidth: 160,
     justifyContent: 'center',
     ...Platform.select({
       web: {
-        transition: Tokens.motion.transitions.base,
+        transition: 'all 0.2s ease',
         cursor: 'pointer',
       },
     }),
   },
   recordButtonHovered: {
-    transform: [{ translateY: -2 }],
-    ...Platform.select({
-      web: {
-        boxShadow: HOVER_SHADOW,
-      },
-    }),
+    borderColor: '#FFFFFF',
   },
   recordButtonActive: {
-    backgroundColor: Tokens.colors.error.main + '20', // Subtle red
-    borderColor: Tokens.colors.error.main,
+    backgroundColor: '#FF0000', // THE RED ACCENT
+    borderColor: '#FF0000',
   },
   recordButtonProcessing: {
-    opacity: 0.7,
+    opacity: 0.5,
+    backgroundColor: '#222222',
   },
   recordButtonPressed: {
     opacity: 0.8,
-    transform: [{ scale: Tokens.motion.scales.press }],
   },
   recordIcon: {
     fontSize: Tokens.type.h3,
     marginRight: Tokens.spacing[2],
+    color: '#FFFFFF',
   },
   recordText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    fontWeight: '600',
-    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    fontWeight: '700',
+    color: '#FFFFFF',
     letterSpacing: 1,
   },
   errorText: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.error.main,
+    color: '#CC0000',
     marginTop: Tokens.spacing[2],
     textAlign: 'center',
   },

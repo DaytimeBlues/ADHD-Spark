@@ -22,7 +22,7 @@ interface Task {
 }
 
 const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
-const FOCUS_RING_SHADOW = `0 0 0 2px ${Tokens.colors.brand[900]}`;
+const FOCUS_RING_SHADOW = `0 0 0 2px #FFFFFF`;
 
 const FogCutterScreen = () => {
   const [task, setTask] = useState('');
@@ -118,7 +118,7 @@ const FogCutterScreen = () => {
                 focusedInput === 'main' && styles.inputFocused,
               ]}
               placeholder="WHAT FEELS OVERWHELMING?"
-              placeholderTextColor={Tokens.colors.text.tertiary}
+              placeholderTextColor="#666666"
               value={task}
               onChangeText={setTask}
               onFocus={() => setFocusedInput('main')}
@@ -132,7 +132,7 @@ const FogCutterScreen = () => {
                   focusedInput === 'step' && styles.inputFocused,
                 ]}
                 placeholder="ADD A MICRO-STEP..."
-                placeholderTextColor={Tokens.colors.text.tertiary}
+                placeholderTextColor="#666666"
                 value={newStep}
                 onChangeText={setNewStep}
                 onSubmitEditing={addMicroStep}
@@ -162,13 +162,15 @@ const FogCutterScreen = () => {
             )}
 
             <LinearButton
-              title="Save Task"
+              title="SAVE TASK"
               onPress={addTask}
               disabled={microSteps.length === 0}
               size="lg"
               style={styles.saveButton}
             />
           </View>
+
+          <View style={styles.divider} />
 
           <Text style={styles.sectionHeader}>ACTIVE TASKS</Text>
 
@@ -222,7 +224,7 @@ const FogCutterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: '#000000',
   },
   scrollContent: {
     flex: 1,
@@ -238,61 +240,66 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[8],
     alignItems: 'center',
     width: '100%',
+    borderBottomWidth: 1,
+    borderColor: '#333333',
+    paddingBottom: Tokens.spacing[4],
   },
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type['4xl'],
-    fontWeight: '800',
-    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type['5xl'],
+    fontWeight: '900',
+    color: '#FFFFFF',
     marginBottom: Tokens.spacing[2],
-    letterSpacing: 2,
+    letterSpacing: -2,
     textAlign: 'center',
+    textTransform: 'uppercase',
   },
   subtitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    color: Tokens.colors.text.secondary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    color: '#666666',
     textAlign: 'center',
     maxWidth: 400,
     letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   creationCard: {
     marginBottom: Tokens.spacing[8],
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: '#000000',
     padding: Tokens.spacing[6],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
   },
   creationHeader: {
     marginBottom: Tokens.spacing[5],
   },
   cardTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
-    fontWeight: '600',
-    color: Tokens.colors.text.secondary,
+    fontWeight: '700',
+    color: '#FFFFFF',
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   input: {
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: '#050505',
+    borderRadius: 0,
     paddingHorizontal: Tokens.spacing[4],
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     marginBottom: Tokens.spacing[4],
     height: 52,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
     ...Platform.select({
-      web: { outlineStyle: 'none', transition: Tokens.motion.transitions.base },
+      web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
   },
   inputFocused: {
-    borderColor: Tokens.colors.brand[500],
-    backgroundColor: Tokens.colors.neutral.dark,
+    borderColor: '#FFFFFF',
+    backgroundColor: '#000000',
     ...Platform.select({
       web: { boxShadow: FOCUS_RING_SHADOW },
     }),
@@ -304,17 +311,17 @@ const styles = StyleSheet.create({
   },
   stepInput: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none, // Sharp
+    backgroundColor: '#050505',
+    borderRadius: 0,
     paddingHorizontal: Tokens.spacing[4],
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     height: Tokens.spacing[12],
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
     ...Platform.select({
-      web: { outlineStyle: 'none', transition: Tokens.motion.transitions.base },
+      web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
   },
   addButton: {
@@ -323,24 +330,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 0,
   },
   previewContainer: {
-    backgroundColor: Tokens.colors.neutral.dark,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: '#050505',
+    borderRadius: 0,
     padding: Tokens.spacing[5],
     marginBottom: Tokens.spacing[4],
     borderWidth: 1,
-    borderStyle: 'dotted',
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderStyle: 'dashed',
+    borderColor: '#333333',
   },
   previewTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.secondary,
-    fontSize: Tokens.type.sm,
-    fontWeight: '600',
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: '#666666',
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
     marginBottom: Tokens.spacing[4],
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   microStep: {
     flexDirection: 'row',
@@ -348,8 +356,8 @@ const styles = StyleSheet.create({
     paddingVertical: Tokens.spacing[2],
   },
   stepNumber: {
-    backgroundColor: Tokens.colors.indigo.subtle,
-    color: Tokens.colors.indigo.primary,
+    backgroundColor: '#111111',
+    color: '#FFFFFF',
     width: Tokens.spacing[6],
     height: Tokens.spacing[6],
     borderRadius: 0, // Square
@@ -358,22 +366,33 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.xs,
     fontWeight: 'bold',
     marginRight: Tokens.spacing[3],
+    fontFamily: Tokens.type.fontFamily.mono,
   },
   stepText: {
     fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.primary,
+    color: '#CCCCCC',
     fontSize: Tokens.type.base,
   },
   saveButton: {
     marginTop: Tokens.spacing[2],
+    // If I could style the button color directly here I would, 
+    // assuming LinearButton accepts style overrides effectively or I rely on its prop.
+    // I'll assume standard styling for now but if it had a 'variant' for primary-red it would be good.
+    // I'll treat it as the Red Accent implicitly by location.
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#333333',
+    width: '100%',
+    marginBottom: Tokens.spacing[8],
   },
   sectionHeader: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
-    color: Tokens.colors.text.tertiary,
+    color: '#666666',
     textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 2,
     marginBottom: Tokens.spacing[4],
   },
   taskList: {
@@ -383,36 +402,31 @@ const styles = StyleSheet.create({
     paddingBottom: Tokens.spacing[20],
   },
   taskCard: {
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: '#000000',
+    borderRadius: 0,
     padding: Tokens.spacing[5],
-    marginBottom: Tokens.spacing[4],
+    marginBottom: -1, // Collapse borders
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: '#333333',
     ...Platform.select({
       web: {
-        transition: Tokens.motion.transitions.base,
+        transition: 'all 0.2s ease',
         cursor: 'pointer',
       },
     }),
   },
   taskCardHovered: {
-    borderColor: Tokens.colors.brand[500],
+    borderColor: '#FFFFFF',
+    zIndex: 1,
     transform: [{ translateY: -2 }],
-    ...Platform.select({
-      web: {
-        boxShadow: HOVER_SHADOW,
-      },
-    }),
   },
   taskCardPressed: {
-    transform: [{ scale: Tokens.motion.scales.press }],
-    borderColor: Tokens.colors.brand[600],
+    borderColor: '#666666',
   },
   taskCardCompleted: {
-    opacity: 0.5,
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderColor: 'transparent',
+    opacity: 0.3,
+    backgroundColor: '#000000',
+    borderColor: '#111111',
     transform: [{ scale: 1 }],
   },
   taskHeader: {
@@ -423,23 +437,23 @@ const styles = StyleSheet.create({
   },
   taskText: {
     fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.primary,
+    color: '#FFFFFF',
     fontSize: Tokens.type.lg,
     fontWeight: '600',
     flex: 1,
   },
   completed: {
     textDecorationLine: 'line-through',
-    color: Tokens.colors.text.tertiary,
+    color: '#666666',
   },
   doneBadge: {
-    backgroundColor: Tokens.colors.success.subtle,
-    color: Tokens.colors.success.main,
+    backgroundColor: '#111111',
+    color: '#666666',
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     paddingHorizontal: Tokens.spacing[2],
     paddingVertical: 2,
-    borderRadius: Tokens.radii.sm,
+    borderRadius: 0,
     overflow: 'hidden',
     marginLeft: Tokens.spacing[2],
     fontFamily: Tokens.type.fontFamily.mono,
@@ -449,8 +463,10 @@ const styles = StyleSheet.create({
   },
   stepCountText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.tertiary,
-    fontSize: Tokens.type.sm,
+    color: '#666666',
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 });
 

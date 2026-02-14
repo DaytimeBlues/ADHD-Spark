@@ -14,6 +14,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import StorageService from './src/services/StorageService';
 import { GoogleTasksSyncService } from './src/services/PlaudService';
 import OverlayService from './src/services/OverlayService';
+import WebMCPService from './src/services/WebMCPService';
 import { Tokens } from './src/theme/tokens';
 import {
   handleOverlayIntent,
@@ -29,6 +30,7 @@ const App = () => {
       try {
         await StorageService.init();
         await GoogleTasksSyncService.syncToBrainDump();
+        WebMCPService.init();
       } catch (error) {
         console.error('App initialization error:', error);
       } finally {
