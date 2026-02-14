@@ -117,7 +117,9 @@ describe('HomeScreen', () => {
     expect(screen.getByText('OVERLAY EVENT LOG (DEV)')).toBeTruthy();
     expect(screen.getByText(/Permission requested/i)).toBeTruthy();
 
-    fireEvent.press(screen.getByText('COPY DIAGNOSTICS'));
+    await act(async () => {
+      fireEvent.press(screen.getByText('COPY DIAGNOSTICS'));
+    });
     expect(Share.share).toHaveBeenCalled();
   });
 });
