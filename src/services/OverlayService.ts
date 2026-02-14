@@ -12,8 +12,7 @@ const { OverlayModule } = NativeModules as {
     updateCount: (count: number) => void;
     canDrawOverlays: () => Promise<boolean>;
     requestOverlayPermission: () => Promise<boolean>;
-    collapseOverlay?: () => void;
-    isExpanded?: () => Promise<boolean>;
+    canPostNotifications: () => Promise<boolean>;
   };
 };
 
@@ -88,6 +87,16 @@ const OverlayService = {
     } finally {
       overlayPermissionRequestInProgress = false;
     }
+  },
+
+  async canPostNotifications(): Promise<boolean> {
+    if (Platform.OS !== 'android') {
+      return true; // No notification permission needed on other platforms
+    }
+    if (!OverlayModule?.canPostNotifications) {
+      return true; // Assume granted if method not available
+    }
+    return OverlayModule.canPostNotifications();
   },
 
   startOverlay() {
