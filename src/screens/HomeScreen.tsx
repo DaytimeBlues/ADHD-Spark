@@ -59,6 +59,20 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [overlayEvents, setOverlayEvents] = useState<OverlayEvent[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
+  const addOverlayEvent = useCallback((label: string) => {
+    if (!__DEV__) {
+      return;
+    }
+    setOverlayEvents((prev) => {
+      const newEvent = {
+        id: Date.now().toString() + Math.random(),
+        timestamp: Date.now(),
+        label,
+      };
+      return [newEvent, ...prev].slice(0, 5);
+    });
+  }, []);
+
   const handleCopyDiagnostics = useCallback(async () => {
     if (!__DEV__) {
       return;
@@ -105,20 +119,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     isOverlayPermissionRequesting,
     overlayEvents,
   ]);
-
-  const addOverlayEvent = useCallback((label: string) => {
-    if (!__DEV__) {
-      return;
-    }
-    setOverlayEvents((prev) => {
-      const newEvent = {
-        id: Date.now().toString() + Math.random(),
-        timestamp: Date.now(),
-        label,
-      };
-      return [newEvent, ...prev].slice(0, 5);
-    });
-  }, []);
 
   const cardWidth = '48%'; // Strict 2-column grid
 

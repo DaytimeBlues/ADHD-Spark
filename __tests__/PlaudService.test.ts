@@ -32,7 +32,6 @@ jest.mock('@react-native-google-signin/google-signin', () => ({
   },
 }));
 
-
 describe('PlaudService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -52,7 +51,7 @@ describe('PlaudService', () => {
       const mockBlob = {
         size: 1024,
         type: 'audio/m4a',
-        [Symbol.toStringTag]: 'Blob'
+        [Symbol.toStringTag]: 'Blob',
       };
 
       (fetch as jest.Mock)

@@ -47,7 +47,9 @@ const AnchorScreen = () => {
   } = useTimer({
     initialTime: 4,
     onComplete: () => {
-      if (!patternRef.current) return;
+      if (!patternRef.current) {
+        return;
+      }
       const p = PATTERNS[patternRef.current];
       const phases: Record<
         'inhale' | 'hold' | 'exhale' | 'wait',
@@ -184,10 +186,10 @@ const AnchorScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                      styles.patternButton,
-                      hovered && styles.patternButtonHovered,
-                      pressed && styles.patternButtonPressed,
-                    ]}
+                    styles.patternButton,
+                    hovered && styles.patternButtonHovered,
+                    pressed && styles.patternButtonPressed,
+                  ]}
                   onPress={() => startPattern(p)}
                 >
                   <View style={styles.patternIcon}>

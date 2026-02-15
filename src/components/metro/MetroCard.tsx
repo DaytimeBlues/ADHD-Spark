@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { MetroPalette, MetroSpacing, MetroTypography } from '../../theme/metroTheme';
+import {
+  MetroPalette,
+  MetroSpacing,
+  MetroTypography,
+} from '../../theme/metroTheme';
 
 interface MetroCardProps {
   children: React.ReactNode;
@@ -17,14 +21,8 @@ export const MetroCard: React.FC<MetroCardProps> = ({
 }) => {
   return (
     <View style={[styles.container, style]}>
-      {title && (
-        <Text style={styles.header}>
-          {title.toUpperCase()}
-        </Text>
-      )}
-      <View style={[styles.content, contentStyle]}>
-        {children}
-      </View>
+      {title && <Text style={styles.header}>{title.toUpperCase()}</Text>}
+      <View style={[styles.content, contentStyle]}>{children}</View>
     </View>
   );
 };

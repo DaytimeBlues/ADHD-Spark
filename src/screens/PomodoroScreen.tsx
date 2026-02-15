@@ -36,33 +36,26 @@ const PomodoroScreen = () => {
   const isWorkingRef = useRef(isWorking);
   const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const {
-    timeLeft,
-    isRunning,
-    formattedTime,
-    start,
-    pause,
-    reset,
-    setTime,
-  } = useTimer({
-    initialTime: FOCUS_DURATION_SECONDS,
-    onComplete: () => {
-      if (isWorkingRef.current) {
-        setSessions((s) => s + 1);
-        setIsWorking(false);
-        isWorkingRef.current = false;
-        SoundService.playCompletionSound();
-        setTime(BREAK_DURATION_SECONDS);
-      } else {
-        setIsWorking(true);
-        isWorkingRef.current = true;
-        SoundService.playNotificationSound();
-        setTime(FOCUS_DURATION_SECONDS);
-      }
-      // Re-start for the next phase
-      setTimeout(() => start(), 0);
-    },
-  });
+  const { timeLeft, isRunning, formattedTime, start, pause, reset, setTime } =
+    useTimer({
+      initialTime: FOCUS_DURATION_SECONDS,
+      onComplete: () => {
+        if (isWorkingRef.current) {
+          setSessions((s) => s + 1);
+          setIsWorking(false);
+          isWorkingRef.current = false;
+          SoundService.playCompletionSound();
+          setTime(BREAK_DURATION_SECONDS);
+        } else {
+          setIsWorking(true);
+          isWorkingRef.current = true;
+          SoundService.playNotificationSound();
+          setTime(FOCUS_DURATION_SECONDS);
+        }
+        // Re-start for the next phase
+        setTimeout(() => start(), 0);
+      },
+    });
 
   useEffect(() => {
     isWorkingRef.current = isWorking;
@@ -83,7 +76,7 @@ const PomodoroScreen = () => {
       }
 
       if (typeof storedState.timeLeft === 'number') {
-        setTimeLeft(storedState.timeLeft);
+        setTime(storedState.timeLeft);
       }
 
       if (typeof storedState.sessions === 'number') {

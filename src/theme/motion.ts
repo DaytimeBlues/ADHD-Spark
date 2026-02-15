@@ -17,11 +17,14 @@ export const Motion = {
     fast: Platform.select({ web: 'all 0.1s linear', default: undefined }),
     base: Platform.select({ web: 'all 0.15s linear', default: undefined }),
     slow: Platform.select({ web: 'all 0.2s linear', default: undefined }),
-    transform: Platform.select({ web: 'transform 0.15s cubic-bezier(0, 0, 0.2, 1)', default: undefined }),
+    transform: Platform.select({
+      web: 'transform 0.15s cubic-bezier(0, 0, 0.2, 1)',
+      default: undefined,
+    }),
   },
   // Interactive scales
   scales: {
     press: 0.98,
-    hover: 1.00,
+    hover: 1.0,
   },
 } as const;

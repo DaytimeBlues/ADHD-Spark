@@ -89,7 +89,13 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
           <View style={styles.header}>
             <Pressable
               onPress={() => navigation.goBack()}
-              style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+              style={({
+                pressed,
+                hovered,
+              }: {
+                pressed: boolean;
+                hovered?: boolean;
+              }) => [
                 styles.backButton,
                 hovered && styles.backButtonHovered,
                 pressed && styles.backButtonPressed,
@@ -105,23 +111,84 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
             </View>
           </View>
 
-          <View style={styles.introCard}>
-            <Text style={styles.introTitle}>📚 ABOUT CADDI</Text>
-            <Text style={styles.introText}>
-              CADDI (CBT for ADHD-Inattentive) is a research-backed protocol
-              from Karolinska Institute focusing on three pillars: Behavioral
-              Activation, Organization, and Mindfulness.
+          <View style={styles.compactCard}>
+            <View style={styles.compactHeaderRow}>
+              <Text style={styles.compactTitle}>WHAT IS CADDI?</Text>
+              <View style={styles.compactBadge}>
+                <Text style={styles.compactBadgeText}>EVIDENCE-BASED</Text>
+              </View>
+            </View>
+
+            <Text style={styles.compactDescription}>
+              CBT for ADHD-Inattentive (CADDI) is a specialized protocol
+              targeting initiation paralysis and focus. It shifts from impulse
+              control to behavioral activation.
             </Text>
-            <Pressable
-              onPress={() => openSource('https://pubmed.ncbi.nlm.nih.gov/')}
-              style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
-                styles.sourceLink,
-                hovered && styles.sourceLinkHovered,
-                pressed && styles.sourceLinkPressed,
-              ]}
-            >
-              <Text style={styles.sourceLinkText}>View Research Sources →</Text>
-            </Pressable>
+
+            <View style={styles.evidenceRow}>
+              <Text style={styles.evidenceBullet}>• RCT PROVEN (2025)</Text>
+              <Text style={styles.evidenceBullet}>• INATTENTIVE FOCUSED</Text>
+              <Text style={styles.evidenceBullet}>• ACTIVATION BASED</Text>
+            </View>
+
+            <View style={styles.linksRow}>
+              <Pressable
+                onPress={() =>
+                  openSource('https://doi.org/10.3389/fpsyt.2025.1564506')
+                }
+                style={({
+                  pressed,
+                  hovered,
+                }: {
+                  pressed: boolean;
+                  hovered?: boolean;
+                }) => [
+                  styles.linkButton,
+                  hovered && styles.linkButtonHovered,
+                  pressed && styles.linkButtonPressed,
+                ]}
+              >
+                <Text style={styles.linkButtonText}>RCT STUDY</Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() =>
+                  openSource('https://pubmed.ncbi.nlm.nih.gov/38905212/')
+                }
+                style={({
+                  pressed,
+                  hovered,
+                }: {
+                  pressed: boolean;
+                  hovered?: boolean;
+                }) => [
+                  styles.linkButton,
+                  hovered && styles.linkButtonHovered,
+                  pressed && styles.linkButtonPressed,
+                ]}
+              >
+                <Text style={styles.linkButtonText}>QUALITATIVE</Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() =>
+                  openSource('https://clinicaltrials.gov/ct2/show/NCT04090983')
+                }
+                style={({
+                  pressed,
+                  hovered,
+                }: {
+                  pressed: boolean;
+                  hovered?: boolean;
+                }) => [
+                  styles.linkButton,
+                  hovered && styles.linkButtonHovered,
+                  pressed && styles.linkButtonPressed,
+                ]}
+              >
+                <Text style={styles.linkButtonText}>REGISTRY</Text>
+              </Pressable>
+            </View>
           </View>
 
           {categories.map((category) => (
@@ -140,14 +207,22 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                 {category.features.map((feature) => (
                   <Pressable
                     key={feature.route}
-                    style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+                    style={({
+                      pressed,
+                      hovered,
+                    }: {
+                      pressed: boolean;
+                      hovered?: boolean;
+                    }) => [
                       styles.featureButton,
                       hovered && styles.featureButtonHovered,
                       pressed && styles.featureButtonPressed,
                     ]}
                     onPress={() => handleFeaturePress(feature.route)}
                   >
-                    <Text style={styles.featureButtonText}>{feature.name.toUpperCase()}</Text>
+                    <Text style={styles.featureButtonText}>
+                      {feature.name.toUpperCase()}
+                    </Text>
                   </Pressable>
                 ))}
               </View>
@@ -225,51 +300,88 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: -2,
   },
-  introCard: {
+  compactCard: {
     backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none, // Sharp
-    padding: Tokens.spacing[6],
-    marginBottom: Tokens.spacing[8],
+    borderRadius: Tokens.radii.none,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[6],
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
   },
-  introTitle: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
+  compactHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Tokens.spacing[2],
+    gap: Tokens.spacing[3],
+  },
+  compactTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    marginBottom: Tokens.spacing[3],
     letterSpacing: 1,
   },
-  introText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.sm * 1.5,
+  compactBadge: {
+    backgroundColor: Tokens.colors.brand[500],
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: Tokens.radii.full,
   },
-  sourceLink: {
-    marginTop: Tokens.spacing[4],
+  compactBadgeText: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  compactDescription: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    lineHeight: 18,
+    marginBottom: Tokens.spacing[3],
+  },
+  evidenceRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Tokens.spacing[3],
+    marginBottom: Tokens.spacing[3],
+  },
+  evidenceBullet: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: 10,
+    color: Tokens.colors.brand[400],
+    textTransform: 'uppercase',
+  },
+  linksRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Tokens.spacing[2],
+  },
+  linkButton: {
+    backgroundColor: Tokens.colors.neutral.dark,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
       web: {
-        transition: Tokens.motion.transitions.base,
         cursor: 'pointer',
+        transition: Tokens.motion.transitions.base,
       },
     }),
   },
-  sourceLinkHovered: {
-    opacity: 0.8,
-    transform: [{ translateX: 4 }],
+  linkButtonHovered: {
+    borderColor: Tokens.colors.text.secondary,
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
-  sourceLinkPressed: {
-    opacity: 0.6,
+  linkButtonPressed: {
+    opacity: 0.7,
   },
-  sourceLinkText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.brand[400],
+  linkButtonText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: 10,
+    color: Tokens.colors.text.secondary,
     fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
   },
   categoryCard: {
     backgroundColor: Tokens.colors.neutral.darker,

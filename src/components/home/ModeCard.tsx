@@ -1,10 +1,10 @@
 import React, { useCallback, useState, memo } from 'react';
 import {
   Animated,
-  AnimatedStyleProp,
   Platform,
   Pressable,
   StyleSheet,
+  StyleProp,
   Text,
   View,
   ViewStyle,
@@ -24,11 +24,12 @@ export type ModeCardProps = {
   mode: ModeCardMode;
   onPress: () => void;
   style?: ViewStyle;
-  animatedStyle?: AnimatedStyleProp<ViewStyle>;
+  animatedStyle?: StyleProp<ViewStyle>;
   testID?: string;
 };
 
 type WebInteractiveStyle = {
+  borderColor?: string;
   outlineColor?: string;
   outlineStyle?: 'solid' | 'dotted' | 'dashed';
   outlineWidth?: number;

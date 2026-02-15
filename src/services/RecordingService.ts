@@ -99,9 +99,7 @@ class RecordingServiceClass {
       const recordingPreset =
         Audio.RecordingOptionsPresets?.HIGH_QUALITY ??
         Audio.Recording.OptionsPresets.HIGH_QUALITY;
-      const { recording } = await Audio.Recording.createAsync(
-        recordingPreset,
-      );
+      const { recording } = await Audio.Recording.createAsync(recordingPreset);
 
       this.recording = recording;
       this.isRecording = true;

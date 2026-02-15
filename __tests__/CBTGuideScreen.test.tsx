@@ -43,11 +43,12 @@ describe('CBTGuideScreen', () => {
     expect(screen.getByText('ANCHOR BREATHING')).toBeTruthy();
   });
 
-  it('renders intro card about CADDI', () => {
+  it('renders compact CADDI research section', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
-    expect(screen.getByText(/ABOUT CADDI/i)).toBeTruthy();
-    expect(
-      screen.getByText(/Behavioral Activation, Organization, and Mindfulness/i),
-    ).toBeTruthy();
+    expect(screen.getByText(/WHAT IS CADDI/i)).toBeTruthy();
+    expect(screen.getAllByText(/EVIDENCE-BASED/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/RCT STUDY/i)).toBeTruthy();
+    expect(screen.getByText(/QUALITATIVE/i)).toBeTruthy();
+    expect(screen.getByText(/REGISTRY/i)).toBeTruthy();
   });
 });

@@ -1,9 +1,9 @@
-import { device } from "detox";
+import { device } from 'detox';
 
 beforeAll(async () => {
-    await device.launchApp();
+  await device.launchApp();
 });
 
 beforeEach(async () => {
-    await device.reloadReactNative();
+  await device.reloadReactNative();
 });

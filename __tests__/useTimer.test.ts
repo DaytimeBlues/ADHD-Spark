@@ -1,7 +1,7 @@
-import { renderHook, act, waitFor } from "@testing-library/react-native";
-import useTimer from "../src/hooks/useTimer";
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import useTimer from '../src/hooks/useTimer';
 
-describe("useTimer", () => {
+describe('useTimer', () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -10,13 +10,13 @@ describe("useTimer", () => {
     jest.useRealTimers();
   });
 
-  it("initializes with correct time", () => {
+  it('initializes with correct time', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 300 }));
     expect(result.current.timeLeft).toBe(300);
-    expect(result.current.formattedTime).toBe("05:00");
+    expect(result.current.formattedTime).toBe('05:00');
   });
 
-  it("starts timer when start is called", () => {
+  it('starts timer when start is called', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
     expect(result.current.isRunning).toBe(false);
 
@@ -27,7 +27,7 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(true);
   });
 
-  it("pauses timer when pause is called", () => {
+  it('pauses timer when pause is called', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
     act(() => {
       result.current.start();
@@ -41,7 +41,7 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(false);
   });
 
-  it("resets timer to initial time", () => {
+  it('resets timer to initial time', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 300 }));
     act(() => {
       result.current.start();
@@ -59,12 +59,12 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(false);
   });
 
-  it("formats time correctly", () => {
+  it('formats time correctly', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 65 }));
-    expect(result.current.formattedTime).toBe("01:05");
+    expect(result.current.formattedTime).toBe('01:05');
   });
 
-  it("supports autoStart and completion state", () => {
+  it('supports autoStart and completion state', () => {
     const { result } = renderHook(() =>
       useTimer({ initialTime: 1, autoStart: true }),
     );
@@ -79,7 +79,7 @@ describe("useTimer", () => {
     expect(result.current.hasCompleted).toBe(true);
   });
 
-  it("allows setting time directly", () => {
+  it('allows setting time directly', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 10 }));
 
     act(() => {
@@ -89,7 +89,7 @@ describe("useTimer", () => {
     expect(result.current.timeLeft).toBe(42);
   });
 
-  it("calls onComplete when timer finishes", async () => {
+  it('calls onComplete when timer finishes', async () => {
     const onComplete = jest.fn();
     const { result } = renderHook(() =>
       useTimer({ initialTime: 1, onComplete }),

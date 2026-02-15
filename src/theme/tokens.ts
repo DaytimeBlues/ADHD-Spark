@@ -1,7 +1,13 @@
 // Design tokens for Spark ADHD.
 // Web-first, must also work on Android web.
 
-import { LinearColors, LinearSpacing, LinearTypography, LinearRadii, LinearElevation } from './linearTokens';
+import {
+  LinearColors,
+  LinearSpacing,
+  LinearTypography,
+  LinearRadii,
+  LinearElevation,
+} from './linearTokens';
 import { Motion } from './motion';
 
 export const Colors = LinearColors;

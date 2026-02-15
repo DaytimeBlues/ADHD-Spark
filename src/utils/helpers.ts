@@ -8,7 +8,9 @@ export const calculateStreak = (
   lastUseDate: Date | null,
   currentStreak: number,
 ): number => {
-  if (!lastUseDate) return 1;
+  if (!lastUseDate) {
+    return 1;
+  }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -20,8 +22,12 @@ export const calculateStreak = (
     (today.getTime() - lastUse.getTime()) / (1000 * 60 * 60 * 24),
   );
 
-  if (diffDays === 0) return currentStreak;
-  if (diffDays === 1) return currentStreak + 1;
+  if (diffDays === 0) {
+    return currentStreak;
+  }
+  if (diffDays === 1) {
+    return currentStreak + 1;
+  }
   return 1;
 };
 
@@ -30,6 +36,14 @@ export const generateId = (): string => {
 };
 
 export const getDayName = (date: Date): string => {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
   return days[date.getDay()];
 };

@@ -1,6 +1,12 @@
 import { config } from '../config';
 
-export type SortCategory = 'task' | 'event' | 'reminder' | 'thought' | 'worry' | 'idea';
+export type SortCategory =
+  | 'task'
+  | 'event'
+  | 'reminder'
+  | 'thought'
+  | 'worry'
+  | 'idea';
 export type SortPriority = 'high' | 'medium' | 'low';
 
 export interface SortedItem {

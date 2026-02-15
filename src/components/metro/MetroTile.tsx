@@ -1,6 +1,10 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, ViewStyle, View } from 'react-native';
-import { MetroPalette, MetroSpacing, MetroTypography } from '../../theme/metroTheme';
+import {
+  MetroPalette,
+  MetroSpacing,
+  MetroTypography,
+} from '../../theme/metroTheme';
 
 type TileSize = 'small' | 'medium' | 'wide';
 
@@ -27,10 +31,14 @@ export const MetroTile: React.FC<MetroTileProps> = ({
     // Assuming a base unit width for the grid column
     // This is approximate; in a real grid this would be controlled by parent
     switch (size) {
-      case 'small': return { width: 100, height: 100 };
-      case 'medium': return { width: 150, height: 150 };
-      case 'wide': return { width: 310, height: 150 }; // 2x medium + gutter
-      default: return { width: 150, height: 150 };
+      case 'small':
+        return { width: 100, height: 100 };
+      case 'medium':
+        return { width: 150, height: 150 };
+      case 'wide':
+        return { width: 310, height: 150 }; // 2x medium + gutter
+      default:
+        return { width: 150, height: 150 };
     }
   };
 
@@ -48,11 +56,9 @@ export const MetroTile: React.FC<MetroTileProps> = ({
       <View style={styles.contentContainer}>
         <View style={styles.topRow}>
           {icon && <View style={styles.iconContainer}>{icon}</View>}
-          {count !== undefined && (
-            <Text style={styles.count}>{count}</Text>
-          )}
+          {count !== undefined && <Text style={styles.count}>{count}</Text>}
         </View>
-        
+
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>

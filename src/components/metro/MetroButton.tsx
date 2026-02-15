@@ -1,6 +1,17 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle, View } from 'react-native';
-import { MetroPalette, MetroSpacing, MetroTypography } from '../../theme/metroTheme';
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  View,
+} from 'react-native';
+import {
+  MetroPalette,
+  MetroSpacing,
+  MetroTypography,
+} from '../../theme/metroTheme';
 
 interface MetroButtonProps {
   title: string;
@@ -28,11 +39,13 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
       style={({ pressed }) => [
         styles.base,
         disabled && styles.disabled,
-        variant === 'filled' && { backgroundColor: disabled ? MetroPalette.darkGray : accentColor },
-        variant === 'outline' && { 
-          borderColor: disabled ? MetroPalette.gray : accentColor, 
+        variant === 'filled' && {
+          backgroundColor: disabled ? MetroPalette.darkGray : accentColor,
+        },
+        variant === 'outline' && {
+          borderColor: disabled ? MetroPalette.gray : accentColor,
           borderWidth: 2,
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
         },
         variant === 'link' && { backgroundColor: 'transparent' },
         pressed && !disabled && styles.pressed,
@@ -44,10 +57,12 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
           style={[
             styles.text,
             variant === 'filled' && { color: MetroPalette.white },
-            variant === 'outline' && { color: disabled ? MetroPalette.gray : accentColor },
-            variant === 'link' && { 
+            variant === 'outline' && {
               color: disabled ? MetroPalette.gray : accentColor,
-              textDecorationLine: 'underline'
+            },
+            variant === 'link' && {
+              color: disabled ? MetroPalette.gray : accentColor,
+              textDecorationLine: 'underline',
             },
             pressed && variant === 'link' && { opacity: 0.7 },
             textStyle,

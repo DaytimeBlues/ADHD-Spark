@@ -10,6 +10,8 @@ import {
 import { LinearCard } from '../components/ui/LinearCard';
 import { Tokens } from '../theme/tokens';
 
+const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
+
 const CheckInScreen = () => {
   const [mood, setMood] = useState<number | null>(null);
   const [energy, setEnergy] = useState<number | null>(null);
@@ -29,8 +31,6 @@ const CheckInScreen = () => {
     { emoji: '🚀', label: 'High', value: 4 },
     { emoji: '🔥', label: 'Full', value: 5 },
   ];
-
-  const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed
 
   const getRecommendation = () => {
     if (mood === null || energy === null) {
@@ -72,7 +72,13 @@ const CheckInScreen = () => {
               {moods.map((m) => (
                 <Pressable
                   key={m.value}
-                  style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+                  style={({
+                    pressed,
+                    hovered,
+                  }: {
+                    pressed: boolean;
+                    hovered?: boolean;
+                  }) => [
                     styles.option,
                     mood === m.value && styles.selected,
                     hovered && !mood && styles.optionHovered,
@@ -100,7 +106,13 @@ const CheckInScreen = () => {
               {energyLevels.map((e) => (
                 <Pressable
                   key={e.value}
-                  style={({ pressed, hovered }: { pressed: boolean; hovered?: boolean }) => [
+                  style={({
+                    pressed,
+                    hovered,
+                  }: {
+                    pressed: boolean;
+                    hovered?: boolean;
+                  }) => [
                     styles.option,
                     energy === e.value && styles.selected,
                     hovered && !energy && styles.optionHovered,
@@ -225,7 +237,7 @@ const styles = StyleSheet.create({
     ...Tokens.elevation.none, // Flat
     ...Platform.select({
       web: {
-        boxShadow: `0 0 0 0`,
+        boxShadow: '0 0 0 0',
       },
     }),
   },

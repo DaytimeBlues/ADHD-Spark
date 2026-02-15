@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {formatTime} from '../utils/helpers';
+import React, { useState, useEffect, useCallback } from 'react';
+import { formatTime } from '../utils/helpers';
 
 interface UseTimerOptions {
   initialTime: number;
@@ -7,7 +7,11 @@ interface UseTimerOptions {
   autoStart?: boolean;
 }
 
-const useTimer = ({initialTime, onComplete, autoStart = false}: UseTimerOptions) => {
+const useTimer = ({
+  initialTime,
+  onComplete,
+  autoStart = false,
+}: UseTimerOptions) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(autoStart);
   const [hasCompleted, setHasCompleted] = useState(false);
@@ -17,7 +21,7 @@ const useTimer = ({initialTime, onComplete, autoStart = false}: UseTimerOptions)
 
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(prev => {
+        setTimeLeft((prev) => {
           if (prev <= 1) {
             setIsRunning(false);
             setHasCompleted(true);
@@ -30,7 +34,9 @@ const useTimer = ({initialTime, onComplete, autoStart = false}: UseTimerOptions)
     }
 
     return () => {
-      if (interval) clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
   }, [isRunning, timeLeft, onComplete]);
 

@@ -13,6 +13,10 @@ const { OverlayModule } = NativeModules as {
     canDrawOverlays: () => Promise<boolean>;
     requestOverlayPermission: () => Promise<boolean>;
     canPostNotifications: () => Promise<boolean>;
+    collapseOverlay?: () => void;
+    isExpanded?: () => Promise<boolean>;
+    addListener?: (eventName: string) => void;
+    removeListeners?: (count: number) => void;
   };
 };
 
@@ -32,9 +36,7 @@ export type OverlayEventPayload = {
   granted?: boolean;
 };
 
-const overlayEventEmitter = OverlayModule
-  ? new NativeEventEmitter(OverlayModule)
-  : null;
+const overlayEventEmitter = OverlayModule ? new NativeEventEmitter() : null;
 
 let pendingOverlayCount = 0;
 let overlayCountUpdateTimer: ReturnType<typeof setTimeout> | null = null;

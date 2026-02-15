@@ -70,15 +70,16 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                    styles.navButton,
-                    hovered && styles.navButtonHovered,
-                    pressed && styles.navButtonPressed,
-                  ]}
+                  styles.navButton,
+                  hovered && styles.navButtonHovered,
+                  pressed && styles.navButtonPressed,
+                ]}
               >
                 <Text style={styles.navButtonText}>‹</Text>
               </Pressable>
               <Text style={styles.monthText}>
-                {months[currentDate.getMonth()].toUpperCase()} {currentDate.getFullYear()}
+                {months[currentDate.getMonth()].toUpperCase()}{' '}
+                {currentDate.getFullYear()}
               </Text>
               <Pressable
                 onPress={nextMonth}
@@ -89,10 +90,10 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                    styles.navButton,
-                    hovered && styles.navButtonHovered,
-                    pressed && styles.navButtonPressed,
-                  ]}
+                  styles.navButton,
+                  hovered && styles.navButtonHovered,
+                  pressed && styles.navButtonPressed,
+                ]}
               >
                 <Text style={styles.navButtonText}>›</Text>
               </Pressable>
@@ -127,11 +128,11 @@ const CalendarScreen = () => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                        styles.dayCell,
-                        isToday && styles.todayCell,
-                        hovered && !isToday && styles.dayCellHovered,
-                        pressed && !isToday && styles.dayCellPressed,
-                      ]}
+                      styles.dayCell,
+                      isToday && styles.todayCell,
+                      hovered && !isToday && styles.dayCellHovered,
+                      pressed && !isToday && styles.dayCellPressed,
+                    ]}
                   >
                     <Text style={[styles.dayText, isToday && styles.todayText]}>
                       {day}
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     ...Tokens.elevation.none,
     ...Platform.select({
       web: {
-        boxShadow: `0 0 0 0`,
+        boxShadow: '0 0 0 0',
       },
     }),
   },

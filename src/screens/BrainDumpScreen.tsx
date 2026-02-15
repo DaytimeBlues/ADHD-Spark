@@ -161,15 +161,6 @@ const BrainDumpScreen = () => {
     };
   }, [items]);
 
-  useEffect(() => {
-    if (!route.params?.autoRecord || hasAutoRecorded.current) {
-      return;
-    }
-
-    hasAutoRecorded.current = true;
-    handleRecordPress();
-  }, [handleRecordPress, route.params?.autoRecord]);
-
   const dismissGuide = async () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShowGuide(false);
@@ -267,6 +258,15 @@ const BrainDumpScreen = () => {
       setRecordingState('idle');
     }
   }, [guideDismissed, recordingError, recordingState, showGuide]);
+
+  useEffect(() => {
+    if (!route.params?.autoRecord || hasAutoRecorded.current) {
+      return;
+    }
+
+    hasAutoRecorded.current = true;
+    handleRecordPress();
+  }, [handleRecordPress, route.params?.autoRecord]);
 
   const deleteItem = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -864,7 +864,6 @@ const styles = StyleSheet.create({
   emptyIcon: {
     fontSize: Tokens.type['5xl'],
     marginBottom: Tokens.spacing[4],
-    filter: 'grayscale(100%)',
   },
   emptyText: {
     fontFamily: Tokens.type.fontFamily.mono,
