@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Alert,
+  AccessibilityInfo,
+  NativeModules,
+  Share,
   View,
   Text,
   StyleSheet,
   ScrollView,
   SafeAreaView,
+  TextInput,
   TouchableOpacity,
   Platform,
 } from 'react-native';
 import { Tokens } from '../theme/tokens';
-import { GoogleTasksSyncService } from '../services/PlaudService';
 import { config } from '../config';
 import StorageService from '../services/StorageService';
 
@@ -19,6 +23,16 @@ interface DiagnosticEntry {
   status: 'ok' | 'warning' | 'error' | 'info';
 }
 
+type BackupPayload = {
+  schema: 'spark-backup-v1';
+  exportedAt: string;
+  app: 'spark-adhd';
+  data: Record<string, string | null>;
+};
+
+const BACKUP_SCHEMA = 'spark-backup-v1' as const;
+const BACKUP_APP_ID = 'spark-adhd' as const;
+
 type NavigationNode = {
   goBack: () => void;
 };
@@ -26,10 +40,221 @@ type NavigationNode = {
 const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [diagnostics, setDiagnostics] = useState<DiagnosticEntry[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [backupJson, setBackupJson] = useState('');
+  const [isBackupBusy, setIsBackupBusy] = useState(false);
+  const [backupStatus, setBackupStatus] = useState('');
+  const [importMode, setImportMode] = useState<'overwrite' | 'merge'>(
+    'overwrite',
+  );
+  const [lastBackupExportAt, setLastBackupExportAt] = useState<string | null>(
+    null,
+  );
 
-  const loadDiagnostics = async () => {
+  const exportableKeys = Object.values(StorageService.STORAGE_KEYS);
+
+  const announceBackupStatus = (message: string) => {
+    setBackupStatus(message);
+    AccessibilityInfo.announceForAccessibility(message);
+  };
+
+  const parseBackupPayload = (
+    value: unknown,
+  ): { payload: BackupPayload } | { error: string } => {
+    if (!value || typeof value !== 'object') {
+      return { error: 'Backup JSON must be an object.' };
+    }
+
+    const payload = value as Partial<BackupPayload>;
+    if (payload.schema !== BACKUP_SCHEMA) {
+      return { error: 'Unsupported backup schema.' };
+    }
+
+    if (payload.app !== BACKUP_APP_ID) {
+      return { error: 'Backup is not from Spark ADHD.' };
+    }
+
+    if (
+      typeof payload.exportedAt !== 'string' ||
+      Number.isNaN(Date.parse(payload.exportedAt))
+    ) {
+      return { error: 'Backup exportedAt timestamp is invalid.' };
+    }
+
+    if (!payload.data || typeof payload.data !== 'object') {
+      return { error: 'Backup data payload is missing.' };
+    }
+
+    const hasUnknownKeys = Object.keys(payload.data).some(
+      (key) => !exportableKeys.includes(key),
+    );
+    if (hasUnknownKeys) {
+      return { error: 'Backup data includes unsupported keys.' };
+    }
+
+    const hasInvalidValue = Object.values(payload.data).some((entry) => {
+      return entry !== null && typeof entry !== 'string';
+    });
+    if (hasInvalidValue) {
+      return { error: 'Backup data values must be string or null.' };
+    }
+
+    return { payload: payload as BackupPayload };
+  };
+
+  const loadLastBackupExportAt = useCallback(async () => {
+    const value = await StorageService.get(
+      StorageService.STORAGE_KEYS.backupLastExportAt,
+    );
+    setLastBackupExportAt(value);
+  }, []);
+
+  const applyImportedBackup = async (payload: BackupPayload) => {
+    setIsBackupBusy(true);
+    try {
+      if (importMode === 'overwrite') {
+        await Promise.all(
+          exportableKeys.map(async (key) => {
+            const value = payload.data[key];
+            if (typeof value === 'string') {
+              await StorageService.set(key, value);
+            } else {
+              await StorageService.remove(key);
+            }
+          }),
+        );
+      } else {
+        await Promise.all(
+          Object.entries(payload.data).map(async ([key, value]) => {
+            if (exportableKeys.includes(key) && typeof value === 'string') {
+              await StorageService.set(key, value);
+            }
+          }),
+        );
+      }
+
+      announceBackupStatus(
+        `Import (${importMode}) completed. Diagnostics reloading...`,
+      );
+      await loadDiagnostics();
+    } catch (error) {
+      announceBackupStatus(
+        error instanceof Error ? error.message : 'Import failed unexpectedly.',
+      );
+    } finally {
+      setIsBackupBusy(false);
+    }
+  };
+
+  const handleExportBackup = async () => {
+    setIsBackupBusy(true);
+    try {
+      const entries = await Promise.all(
+        exportableKeys.map(async (key) => {
+          const value = await StorageService.get(key);
+          return [key, value] as const;
+        }),
+      );
+
+      const payload: BackupPayload = {
+        schema: BACKUP_SCHEMA,
+        exportedAt: new Date().toISOString(),
+        app: BACKUP_APP_ID,
+        data: Object.fromEntries(entries),
+      };
+
+      const json = JSON.stringify(payload, null, 2);
+      setBackupJson(json);
+      await StorageService.set(
+        StorageService.STORAGE_KEYS.backupLastExportAt,
+        payload.exportedAt,
+      );
+      setLastBackupExportAt(payload.exportedAt);
+
+      const clipboardModule = NativeModules.Clipboard as
+        | { setString?: (value: string) => void }
+        | undefined;
+
+      if (clipboardModule?.setString) {
+        clipboardModule.setString(json);
+        announceBackupStatus('Backup exported and copied to clipboard.');
+      } else {
+        await Share.share({
+          title: 'Spark backup JSON',
+          message: json,
+        });
+        announceBackupStatus('Backup exported. Shared via system dialog.');
+      }
+    } catch (error) {
+      announceBackupStatus(
+        error instanceof Error ? error.message : 'Export failed unexpectedly.',
+      );
+    } finally {
+      setIsBackupBusy(false);
+    }
+  };
+
+  const handleImportBackup = async () => {
+    if (!backupJson.trim()) {
+      announceBackupStatus('Paste backup JSON before importing.');
+      return;
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(backupJson);
+    } catch {
+      announceBackupStatus('Invalid JSON. Import canceled.');
+      return;
+    }
+
+    const parsedPayloadResult = parseBackupPayload(parsed);
+    if ('error' in parsedPayloadResult) {
+      announceBackupStatus(`${parsedPayloadResult.error} Import canceled.`);
+      return;
+    }
+
+    if (Platform.OS === 'web') {
+      await applyImportedBackup(parsedPayloadResult.payload);
+      return;
+    }
+
+    Alert.alert(
+      'Import backup?',
+      importMode === 'overwrite'
+        ? 'This overwrites local app data for tracked keys. Continue?'
+        : 'This merges backup data into local app data. Continue?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Import',
+          style: 'destructive',
+          onPress: () => {
+            applyImportedBackup(parsedPayloadResult.payload).catch((error) => {
+              announceBackupStatus(
+                error instanceof Error
+                  ? error.message
+                  : 'Import failed unexpectedly.',
+              );
+            });
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
+
+  const handleImportBackupPress = () => {
+    handleImportBackup().catch((error) => {
+      announceBackupStatus(
+        error instanceof Error ? error.message : 'Import failed unexpectedly.',
+      );
+    });
+  };
+
+  const loadDiagnostics = useCallback(async () => {
     setIsRefreshing(true);
     const entries: DiagnosticEntry[] = [];
+    await loadLastBackupExportAt();
 
     // Platform check
     entries.push({
@@ -147,9 +372,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       if (lastSyncAt) {
         const date = new Date(lastSyncAt);
         const now = new Date();
-        const ageMinutes = Math.floor(
-          (now.getTime() - date.getTime()) / 60000,
-        );
+        const ageMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
         entries.push({
           label: 'Last Sync',
           value: `${ageMinutes} minutes ago (${date.toLocaleString()})`,
@@ -191,11 +414,11 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
     setDiagnostics(entries);
     setIsRefreshing(false);
-  };
+  }, [loadLastBackupExportAt]);
 
   useEffect(() => {
     loadDiagnostics();
-  }, []);
+  }, [loadDiagnostics]);
 
   const handleRefresh = () => {
     loadDiagnostics();
@@ -314,9 +537,109 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
             <Text style={styles.instructionStep}>
               5. Set REACT_APP_GOOGLE_WEB_CLIENT_ID environment variable
             </Text>
-            <Text style={styles.instructionStep}>
-              6. Rebuild the app
+            <Text style={styles.instructionStep}>6. Rebuild the app</Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>DATA BACKUP</Text>
+            <Text style={styles.instructionText}>
+              Export local data as JSON and import it later to restore this
+              device state.
             </Text>
+            <Text style={styles.backupMetaText}>
+              LAST EXPORT:{' '}
+              {lastBackupExportAt
+                ? new Date(lastBackupExportAt).toLocaleString()
+                : 'NEVER'}
+            </Text>
+
+            <View style={styles.modeSelectorContainer}>
+              <TouchableOpacity
+                onPress={() => setImportMode('overwrite')}
+                style={[
+                  styles.modeButton,
+                  importMode === 'overwrite' && styles.modeButtonActive,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="Set import mode to overwrite"
+                testID="import-mode-overwrite"
+              >
+                <Text
+                  style={[
+                    styles.modeButtonText,
+                    importMode === 'overwrite' && styles.modeButtonTextActive,
+                  ]}
+                >
+                  OVERWRITE
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setImportMode('merge')}
+                style={[
+                  styles.modeButton,
+                  importMode === 'merge' && styles.modeButtonActive,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="Set import mode to merge"
+                testID="import-mode-merge"
+              >
+                <Text
+                  style={[
+                    styles.modeButtonText,
+                    importMode === 'merge' && styles.modeButtonTextActive,
+                  ]}
+                >
+                  MERGE
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.backupActionsRow}>
+              <TouchableOpacity
+                testID="diagnostics-export-backup"
+                onPress={handleExportBackup}
+                disabled={isBackupBusy}
+                style={[
+                  styles.backupButton,
+                  isBackupBusy && styles.backupButtonDisabled,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="Export backup JSON"
+              >
+                <Text style={styles.backupButtonText}>EXPORT JSON</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                testID="diagnostics-import-backup"
+                onPress={handleImportBackupPress}
+                disabled={isBackupBusy || !backupJson.trim()}
+                style={[
+                  styles.backupButton,
+                  (isBackupBusy || !backupJson.trim()) &&
+                    styles.backupButtonDisabled,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="Import backup JSON"
+              >
+                <Text style={styles.backupButtonText}>IMPORT JSON</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TextInput
+              testID="diagnostics-backup-input"
+              style={styles.backupInput}
+              value={backupJson}
+              onChangeText={setBackupJson}
+              multiline
+              placeholder="Paste backup JSON here"
+              placeholderTextColor={Tokens.colors.text.placeholder}
+              textAlignVertical="top"
+              accessibilityLabel="Backup JSON input"
+            />
+
+            {backupStatus ? (
+              <Text style={styles.backupStatusText}>{backupStatus}</Text>
+            ) : null}
           </View>
         </ScrollView>
       </View>
@@ -435,6 +758,82 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing.xs,
     paddingLeft: Tokens.spacing.sm,
     lineHeight: 18,
+  },
+  backupActionsRow: {
+    flexDirection: 'row',
+    gap: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing.sm,
+  },
+  backupButton: {
+    flex: 1,
+    minHeight: Tokens.layout.minTapTarget,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.dark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Tokens.spacing.xs,
+    paddingHorizontal: Tokens.spacing.sm,
+  },
+  backupButtonDisabled: {
+    opacity: 0.5,
+  },
+  backupButtonText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.primary,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  backupInput: {
+    minHeight: Tokens.layout.minTapTargetComfortable * 4,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.darker,
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    padding: Tokens.spacing.sm,
+  },
+  backupStatusText: {
+    marginTop: Tokens.spacing.sm,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+  },
+  backupMetaText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.tertiary,
+    marginBottom: Tokens.spacing.sm,
+    letterSpacing: 0.5,
+  },
+  modeSelectorContainer: {
+    flexDirection: 'row',
+    marginBottom: Tokens.spacing.sm,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.darker,
+  },
+  modeButton: {
+    flex: 1,
+    paddingVertical: Tokens.spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  modeButtonActive: {
+    backgroundColor: Tokens.colors.neutral.dark,
+  },
+  modeButtonText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: 10,
+    color: Tokens.colors.text.secondary,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  modeButtonTextActive: {
+    color: Tokens.colors.text.primary,
   },
 });
 
