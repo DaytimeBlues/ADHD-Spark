@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RetentionService from '../src/services/RetentionService';
 import StorageService from '../src/services/StorageService';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -86,5 +87,45 @@ describe('StorageService', () => {
 
     const result = await StorageService.setJSON('test-key', circular);
     expect(result).toBe(false);
+  });
+});
+
+describe('RetentionService grace-day behavior', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('preserves streak with one grace day in active window', async () => {
+    (AsyncStorage.getItem as jest.Mock)
+      .mockResolvedValueOnce('2026-02-14')
+      .mockResolvedValueOnce('4')
+      .mockResolvedValueOnce('2026-02-10')
+      .mockResolvedValueOnce('0');
+
+    const result = await RetentionService.markAppUse(
+      new Date('2026-02-16T00:00:00Z'),
+    );
+
+    expect(result).toBe(5);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith('streakCount', '5');
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'retentionGraceDaysUsed',
+      '1',
+    );
+  });
+
+  it('resets streak when grace day already used', async () => {
+    (AsyncStorage.getItem as jest.Mock)
+      .mockResolvedValueOnce('2026-02-14')
+      .mockResolvedValueOnce('7')
+      .mockResolvedValueOnce('2026-02-10')
+      .mockResolvedValueOnce('1');
+
+    const result = await RetentionService.markAppUse(
+      new Date('2026-02-16T00:00:00Z'),
+    );
+
+    expect(result).toBe(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith('streakCount', '1');
   });
 });

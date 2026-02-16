@@ -14,20 +14,32 @@ import {
 } from 'react-native';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
+import ActivationService from '../services/ActivationService';
 import { generateId } from '../utils/helpers';
+import {
+  MicroStep,
+  advanceTaskProgress,
+  getTaskProgressSummary,
+  normalizeMicroSteps,
+} from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
+import { ROUTES } from '../navigation/routes';
 
 interface Task {
   id: string;
   text: string;
   completed: boolean;
-  microSteps: string[];
+  microSteps: MicroStep[];
 }
 
 const FOCUS_RING_SHADOW = '0 0 0 2px #FFFFFF';
 
-const FogCutterScreen = () => {
+type FogCutterNavigation = {
+  navigate: (route: string) => void;
+};
+
+const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) => {
   const [task, setTask] = useState('');
   const [microSteps, setMicroSteps] = useState<string[]>([]);
   const [newStep, setNewStep] = useState('');
@@ -36,6 +48,7 @@ const FogCutterScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showGuide, setShowGuide] = useState(false);
   const [guideDismissed, setGuideDismissed] = useState(true);
+  const [latestSavedTaskId, setLatestSavedTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -59,11 +72,16 @@ const FogCutterScreen = () => {
         }
 
         if (storedTasks && Array.isArray(storedTasks)) {
-          const normalized = storedTasks.filter((item) => {
-            return Boolean(
-              item?.id && item?.text && Array.isArray(item?.microSteps),
-            );
-          });
+          const normalized = storedTasks
+            .filter((item) => {
+              return Boolean(
+                item?.id && item?.text && Array.isArray(item?.microSteps),
+              );
+            })
+            .map((item) => ({
+              ...item,
+              microSteps: normalizeMicroSteps(item.microSteps),
+            }));
           setTasks(normalized);
         }
       } catch (error) {
@@ -89,13 +107,15 @@ const FogCutterScreen = () => {
 
   const addTask = () => {
     if (task.trim() && microSteps.length > 0) {
+      const microStepModels = normalizeMicroSteps(microSteps);
       const newTask: Task = {
         id: generateId(),
         text: task,
         completed: false,
-        microSteps: [...microSteps],
+        microSteps: microStepModels,
       };
       setTasks((prevTasks) => [...prevTasks, newTask]);
+      setLatestSavedTaskId(newTask.id);
 
       if (!guideDismissed && !showGuide) {
         UXMetricsService.track('fog_cutter_first_task_saved');
@@ -120,25 +140,30 @@ const FogCutterScreen = () => {
       StorageService.STORAGE_KEYS.firstSuccessGuideState,
       { ...currentState, fogCutterDismissed: true },
     );
+
+    await ActivationService.requestPendingStart({
+      source: 'fogcutter_handoff',
+      requestedAt: new Date().toISOString(),
+      context: {
+        taskId: latestSavedTaskId ?? undefined,
+        reason: 'user_completed_fog_cutter_decomposition',
+      },
+    });
+
+    navigation?.navigate(ROUTES.FOCUS);
   };
 
   const toggleTask = (id: string) => {
     setTasks((prevTasks) =>
       prevTasks.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t,
+        t.id === id ? advanceTaskProgress(t) : t,
       ),
     );
   };
 
-  const renderMicroStep = ({
-    item,
-    index,
-  }: {
-    item: string;
-    index: number;
-  }) => (
+  const renderMicroStep = ({ item, index }: { item: string; index: number }) => (
     <View style={styles.microStep}>
-      <Text style={styles.stepNumber}>{index + 1}</Text>
+      <Text style={styles.stepNumber}>{(index + 1).toString().padStart(2, '0')}</Text>
       <Text style={styles.stepText}>{item}</Text>
     </View>
   );
@@ -148,22 +173,20 @@ const FogCutterScreen = () => {
       <View style={styles.scrollContent}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>FOG CUTTER</Text>
-            <Text style={styles.subtitle}>
-              BREAK BIG TASKS INTO TINY STEPS.
-            </Text>
+            <Text style={styles.title}>FOG_CUTTER</Text>
+            <View style={styles.headerLine} />
           </View>
 
           <View style={styles.creationCard}>
             <View style={styles.creationHeader}>
-              <Text style={styles.cardTitle}>DECOMPOSE A TASK</Text>
+              <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
             </View>
             <TextInput
               style={[
                 styles.input,
                 focusedInput === 'main' && styles.inputFocused,
               ]}
-              placeholder="WHAT FEELS OVERWHELMING?"
+              placeholder="> INPUT_OVERWHELMING_TASK"
               placeholderTextColor="#666666"
               value={task}
               onChangeText={setTask}
@@ -177,7 +200,7 @@ const FogCutterScreen = () => {
                   styles.stepInput,
                   focusedInput === 'step' && styles.inputFocused,
                 ]}
-                placeholder="ADD A MICRO-STEP..."
+                placeholder="> ADD_MICRO_STEP"
                 placeholderTextColor="#666666"
                 value={newStep}
                 onChangeText={setNewStep}
@@ -196,7 +219,7 @@ const FogCutterScreen = () => {
             {microSteps.length > 0 && (
               <View style={styles.previewContainer}>
                 <Text style={styles.previewTitle}>
-                  NEXT STEPS FOR "{task}":
+                  SEQUENCE:
                 </Text>
                 <FlatList
                   data={microSteps}
@@ -208,7 +231,7 @@ const FogCutterScreen = () => {
             )}
 
             <LinearButton
-              title="SAVE TASK"
+              title="EXECUTE_SAVE"
               onPress={addTask}
               disabled={microSteps.length === 0}
               size="lg"
@@ -221,9 +244,9 @@ const FogCutterScreen = () => {
           {showGuide && (
             <View style={styles.guideBanner}>
               <View style={styles.guideContent}>
-                <Text style={styles.guideTitle}>CLARITY ACHIEVED.</Text>
+                <Text style={styles.guideTitle}>CLARITY_ACHIEVED</Text>
                 <Text style={styles.guideText}>
-                  READY TO FOCUS? START A TIMER IN IGNITE.
+                  READY. INITIATE_IGNITE_PROTOCOL.
                 </Text>
               </View>
               <Pressable
@@ -235,17 +258,17 @@ const FogCutterScreen = () => {
                 accessibilityRole="button"
                 accessibilityLabel="Dismiss guidance"
               >
-                <Text style={styles.guideButtonText}>GOT IT</Text>
+                <Text style={styles.guideButtonText}>ACK</Text>
               </Pressable>
             </View>
           )}
 
-          <Text style={styles.sectionHeader}>ACTIVE TASKS</Text>
+          <Text style={styles.sectionHeader}>ACTIVE_OPERATIONS</Text>
 
           {isLoading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="small" color="#FFFFFF" />
-              <Text style={styles.loadingText}>LOADING TASKS...</Text>
+              <Text style={styles.loadingText}>LOADING...</Text>
             </View>
           ) : (
             <FlatList
@@ -277,16 +300,36 @@ const FogCutterScreen = () => {
                     >
                       {item.text}
                     </Text>
-                    {item.completed && (
-                      <Text style={styles.doneBadge}>DONE</Text>
+                    {item.completed ? (
+                      <Text style={styles.doneBadge}>CMPLTD</Text>
+                    ) : (
+                        <Text style={styles.stepCountText}>
+                        {getTaskProgressSummary(item.microSteps)}
+                        </Text>
                     )}
                   </View>
 
-                  <View style={styles.stepCount}>
-                    <Text style={styles.stepCountText}>
-                      {item.microSteps.length} MICRO-STEPS
-                    </Text>
-                  </View>
+                  {!item.completed && (
+                    <View style={styles.activeStepContainer}>
+                      <Text style={styles.activeStepLabel}>
+                        {item.microSteps.find((s) => s.status === 'in_progress')
+                          ? 'CURRENT_STEP >>'
+                          : 'NEXT_STEP >>'}
+                      </Text>
+                      <Text style={styles.activeStepText} numberOfLines={1}>
+                        {
+                          (
+                            item.microSteps.find(
+                              (s) => s.status === 'in_progress',
+                            ) ||
+                            item.microSteps.find((s) => s.status === 'next') || {
+                              text: '...',
+                            }
+                          ).text
+                        }
+                      </Text>
+                    </View>
+                  )}
                 </Pressable>
               )}
               style={styles.taskList}
@@ -301,7 +344,7 @@ const FogCutterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   scrollContent: {
     flex: 1,
@@ -311,166 +354,149 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     maxWidth: Tokens.layout.maxWidth.prose,
-    padding: Tokens.spacing[6],
+    padding: Tokens.spacing[4], // Reduced padding
   },
   header: {
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
+    flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    borderBottomWidth: 1,
-    borderColor: '#333333',
-    paddingBottom: Tokens.spacing[4],
+    paddingBottom: Tokens.spacing[2],
+    justifyContent: 'space-between',
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type['5xl'],
-    fontWeight: '900',
-    color: '#FFFFFF',
-    marginBottom: Tokens.spacing[2],
-    letterSpacing: -2,
-    textAlign: 'center',
-    textTransform: 'uppercase',
-  },
-  subtitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
-    color: '#666666',
-    textAlign: 'center',
-    maxWidth: 400,
+    fontSize: Tokens.type.lg,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
+  headerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: Tokens.colors.neutral.dark,
+      marginLeft: Tokens.spacing[4],
+  },
   creationCard: {
-    marginBottom: Tokens.spacing[8],
-    backgroundColor: '#000000',
-    padding: Tokens.spacing[6],
-    borderRadius: 0,
+    marginBottom: Tokens.spacing[6],
+    backgroundColor: Tokens.colors.neutral.darkest,
+    padding: Tokens.spacing[4], // Reduced
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
   },
   creationHeader: {
-    marginBottom: Tokens.spacing[5],
+    marginBottom: Tokens.spacing[4],
   },
   cardTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   input: {
-    backgroundColor: '#050505',
-    borderRadius: 0,
-    paddingHorizontal: Tokens.spacing[4],
-    color: '#FFFFFF',
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    marginBottom: Tokens.spacing[4],
-    height: 52,
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.none,
+    paddingHorizontal: Tokens.spacing[3],
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono, // Mono for input
+    fontSize: Tokens.type.sm, // Smaller text
+    marginBottom: Tokens.spacing[3],
+    height: 48,
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
     ...Platform.select({
       web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
   },
   inputFocused: {
-    borderColor: '#FFFFFF',
-    backgroundColor: '#000000',
-    ...Platform.select({
-      web: { boxShadow: FOCUS_RING_SHADOW },
-    }),
+    borderColor: Tokens.colors.brand[500],
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   addStepRow: {
     flexDirection: 'row',
-    marginBottom: Tokens.spacing[4],
-    gap: Tokens.spacing[3],
+    marginBottom: Tokens.spacing[3],
+    gap: Tokens.spacing[2],
   },
   stepInput: {
     flex: 1,
-    backgroundColor: '#050505',
-    borderRadius: 0,
-    paddingHorizontal: Tokens.spacing[4],
-    color: '#FFFFFF',
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    height: Tokens.spacing[12],
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.none,
+    paddingHorizontal: Tokens.spacing[3],
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    height: 48,
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
     ...Platform.select({
       web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
   },
   addButton: {
-    width: Tokens.spacing[12],
-    height: Tokens.spacing[12],
+    width: 48,
+    height: 48,
     paddingHorizontal: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 0,
+    borderRadius: Tokens.radii.none,
   },
   previewContainer: {
-    backgroundColor: '#050505',
-    borderRadius: 0,
-    padding: Tokens.spacing[5],
-    marginBottom: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderRadius: Tokens.radii.none,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[3],
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
   },
   previewTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#666666',
-    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    marginBottom: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   microStep: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: Tokens.spacing[2],
+    paddingVertical: 2,
   },
   stepNumber: {
-    backgroundColor: '#111111',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.tertiary,
     width: Tokens.spacing[6],
-    height: Tokens.spacing[6],
-    borderRadius: 0, // Square
-    textAlign: 'center',
-    lineHeight: Tokens.spacing[6],
     fontSize: Tokens.type.xs,
     fontWeight: 'bold',
-    marginRight: Tokens.spacing[3],
+    marginRight: Tokens.spacing[2],
     fontFamily: Tokens.type.fontFamily.mono,
   },
   stepText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    color: '#CCCCCC',
-    fontSize: Tokens.type.base,
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.sm,
   },
   saveButton: {
     marginTop: Tokens.spacing[2],
-    // If I could style the button color directly here I would,
-    // assuming LinearButton accepts style overrides effectively or I rely on its prop.
-    // I'll assume standard styling for now but if it had a 'variant' for primary-red it would be good.
-    // I'll treat it as the Red Accent implicitly by location.
   },
   divider: {
     height: 1,
-    backgroundColor: '#333333',
+    backgroundColor: Tokens.colors.neutral.border,
     width: '100%',
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
   },
   sectionHeader: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#666666',
+    color: Tokens.colors.text.tertiary,
     textTransform: 'uppercase',
-    letterSpacing: 2,
-    marginBottom: Tokens.spacing[4],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[3],
   },
   taskList: {
     flex: 1,
@@ -479,12 +505,14 @@ const styles = StyleSheet.create({
     paddingBottom: Tokens.spacing[20],
   },
   taskCard: {
-    backgroundColor: '#000000',
-    borderRadius: 0,
-    padding: Tokens.spacing[5],
-    marginBottom: -1, // Collapse borders
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderRadius: Tokens.radii.none,
+    padding: Tokens.spacing[4],
+    marginBottom: -1,
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
+    minHeight: 64, // Reduced height
+    justifyContent: 'center',
     ...Platform.select({
       web: {
         transition: 'all 0.2s ease',
@@ -493,56 +521,67 @@ const styles = StyleSheet.create({
     }),
   },
   taskCardHovered: {
-    borderColor: '#FFFFFF',
+    borderColor: Tokens.colors.brand[500],
     zIndex: 1,
-    transform: [{ translateY: -2 }],
   },
   taskCardPressed: {
-    borderColor: '#666666',
+    backgroundColor: Tokens.colors.neutral.darker,
   },
   taskCardCompleted: {
-    opacity: 0.3,
-    backgroundColor: '#000000',
-    borderColor: '#111111',
-    transform: [{ scale: 1 }],
+    opacity: 0.5,
+    backgroundColor: Tokens.colors.neutral.darker,
   },
   taskHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Tokens.spacing[2],
+    marginBottom: Tokens.spacing[1],
   },
   taskText: {
     fontFamily: Tokens.type.fontFamily.sans,
-    color: '#FFFFFF',
-    fontSize: Tokens.type.lg,
-    fontWeight: '600',
+    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type.base,
+    fontWeight: '700',
     flex: 1,
+    marginRight: Tokens.spacing[2],
   },
   completed: {
     textDecorationLine: 'line-through',
-    color: '#666666',
+    color: Tokens.colors.text.secondary,
   },
   doneBadge: {
-    backgroundColor: '#111111',
-    color: '#666666',
-    fontSize: Tokens.type.xs,
+    backgroundColor: Tokens.colors.neutral.dark,
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    paddingHorizontal: Tokens.spacing[2],
+    paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 0,
+    borderRadius: Tokens.radii.none,
     overflow: 'hidden',
-    marginLeft: Tokens.spacing[2],
     fontFamily: Tokens.type.fontFamily.mono,
   },
-  stepCount: {
-    alignSelf: 'flex-start',
+  activeStepContainer: {
+    marginTop: Tokens.spacing[2],
+    paddingLeft: Tokens.spacing[2],
+    borderLeftWidth: 1,
+    borderLeftColor: Tokens.colors.brand[500],
+  },
+  activeStepLabel: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.text.tertiary,
+    marginBottom: 1,
+    letterSpacing: 0.5,
+  },
+  activeStepText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
   },
   stepCountText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#666666',
+    color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: '700',
     letterSpacing: 1,
   },
   loadingContainer: {
@@ -552,16 +591,16 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
-    color: '#666666',
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   guideBanner: {
-    backgroundColor: '#111111',
+    backgroundColor: Tokens.colors.neutral.dark,
     borderWidth: 1,
-    borderColor: '#CC0000',
-    padding: Tokens.spacing[4],
+    borderColor: Tokens.colors.brand[500],
+    padding: Tokens.spacing[3],
     marginBottom: Tokens.spacing[6],
     flexDirection: 'row',
     alignItems: 'center',
@@ -575,31 +614,30 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#CC0000',
+    color: Tokens.colors.brand[500],
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
   guideText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.sm,
-    color: '#FFFFFF',
-    lineHeight: 18,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.primary,
   },
   guideButton: {
-    paddingVertical: Tokens.spacing[2],
-    paddingHorizontal: Tokens.spacing[3],
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: '#333333',
-    backgroundColor: '#000000',
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   guideButtonPressed: {
-    backgroundColor: '#222222',
+    backgroundColor: Tokens.colors.neutral.darker,
   },
   guideButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
     textTransform: 'uppercase',
   },
 });

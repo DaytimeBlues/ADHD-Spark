@@ -8,13 +8,62 @@ import {
   Platform,
 } from 'react-native';
 import { LinearCard } from '../components/ui/LinearCard';
+import { LinearButton } from '../components/ui/LinearButton';
+import ActivationService, { ActivationSource } from '../services/ActivationService';
+import { ROUTES } from '../navigation/routes';
 import { Tokens } from '../theme/tokens';
 
 const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 
-const CheckInScreen = () => {
+type CheckInNavigation = {
+  navigate: (route: string) => void;
+};
+
+type RecommendationAction = {
+  route: string;
+  source: ActivationSource;
+  cta: string;
+};
+
+export const getRecommendationAction = (
+  mood: number,
+  energy: number,
+): RecommendationAction => {
+  if (mood >= 4 && energy >= 4) {
+    return {
+      route: ROUTES.FOCUS,
+      source: 'checkin_prompt',
+      cta: 'START IGNITE',
+    };
+  }
+
+  if (mood <= 2 && energy <= 2) {
+    return {
+      route: ROUTES.ANCHOR,
+      source: 'checkin_prompt',
+      cta: 'OPEN ANCHOR',
+    };
+  }
+
+  if (energy <= 2) {
+    return {
+      route: ROUTES.FOG_CUTTER,
+      source: 'checkin_prompt',
+      cta: 'OPEN FOG CUTTER',
+    };
+  }
+
+  return {
+    route: ROUTES.TASKS,
+    source: 'checkin_prompt',
+    cta: 'OPEN BRAIN DUMP',
+  };
+};
+
+const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
   const [mood, setMood] = useState<number | null>(null);
   const [energy, setEnergy] = useState<number | null>(null);
+  const [isRecommendationPending, setIsRecommendationPending] = useState(false);
 
   const moods = [
     { emoji: '😢', label: 'Low', value: 1 },
@@ -58,6 +107,35 @@ const CheckInScreen = () => {
   };
 
   const recommendation = getRecommendation();
+
+  const handleRecommendationAction = async () => {
+    if (mood === null || energy === null || isRecommendationPending) {
+      return;
+    }
+
+    const action = getRecommendationAction(mood, energy);
+    setIsRecommendationPending(true);
+
+    try {
+      if (action.route === ROUTES.FOCUS) {
+        try {
+          await ActivationService.requestPendingStart({
+            source: action.source,
+            requestedAt: new Date().toISOString(),
+            context: {
+              reason: 'checkin_high_readiness',
+            },
+          });
+        } catch (error) {
+          console.warn('Failed to queue pending ignite start from check-in:', error);
+        }
+      }
+
+      navigation?.navigate(action.route);
+    } finally {
+      setIsRecommendationPending(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -143,6 +221,18 @@ const CheckInScreen = () => {
               <Text style={styles.recommendationText}>
                 {recommendation.desc}
               </Text>
+              <LinearButton
+                title={
+                  mood !== null && energy !== null
+                    ? getRecommendationAction(mood, energy).cta
+                    : 'CONTINUE'
+                }
+                onPress={() => {
+                  void handleRecommendationAction();
+                }}
+                size="md"
+                style={styles.recommendationButton}
+              />
             </LinearCard>
           )}
         </View>
@@ -265,6 +355,9 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
     lineHeight: Tokens.type.base * 1.5,
+  },
+  recommendationButton: {
+    marginTop: Tokens.spacing[4],
   },
 });
 

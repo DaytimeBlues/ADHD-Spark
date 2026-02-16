@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { Tokens } from '../theme/tokens';
+import { CADDI_OVERVIEW, CADDI_SOURCES } from '../config/caddi';
 
 type CBTCategory = {
   id: string;
@@ -113,81 +114,44 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
 
           <View style={styles.compactCard}>
             <View style={styles.compactHeaderRow}>
-              <Text style={styles.compactTitle}>WHAT IS CADDI?</Text>
+              <Text style={styles.compactTitle}>{CADDI_OVERVIEW.title}</Text>
               <View style={styles.compactBadge}>
-                <Text style={styles.compactBadgeText}>EVIDENCE-BASED</Text>
+                <Text style={styles.compactBadgeText}>{CADDI_OVERVIEW.badge}</Text>
               </View>
             </View>
 
             <Text style={styles.compactDescription}>
-              CBT for ADHD-Inattentive (CADDI) is a specialized protocol
-              targeting initiation paralysis and focus. It shifts from impulse
-              control to behavioral activation.
+              {CADDI_OVERVIEW.description}
             </Text>
 
             <View style={styles.evidenceRow}>
-              <Text style={styles.evidenceBullet}>• RCT PROVEN (2025)</Text>
-              <Text style={styles.evidenceBullet}>• INATTENTIVE FOCUSED</Text>
-              <Text style={styles.evidenceBullet}>• ACTIVATION BASED</Text>
+              {CADDI_OVERVIEW.bullets.map((bullet) => (
+                <Text key={bullet} style={styles.evidenceBullet}>
+                  • {bullet}
+                </Text>
+              ))}
             </View>
 
             <View style={styles.linksRow}>
-              <Pressable
-                onPress={() =>
-                  openSource('https://doi.org/10.3389/fpsyt.2025.1564506')
-                }
-                style={({
-                  pressed,
-                  hovered,
-                }: {
-                  pressed: boolean;
-                  hovered?: boolean;
-                }) => [
-                  styles.linkButton,
-                  hovered && styles.linkButtonHovered,
-                  pressed && styles.linkButtonPressed,
-                ]}
-              >
-                <Text style={styles.linkButtonText}>RCT STUDY</Text>
-              </Pressable>
-
-              <Pressable
-                onPress={() =>
-                  openSource('https://pubmed.ncbi.nlm.nih.gov/38905212/')
-                }
-                style={({
-                  pressed,
-                  hovered,
-                }: {
-                  pressed: boolean;
-                  hovered?: boolean;
-                }) => [
-                  styles.linkButton,
-                  hovered && styles.linkButtonHovered,
-                  pressed && styles.linkButtonPressed,
-                ]}
-              >
-                <Text style={styles.linkButtonText}>QUALITATIVE</Text>
-              </Pressable>
-
-              <Pressable
-                onPress={() =>
-                  openSource('https://clinicaltrials.gov/ct2/show/NCT04090983')
-                }
-                style={({
-                  pressed,
-                  hovered,
-                }: {
-                  pressed: boolean;
-                  hovered?: boolean;
-                }) => [
-                  styles.linkButton,
-                  hovered && styles.linkButtonHovered,
-                  pressed && styles.linkButtonPressed,
-                ]}
-              >
-                <Text style={styles.linkButtonText}>REGISTRY</Text>
-              </Pressable>
+              {CADDI_SOURCES.map((source) => (
+                <Pressable
+                  key={source.id}
+                  onPress={() => openSource(source.url)}
+                  style={({
+                    pressed,
+                    hovered,
+                  }: {
+                    pressed: boolean;
+                    hovered?: boolean;
+                  }) => [
+                    styles.linkButton,
+                    hovered && styles.linkButtonHovered,
+                    pressed && styles.linkButtonPressed,
+                  ]}
+                >
+                  <Text style={styles.linkButtonText}>{source.label}</Text>
+                </Pressable>
+              ))}
             </View>
           </View>
 

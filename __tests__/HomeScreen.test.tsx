@@ -18,14 +18,40 @@ jest.mock('../src/services/StorageService', () => ({
   __esModule: true,
   default: {
     get: jest.fn().mockResolvedValue(null),
+    getJSON: jest.fn().mockResolvedValue([]),
+    set: jest.fn().mockResolvedValue(true),
+    setJSON: jest.fn().mockResolvedValue(true),
+    remove: jest.fn().mockResolvedValue(true),
     STORAGE_KEYS: {
       streakCount: 'streakCount',
+      lastUseDate: 'lastUseDate',
+      activationSessions: 'activationSessions',
+      activationPendingStart: 'activationPendingStart',
     },
+  },
+}));
+
+jest.mock('../src/services/ActivationService', () => ({
+  __esModule: true,
+  default: {
+    getSummary: jest.fn().mockResolvedValue({
+      started: 10,
+      completed: 8,
+      abandoned: 0,
+      resumed: 0,
+      completionRate: 0.8,
+    }),
+    getDailyTrend: jest.fn().mockResolvedValue([
+      { day: '2023-01-01', started: 2, completed: 2 },
+      { day: '2023-01-02', started: 3, completed: 3 },
+      { day: '2023-01-03', started: 8, completed: 6 },
+    ]),
   },
 }));
 
 // Mock vector icons
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
+
 
 jest.mock('../src/services/OverlayService', () => ({
   __esModule: true,
@@ -75,34 +101,47 @@ describe('HomeScreen', () => {
     });
   });
 
-  const renderHomeScreen = () => {
+  const renderHomeScreen = async () => {
     const result = render(<HomeScreen navigation={mockNavigation} />);
-    act(() => {
+    await act(async () => {
       jest.runOnlyPendingTimers();
+      await Promise.resolve();
     });
     return result;
   };
 
-  it('renders correctly', () => {
-    renderHomeScreen();
-    expect(screen.getByText('SPARK')).toBeTruthy();
+  it('renders correctly', async () => {
+    await renderHomeScreen();
+    expect(screen.getByText('SPARK_PRO')).toBeTruthy();
   });
 
-  it('displays mode cards', () => {
-    renderHomeScreen();
+  it('displays mode cards', async () => {
+    await renderHomeScreen();
     expect(screen.getByText('IGNITE')).toBeTruthy();
     expect(screen.getByText('FOG CUTTER')).toBeTruthy();
     expect(screen.getByText('POMODORO')).toBeTruthy();
     expect(screen.getByText('CBT GUIDE')).toBeTruthy();
   });
 
-  it('shows streak container', () => {
-    renderHomeScreen();
-    expect(screen.getByText(/0\s+days?/i)).toBeTruthy();
+  it('shows streak container', async () => {
+    await renderHomeScreen();
+    expect(screen.getByTestId('home-streak')).toHaveTextContent('STREAK.000');
   });
 
-  it('navigates to FogCutter when its card is pressed', () => {
-    renderHomeScreen();
+  it('renders activation trend metrics correctly', async () => {
+    await renderHomeScreen();
+
+    expect(screen.getByText('WEEKLY_METRICS')).toBeTruthy();
+    expect(screen.getByText('TODAY')).toBeTruthy();
+    expect(screen.getAllByText('8').length).toBeGreaterThan(0);
+    expect(screen.getByText('DELTA')).toBeTruthy();
+    expect(screen.getByText('+5')).toBeTruthy();
+    expect(screen.getByText('STARTED')).toBeTruthy();
+    expect(screen.getByText('COMPLETED')).toBeTruthy();
+  });
+
+  it('navigates to FogCutter when its card is pressed', async () => {
+    await renderHomeScreen();
     fireEvent.press(screen.getByTestId('mode-fogcutter'));
     expect(mockNavigation.navigate).toHaveBeenCalledWith('FogCutter');
   });
@@ -113,17 +152,17 @@ describe('HomeScreen', () => {
       get: () => 'android',
     });
 
-    renderHomeScreen();
+    await renderHomeScreen();
 
     await act(async () => {
       emitOverlayEvent('overlay_permission_requested');
     });
 
-    expect(screen.getByText('OVERLAY EVENT LOG (DEV)')).toBeTruthy();
+    expect(screen.getByText('LOGS')).toBeTruthy();
     expect(screen.getByText(/Permission requested/i)).toBeTruthy();
 
     await act(async () => {
-      fireEvent.press(screen.getByText('COPY DIAGNOSTICS'));
+      fireEvent.press(screen.getByText('COPY_DIAG'));
     });
     expect(Share.share).toHaveBeenCalled();
   });

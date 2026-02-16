@@ -16,6 +16,7 @@ import { GoogleTasksSyncService } from './src/services/PlaudService';
 import OverlayService from './src/services/OverlayService';
 import WebMCPService from './src/services/WebMCPService';
 import { Tokens } from './src/theme/tokens';
+import { config } from './src/config';
 import {
   handleOverlayIntent,
   navigationRef,
@@ -29,6 +30,18 @@ const App = () => {
     const initializeApp = async () => {
       try {
         await StorageService.init();
+        
+        // Validate Google configuration before attempting sync
+        const hasGoogleConfig = Platform.OS === 'web' || 
+          (config.googleWebClientId || config.googleIosClientId);
+        
+        if (!hasGoogleConfig && Platform.OS !== 'web') {
+          console.warn(
+            '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
+            'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.'
+          );
+        }
+        
         await GoogleTasksSyncService.syncToBrainDump();
         WebMCPService.init();
       } catch (error) {

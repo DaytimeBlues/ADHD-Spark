@@ -156,7 +156,7 @@ public class OverlayService extends Service {
 
     try {
       windowManager.addView(bubbleView, bubbleParams);
-    } catch (SecurityException | RuntimeException exception) {
+    } catch (RuntimeException exception) {
       stopSelf();
     }
   }
@@ -213,7 +213,7 @@ public class OverlayService extends Service {
       slideAnimator.start();
 
       menuView.animate().alpha(1f).setDuration(MENU_ANIMATION_DURATION_MS).start();
-    } catch (SecurityException | RuntimeException exception) {
+    } catch (RuntimeException exception) {
       collapseMenu();
     }
   }
@@ -284,7 +284,7 @@ public class OverlayService extends Service {
       windowManager.addView(scrimView, scrimParams);
       scrimView.setAlpha(0f);
       scrimView.animate().alpha(1f).setDuration(MENU_ANIMATION_DURATION_MS).start();
-    } catch (SecurityException | RuntimeException ignored) {
+    } catch (RuntimeException ignored) {
       scrimView = null;
     }
   }

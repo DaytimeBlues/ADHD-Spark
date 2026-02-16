@@ -90,16 +90,16 @@ import IgniteScreen from '../src/screens/IgniteScreen';
 describe('Phase B loading states', () => {
   it('shows loading state for BrainDump initial hydration', () => {
     render(<BrainDumpScreen />);
-    expect(screen.getByText('LOADING THOUGHTS...')).toBeTruthy();
+    expect(screen.getByText('LOADING...')).toBeTruthy();
   });
 
   it('shows loading state for FogCutter initial hydration', () => {
     render(<FogCutterScreen />);
-    expect(screen.getByText('LOADING TASKS...')).toBeTruthy();
+    expect(screen.getByText('LOADING...')).toBeTruthy();
   });
 
   it('shows restoring state for Ignite session restore', () => {
     render(<IgniteScreen />);
-    expect(screen.getByText('RESTORING SESSION...')).toBeTruthy();
+    expect(screen.getByText('RESTORING...')).toBeTruthy();
   });
 });

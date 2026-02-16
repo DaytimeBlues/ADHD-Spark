@@ -24,6 +24,12 @@ import {
 } from 'react-native';
 import OverlayService from '../services/OverlayService';
 import StorageService from '../services/StorageService';
+import ActivationService, {
+  ActivationDailyTrendPoint,
+  ActivationSummary,
+} from '../services/ActivationService';
+import RetentionService from '../services/RetentionService';
+import { ReentryPromptLevel } from '../services/RetentionService';
 import useReducedMotion from '../hooks/useReducedMotion';
 import { Tokens } from '../theme/tokens';
 import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
@@ -57,7 +63,42 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
     useState(false);
   const [overlayEvents, setOverlayEvents] = useState<OverlayEvent[]>([]);
+  const [activationSummary, setActivationSummary] =
+    useState<ActivationSummary | null>(null);
+  const [activationTrend, setActivationTrend] = useState<
+    ActivationDailyTrendPoint[]
+  >([]);
+  const [reentryPromptLevel, setReentryPromptLevel] =
+    useState<ReentryPromptLevel>('none');
   const prefersReducedMotion = useReducedMotion();
+
+  const trendMetrics = useMemo(() => {
+    if (activationTrend.length === 0) {
+      return null;
+    }
+    const today = activationTrend[activationTrend.length - 1];
+    const yesterday =
+      activationTrend.length > 1
+        ? activationTrend[activationTrend.length - 2]
+        : null;
+    const maxStarted = Math.max(...activationTrend.map((d) => d.started));
+
+    const todayCount = today.started;
+    const yesterdayCount = yesterday ? yesterday.started : 0;
+    const delta = todayCount - yesterdayCount;
+    const deltaStr = delta > 0 ? `+${delta}` : `${delta}`;
+    const isPositive = delta > 0;
+    const isNeutral = delta === 0;
+
+    return {
+      todayCount,
+      deltaStr,
+      isPositive,
+      isNeutral,
+      maxStarted,
+    };
+  }, [activationTrend]);
+
 
   const addOverlayEvent = useCallback((label: string) => {
     if (!__DEV__) {
@@ -120,7 +161,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     overlayEvents,
   ]);
 
-  const cardWidth = '48%'; // Strict 2-column grid
+  const cardWidth = '49%'; // Tighter grid
 
   const modes = useMemo<Mode[]>(
     () => [
@@ -128,42 +169,42 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         id: 'ignite',
         name: 'Ignite',
         icon: 'fire',
-        desc: '5-MIN FOCUS TIMER',
+        desc: '5-MIN FOCUS',
         accent: Tokens.colors.brand[500],
       },
       {
         id: 'fogcutter',
         name: 'Fog Cutter',
         icon: 'weather-windy',
-        desc: 'BREAK TASKS DOWN',
-        accent: Tokens.colors.brand[500], // Unified accent
+        desc: 'DECOMPOSE',
+        accent: Tokens.colors.brand[500],
       },
       {
         id: 'pomodoro',
         name: 'Pomodoro',
         icon: 'timer-sand',
-        desc: 'CLASSIC TIMER',
+        desc: 'TIMER',
         accent: Tokens.colors.brand[500],
       },
       {
         id: 'anchor',
         name: 'Anchor',
         icon: 'anchor',
-        desc: 'BREATHING EXERCISES',
+        desc: 'BREATHE',
         accent: Tokens.colors.brand[500],
       },
       {
         id: 'checkin',
         name: 'Check In',
         icon: 'chart-bar',
-        desc: 'MOOD & ENERGY',
+        desc: 'STATUS',
         accent: Tokens.colors.brand[500],
       },
       {
         id: 'cbtguide',
         name: 'CBT Guide',
         icon: 'brain',
-        desc: 'EVIDENCE-BASED STRATEGIES',
+        desc: 'STRATEGIES',
         accent: Tokens.colors.brand[500],
       },
     ],
@@ -194,11 +235,28 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const loadStreak = useCallback(async () => {
     try {
+      const reentryPrompt = await RetentionService.getReentryPromptLevel();
+      const summary = await ActivationService.getSummary(7);
+      const trend = await ActivationService.getDailyTrend(7);
+      await RetentionService.markAppUse();
       const streakCount = await StorageService.get(
         StorageService.STORAGE_KEYS.streakCount,
       );
       const parsed = streakCount ? parseInt(streakCount, 10) : 0;
       setStreak(Number.isNaN(parsed) ? 0 : parsed);
+      setActivationSummary(summary);
+      setActivationTrend(trend);
+      setReentryPromptLevel(reentryPrompt);
+
+      if (reentryPrompt === 'gentle_restart') {
+        AccessibilityInfo.announceForAccessibility(
+          'Welcome back. Start with one small focus session.',
+        );
+      } else if (reentryPrompt === 'fresh_restart') {
+        AccessibilityInfo.announceForAccessibility(
+          'Fresh restart. Begin with a tiny step in Fog Cutter or Ignite.',
+        );
+      }
     } catch (error) {
       console.error('Error loading streak:', error);
     }
@@ -407,9 +465,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 testID="home-title"
                 accessibilityLabel="home-title"
               >
-                SPARK
+                SPARK_PRO
               </Text>
-              <Text style={styles.subtitle}>READY TO FOCUS?</Text>
+              <View style={styles.systemStatusRow}>
+                 <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
+                 <View style={styles.statusDot} />
+              </View>
             </View>
             <View
               style={styles.streakBadge}
@@ -417,16 +478,61 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
               accessibilityRole="text"
               accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? 'days' : 'day'}`}
             >
-              <Text style={styles.streakEmoji}>🔥</Text>
               <Text
                 style={styles.streakText}
                 testID="home-streak"
                 accessibilityLabel="home-streak"
               >
-                {streak} {streak !== 1 ? 'DAYS' : 'DAY'}
+                STREAK.{streak.toString().padStart(3, '0')}
               </Text>
             </View>
           </View>
+
+          {activationSummary && activationSummary.started > 0 && (
+            <View style={styles.activationCard}>
+              <View style={styles.activationHeader}>
+                  <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
+                  <Text style={styles.activationRate}>
+                    {Math.round(activationSummary.completionRate * 100)}%
+                  </Text>
+              </View>
+              <View style={styles.activationGrid}>
+                  <View style={styles.statBox}>
+                     <Text style={styles.statLabel}>STARTED</Text>
+                     <Text style={styles.statValue}>{activationSummary.started}</Text>
+                  </View>
+                  <View style={styles.statBox}>
+                     <Text style={styles.statLabel}>COMPLETED</Text>
+                     <Text style={styles.statValue}>{activationSummary.completed}</Text>
+                  </View>
+                  {trendMetrics && (
+                    <>
+                       <View style={styles.statBox}>
+                          <Text style={styles.statLabel}>TODAY</Text>
+                          <Text style={styles.statValue}>{trendMetrics.todayCount}</Text>
+                       </View>
+                       <View style={styles.statBox}>
+                          <Text style={styles.statLabel}>DELTA</Text>
+                          <Text style={[styles.statValue, trendMetrics.isPositive ? styles.textSuccess : trendMetrics.isNeutral ? styles.textNeutral : styles.textError]}>
+                             {trendMetrics.deltaStr}
+                          </Text>
+                       </View>
+                    </>
+                  )}
+              </View>
+
+              {(reentryPromptLevel === 'gentle_restart' ||
+                reentryPromptLevel === 'fresh_restart') && (
+                <View style={styles.activationHint}>
+                  <Text style={styles.activationHintText}>
+                    {reentryPromptLevel === 'gentle_restart'
+                      ? 'RESTART_PROTOCOL: START_SMALL'
+                      : 'FRESH_START: EXECUTE_ONE_TASK'}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
 
           {Platform.OS === 'android' && (
             <View
@@ -435,11 +541,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 isOverlayEnabled && styles.overlayCardActive,
               ]}
             >
-              <View>
-                <Text style={styles.overlayTitle}>FOCUS OVERLAY</Text>
-                <Text style={styles.overlayDesc}>
-                  FLOAT TASK COUNT OVER OTHER APPS
-                </Text>
+              <View style={styles.overlayTextGroup}>
+                <Text style={styles.overlayTitle}>FOCUS_OVERLAY</Text>
                 <Text
                   style={[
                     styles.overlayStatus,
@@ -448,67 +551,66 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   accessibilityLiveRegion="polite"
                 >
                   {isOverlayPermissionRequesting
-                    ? 'REQUESTING PERMISSION...'
+                    ? 'REQ_PERM...'
                     : isOverlayEnabled
-                      ? 'ACTIVE • TAP TO DISABLE'
-                      : 'PERMISSION REQUIRED (TAP TO ENABLE)'}
+                      ? 'ACTIVE'
+                      : 'INACTIVE'}
                 </Text>
               </View>
-              <View style={styles.overlaySwitchHitTarget}>
-                <Switch
-                  testID="home-overlay-toggle"
-                  accessibilityRole="switch"
-                  accessibilityLabel="home-overlay-toggle"
-                  accessibilityState={{
-                    checked: isOverlayEnabled,
-                    busy: isOverlayPermissionRequesting,
-                    disabled: isOverlayPermissionRequesting,
-                  }}
-                  trackColor={{
-                    false: Tokens.colors.neutral[600],
-                    true: Tokens.colors.brand[500],
-                  }}
-                  thumbColor={Tokens.colors.neutral[0]}
-                  ios_backgroundColor={Tokens.colors.neutral[700]}
-                  onValueChange={toggleOverlay}
-                  disabled={isOverlayPermissionRequesting}
-                  value={isOverlayEnabled}
-                />
-              </View>
+              <Switch
+                testID="home-overlay-toggle"
+                accessibilityRole="switch"
+                accessibilityLabel="home-overlay-toggle"
+                accessibilityState={{
+                  checked: isOverlayEnabled,
+                  busy: isOverlayPermissionRequesting,
+                  disabled: isOverlayPermissionRequesting,
+                }}
+                trackColor={{
+                  false: Tokens.colors.neutral[700],
+                  true: Tokens.colors.brand[500],
+                }}
+                thumbColor={Tokens.colors.neutral[0]}
+                ios_backgroundColor={Tokens.colors.neutral[700]}
+                onValueChange={toggleOverlay}
+                disabled={isOverlayPermissionRequesting}
+                value={isOverlayEnabled}
+                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+              />
             </View>
           )}
 
           {Platform.OS === 'android' && __DEV__ && (
             <View style={styles.debugPanel}>
-              <Text style={styles.debugTitle}>OVERLAY EVENT LOG (DEV)</Text>
+              <Text style={styles.debugTitle}>LOGS</Text>
               {overlayEvents.length === 0 ? (
-                <Text style={styles.debugText}>No events yet</Text>
+                <Text style={styles.debugText}>NULL</Text>
               ) : (
                 overlayEvents.map((event) => (
                   <Text key={event.id} style={styles.debugText}>
-                    <Text style={styles.debugTime}>
-                      [
-                      {new Date(event.timestamp).toLocaleTimeString([], {
+                    {new Date(event.timestamp).toLocaleTimeString([], {
                         hour12: false,
                         hour: '2-digit',
                         minute: '2-digit',
                         second: '2-digit',
-                      })}
-                      ]
-                    </Text>{' '}
-                    {event.label}
+                      })} :: {event.label}
                   </Text>
                 ))
               )}
-              <TouchableOpacity
-                onPress={handleCopyDiagnostics}
-                style={styles.debugButton}
-                accessibilityRole="button"
-                accessibilityLabel="Copy Diagnostics"
-                accessibilityHint="Exports overlay event logs and diagnostic data"
-              >
-                <Text style={styles.debugButtonText}>COPY DIAGNOSTICS</Text>
-              </TouchableOpacity>
+              <View style={styles.debugButtonRow}>
+                <TouchableOpacity
+                  onPress={handleCopyDiagnostics}
+                  style={styles.debugButton}
+                >
+                  <Text style={styles.debugButtonText}>COPY_DIAG</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigateByRouteName(ROUTES.DIAGNOSTICS)}
+                  style={styles.debugButton}
+                >
+                  <Text style={styles.debugButtonText}>DIAGNOSTICS</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
 
@@ -543,7 +645,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: Tokens.spacing[6],
+    padding: Tokens.spacing[4], // Tighter padding
     alignItems: 'center',
   },
   maxWidthWrapper: {
@@ -551,54 +653,123 @@ const styles = StyleSheet.create({
     maxWidth: 960,
   },
   header: {
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: Tokens.spacing[4],
+    alignItems: 'flex-start',
+    paddingTop: Tokens.spacing[2],
+    borderBottomWidth: 1,
+    borderBottomColor: Tokens.colors.neutral.dark,
+    paddingBottom: Tokens.spacing[4],
   },
   title: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.h1,
+    fontSize: Tokens.type.xl,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: 2, // Wide industrial
+    letterSpacing: -1,
   },
-  subtitle: {
+  systemStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  systemStatusText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.base,
-    color: Tokens.colors.text.secondary,
-    marginTop: Tokens.spacing[1],
-    letterSpacing: 1,
-    textTransform: 'uppercase',
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.text.tertiary,
+    marginRight: 6,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Tokens.colors.success.main,
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[3],
-    paddingVertical: Tokens.spacing[2],
+    paddingVertical: 4,
     borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderStyle: 'solid',
     borderColor: Tokens.colors.neutral.border,
-  },
-  streakEmoji: {
-    fontSize: Tokens.type.lg,
-    marginRight: Tokens.spacing[2],
   },
   streakText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+  },
+  activationCard: {
+    marginBottom: Tokens.spacing[6],
+    padding: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    borderRadius: Tokens.radii.none,
+  },
+  activationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Tokens.spacing[4],
+    borderBottomWidth: 1,
+    borderBottomColor: Tokens.colors.neutral.dark,
+    paddingBottom: Tokens.spacing[2],
+  },
+  activationTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    letterSpacing: 1,
+  },
+  activationRate: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.lg,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
+  },
+  activationGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statBox: {
+    flex: 1,
+  },
+  statLabel: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.text.tertiary,
+    marginBottom: 2,
+  },
+  statValue: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.base,
+    color: Tokens.colors.text.primary,
+    fontWeight: '700',
+  },
+  textSuccess: { color: Tokens.colors.success.main },
+  textError: { color: Tokens.colors.error.main },
+  textNeutral: { color: Tokens.colors.text.secondary },
+  activationHint: {
+    marginTop: Tokens.spacing[3],
+    paddingTop: Tokens.spacing[2],
+    borderTopWidth: 1,
+    borderTopColor: Tokens.colors.neutral.dark,
+  },
+  activationHintText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.brand[500],
+    letterSpacing: 0.5,
+    fontWeight: '700',
   },
   overlayCard: {
-    minHeight: Tokens.layout.minTapTargetComfortable,
-    marginBottom: Tokens.spacing[8],
-    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[6],
+    padding: Tokens.spacing[3],
     backgroundColor: Tokens.colors.neutral.darkest,
     borderRadius: Tokens.radii.none,
     borderWidth: 1,
@@ -609,47 +780,34 @@ const styles = StyleSheet.create({
   },
   overlayCardActive: {
     borderColor: Tokens.colors.brand[500],
-    backgroundColor: Tokens.colors.neutral.darkest,
+  },
+  overlayTextGroup: {
+      flex: 1,
   },
   overlayTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.base,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
-  overlayDesc: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
-    letterSpacing: 0.5,
-  },
   overlayStatus: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.xs,
-    fontWeight: '700',
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xxs,
     color: Tokens.colors.text.secondary,
-    letterSpacing: 0.5,
-    marginTop: Tokens.spacing[2],
+    marginTop: 2,
   },
   overlayStatusActive: {
     color: Tokens.colors.success.main,
-  },
-  overlaySwitchHitTarget: {
-    minWidth: Tokens.layout.minTapTargetComfortable,
-    minHeight: Tokens.layout.minTapTargetComfortable,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   modesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    rowGap: Tokens.spacing[4],
+    rowGap: Tokens.spacing[3], // Tighter gap
   },
   debugPanel: {
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[3],
     backgroundColor: Tokens.colors.neutral.darker,
     borderWidth: 1,
@@ -658,39 +816,34 @@ const styles = StyleSheet.create({
   },
   debugTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
+    fontSize: Tokens.type.xxs,
     color: Tokens.colors.text.tertiary,
     marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
-    letterSpacing: 1,
   },
   debugText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
+    fontSize: Tokens.type.xxs,
     color: Tokens.colors.text.secondary,
     marginBottom: 2,
   },
-  debugTime: {
-    color: Tokens.colors.text.tertiary,
+  debugButtonRow: {
+    flexDirection: 'row',
+    gap: Tokens.spacing[2],
+    marginTop: Tokens.spacing[2],
   },
   debugButton: {
-    marginTop: Tokens.spacing[4],
-    paddingVertical: Tokens.spacing[2],
-    paddingHorizontal: Tokens.spacing[3],
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     backgroundColor: Tokens.colors.neutral.dark,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
-    borderRadius: Tokens.radii.none,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   debugButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
     color: Tokens.colors.text.primary,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
   },
 });
 

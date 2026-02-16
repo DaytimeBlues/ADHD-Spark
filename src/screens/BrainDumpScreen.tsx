@@ -24,10 +24,11 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import RecordingService from '../services/RecordingService';
-import PlaudService from '../services/PlaudService';
+import PlaudService, { GoogleTasksSyncService } from '../services/PlaudService';
 import OverlayService from '../services/OverlayService';
 import AISortService, { SortedItem } from '../services/AISortService';
 import { generateId } from '../utils/helpers';
+import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 
@@ -41,6 +42,7 @@ const HIT_SLOP = {
 
 const PERSIST_DEBOUNCE_MS = 300;
 const OVERLAY_COUNT_DEBOUNCE_MS = 250;
+const MAX_SORT_INPUT_ITEMS = 50;
 
 const CATEGORY_ORDER: Array<SortedItem['category']> = [
   'task',
@@ -59,6 +61,13 @@ interface DumpItem {
   audioPath?: string; // Optional local file path
 }
 
+interface StoredFogCutterTask {
+  id: string;
+  text: string;
+  completed: boolean;
+  microSteps: Array<{ id: string; text: string; status: string }>;
+}
+
 type RecordingState = 'idle' | 'recording' | 'processing';
 
 type BrainDumpRouteParams = {
@@ -66,6 +75,44 @@ type BrainDumpRouteParams = {
 };
 
 type BrainDumpRoute = RouteProp<Record<'Tasks', BrainDumpRouteParams>, 'Tasks'>;
+
+const transcriptionToSortItems = (transcription: string): string[] => {
+  return transcription
+    .split(/\r?\n|[.;]+/)
+    .map((line) => line.replace(/^[-*\d.)\s]+/, '').trim())
+    .filter(Boolean)
+    .slice(0, MAX_SORT_INPUT_ITEMS);
+};
+
+const toFogCutterTask = (item: SortedItem): StoredFogCutterTask | null => {
+  if (
+    item.category !== 'task' &&
+    item.category !== 'reminder' &&
+    item.category !== 'event'
+  ) {
+    return null;
+  }
+
+  const title = item.text.trim();
+  if (!title) {
+    return null;
+  }
+
+  const stepHints: string[] = ['Open this task and start with a 2-minute first step'];
+  if (item.dueDate) {
+    stepHints.push(`Check due date: ${item.dueDate}`);
+  }
+  if (item.start) {
+    stepHints.push(`Schedule window starts: ${item.start}`);
+  }
+
+  return {
+    id: generateId(),
+    text: title,
+    completed: false,
+    microSteps: normalizeMicroSteps(stepHints),
+  };
+};
 
 const BrainDumpScreen = () => {
   const route = useRoute<BrainDumpRoute>();
@@ -199,6 +246,81 @@ const BrainDumpScreen = () => {
     }
   };
 
+  const saveSortedItemsToFogCutter = useCallback(
+    async (nextSortedItems: SortedItem[]): Promise<number> => {
+      const existingTasks =
+        (await StorageService.getJSON<StoredFogCutterTask[]>(
+          StorageService.STORAGE_KEYS.tasks,
+        )) ?? [];
+
+      const existingTextSet = new Set(
+        existingTasks.map((existingTask) => existingTask.text.trim().toLowerCase()),
+      );
+
+      const newTasks: StoredFogCutterTask[] = [];
+      nextSortedItems.forEach((item) => {
+        const task = toFogCutterTask(item);
+        if (!task) {
+          return;
+        }
+
+        const key = task.text.trim().toLowerCase();
+        if (existingTextSet.has(key)) {
+          return;
+        }
+
+        existingTextSet.add(key);
+        newTasks.push(task);
+      });
+
+      if (newTasks.length === 0) {
+        return 0;
+      }
+
+      await StorageService.setJSON(StorageService.STORAGE_KEYS.tasks, [
+        ...existingTasks,
+        ...newTasks,
+      ]);
+      return newTasks.length;
+    },
+    [],
+  );
+
+  const runSortAndSyncPipeline = useCallback(
+    async (sourceItems: string[]) => {
+      if (sourceItems.length === 0) {
+        return;
+      }
+
+      const sorted = await AISortService.sortItems(sourceItems);
+      setSortedItems(sorted);
+
+      const [createdTaskCount, exportResult] = await Promise.all([
+        saveSortedItemsToFogCutter(sorted),
+        GoogleTasksSyncService.syncSortedItemsToGoogle(sorted),
+      ]);
+
+      if (exportResult.authRequired) {
+        setSortingError(
+          exportResult.errorMessage ||
+            'Google sign-in required to sync Tasks and Calendar exports.',
+        );
+      } else if (exportResult.errorMessage) {
+        setSortingError(exportResult.errorMessage);
+      }
+
+      if (
+        createdTaskCount > 0 ||
+        exportResult.createdTasks > 0 ||
+        exportResult.createdEvents > 0
+      ) {
+        setSortingError(null);
+        AccessibilityInfo.announceForAccessibility('Tasks synced and suggestions saved.');
+      }
+    },
+    [saveSortedItemsToFogCutter],
+  );
+
   // Handle recording toggle
   const handleRecordPress = useCallback(async () => {
     if (recordingState === 'idle') {
@@ -225,7 +347,7 @@ const BrainDumpScreen = () => {
         setRecordingError('Recording failed.');
         setRecordingState('idle');
         return;
-      }
+        }
 
       // Send to Plaud for transcription
       const transcription = await PlaudService.transcribe(result.uri);
@@ -251,13 +373,35 @@ const BrainDumpScreen = () => {
           }
           return next;
         });
+
+        const sourceItems = transcriptionToSortItems(
+          transcription.transcription,
+        );
+        if (sourceItems.length > 0) {
+          try {
+            await runSortAndSyncPipeline(sourceItems);
+            setSortingError(null);
+          } catch (error) {
+            const message =
+              error instanceof Error
+                ? error.message
+                : 'Failed to sync transcription suggestions.';
+            setSortingError(message);
+          }
+        }
       } else {
         setRecordingError(transcription.error || 'Transcription failed.');
       }
 
       setRecordingState('idle');
     }
-  }, [guideDismissed, recordingError, recordingState, showGuide]);
+  }, [
+    guideDismissed,
+    recordingError,
+    recordingState,
+    runSortAndSyncPipeline,
+    showGuide,
+  ]);
 
   useEffect(() => {
     if (!route.params?.autoRecord || hasAutoRecorded.current) {
@@ -285,11 +429,11 @@ const BrainDumpScreen = () => {
     };
 
     Alert.alert(
-      'Clear all items?',
-      'This will remove all brain dump entries.',
+      'CLEAR_DATA?',
+      'IRREVERSIBLE_ACTION.',
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Clear', style: 'destructive', onPress: clearItems },
+        { text: 'ABORT', style: 'cancel' },
+        { text: 'CONFIRM', style: 'destructive', onPress: clearItems },
       ],
       { cancelable: true },
     );
@@ -300,10 +444,7 @@ const BrainDumpScreen = () => {
     setIsSorting(true);
 
     try {
-      const sorted = await AISortService.sortItems(
-        items.map((item) => item.text),
-      );
-      setSortedItems(sorted);
+      await runSortAndSyncPipeline(items.map((item) => item.text));
       AccessibilityInfo.announceForAccessibility('AI suggestions updated.');
     } catch (error) {
       setSortingError(
@@ -372,10 +513,8 @@ const BrainDumpScreen = () => {
       <View style={styles.centerContainer}>
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
-            <Text style={styles.title}>BRAIN DUMP</Text>
-            <Text style={styles.subtitle}>
-              UNLOAD YOUR THOUGHTS. WE'LL KEEP THEM SAFE.
-            </Text>
+            <Text style={styles.title}>BRAIN_DUMP</Text>
+            <View style={styles.headerLine} />
           </View>
 
           <View style={styles.inputSection}>
@@ -387,7 +526,7 @@ const BrainDumpScreen = () => {
             >
               <TextInput
                 style={styles.input}
-                placeholder="WHAT'S ON YOUR MIND?"
+                placeholder="> INPUT_DATA..."
                 placeholderTextColor="#666666"
                 accessibilityLabel="Add a brain dump item"
                 accessibilityHint="Type a thought and press Add"
@@ -402,7 +541,7 @@ const BrainDumpScreen = () => {
               />
             </View>
             <LinearButton
-              title="ADD"
+              title="+"
               onPress={addItem}
               size="lg"
               style={styles.addButton}
@@ -412,9 +551,9 @@ const BrainDumpScreen = () => {
           {showGuide && (
             <View style={styles.guideBanner}>
               <View style={styles.guideContent}>
-                <Text style={styles.guideTitle}>GREAT START.</Text>
+                <Text style={styles.guideTitle}>DATA_CAPTURED.</Text>
                 <Text style={styles.guideText}>
-                  FEELING OVERWHELMED? BREAK IT DOWN IN FOG CUTTER.
+                  NEXT: PROCESS_IN_FOG_CUTTER.
                 </Text>
               </View>
               <Pressable
@@ -426,7 +565,7 @@ const BrainDumpScreen = () => {
                 accessibilityRole="button"
                 accessibilityLabel="Dismiss guidance"
               >
-                <Text style={styles.guideButtonText}>GOT IT</Text>
+                <Text style={styles.guideButtonText}>ACK</Text>
               </Pressable>
             </View>
           )}
@@ -466,14 +605,11 @@ const BrainDumpScreen = () => {
                 </Text>
               )}
               <Text style={styles.recordText}>
-                {recordingState === 'idle' && 'RECORD'}
-                {recordingState === 'recording' && 'STOP'}
+                {recordingState === 'idle' && 'VOICE_INPUT'}
+                {recordingState === 'recording' && 'STOP_REC'}
                 {recordingState === 'processing' && 'PROCESSING...'}
               </Text>
             </Pressable>
-            {recordingState === 'idle' && (
-              <Text style={styles.recordHint}>AUTO-TRANSCRIBED SECURELY</Text>
-            )}
             {recordingError && (
               <Text style={styles.errorText}>{recordingError}</Text>
             )}
@@ -485,7 +621,7 @@ const BrainDumpScreen = () => {
                 size="small"
                 color={Tokens.colors.brand[500]}
               />
-              <Text style={styles.loadingText}>LOADING THOUGHTS...</Text>
+              <Text style={styles.loadingText}>LOADING...</Text>
             </View>
           ) : items.length > 0 ? (
             <View style={styles.actionsBar}>
@@ -511,7 +647,7 @@ const BrainDumpScreen = () => {
                   ]}
                 >
                   <Text style={styles.aiSortText}>
-                    {isSorting ? 'SORTING...' : 'AI SORT'}
+                    {isSorting ? 'SORTING...' : 'AI_SORT'}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -531,7 +667,7 @@ const BrainDumpScreen = () => {
                     pressed && styles.clearPressed,
                   ]}
                 >
-                  <Text style={styles.clearText}>CLEAR ALL</Text>
+                  <Text style={styles.clearText}>CLEAR</Text>
                 </Pressable>
               </View>
             </View>
@@ -541,7 +677,7 @@ const BrainDumpScreen = () => {
 
           {!isLoading && groupedSortedItems.length > 0 && (
             <View style={styles.sortedSection}>
-              <Text style={styles.sortedTitle}>AI SUGGESTIONS</Text>
+              <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
               {groupedSortedItems.map(({ category, items: categoryItems }) => (
                 <View key={category} style={styles.sortedGroup}>
                   <Text style={styles.sortedCategory}>
@@ -586,7 +722,7 @@ const BrainDumpScreen = () => {
                 <View style={styles.emptyState}>
                   <Text style={styles.emptyIcon}>☁️</Text>
                   <Text style={styles.emptyText}>
-                    YOUR MIND IS CLEAR... FOR NOW.
+                    NULL_DATA.
                   </Text>
                 </View>
               }
@@ -601,7 +737,7 @@ const BrainDumpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   centerContainer: {
     flex: 1,
@@ -611,58 +747,59 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     maxWidth: Tokens.layout.maxWidth.prose,
-    padding: Tokens.spacing[6],
+    padding: Tokens.spacing[4], // Reduced
   },
   header: {
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
     borderBottomWidth: 1,
-    borderColor: '#333333',
-    paddingBottom: Tokens.spacing[4],
+    borderColor: Tokens.colors.neutral.border, // Darker
+    paddingBottom: Tokens.spacing[2],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type['5xl'],
-    fontWeight: '900',
-    color: '#FFFFFF',
-    marginBottom: Tokens.spacing[2],
-    letterSpacing: -2,
-    textTransform: 'uppercase',
-  },
-  subtitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: '#666666',
+    fontSize: Tokens.type.lg,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
     letterSpacing: 1,
     textTransform: 'uppercase',
+  },
+  headerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: Tokens.colors.neutral.dark,
+      marginLeft: Tokens.spacing[4],
   },
   // Input
   inputSection: {
     flexDirection: 'row',
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
     gap: Tokens.spacing[3],
     alignItems: 'center',
   },
   inputWrapper: {
     flex: 1,
-    backgroundColor: '#050505',
-    borderRadius: 0,
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderColor: '#333333',
-    minHeight: INPUT_HEIGHT,
+    borderColor: Tokens.colors.neutral.border,
+    minHeight: 48, // Reduced
     justifyContent: 'center',
     ...Platform.select({
       web: { transition: 'border-color 0.2s ease' },
     }),
   },
   inputWrapperFocused: {
-    borderColor: '#FFFFFF',
+    borderColor: Tokens.colors.text.primary,
   },
   input: {
-    paddingHorizontal: Tokens.spacing[4],
-    color: '#FFFFFF',
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    minHeight: INPUT_HEIGHT,
+    paddingHorizontal: Tokens.spacing[3],
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    minHeight: 48,
     textAlignVertical: 'center',
     paddingVertical: 0,
     ...Platform.select({
@@ -670,11 +807,11 @@ const styles = StyleSheet.create({
     }),
   },
   addButton: {
-    minHeight: INPUT_HEIGHT,
-    width: 80,
+    minHeight: 48,
+    width: 60, // Reduced
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 0,
+    borderRadius: Tokens.radii.none,
   },
   // Actions
   actionsBar: {
@@ -690,9 +827,11 @@ const styles = StyleSheet.create({
     gap: Tokens.spacing[4],
   },
   actionButton: {
-    paddingVertical: Tokens.spacing[2],
-    paddingHorizontal: Tokens.spacing[3],
-    borderRadius: 0,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: Tokens.radii.none,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
     ...Platform.select({
       web: { transition: 'all 0.2s ease' },
     }),
@@ -702,122 +841,121 @@ const styles = StyleSheet.create({
     pointerEvents: 'none',
   },
   clearHovered: {
-    backgroundColor: '#222222',
+    backgroundColor: Tokens.colors.neutral.dark,
   },
   clearPressed: {
     opacity: 0.7,
   },
   countText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#666666',
+    color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   clearText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#CC0000',
+    color: Tokens.colors.brand[500],
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   aiSortText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
-
   // Sorted Section
   sortedSection: {
-    marginTop: Tokens.spacing[6],
+    marginTop: Tokens.spacing[4],
     marginBottom: Tokens.spacing[6],
-    padding: Tokens.spacing[5],
-    backgroundColor: '#050505',
-    borderRadius: 0,
+    padding: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
   },
   sortedTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[4],
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   sortedGroup: {
-    marginBottom: Tokens.spacing[5],
+    marginBottom: Tokens.spacing[4],
   },
   sortedCategory: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#666666',
+    color: Tokens.colors.text.secondary,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: Tokens.spacing[3],
+    marginBottom: Tokens.spacing[2],
     opacity: 0.9,
   },
   sortedItemRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingVertical: Tokens.spacing[2],
-    marginBottom: Tokens.spacing[1],
+    paddingVertical: 4,
+    marginBottom: 0,
   },
   sortedItemText: {
     flex: 1,
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.sm,
-    color: '#CCCCCC',
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
     lineHeight: Tokens.type.sm * 1.5,
     marginRight: Tokens.spacing[3],
   },
   priorityBadge: {
-    paddingHorizontal: Tokens.spacing[2],
-    paddingVertical: 2,
-    borderRadius: 0,
-    minWidth: 50,
+    paddingHorizontal: 6,
+    paddingVertical: 0,
+    borderRadius: Tokens.radii.none,
+    minWidth: 40,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
   },
   priorityText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
     textTransform: 'uppercase',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
   },
   priorityHigh: {
-    backgroundColor: '#CC0000',
-    borderColor: '#CC0000',
+    backgroundColor: Tokens.colors.brand[500],
+    borderColor: Tokens.colors.brand[500],
   },
   priorityMedium: {
-    backgroundColor: '#333333',
+    backgroundColor: Tokens.colors.neutral.border,
   },
   priorityLow: {
-    backgroundColor: '#111111',
+    backgroundColor: Tokens.colors.neutral.dark,
   },
-
   listContent: {
     paddingBottom: 120,
   },
   item: {
-    backgroundColor: '#000000',
-    borderRadius: 0,
-    paddingHorizontal: Tokens.spacing[5],
-    paddingVertical: Tokens.spacing[4],
-    marginBottom: -1, // Collapse borders
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderRadius: Tokens.radii.none,
+    paddingHorizontal: Tokens.spacing[4],
+    paddingVertical: Tokens.spacing[3],
+    marginBottom: -1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: Tokens.colors.neutral.border,
+    minHeight: 48, // Reduced
     ...Platform.select({
       web: {
         transition: 'all 0.2s ease',
@@ -826,17 +964,17 @@ const styles = StyleSheet.create({
   },
   itemText: {
     flex: 1,
-    color: '#FFFFFF',
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.base,
-    lineHeight: Tokens.type.base * 1.5,
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.sm,
+    lineHeight: Tokens.type.base * 1.2,
     marginRight: Tokens.spacing[4],
   },
   deleteButton: {
-    padding: Tokens.spacing[2],
-    borderRadius: 0,
-    width: 36,
-    height: 36,
+    padding: 0,
+    borderRadius: Tokens.radii.none,
+    width: 32,
+    height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
@@ -844,16 +982,16 @@ const styles = StyleSheet.create({
     }),
   },
   deleteButtonHovered: {
-    backgroundColor: '#222222',
+    backgroundColor: Tokens.colors.neutral.dark,
   },
   deleteButtonPressed: {
-    backgroundColor: '#333333',
+    backgroundColor: Tokens.colors.neutral.border,
   },
   deleteText: {
-    color: '#666666',
-    fontSize: Tokens.type.h3,
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.lg,
     fontWeight: '300',
-    marginTop: -4,
+    marginTop: -2,
   },
   // Empty
   emptyState: {
@@ -867,7 +1005,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: '#666666',
+    color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.sm,
     letterSpacing: 2,
     textTransform: 'uppercase',
@@ -875,18 +1013,19 @@ const styles = StyleSheet.create({
   // Recording
   recordSection: {
     alignItems: 'center',
-    marginBottom: Tokens.spacing[8],
+    marginBottom: Tokens.spacing[6],
   },
   recordButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#000000',
-    paddingHorizontal: Tokens.spacing[6],
-    paddingVertical: Tokens.spacing[3],
-    borderRadius: 0,
+    backgroundColor: Tokens.colors.neutral.darkest,
+    paddingHorizontal: Tokens.spacing[4],
+    paddingVertical: Tokens.spacing[2],
+    borderRadius: Tokens.radii.none,
     borderWidth: 1,
-    borderColor: '#333333',
-    minWidth: 160,
+    borderColor: Tokens.colors.neutral.border,
+    minWidth: 140,
+    minHeight: 48,
     justifyContent: 'center',
     ...Platform.select({
       web: {
@@ -896,43 +1035,35 @@ const styles = StyleSheet.create({
     }),
   },
   recordButtonHovered: {
-    borderColor: '#FFFFFF',
+    borderColor: Tokens.colors.text.primary,
   },
   recordButtonActive: {
-    backgroundColor: '#FF0000', // THE RED ACCENT
-    borderColor: '#FF0000',
+    backgroundColor: Tokens.colors.brand[500],
+    borderColor: Tokens.colors.brand[500],
   },
   recordButtonProcessing: {
     opacity: 0.5,
-    backgroundColor: '#222222',
+    backgroundColor: Tokens.colors.neutral.dark,
   },
   recordButtonPressed: {
     opacity: 0.8,
   },
   recordIcon: {
-    fontSize: Tokens.type.h3,
+    fontSize: Tokens.type.base,
     marginRight: Tokens.spacing[2],
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
   },
   recordText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
+    fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
     letterSpacing: 1,
-  },
-  recordHint: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    color: '#666666',
-    marginTop: Tokens.spacing[2],
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
   },
   errorText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: '#CC0000',
+    color: Tokens.colors.brand[500],
     marginTop: Tokens.spacing[2],
     textAlign: 'center',
   },
@@ -942,10 +1073,10 @@ const styles = StyleSheet.create({
     gap: Tokens.spacing[4],
   },
   guideBanner: {
-    backgroundColor: '#111111',
+    backgroundColor: Tokens.colors.neutral.dark,
     borderWidth: 1,
-    borderColor: '#CC0000',
-    padding: Tokens.spacing[4],
+    borderColor: Tokens.colors.brand[500],
+    padding: Tokens.spacing[3],
     marginBottom: Tokens.spacing[6],
     flexDirection: 'row',
     alignItems: 'center',
@@ -959,37 +1090,36 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: '#CC0000',
+    color: Tokens.colors.brand[500],
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
   guideText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: Tokens.type.sm,
-    color: '#FFFFFF',
-    lineHeight: 18,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.primary,
   },
   guideButton: {
-    paddingVertical: Tokens.spacing[2],
-    paddingHorizontal: Tokens.spacing[3],
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: '#333333',
-    backgroundColor: '#000000',
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
   guideButtonPressed: {
-    backgroundColor: '#222222',
+    backgroundColor: Tokens.colors.neutral.darker,
   },
   guideButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
+    fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: Tokens.colors.text.primary,
     textTransform: 'uppercase',
   },
   loadingText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
-    color: '#666666',
+    color: Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },

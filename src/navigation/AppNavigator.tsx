@@ -19,6 +19,7 @@ const CalendarScreen = lazy(() => import('../screens/CalendarScreen'));
 const AnchorScreen = lazy(() => import('../screens/AnchorScreen'));
 const CheckInScreen = lazy(() => import('../screens/CheckInScreen'));
 const CBTGuideScreen = lazy(() => import('../screens/CBTGuideScreen'));
+const DiagnosticsScreen = lazy(() => import('../screens/DiagnosticsScreen'));
 
 // Lazy loading wrapper
 const withSuspense = (Component: React.ComponentType<any>) => (props: any) => (
@@ -47,6 +48,7 @@ const LazyCalendar = withSuspense(CalendarScreen);
 const LazyAnchor = withSuspense(AnchorScreen);
 const LazyCheckIn = withSuspense(CheckInScreen);
 const LazyCBTGuide = withSuspense(CBTGuideScreen);
+const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +58,7 @@ const HomeStack = () => (
     <Stack.Screen name={ROUTES.HOME_MAIN} component={HomeScreen} />
     <Stack.Screen name={ROUTES.CHECK_IN} component={LazyCheckIn} />
     <Stack.Screen name={ROUTES.CBT_GUIDE} component={LazyCBTGuide} />
+    <Stack.Screen name={ROUTES.DIAGNOSTICS} component={LazyDiagnostics} />
   </Stack.Navigator>
 );
 

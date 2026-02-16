@@ -12,6 +12,7 @@ jest.mock('../src/services/StorageService', () => ({
     setJSON: (...args: unknown[]) => mockSetJSON(...args),
     STORAGE_KEYS: {
       tasks: 'tasks',
+      firstSuccessGuideState: 'firstSuccessGuideState',
     },
   },
 }));
@@ -40,6 +41,6 @@ describe('FogCutterScreen', () => {
     render(<FogCutterScreen />);
 
     expect(await screen.findByText('Draft outline')).toBeTruthy();
-    expect(await screen.findByText('2 MICRO-STEPS')).toBeTruthy();
+    expect(await screen.findByText('0/2 DONE')).toBeTruthy();
   }, 15000);
 });

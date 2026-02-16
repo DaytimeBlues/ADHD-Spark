@@ -13,9 +13,14 @@ const STORAGE_KEYS = {
   pomodoroState: 'pomodoroState',
   firstSuccessGuideState: 'firstSuccessGuideState',
   uxMetricsEvents: 'uxMetricsEvents',
+  activationSessions: 'activationSessions',
+  activationPendingStart: 'activationPendingStart',
+  retentionGraceWindowStart: 'retentionGraceWindowStart',
+  retentionGraceDaysUsed: 'retentionGraceDaysUsed',
   googleTasksSyncState: 'googleTasksSyncState',
   googleTasksProcessedIds: 'googleTasksProcessedIds',
   googleTasksLastSyncAt: 'googleTasksLastSyncAt',
+  googleTasksExportedFingerprints: 'googleTasksExportedFingerprints',
 };
 
 /**

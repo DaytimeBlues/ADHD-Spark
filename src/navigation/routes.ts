@@ -18,6 +18,7 @@ export const ROUTES = {
   HOME_MAIN: 'HomeMain' as const,
   CHECK_IN: 'CheckIn' as const,
   CBT_GUIDE: 'CBTGuide' as const,
+  DIAGNOSTICS: 'Diagnostics' as const,
 
   // Modal Screens (Root Stack)
   FOG_CUTTER: 'FogCutter' as const,
