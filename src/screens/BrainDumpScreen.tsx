@@ -32,7 +32,6 @@ import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 
-const INPUT_HEIGHT = 56;
 const HIT_SLOP = {
   top: Tokens.spacing[4],
   bottom: Tokens.spacing[4],
@@ -98,7 +97,9 @@ const toFogCutterTask = (item: SortedItem): StoredFogCutterTask | null => {
     return null;
   }
 
-  const stepHints: string[] = ['Open this task and start with a 2-minute first step'];
+  const stepHints: string[] = [
+    'Open this task and start with a 2-minute first step',
+  ];
   if (item.dueDate) {
     stepHints.push(`Check due date: ${item.dueDate}`);
   }
@@ -134,6 +135,7 @@ const BrainDumpScreen = () => {
     null,
   );
   const lastOverlayCountRef = useRef<number>(0);
+  const inputRef = useRef<TextInput>(null);
 
   const loadItems = async () => {
     try {
@@ -254,7 +256,9 @@ const BrainDumpScreen = () => {
         )) ?? [];
 
       const existingTextSet = new Set(
-        existingTasks.map((existingTask) => existingTask.text.trim().toLowerCase()),
+        existingTasks.map((existingTask) =>
+          existingTask.text.trim().toLowerCase(),
+        ),
       );
 
       const newTasks: StoredFogCutterTask[] = [];
@@ -315,7 +319,9 @@ const BrainDumpScreen = () => {
         exportResult.createdEvents > 0
       ) {
         setSortingError(null);
-        AccessibilityInfo.announceForAccessibility('Tasks synced and suggestions saved.');
+        AccessibilityInfo.announceForAccessibility(
+          'Tasks synced and suggestions saved.',
+        );
       }
     },
     [saveSortedItemsToFogCutter],
@@ -347,7 +353,7 @@ const BrainDumpScreen = () => {
         setRecordingError('Recording failed.');
         setRecordingState('idle');
         return;
-        }
+      }
 
       // Send to Plaud for transcription
       const transcription = await PlaudService.transcribe(result.uri);
@@ -525,9 +531,10 @@ const BrainDumpScreen = () => {
               ]}
             >
               <TextInput
+                ref={inputRef}
                 style={styles.input}
                 placeholder="> INPUT_DATA..."
-                placeholderTextColor="#666666"
+                placeholderTextColor={Tokens.colors.text.placeholder}
                 accessibilityLabel="Add a brain dump item"
                 accessibilityHint="Type a thought and press Add"
                 value={input}
@@ -598,7 +605,10 @@ const BrainDumpScreen = () => {
               ]}
             >
               {recordingState === 'processing' ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator
+                  size="small"
+                  color={Tokens.colors.text.primary}
+                />
               ) : (
                 <Text style={styles.recordIcon}>
                   {recordingState === 'recording' ? '⏹️' : '🎙️'}
@@ -721,9 +731,19 @@ const BrainDumpScreen = () => {
               ListEmptyComponent={
                 <View style={styles.emptyState}>
                   <Text style={styles.emptyIcon}>☁️</Text>
-                  <Text style={styles.emptyText}>
-                    NULL_DATA.
-                  </Text>
+                  <Text style={styles.emptyText}>NULL_DATA.</Text>
+                  <View style={styles.emptyAction}>
+                    <LinearButton
+                      title="ADD FIRST ITEM"
+                      onPress={() => {
+                        if (input.trim()) {
+                          addItem();
+                        } else {
+                          inputRef.current?.focus();
+                        }
+                      }}
+                    />
+                  </View>
                 </View>
               }
             />
@@ -767,10 +787,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   headerLine: {
-      flex: 1,
-      height: 1,
-      backgroundColor: Tokens.colors.neutral.dark,
-      marginLeft: Tokens.spacing[4],
+    flex: 1,
+    height: 1,
+    backgroundColor: Tokens.colors.neutral.dark,
+    marginLeft: Tokens.spacing[4],
   },
   // Input
   inputSection: {
@@ -1009,6 +1029,9 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.sm,
     letterSpacing: 2,
     textTransform: 'uppercase',
+  },
+  emptyAction: {
+    marginTop: Tokens.spacing[6],
   },
   // Recording
   recordSection: {

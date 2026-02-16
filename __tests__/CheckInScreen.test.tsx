@@ -1,18 +1,32 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import CheckInScreen, { getRecommendationAction } from '../src/screens/CheckInScreen';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
+import CheckInScreen, {
+  getRecommendationAction,
+} from '../src/screens/CheckInScreen';
 
 const mockRequestPendingStart = jest.fn();
 
 jest.mock('../src/services/ActivationService', () => ({
   __esModule: true,
   default: {
-    requestPendingStart: (...args: unknown[]) => mockRequestPendingStart(...args),
+    requestPendingStart: (...args: unknown[]) =>
+      mockRequestPendingStart(...args),
   },
 }));
 
 jest.mock('../src/components/ui/LinearButton', () => ({
-  LinearButton: ({ title, onPress }: { title: string; onPress: () => void }) => {
+  LinearButton: ({
+    title,
+    onPress,
+  }: {
+    title: string;
+    onPress: () => void;
+  }) => {
     const { Pressable, Text } = require('react-native');
     return (
       <Pressable onPress={onPress}>
@@ -39,8 +53,8 @@ describe('CheckInScreen', () => {
 
     render(<CheckInScreen navigation={{ navigate }} />);
 
-    fireEvent.press(screen.getByText('GREAT'));
-    fireEvent.press(screen.getByText('FULL'));
+    fireEvent.press(screen.getByTestId('mood-option-5'));
+    fireEvent.press(screen.getByTestId('energy-option-5'));
 
     const cta = await screen.findByText('START IGNITE');
     fireEvent.press(cta);
@@ -63,8 +77,8 @@ describe('CheckInScreen', () => {
 
     render(<CheckInScreen navigation={{ navigate }} />);
 
-    fireEvent.press(screen.getByText('GREAT'));
-    fireEvent.press(screen.getByText('FULL'));
+    fireEvent.press(screen.getByTestId('mood-option-5'));
+    fireEvent.press(screen.getByTestId('energy-option-5'));
 
     const cta = await screen.findByText('START IGNITE');
     fireEvent.press(cta);

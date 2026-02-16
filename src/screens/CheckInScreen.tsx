@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import { LinearCard } from '../components/ui/LinearCard';
 import { LinearButton } from '../components/ui/LinearButton';
-import ActivationService, { ActivationSource } from '../services/ActivationService';
+import ActivationService, {
+  ActivationSource,
+} from '../services/ActivationService';
 import { ROUTES } from '../navigation/routes';
 import { Tokens } from '../theme/tokens';
 
@@ -127,7 +129,10 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
             },
           });
         } catch (error) {
-          console.warn('Failed to queue pending ignite start from check-in:', error);
+          console.warn(
+            'Failed to queue pending ignite start from check-in:',
+            error,
+          );
         }
       }
 
@@ -150,6 +155,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
               {moods.map((m) => (
                 <Pressable
                   key={m.value}
+                  testID={`mood-option-${m.value}`}
                   style={({
                     pressed,
                     hovered,
@@ -184,6 +190,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
               {energyLevels.map((e) => (
                 <Pressable
                   key={e.value}
+                  testID={`energy-option-${e.value}`}
                   style={({
                     pressed,
                     hovered,
@@ -219,7 +226,8 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
               style={styles.recommendation}
             >
               <Text style={styles.recommendationText}>
-                {recommendation.desc}
+                {recommendation.desc}{' '}
+                <Text style={styles.evidenceLabel}>(Expert consensus)</Text>
               </Text>
               <LinearButton
                 title={
@@ -228,7 +236,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                     : 'CONTINUE'
                 }
                 onPress={() => {
-                  void handleRecommendationAction();
+                  handleRecommendationAction();
                 }}
                 size="md"
                 style={styles.recommendationButton}
@@ -358,6 +366,12 @@ const styles = StyleSheet.create({
   },
   recommendationButton: {
     marginTop: Tokens.spacing[4],
+  },
+  evidenceLabel: {
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.text.tertiary,
+    fontFamily: Tokens.type.fontFamily.mono,
+    letterSpacing: 0.5,
   },
 });
 

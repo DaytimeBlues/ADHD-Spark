@@ -68,6 +68,7 @@ export const LinearColors = {
   // Text
   text: {
     primary: '#FFFFFF',
+    placeholder: '#666666',
     secondary: '#888888',
     tertiary: '#555555',
     disabled: '#333333',
@@ -146,6 +147,7 @@ export const LinearTypography = {
     '4xl': 36,
     '5xl': 48,
     giga: 72,
+    timerHero: 140,
   },
   weight: {
     regular: '400' as const,

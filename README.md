@@ -19,7 +19,6 @@ A behavioral activation tool for ADHD, designed as a high-performance **PWA (Pro
 - **Brain Dump** - Quick capture for racing thoughts with AI-powered sorting suggestions
 - **Security** - Built-in security checklist and secret scanning (gitleaks) support
 - **Calendar** - Simple monthly view
-- **Crisis Mode** - Safety resources and coping strategies
 
 ## Getting Started (Web/PWA)
 

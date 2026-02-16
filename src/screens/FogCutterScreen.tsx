@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -33,13 +33,15 @@ interface Task {
   microSteps: MicroStep[];
 }
 
-const FOCUS_RING_SHADOW = '0 0 0 2px #FFFFFF';
-
 type FogCutterNavigation = {
   navigate: (route: string) => void;
 };
 
-const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) => {
+const FogCutterScreen = ({
+  navigation,
+}: {
+  navigation?: FogCutterNavigation;
+}) => {
   const [task, setTask] = useState('');
   const [microSteps, setMicroSteps] = useState<string[]>([]);
   const [newStep, setNewStep] = useState('');
@@ -48,7 +50,10 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
   const [isLoading, setIsLoading] = useState(true);
   const [showGuide, setShowGuide] = useState(false);
   const [guideDismissed, setGuideDismissed] = useState(true);
-  const [latestSavedTaskId, setLatestSavedTaskId] = useState<string | null>(null);
+  const [latestSavedTaskId, setLatestSavedTaskId] = useState<string | null>(
+    null,
+  );
+  const taskInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -155,15 +160,21 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
 
   const toggleTask = (id: string) => {
     setTasks((prevTasks) =>
-      prevTasks.map((t) =>
-        t.id === id ? advanceTaskProgress(t) : t,
-      ),
+      prevTasks.map((t) => (t.id === id ? advanceTaskProgress(t) : t)),
     );
   };
 
-  const renderMicroStep = ({ item, index }: { item: string; index: number }) => (
+  const renderMicroStep = ({
+    item,
+    index,
+  }: {
+    item: string;
+    index: number;
+  }) => (
     <View style={styles.microStep}>
-      <Text style={styles.stepNumber}>{(index + 1).toString().padStart(2, '0')}</Text>
+      <Text style={styles.stepNumber}>
+        {(index + 1).toString().padStart(2, '0')}
+      </Text>
       <Text style={styles.stepText}>{item}</Text>
     </View>
   );
@@ -182,12 +193,13 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
               <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
             </View>
             <TextInput
+              ref={taskInputRef}
               style={[
                 styles.input,
                 focusedInput === 'main' && styles.inputFocused,
               ]}
               placeholder="> INPUT_OVERWHELMING_TASK"
-              placeholderTextColor="#666666"
+              placeholderTextColor={Tokens.colors.text.placeholder}
               value={task}
               onChangeText={setTask}
               onFocus={() => setFocusedInput('main')}
@@ -201,7 +213,7 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
                   focusedInput === 'step' && styles.inputFocused,
                 ]}
                 placeholder="> ADD_MICRO_STEP"
-                placeholderTextColor="#666666"
+                placeholderTextColor={Tokens.colors.text.placeholder}
                 value={newStep}
                 onChangeText={setNewStep}
                 onSubmitEditing={addMicroStep}
@@ -218,9 +230,7 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
 
             {microSteps.length > 0 && (
               <View style={styles.previewContainer}>
-                <Text style={styles.previewTitle}>
-                  SEQUENCE:
-                </Text>
+                <Text style={styles.previewTitle}>SEQUENCE:</Text>
                 <FlatList
                   data={microSteps}
                   renderItem={renderMicroStep}
@@ -267,7 +277,10 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
 
           {isLoading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator
+                size="small"
+                color={Tokens.colors.text.primary}
+              />
               <Text style={styles.loadingText}>LOADING...</Text>
             </View>
           ) : (
@@ -303,9 +316,9 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
                     {item.completed ? (
                       <Text style={styles.doneBadge}>CMPLTD</Text>
                     ) : (
-                        <Text style={styles.stepCountText}>
+                      <Text style={styles.stepCountText}>
                         {getTaskProgressSummary(item.microSteps)}
-                        </Text>
+                      </Text>
                     )}
                   </View>
 
@@ -322,7 +335,9 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
                             item.microSteps.find(
                               (s) => s.status === 'in_progress',
                             ) ||
-                            item.microSteps.find((s) => s.status === 'next') || {
+                            item.microSteps.find(
+                              (s) => s.status === 'next',
+                            ) || {
                               text: '...',
                             }
                           ).text
@@ -333,6 +348,19 @@ const FogCutterScreen = ({ navigation }: { navigation?: FogCutterNavigation }) =
                 </Pressable>
               )}
               style={styles.taskList}
+              ListEmptyComponent={
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyIcon}>⛰️</Text>
+                  <Text style={styles.emptyText}>NO_ACTIVE_TASKS.</Text>
+                  <View style={styles.emptyAction}>
+                    <LinearButton
+                      title="CREATE FIRST TASK"
+                      onPress={() => taskInputRef.current?.focus()}
+                      variant="secondary"
+                    />
+                  </View>
+                </View>
+              }
             />
           )}
         </View>
@@ -373,10 +401,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   headerLine: {
-      flex: 1,
-      height: 1,
-      backgroundColor: Tokens.colors.neutral.dark,
-      marginLeft: Tokens.spacing[4],
+    flex: 1,
+    height: 1,
+    backgroundColor: Tokens.colors.neutral.dark,
+    marginLeft: Tokens.spacing[4],
   },
   creationCard: {
     marginBottom: Tokens.spacing[6],
@@ -595,6 +623,25 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
+  },
+  emptyState: {
+    alignItems: 'center',
+    marginTop: Tokens.spacing[8],
+    opacity: 0.5,
+  },
+  emptyIcon: {
+    fontSize: Tokens.type['4xl'],
+    marginBottom: Tokens.spacing[4],
+  },
+  emptyText: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    color: Tokens.colors.text.secondary,
+    fontSize: Tokens.type.sm,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
+  emptyAction: {
+    marginTop: Tokens.spacing[6],
   },
   guideBanner: {
     backgroundColor: Tokens.colors.neutral.dark,
