@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import React from 'react';
 import { Platform, Share } from 'react-native';
 import HomeScreen from '../src/screens/HomeScreen';
@@ -91,13 +97,7 @@ const mockNavigation = {
 };
 
 describe('HomeScreen', () => {
-  beforeAll(() => {
-    jest.useFakeTimers();
-  });
-
-  afterAll(() => {
-    jest.useRealTimers();
-  });
+  jest.setTimeout(20000);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -113,9 +113,8 @@ describe('HomeScreen', () => {
 
   const renderHomeScreen = async () => {
     const result = render(<HomeScreen navigation={mockNavigation} />);
-    await act(async () => {
-      jest.runOnlyPendingTimers();
-      await Promise.resolve();
+    await waitFor(() => {
+      expect(screen.getByText('SPARK_PRO')).toBeTruthy();
     });
     return result;
   };

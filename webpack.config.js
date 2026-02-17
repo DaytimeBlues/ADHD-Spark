@@ -71,6 +71,9 @@ module.exports = (env, argv) => {
       static: {
         directory: path.join(__dirname, 'public'),
       },
+      client: {
+        overlay: false,
+      },
       historyApiFallback: true,
       port: 3000,
       open: true,

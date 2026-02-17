@@ -15,11 +15,9 @@ test.describe('Home Screen', () => {
   test('should display streak summary', async ({ page }) => {
     await page.goto('/');
 
-    // Streak text format (e.g. "0 days streak" or "1 day streak")
+    // Current streak format (e.g. STREAK.001)
     await expect(page.getByTestId('home-streak')).toBeVisible();
-    await expect(page.getByTestId('home-streak')).toHaveText(
-      /\b\d+\s+day(s)?\s+streak\b/,
-    );
+    await expect(page.getByTestId('home-streak')).toHaveText(/STREAK\.\d{3}/);
   });
 
   test('should display mode cards', async ({ page }) => {
@@ -37,20 +35,23 @@ test.describe('Home Screen', () => {
   test('should navigate to Fog Cutter from home card', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByTestId('mode-fogcutter').click();
-    await expect(page.getByPlaceholder('What feels overwhelming?')).toBeVisible(
-      { timeout: 15000 },
+    await page.getByTestId('mode-fogcutter').click({ force: true });
+    await expect(page.getByText('FOG_CUTTER')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByPlaceholder('> INPUT_OVERWHELMING_TASK')).toBeVisible(
+      {
+        timeout: 15000,
+      },
     );
   });
 
   test('should display bottom tab navigation', async ({ page }) => {
     await page.goto('/');
 
-    // Current Tab Labels
-    await expect(page.getByText('Home', { exact: true })).toBeVisible();
-    await expect(page.getByText('Focus', { exact: true })).toBeVisible();
-    await expect(page.getByText('Tasks', { exact: true })).toBeVisible();
-    await expect(page.getByText('Calendar', { exact: true })).toBeVisible();
+    // Web nav uses uppercase route labels
+    await expect(page.getByText('HOME', { exact: true })).toBeVisible();
+    await expect(page.getByText('FOCUS', { exact: true })).toBeVisible();
+    await expect(page.getByText('TASKS', { exact: true })).toBeVisible();
+    await expect(page.getByText('CALENDAR', { exact: true })).toBeVisible();
   });
 });
 

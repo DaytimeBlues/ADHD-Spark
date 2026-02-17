@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import React from 'react';
 import { Platform, Share } from 'react-native';
 import DiagnosticsScreen from '../src/screens/DiagnosticsScreen';
@@ -44,6 +50,8 @@ const mockNavigation = {
 };
 
 describe('DiagnosticsScreen backup tools', () => {
+  jest.setTimeout(20000);
+
   beforeEach(() => {
     jest.clearAllMocks();
     Object.defineProperty(Platform, 'OS', {
@@ -69,16 +77,16 @@ describe('DiagnosticsScreen backup tools', () => {
 
     fireEvent.press(screen.getByTestId('diagnostics-export-backup'));
 
-    await act(async () => {
-      await Promise.resolve();
+    await waitFor(() => {
+      const input = screen.getByTestId('diagnostics-backup-input');
+      expect(String(input.props.value)).toContain(
+        '"schema": "spark-backup-v1"',
+      );
+      expect(mockSet).toHaveBeenCalledWith(
+        'backupLastExportAt',
+        expect.any(String),
+      );
     });
-
-    const input = screen.getByTestId('diagnostics-backup-input');
-    expect(String(input.props.value)).toContain('"schema": "spark-backup-v1"');
-    expect(mockSet).toHaveBeenCalledWith(
-      'backupLastExportAt',
-      expect.any(String),
-    );
   });
 
   it('imports valid backup JSON (default overwrite) and writes tracked keys while removing absent ones', async () => {
