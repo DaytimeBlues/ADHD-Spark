@@ -3,6 +3,8 @@ import React from 'react';
 import { Platform, Share } from 'react-native';
 import HomeScreen from '../src/screens/HomeScreen';
 
+const mockGetReentryPromptLevel = jest.fn().mockResolvedValue('none');
+
 jest.mock('../src/hooks/useReducedMotion', () => ({
   __esModule: true,
   default: () => false,
@@ -49,9 +51,16 @@ jest.mock('../src/services/ActivationService', () => ({
   },
 }));
 
+jest.mock('../src/services/RetentionService', () => ({
+  __esModule: true,
+  default: {
+    getReentryPromptLevel: () => mockGetReentryPromptLevel(),
+    markAppUse: jest.fn().mockResolvedValue(undefined),
+  },
+}));
+
 // Mock vector icons
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
-
 
 jest.mock('../src/services/OverlayService', () => ({
   __esModule: true,
@@ -92,6 +101,7 @@ describe('HomeScreen', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetReentryPromptLevel.mockResolvedValue('none');
     jest.spyOn(Share, 'share').mockResolvedValue({
       action: 'sharedAction',
       activityType: null,
@@ -117,6 +127,7 @@ describe('HomeScreen', () => {
 
   it('displays mode cards', async () => {
     await renderHomeScreen();
+    expect(screen.getByText('RESUME')).toBeTruthy();
     expect(screen.getByText('IGNITE')).toBeTruthy();
     expect(screen.getByText('FOG CUTTER')).toBeTruthy();
     expect(screen.getByText('POMODORO')).toBeTruthy();
@@ -144,6 +155,22 @@ describe('HomeScreen', () => {
     await renderHomeScreen();
     fireEvent.press(screen.getByTestId('mode-fogcutter'));
     expect(mockNavigation.navigate).toHaveBeenCalledWith('FogCutter');
+  });
+
+  it('navigates to Focus (Ignite) when Resume card is pressed', async () => {
+    await renderHomeScreen();
+    fireEvent.press(screen.getByTestId('mode-resume'));
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('Focus');
+  });
+
+  it('shows re-entry prompt and routes to Focus', async () => {
+    mockGetReentryPromptLevel.mockResolvedValue('gentle_restart');
+
+    await renderHomeScreen();
+
+    expect(screen.getByTestId('reentry-prompt')).toBeTruthy();
+    fireEvent.press(screen.getByText('START SMALL'));
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('Focus');
   });
 
   it('renders overlay debug log entries when permission event is received', async () => {

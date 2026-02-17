@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,22 @@ import {
   SafeAreaView,
   Pressable,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { Tokens } from '../theme/tokens';
+import { GoogleTasksSyncService } from '../services/PlaudService';
+
+type CalendarConnectionStatus =
+  | 'checking'
+  | 'connected'
+  | 'disconnected'
+  | 'unsupported';
 
 const CalendarScreen = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [connectionStatus, setConnectionStatus] =
+    useState<CalendarConnectionStatus>('checking');
+  const [isConnecting, setIsConnecting] = useState(false);
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
     'January',
@@ -53,36 +64,189 @@ const CalendarScreen = () => {
     .fill(0)
     .map((_, i) => i + 1);
 
+  const refreshCalendarConnectionStatus = useCallback(async () => {
+    if (Platform.OS === 'web') {
+      setConnectionStatus('unsupported');
+      return;
+    }
+
+    try {
+      const googleModule =
+        require('@react-native-google-signin/google-signin') as {
+          GoogleSignin?: {
+            getCurrentUser?: () => Promise<{ scopes?: string[] } | null>;
+          };
+        };
+
+      const user = await googleModule.GoogleSignin?.getCurrentUser?.();
+      const hasCalendarScope = Boolean(
+        user?.scopes?.includes(
+          'https://www.googleapis.com/auth/calendar.events',
+        ),
+      );
+
+      setConnectionStatus(hasCalendarScope ? 'connected' : 'disconnected');
+    } catch {
+      setConnectionStatus('disconnected');
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshCalendarConnectionStatus();
+  }, [refreshCalendarConnectionStatus]);
+
+  const handleConnectGoogleCalendar = useCallback(async () => {
+    if (
+      connectionStatus === 'unsupported' ||
+      connectionStatus === 'checking' ||
+      isConnecting
+    ) {
+      return;
+    }
+
+    setIsConnecting(true);
+    try {
+      await GoogleTasksSyncService.signInInteractive();
+    } finally {
+      await refreshCalendarConnectionStatus();
+      setIsConnecting(false);
+    }
+  }, [connectionStatus, isConnecting, refreshCalendarConnectionStatus]);
+
+  const statusTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
+    {
+      checking: 'STATUS: CHECKING...',
+      connected: 'STATUS: CONNECTED',
+      disconnected: 'STATUS: NOT CONNECTED',
+      unsupported: 'STATUS: NOT AVAILABLE ON WEB',
+    };
+
+  const buttonTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
+    {
+      checking: 'CHECKING...',
+      connected: 'CONNECTED',
+      disconnected: 'CONNECT GOOGLE CALENDAR',
+      unsupported: 'WEB UNSUPPORTED',
+    };
+
+  const isConnectButtonDisabled =
+    connectionStatus === 'connected' ||
+    connectionStatus === 'unsupported' ||
+    connectionStatus === 'checking' ||
+    isConnecting;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.webContainer}>
-        <View style={styles.content}>
-          <Text style={styles.title}>CALENDAR</Text>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
+            <Text style={styles.title}>CALENDAR</Text>
 
-          <View style={styles.calendarCard}>
-            <View style={styles.header}>
-              <Pressable
-                onPress={prevMonth}
-                style={({
-                  pressed,
-                  hovered,
-                }: {
-                  pressed: boolean;
-                  hovered?: boolean;
-                }) => [
-                  styles.navButton,
-                  hovered && styles.navButtonHovered,
-                  pressed && styles.navButtonPressed,
-                ]}
-              >
-                <Text style={styles.navButtonText}>‹</Text>
-              </Pressable>
-              <Text style={styles.monthText}>
-                {months[currentDate.getMonth()].toUpperCase()}{' '}
-                {currentDate.getFullYear()}
+            <View style={styles.calendarCard}>
+              <View style={styles.header}>
+                <Pressable
+                  onPress={prevMonth}
+                  style={({
+                    pressed,
+                    hovered,
+                  }: {
+                    pressed: boolean;
+                    hovered?: boolean;
+                  }) => [
+                    styles.navButton,
+                    hovered && styles.navButtonHovered,
+                    pressed && styles.navButtonPressed,
+                  ]}
+                >
+                  <Text style={styles.navButtonText}>‹</Text>
+                </Pressable>
+                <Text style={styles.monthText}>
+                  {months[currentDate.getMonth()].toUpperCase()}{' '}
+                  {currentDate.getFullYear()}
+                </Text>
+                <Pressable
+                  onPress={nextMonth}
+                  style={({
+                    pressed,
+                    hovered,
+                  }: {
+                    pressed: boolean;
+                    hovered?: boolean;
+                  }) => [
+                    styles.navButton,
+                    hovered && styles.navButtonHovered,
+                    pressed && styles.navButtonPressed,
+                  ]}
+                >
+                  <Text style={styles.navButtonText}>›</Text>
+                </Pressable>
+              </View>
+
+              <View style={styles.weekdays}>
+                {days.map((day) => (
+                  <Text key={day} style={styles.weekdayText}>
+                    {day}
+                  </Text>
+                ))}
+              </View>
+
+              <View style={styles.daysGrid}>
+                {Array(firstDay)
+                  .fill(0)
+                  .map((_, i) => (
+                    <View key={`empty-${i}`} style={styles.dayCell} />
+                  ))}
+                {daysArray.map((day) => {
+                  const isToday =
+                    day === new Date().getDate() &&
+                    currentDate.getMonth() === new Date().getMonth() &&
+                    currentDate.getFullYear() === new Date().getFullYear();
+                  return (
+                    <Pressable
+                      key={day}
+                      style={({
+                        pressed,
+                        hovered,
+                      }: {
+                        pressed: boolean;
+                        hovered?: boolean;
+                      }) => [
+                        styles.dayCell,
+                        isToday && styles.todayCell,
+                        hovered && !isToday && styles.dayCellHovered,
+                        pressed && !isToday && styles.dayCellPressed,
+                      ]}
+                    >
+                      <Text
+                        style={[styles.dayText, isToday && styles.todayText]}
+                      >
+                        {day}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            </View>
+
+            <View style={styles.legend}>
+              <View style={styles.legendItem}>
+                <View style={[styles.legendDot, styles.todayDot]} />
+                <Text style={styles.legendText}>TODAY</Text>
+              </View>
+            </View>
+
+            <View style={styles.googleCalendarCard}>
+              <Text style={styles.googleCalendarTitle}>GOOGLE CALENDAR</Text>
+              <Text style={styles.googleCalendarStatus}>
+                {statusTextByConnectionStatus[connectionStatus]}
               </Text>
               <Pressable
-                onPress={nextMonth}
+                onPress={handleConnectGoogleCalendar}
+                disabled={isConnectButtonDisabled}
                 style={({
                   pressed,
                   hovered,
@@ -90,66 +254,24 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                  styles.navButton,
-                  hovered && styles.navButtonHovered,
-                  pressed && styles.navButtonPressed,
+                  styles.googleCalendarButton,
+                  hovered &&
+                    !isConnectButtonDisabled &&
+                    styles.googleCalendarButtonHovered,
+                  pressed &&
+                    !isConnectButtonDisabled &&
+                    styles.googleCalendarButtonPressed,
+                  isConnectButtonDisabled &&
+                    styles.googleCalendarButtonDisabled,
                 ]}
               >
-                <Text style={styles.navButtonText}>›</Text>
+                <Text style={styles.googleCalendarButtonText}>
+                  {buttonTextByConnectionStatus[connectionStatus]}
+                </Text>
               </Pressable>
             </View>
-
-            <View style={styles.weekdays}>
-              {days.map((day) => (
-                <Text key={day} style={styles.weekdayText}>
-                  {day}
-                </Text>
-              ))}
-            </View>
-
-            <View style={styles.daysGrid}>
-              {Array(firstDay)
-                .fill(0)
-                .map((_, i) => (
-                  <View key={`empty-${i}`} style={styles.dayCell} />
-                ))}
-              {daysArray.map((day) => {
-                const isToday =
-                  day === new Date().getDate() &&
-                  currentDate.getMonth() === new Date().getMonth() &&
-                  currentDate.getFullYear() === new Date().getFullYear();
-                return (
-                  <Pressable
-                    key={day}
-                    style={({
-                      pressed,
-                      hovered,
-                    }: {
-                      pressed: boolean;
-                      hovered?: boolean;
-                    }) => [
-                      styles.dayCell,
-                      isToday && styles.todayCell,
-                      hovered && !isToday && styles.dayCellHovered,
-                      pressed && !isToday && styles.dayCellPressed,
-                    ]}
-                  >
-                    <Text style={[styles.dayText, isToday && styles.todayText]}>
-                      {day}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
           </View>
-
-          <View style={styles.legend}>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendDot, styles.todayDot]} />
-              <Text style={styles.legendText}>TODAY</Text>
-            </View>
-          </View>
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -166,8 +288,14 @@ const styles = StyleSheet.create({
     maxWidth: Tokens.layout.maxWidth.content,
     alignSelf: 'center',
   },
-  content: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: Tokens.spacing[8],
+  },
+  content: {
     padding: Tokens.spacing[6],
   },
   title: {
@@ -315,6 +443,72 @@ const styles = StyleSheet.create({
   legendText: {
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  googleCalendarCard: {
+    marginTop: Tokens.spacing[6],
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderRadius: Tokens.radii.none,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[6],
+    ...Tokens.elevation.none,
+  },
+  googleCalendarTitle: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    color: Tokens.colors.text.primary,
+    fontSize: Tokens.type.sm,
+    fontWeight: '700',
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[3],
+  },
+  googleCalendarStatus: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    color: Tokens.colors.text.tertiary,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[4],
+  },
+  googleCalendarButton: {
+    minHeight: Tokens.layout.minTapTarget,
+    paddingHorizontal: Tokens.spacing[4],
+    backgroundColor: Tokens.colors.neutral.dark,
+    borderRadius: Tokens.radii.none,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Platform.select({
+      web: {
+        transition: Tokens.motion.transitions.base,
+        cursor: 'pointer',
+      },
+    }),
+  },
+  googleCalendarButtonHovered: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderColor: Tokens.colors.text.tertiary,
+  },
+  googleCalendarButtonPressed: {
+    transform: [{ scale: Tokens.motion.scales.press }],
+    backgroundColor: Tokens.colors.neutral.darkest,
+  },
+  googleCalendarButtonDisabled: {
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    opacity: 0.5,
+    ...Platform.select({
+      web: {
+        cursor: 'not-allowed',
+      },
+    }),
+  },
+  googleCalendarButtonText: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    color: Tokens.colors.text.primary,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,

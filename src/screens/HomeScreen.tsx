@@ -33,6 +33,7 @@ import { ReentryPromptLevel } from '../services/RetentionService';
 import useReducedMotion from '../hooks/useReducedMotion';
 import { Tokens } from '../theme/tokens';
 import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
+import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';
 
 const ANIMATION_DURATION = 300; // Faster
@@ -99,7 +100,6 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     };
   }, [activationTrend]);
 
-
   const addOverlayEvent = useCallback((label: string) => {
     if (!__DEV__) {
       return;
@@ -165,6 +165,13 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const modes = useMemo<Mode[]>(
     () => [
+      {
+        id: 'resume',
+        name: 'Resume',
+        icon: 'play-circle',
+        desc: 'CONTINUE',
+        accent: Tokens.colors.brand[500],
+      },
       {
         id: 'ignite',
         name: 'Ignite',
@@ -468,8 +475,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 SPARK_PRO
               </Text>
               <View style={styles.systemStatusRow}>
-                 <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
-                 <View style={styles.statusDot} />
+                <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
+                <View style={styles.statusDot} />
               </View>
             </View>
             <View
@@ -491,45 +498,58 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
           {activationSummary && activationSummary.started > 0 && (
             <View style={styles.activationCard}>
               <View style={styles.activationHeader}>
-                  <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
-                  <Text style={styles.activationRate}>
-                    {Math.round(activationSummary.completionRate * 100)}%
-                  </Text>
+                <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
+                <Text style={styles.activationRate}>
+                  {Math.round(activationSummary.completionRate * 100)}%
+                </Text>
               </View>
               <View style={styles.activationGrid}>
-                  <View style={styles.statBox}>
-                     <Text style={styles.statLabel}>STARTED</Text>
-                     <Text style={styles.statValue}>{activationSummary.started}</Text>
-                  </View>
-                  <View style={styles.statBox}>
-                     <Text style={styles.statLabel}>COMPLETED</Text>
-                     <Text style={styles.statValue}>{activationSummary.completed}</Text>
-                  </View>
-                  {trendMetrics && (
-                    <>
-                       <View style={styles.statBox}>
-                          <Text style={styles.statLabel}>TODAY</Text>
-                          <Text style={styles.statValue}>{trendMetrics.todayCount}</Text>
-                       </View>
-                       <View style={styles.statBox}>
-                          <Text style={styles.statLabel}>DELTA</Text>
-                          <Text style={[styles.statValue, trendMetrics.isPositive ? styles.textSuccess : trendMetrics.isNeutral ? styles.textNeutral : styles.textError]}>
-                             {trendMetrics.deltaStr}
-                          </Text>
-                       </View>
-                    </>
-                  )}
+                <View style={styles.statBox}>
+                  <Text style={styles.statLabel}>STARTED</Text>
+                  <Text style={styles.statValue}>
+                    {activationSummary.started}
+                  </Text>
+                </View>
+                <View style={styles.statBox}>
+                  <Text style={styles.statLabel}>COMPLETED</Text>
+                  <Text style={styles.statValue}>
+                    {activationSummary.completed}
+                  </Text>
+                </View>
+                {trendMetrics && (
+                  <>
+                    <View style={styles.statBox}>
+                      <Text style={styles.statLabel}>TODAY</Text>
+                      <Text style={styles.statValue}>
+                        {trendMetrics.todayCount}
+                      </Text>
+                    </View>
+                    <View style={styles.statBox}>
+                      <Text style={styles.statLabel}>DELTA</Text>
+                      <Text
+                        style={[
+                          styles.statValue,
+                          trendMetrics.isPositive
+                            ? styles.textSuccess
+                            : trendMetrics.isNeutral
+                              ? styles.textNeutral
+                              : styles.textError,
+                        ]}
+                      >
+                        {trendMetrics.deltaStr}
+                      </Text>
+                    </View>
+                  </>
+                )}
               </View>
 
               {(reentryPromptLevel === 'gentle_restart' ||
                 reentryPromptLevel === 'fresh_restart') && (
-                <View style={styles.activationHint}>
-                  <Text style={styles.activationHintText}>
-                    {reentryPromptLevel === 'gentle_restart'
-                      ? 'RESTART_PROTOCOL: START_SMALL'
-                      : 'FRESH_START: EXECUTE_ONE_TASK'}
-                  </Text>
-                </View>
+                <ReEntryPrompt
+                  level={reentryPromptLevel}
+                  onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
+                  testID="reentry-prompt"
+                />
               )}
             </View>
           )}
@@ -589,11 +609,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 overlayEvents.map((event) => (
                   <Text key={event.id} style={styles.debugText}>
                     {new Date(event.timestamp).toLocaleTimeString([], {
-                        hour12: false,
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      })} :: {event.label}
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    })}{' '}
+                    :: {event.label}
                   </Text>
                 ))
               )}
@@ -754,19 +775,6 @@ const styles = StyleSheet.create({
   textSuccess: { color: Tokens.colors.success.main },
   textError: { color: Tokens.colors.error.main },
   textNeutral: { color: Tokens.colors.text.secondary },
-  activationHint: {
-    marginTop: Tokens.spacing[3],
-    paddingTop: Tokens.spacing[2],
-    borderTopWidth: 1,
-    borderTopColor: Tokens.colors.neutral.dark,
-  },
-  activationHintText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    color: Tokens.colors.brand[500],
-    letterSpacing: 0.5,
-    fontWeight: '700',
-  },
   overlayCard: {
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[3],
@@ -782,7 +790,7 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.brand[500],
   },
   overlayTextGroup: {
-      flex: 1,
+    flex: 1,
   },
   overlayTitle: {
     fontFamily: Tokens.type.fontFamily.mono,

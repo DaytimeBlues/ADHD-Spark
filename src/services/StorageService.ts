@@ -15,12 +15,14 @@ const STORAGE_KEYS = {
   uxMetricsEvents: 'uxMetricsEvents',
   activationSessions: 'activationSessions',
   activationPendingStart: 'activationPendingStart',
+  lastActiveSession: 'lastActiveSession',
   retentionGraceWindowStart: 'retentionGraceWindowStart',
   retentionGraceDaysUsed: 'retentionGraceDaysUsed',
   googleTasksSyncState: 'googleTasksSyncState',
   googleTasksProcessedIds: 'googleTasksProcessedIds',
   googleTasksLastSyncAt: 'googleTasksLastSyncAt',
   googleTasksExportedFingerprints: 'googleTasksExportedFingerprints',
+  backupLastExportAt: 'backupLastExportAt',
 };
 
 /**

@@ -46,7 +46,13 @@ describe('CBTGuideScreen', () => {
   it('renders compact CADDI research section', () => {
     render(<CBTGuideScreen navigation={mockNavigation} />);
     expect(screen.getByText(/WHAT IS CADDI/i)).toBeTruthy();
+    // Verify EvidenceBadge content is present
     expect(screen.getAllByText(/EVIDENCE-BASED/i).length).toBeGreaterThan(0);
+    expect(screen.getByText('(RCT EVIDENCE)')).toBeTruthy();
+    expect(
+      screen.getAllByText('(CLINICAL BEST PRACTICE)').length,
+    ).toBeGreaterThan(0);
+
     expect(screen.getByText(/RCT STUDY/i)).toBeTruthy();
     expect(screen.getByText(/QUALITATIVE/i)).toBeTruthy();
     expect(screen.getByText(/REGISTRY/i)).toBeTruthy();

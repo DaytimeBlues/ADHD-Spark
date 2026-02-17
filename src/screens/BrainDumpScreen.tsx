@@ -30,6 +30,7 @@ import AISortService, { SortedItem } from '../services/AISortService';
 import { generateId } from '../utils/helpers';
 import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
+import { EmptyState } from '../components/ui/EmptyState';
 import { Tokens } from '../theme/tokens';
 
 const HIT_SLOP = {
@@ -729,22 +730,19 @@ const BrainDumpScreen = () => {
               contentContainerStyle={styles.listContent}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
-                <View style={styles.emptyState}>
-                  <Text style={styles.emptyIcon}>☁️</Text>
-                  <Text style={styles.emptyText}>NULL_DATA.</Text>
-                  <View style={styles.emptyAction}>
-                    <LinearButton
-                      title="ADD FIRST ITEM"
-                      onPress={() => {
-                        if (input.trim()) {
-                          addItem();
-                        } else {
-                          inputRef.current?.focus();
-                        }
-                      }}
-                    />
-                  </View>
-                </View>
+                <EmptyState
+                  icon="☁️"
+                  title="NULL_DATA."
+                  primaryActionLabel="ADD FIRST ITEM"
+                  onPrimaryAction={() => {
+                    if (input.trim()) {
+                      addItem();
+                    } else {
+                      inputRef.current?.focus();
+                    }
+                  }}
+                  style={styles.emptyState}
+                />
               }
             />
           )}
@@ -1015,25 +1013,11 @@ const styles = StyleSheet.create({
   },
   // Empty
   emptyState: {
-    alignItems: 'center',
     marginTop: Tokens.spacing[12],
     opacity: 0.3,
   },
-  emptyIcon: {
-    fontSize: Tokens.type['5xl'],
-    marginBottom: Tokens.spacing[4],
-  },
-  emptyText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.secondary,
-    fontSize: Tokens.type.sm,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-  },
-  emptyAction: {
-    marginTop: Tokens.spacing[6],
-  },
   // Recording
+
   recordSection: {
     alignItems: 'center',
     marginBottom: Tokens.spacing[6],

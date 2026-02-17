@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { LinearCard } from '../components/ui/LinearCard';
 import { LinearButton } from '../components/ui/LinearButton';
+import { EvidenceBadge } from '../components/ui/EvidenceBadge';
 import ActivationService, {
   ActivationSource,
 } from '../services/ActivationService';
@@ -227,7 +228,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
             >
               <Text style={styles.recommendationText}>
                 {recommendation.desc}{' '}
-                <Text style={styles.evidenceLabel}>(Expert consensus)</Text>
+                <EvidenceBadge tier="heuristic" style={styles.evidenceBadge} />
               </Text>
               <LinearButton
                 title={
@@ -367,11 +368,8 @@ const styles = StyleSheet.create({
   recommendationButton: {
     marginTop: Tokens.spacing[4],
   },
-  evidenceLabel: {
-    fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.tertiary,
-    fontFamily: Tokens.type.fontFamily.mono,
-    letterSpacing: 0.5,
+  evidenceBadge: {
+    transform: [{ translateY: 2 }], // Align visually with text
   },
 });
 

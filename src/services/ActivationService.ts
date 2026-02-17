@@ -45,13 +45,15 @@ export type PendingActivationStart = {
 
 const STORAGE_KEY = StorageService.STORAGE_KEYS.activationSessions;
 const PENDING_KEY = StorageService.STORAGE_KEYS.activationPendingStart;
+const LAST_ACTIVE_KEY = StorageService.STORAGE_KEYS.lastActiveSession;
 
 const getSessions = async (): Promise<ActivationSession[]> => {
   if (typeof StorageService.getJSON !== 'function') {
     return [];
   }
 
-  const sessions = await StorageService.getJSON<ActivationSession[]>(STORAGE_KEY);
+  const sessions =
+    await StorageService.getJSON<ActivationSession[]>(STORAGE_KEY);
   return Array.isArray(sessions) ? sessions : [];
 };
 
@@ -88,14 +90,26 @@ const ActivationService = {
     const sessions = await getSessions();
     const now = new Date().toISOString();
 
-    sessions.unshift({
+    const newSession = {
       id: sessionId,
       startedAt: now,
-      status: 'started',
+      status: 'started' as ActivationSessionStatus,
       source,
-    });
+    };
+
+    sessions.unshift(newSession);
 
     await setSessions(sessions);
+
+    // Persist last active session for resume flow
+    const lastActive = {
+      id: sessionId,
+      source,
+      startedAt: now,
+      status: 'started' as ActivationSessionStatus,
+    };
+    await StorageService.setJSON(LAST_ACTIVE_KEY, lastActive);
+
     return sessionId;
   },
 
@@ -119,6 +133,30 @@ const ActivationService = {
     });
 
     await setSessions(next);
+
+    // Update last active session status
+    const lastActive = await StorageService.getJSON<{
+      id: string;
+      source: ActivationSource;
+      startedAt: string;
+      status: ActivationSessionStatus;
+      endedAt?: string;
+    }>(LAST_ACTIVE_KEY);
+
+    if (lastActive && lastActive.id === sessionId) {
+      if (status === 'completed' || status === 'abandoned') {
+        await StorageService.setJSON(LAST_ACTIVE_KEY, {
+          ...lastActive,
+          endedAt: now,
+          status,
+        });
+      } else if (status === 'resumed') {
+        await StorageService.setJSON(LAST_ACTIVE_KEY, {
+          ...lastActive,
+          status: 'resumed',
+        });
+      }
+    }
   },
 
   async getLatestSession(): Promise<ActivationSession | null> {
@@ -142,7 +180,8 @@ const ActivationService = {
       return null;
     }
 
-    const pending = await StorageService.getJSON<PendingActivationStart>(PENDING_KEY);
+    const pending =
+      await StorageService.getJSON<PendingActivationStart>(PENDING_KEY);
     if (!pending) {
       return null;
     }
@@ -153,7 +192,9 @@ const ActivationService = {
 
   async getSummary(days = 7): Promise<ActivationSummary> {
     const sessions = await getSessions();
-    const filtered = sessions.filter((session) => isWithinDays(session.startedAt, days));
+    const filtered = sessions.filter((session) =>
+      isWithinDays(session.startedAt, days),
+    );
 
     const summary = filtered.reduce(
       (acc, session) => {

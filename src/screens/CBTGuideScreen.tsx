@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Tokens } from '../theme/tokens';
 import { CADDI_OVERVIEW, CADDI_SOURCES } from '../config/caddi';
+import { EvidenceBadge } from '../components/ui/EvidenceBadge';
 
 type CBTCategory = {
   id: string;
@@ -115,9 +116,7 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
           <View style={styles.compactCard}>
             <View style={styles.compactHeaderRow}>
               <Text style={styles.compactTitle}>{CADDI_OVERVIEW.title}</Text>
-              <View style={styles.compactBadge}>
-                <Text style={styles.compactBadgeText}>{CADDI_OVERVIEW.badge}</Text>
-              </View>
+              <EvidenceBadge tier="clinical" label={CADDI_OVERVIEW.badge} />
             </View>
 
             <Text style={styles.compactDescription}>
@@ -150,6 +149,10 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                   ]}
                 >
                   <Text style={styles.linkButtonText}>{source.label}</Text>
+                  <EvidenceBadge
+                    tier={source.sourceType === 'rct' ? 'rct' : 'clinical'}
+                    style={styles.linkBadge}
+                  />
                 </Pressable>
               ))}
             </View>
@@ -285,18 +288,6 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.primary,
     letterSpacing: 1,
   },
-  compactBadge: {
-    backgroundColor: Tokens.colors.brand[500],
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: Tokens.radii.full,
-  },
-  compactBadgeText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: 10,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-  },
   compactDescription: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
@@ -327,6 +318,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Tokens.spacing[2],
     ...Platform.select({
       web: {
         cursor: 'pointer',
@@ -346,6 +340,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: Tokens.colors.text.secondary,
     fontWeight: '600',
+  },
+  linkBadge: {
+    marginLeft: -2,
   },
   categoryCard: {
     backgroundColor: Tokens.colors.neutral.darker,

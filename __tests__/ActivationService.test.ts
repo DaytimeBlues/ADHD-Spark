@@ -13,6 +13,7 @@ jest.mock('../src/services/StorageService', () => ({
     STORAGE_KEYS: {
       activationSessions: 'activationSessions',
       activationPendingStart: 'activationPendingStart',
+      lastActiveSession: 'lastActiveSession',
     },
   },
 }));
@@ -117,5 +118,61 @@ describe('ActivationService', () => {
     expect(trend[0].completed).toBe(1);
     expect(trend[1].started).toBe(2);
     expect(trend[1].completed).toBe(1);
+  });
+
+  it('persists lastActiveSession on startSession', async () => {
+    mockGetJSON.mockResolvedValueOnce([]);
+
+    const sessionId = await ActivationService.startSession('ignite');
+
+    expect(mockSetJSON).toHaveBeenCalledWith('lastActiveSession', {
+      id: sessionId,
+      source: 'ignite',
+      startedAt: expect.any(String),
+      status: 'started',
+    });
+  });
+
+  it('updates lastActiveSession status on completion', async () => {
+    const existingSession = {
+      id: 'session-123',
+      startedAt: '2026-02-16T00:00:00.000Z',
+      status: 'started',
+      source: 'ignite',
+    };
+
+    mockGetJSON.mockResolvedValueOnce([existingSession]);
+    mockGetJSON.mockResolvedValueOnce(existingSession);
+
+    await ActivationService.updateSessionStatus('session-123', 'completed');
+
+    expect(mockSetJSON).toHaveBeenCalledWith('lastActiveSession', {
+      id: 'session-123',
+      source: 'ignite',
+      startedAt: '2026-02-16T00:00:00.000Z',
+      status: 'completed',
+      endedAt: expect.any(String),
+    });
+  });
+
+  it('updates lastActiveSession status on resumed', async () => {
+    const existingSession = {
+      id: 'session-456',
+      startedAt: '2026-02-16T00:00:00.000Z',
+      status: 'started',
+      source: 'ignite',
+    };
+
+    mockGetJSON.mockResolvedValueOnce([existingSession]);
+    mockGetJSON.mockResolvedValueOnce(existingSession);
+
+    await ActivationService.updateSessionStatus('session-456', 'resumed');
+
+    expect(mockSetJSON).toHaveBeenCalledWith('lastActiveSession', {
+      id: 'session-456',
+      source: 'ignite',
+      startedAt: '2026-02-16T00:00:00.000Z',
+      status: 'resumed',
+    });
   });
 });

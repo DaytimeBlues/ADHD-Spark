@@ -78,6 +78,24 @@ const IgniteScreen = () => {
           }
         }
 
+        // Check for last active session if no stored session ID
+        if (!sessionIdRef.current) {
+          const lastActive = await StorageService.getJSON<{
+            id: string;
+            source: string;
+            startedAt: string;
+            status: string;
+          }>(StorageService.STORAGE_KEYS.lastActiveSession);
+
+          if (lastActive && lastActive.status === 'started') {
+            sessionIdRef.current = lastActive.id;
+            void ActivationService.updateSessionStatus(
+              lastActive.id,
+              'resumed',
+            );
+          }
+        }
+
         if (pendingStart) {
           const newSessionId = await ActivationService.startSession(
             pendingStart.source,
@@ -170,7 +188,9 @@ const IgniteScreen = () => {
           <View style={styles.header}>
             <Text style={styles.title}>IGNITE_PROTOCOL</Text>
             <View style={styles.statusBadge}>
-                <Text style={styles.statusText}>{isRunning ? 'RUNNING' : 'READY'}</Text>
+              <Text style={styles.statusText}>
+                {isRunning ? 'RUNNING' : 'READY'}
+              </Text>
             </View>
           </View>
 
@@ -213,28 +233,33 @@ const IgniteScreen = () => {
                 )}
 
                 <View style={styles.secondaryControls}>
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.resetButton,
-                            pressed && styles.buttonPressed
-                        ]}
-                        onPress={resetTimer}
-                    >
-                        <Text style={styles.resetButtonText}>RESET</Text>
-                    </Pressable>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.resetButton,
+                      pressed && styles.buttonPressed,
+                    ]}
+                    onPress={resetTimer}
+                  >
+                    <Text style={styles.resetButtonText}>RESET</Text>
+                  </Pressable>
 
-                    <Pressable
-                        style={({ pressed }) => [
-                        styles.soundButton,
-                        isPlaying && styles.soundButtonActive,
-                        pressed && styles.buttonPressed,
-                        ]}
-                        onPress={toggleSound}
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.soundButton,
+                      isPlaying && styles.soundButtonActive,
+                      pressed && styles.buttonPressed,
+                    ]}
+                    onPress={toggleSound}
+                  >
+                    <Text
+                      style={[
+                        styles.soundButtonText,
+                        isPlaying && styles.textActive,
+                      ]}
                     >
-                        <Text style={[styles.soundButtonText, isPlaying && styles.textActive]}>
-                            {isPlaying ? 'NOISE: ON' : 'NOISE: OFF'}
-                        </Text>
-                    </Pressable>
+                      {isPlaying ? 'NOISE: ON' : 'NOISE: OFF'}
+                    </Text>
+                  </Pressable>
                 </View>
               </View>
             </>
@@ -289,17 +314,17 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   statusBadge: {
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      backgroundColor: Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: Tokens.colors.neutral.border,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
   },
   statusText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xxs,
-      color: Tokens.colors.brand[500],
-      letterSpacing: 1,
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xxs,
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
   },
   timerCard: {
     alignItems: 'center',
@@ -307,9 +332,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   timerContainer: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   timer: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -332,51 +357,51 @@ const styles = StyleSheet.create({
     height: 56,
   },
   secondaryControls: {
-      flexDirection: 'row',
-      gap: Tokens.spacing[3],
+    flexDirection: 'row',
+    gap: Tokens.spacing[3],
   },
   resetButton: {
-      flex: 1,
-      height: 44,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: Tokens.colors.neutral.border,
-      backgroundColor: 'transparent',
+    flex: 1,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: 'transparent',
   },
   resetButtonText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      color: Tokens.colors.text.secondary,
-      letterSpacing: 1,
-      fontWeight: '700',
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    letterSpacing: 1,
+    fontWeight: '700',
   },
   soundButton: {
-      flex: 1,
-      height: 44,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: Tokens.colors.neutral.border,
-      backgroundColor: Tokens.colors.neutral.darker,
+    flex: 1,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.darker,
   },
   soundButtonActive: {
-      backgroundColor: Tokens.colors.neutral.dark,
-      borderColor: Tokens.colors.brand[500],
+    backgroundColor: Tokens.colors.neutral.dark,
+    borderColor: Tokens.colors.brand[500],
   },
   soundButtonText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      color: Tokens.colors.text.secondary,
-      letterSpacing: 1,
-      fontWeight: '700',
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    color: Tokens.colors.text.secondary,
+    letterSpacing: 1,
+    fontWeight: '700',
   },
   textActive: {
-      color: Tokens.colors.text.primary,
+    color: Tokens.colors.text.primary,
   },
   buttonPressed: {
-      opacity: 0.8,
-      backgroundColor: Tokens.colors.neutral.dark,
+    opacity: 0.8,
+    backgroundColor: Tokens.colors.neutral.dark,
   },
 });
 

@@ -144,7 +144,10 @@ describe('DiagnosticsScreen backup tools', () => {
       await Promise.resolve();
     });
 
-    expect(mockSet).toHaveBeenCalledWith('tasks', '[{"id":"1","text":"test-merge"}]');
+    expect(mockSet).toHaveBeenCalledWith(
+      'tasks',
+      '[{"id":"1","text":"test-merge"}]',
+    );
     // In merge mode, we do NOT iterate over all exportableKeys to remove missing ones.
     // We only iterate over payload keys.
     expect(mockRemove).not.toHaveBeenCalled();

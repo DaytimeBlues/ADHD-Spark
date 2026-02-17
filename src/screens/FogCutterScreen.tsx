@@ -23,6 +23,7 @@ import {
   normalizeMicroSteps,
 } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
+import { EmptyState } from '../components/ui/EmptyState';
 import { Tokens } from '../theme/tokens';
 import { ROUTES } from '../navigation/routes';
 
@@ -349,17 +350,14 @@ const FogCutterScreen = ({
               )}
               style={styles.taskList}
               ListEmptyComponent={
-                <View style={styles.emptyState}>
-                  <Text style={styles.emptyIcon}>⛰️</Text>
-                  <Text style={styles.emptyText}>NO_ACTIVE_TASKS.</Text>
-                  <View style={styles.emptyAction}>
-                    <LinearButton
-                      title="CREATE FIRST TASK"
-                      onPress={() => taskInputRef.current?.focus()}
-                      variant="secondary"
-                    />
-                  </View>
-                </View>
+                <EmptyState
+                  icon="⛰️"
+                  title="NO_ACTIVE_TASKS."
+                  primaryActionLabel="CREATE FIRST TASK"
+                  onPrimaryAction={() => taskInputRef.current?.focus()}
+                  primaryVariant="secondary"
+                  style={styles.emptyState}
+                />
               }
             />
           )}
@@ -625,23 +623,8 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   emptyState: {
-    alignItems: 'center',
     marginTop: Tokens.spacing[8],
     opacity: 0.5,
-  },
-  emptyIcon: {
-    fontSize: Tokens.type['4xl'],
-    marginBottom: Tokens.spacing[4],
-  },
-  emptyText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.secondary,
-    fontSize: Tokens.type.sm,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-  },
-  emptyAction: {
-    marginTop: Tokens.spacing[6],
   },
   guideBanner: {
     backgroundColor: Tokens.colors.neutral.dark,
