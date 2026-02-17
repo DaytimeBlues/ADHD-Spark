@@ -4,6 +4,7 @@ const webpack = require('webpack');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
+  const disableDevOverlay = Boolean(process.env.CI);
 
   return {
     mode: argv.mode || 'development',
@@ -72,7 +73,7 @@ module.exports = (env, argv) => {
         directory: path.join(__dirname, 'public'),
       },
       client: {
-        overlay: false,
+        overlay: !disableDevOverlay,
       },
       historyApiFallback: true,
       port: 3000,

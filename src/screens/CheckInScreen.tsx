@@ -226,10 +226,8 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
               subtitle="RECOMMENDED FOR YOU"
               style={styles.recommendation}
             >
-              <Text style={styles.recommendationText}>
-                {recommendation.desc}{' '}
-                <EvidenceBadge tier="heuristic" style={styles.evidenceBadge} />
-              </Text>
+              <Text style={styles.recommendationText}>{recommendation.desc}</Text>
+              <EvidenceBadge tier="heuristic" style={styles.evidenceBadge} />
               <LinearButton
                 title={
                   mood !== null && energy !== null
@@ -369,7 +367,7 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[4],
   },
   evidenceBadge: {
-    transform: [{ translateY: 2 }], // Align visually with text
+    marginTop: Tokens.spacing[2],
   },
 });
 
