@@ -22,6 +22,10 @@ interface SortResponse {
   sorted: SortedItem[];
 }
 
+const NETWORK_RESTRICTION_ERROR =
+  'AI sort is unavailable in this browser session (network/CORS restriction). Items remain saved locally.';
+const GENERIC_SORT_ERROR = 'Unable to sort items right now.';
+
 const ALLOWED_CATEGORIES: SortCategory[] = [
   'task',
   'event',
@@ -61,6 +65,21 @@ function assertSortResponse(value: unknown): SortResponse {
   };
 }
 
+function isLikelyNetworkOrCorsError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const message = error.message.toLowerCase();
+  return (
+    message.includes('failed to fetch') ||
+    message.includes('networkerror') ||
+    message.includes('err_failed') ||
+    message.includes('load failed') ||
+    message.includes('cors')
+  );
+}
+
 const AISortService = {
   async sortItems(items: string[], timezone?: string): Promise<SortedItem[]> {
     const cleanedItems = items
@@ -72,27 +91,50 @@ const AISortService = {
       return [];
     }
 
-    const response = await fetch(`${config.apiBaseUrl}/api/sort`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        items: cleanedItems,
-        timezone,
-      }),
-    });
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/api/sort`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cleanedItems,
+          timezone,
+        }),
+      });
 
-    const payload = await response.json();
-    if (!response.ok) {
-      const message =
-        payload && typeof payload.error === 'string'
-          ? payload.error
-          : 'Unable to sort items right now.';
-      throw new Error(message);
+      let payload: unknown = null;
+      try {
+        payload = await response.json();
+      } catch {
+        if (!response.ok) {
+          throw new Error(GENERIC_SORT_ERROR);
+        }
+        throw new Error('Invalid AI sort response payload.');
+      }
+
+      if (!response.ok) {
+        const message =
+          payload &&
+          typeof payload === 'object' &&
+          typeof (payload as { error?: unknown }).error === 'string'
+            ? (payload as { error: string }).error
+            : GENERIC_SORT_ERROR;
+        throw new Error(message);
+      }
+
+      return assertSortResponse(payload).sorted;
+    } catch (error) {
+      if (isLikelyNetworkOrCorsError(error)) {
+        throw new Error(NETWORK_RESTRICTION_ERROR);
+      }
+
+      if (error instanceof Error) {
+        throw error;
+      }
+
+      throw new Error(GENERIC_SORT_ERROR);
     }
-
-    return assertSortResponse(payload).sorted;
   },
 };
 

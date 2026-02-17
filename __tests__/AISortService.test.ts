@@ -59,4 +59,23 @@ describe('AISortService', () => {
       'Rate limit exceeded',
     );
   });
+
+  it('maps browser network/CORS failures to friendly fallback error', async () => {
+    (fetch as jest.Mock).mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
+      'AI sort is unavailable in this browser session (network/CORS restriction). Items remain saved locally.',
+    );
+  });
+
+  it('falls back to generic message when non-ok response has invalid json', async () => {
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      json: jest.fn().mockRejectedValue(new Error('Unexpected token <')),
+    });
+
+    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
+      'Unable to sort items right now.',
+    );
+  });
 });
