@@ -34,6 +34,31 @@ interface AudioModule {
   };
 }
 
+interface E2ERecordingMock {
+  failStart?: boolean;
+  failStop?: boolean;
+  duration?: number;
+  uri?: string;
+}
+
+const getE2ERecordingMock = (): E2ERecordingMock | null => {
+  if (typeof globalThis === 'undefined') {
+    return null;
+  }
+
+  const globalRecord = globalThis as unknown as Record<string, unknown>;
+  if (globalRecord.__SPARK_E2E_TEST_MODE__ !== true) {
+    return null;
+  }
+
+  const mock = globalRecord.__SPARK_E2E_RECORDING_MOCK__;
+  if (!mock || typeof mock !== 'object') {
+    return null;
+  }
+
+  return mock as E2ERecordingMock;
+};
+
 const loadAudioModule = (): AudioModule | null => {
   try {
     const module = require('expo-av') as { Audio?: AudioModule };
@@ -70,6 +95,15 @@ class RecordingServiceClass {
    * Start recording audio
    */
   async startRecording(): Promise<boolean> {
+    const e2eMock = getE2ERecordingMock();
+    if (e2eMock) {
+      if (e2eMock.failStart) {
+        return false;
+      }
+      this.isRecording = true;
+      return true;
+    }
+
     if (this.isRecording) {
       console.warn('Already recording');
       return false;
@@ -116,6 +150,20 @@ class RecordingServiceClass {
    * Stop recording and return the audio file URI
    */
   async stopRecording(): Promise<RecordingResult | null> {
+    const e2eMock = getE2ERecordingMock();
+    if (e2eMock) {
+      if (!this.isRecording || e2eMock.failStop) {
+        this.isRecording = false;
+        return null;
+      }
+
+      this.isRecording = false;
+      return {
+        uri: e2eMock.uri ?? 'mock://spark-recording.m4a',
+        duration: e2eMock.duration ?? 1500,
+      };
+    }
+
     if (!this.recording || !this.isRecording) {
       console.warn('No active recording');
       return null;

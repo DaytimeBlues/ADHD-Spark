@@ -77,6 +77,9 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
           return (
             <Pressable
               key={route.key}
+              testID={`nav-${route.name.toLowerCase()}`}
+              accessibilityRole="button"
+              accessibilityLabel={`${route.name} tab`}
               onPress={onPress}
               style={({ pressed }) => ({
                 flexDirection: 'row',
@@ -99,6 +102,7 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
               })}
             >
               <Text
+                testID={`nav-label-${route.name.toLowerCase()}`}
                 style={{
                   color: isFocused
                     ? Tokens.colors.text.primary

@@ -179,6 +179,21 @@ class PlaudServiceClass {
    * @returns Transcription result
    */
   async transcribe(audioUri: string): Promise<TranscriptionResult> {
+    const globalRecord =
+      typeof globalThis === 'undefined'
+        ? null
+        : (globalThis as unknown as Record<string, unknown>);
+    if (globalRecord?.__SPARK_E2E_TEST_MODE__ === true) {
+      const mockTranscription = globalRecord.__SPARK_E2E_TRANSCRIBE_MOCK__;
+      if (typeof mockTranscription === 'string' && mockTranscription.trim()) {
+        return {
+          success: true,
+          transcription: mockTranscription,
+          summary: 'E2E mock transcription',
+        };
+      }
+    }
+
     try {
       // Read audio file and create form data
       const formData = new FormData();

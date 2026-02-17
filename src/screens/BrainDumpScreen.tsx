@@ -312,9 +312,7 @@ const BrainDumpScreen = () => {
         );
       } else if (exportResult.errorMessage) {
         setSortingError(exportResult.errorMessage);
-      }
-
-      if (
+      } else if (
         createdTaskCount > 0 ||
         exportResult.createdTasks > 0 ||
         exportResult.createdEvents > 0
@@ -581,6 +579,7 @@ const BrainDumpScreen = () => {
           {/* Recording Button */}
           <View style={styles.recordSection}>
             <Pressable
+              testID="brain-dump-record-toggle"
               onPress={handleRecordPress}
               disabled={recordingState === 'processing'}
               accessibilityRole="button"
@@ -639,6 +638,7 @@ const BrainDumpScreen = () => {
               <Text style={styles.countText}>{items.length} ITEMS</Text>
               <View style={styles.actionsRight}>
                 <Pressable
+                  testID="brain-dump-ai-sort"
                   onPress={handleAISort}
                   disabled={isSorting}
                   accessibilityRole="button"

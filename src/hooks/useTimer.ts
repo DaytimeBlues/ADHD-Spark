@@ -7,6 +7,18 @@ interface UseTimerOptions {
   autoStart?: boolean;
 }
 
+const getGlobalRecord = (): Record<string, unknown> | null => {
+  if (typeof globalThis === 'undefined') {
+    return null;
+  }
+  return globalThis as unknown as Record<string, unknown>;
+};
+
+const isE2ETestMode = (): boolean => {
+  const globalRecord = getGlobalRecord();
+  return globalRecord?.__SPARK_E2E_TEST_MODE__ === true;
+};
+
 const useTimer = ({
   initialTime,
   onComplete,
@@ -15,6 +27,7 @@ const useTimer = ({
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(autoStart);
   const [hasCompleted, setHasCompleted] = useState(false);
+  const tickMs = isE2ETestMode() ? 100 : 1000;
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -30,7 +43,7 @@ const useTimer = ({
           }
           return prev - 1;
         });
-      }, 1000);
+      }, tickMs);
     }
 
     return () => {
@@ -38,7 +51,39 @@ const useTimer = ({
         clearInterval(interval);
       }
     };
-  }, [isRunning, timeLeft, onComplete]);
+  }, [isRunning, onComplete, tickMs, timeLeft]);
+
+  useEffect(() => {
+    if (!isE2ETestMode()) {
+      return;
+    }
+
+    const globalRecord = getGlobalRecord();
+    if (!globalRecord) {
+      return;
+    }
+
+    globalRecord.__SPARK_E2E_TIMER_CONTROLS__ = {
+      complete: () => {
+        setTimeLeft(0);
+        setIsRunning(false);
+        setHasCompleted(true);
+        onComplete?.();
+      },
+      fastForward: (seconds: number) => {
+        if (!Number.isFinite(seconds) || seconds <= 0) {
+          return;
+        }
+        setTimeLeft((prev) => Math.max(0, prev - Math.floor(seconds)));
+      },
+    };
+
+    return () => {
+      if (globalRecord.__SPARK_E2E_TIMER_CONTROLS__) {
+        delete globalRecord.__SPARK_E2E_TIMER_CONTROLS__;
+      }
+    };
+  }, [onComplete]);
 
   const start = useCallback(() => {
     setIsRunning(true);

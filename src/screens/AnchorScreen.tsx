@@ -161,7 +161,9 @@ const AnchorScreen = () => {
                   ]}
                 />
                 <Text style={styles.phaseText}>{getPhaseText()}</Text>
-                <Text style={styles.countText}>{count}</Text>
+                <Text testID="anchor-count" style={styles.countText}>
+                  {count}
+                </Text>
               </View>
 
               <LinearButton
@@ -179,6 +181,7 @@ const AnchorScreen = () => {
               {(Object.keys(PATTERNS) as BreathingPattern[]).map((p) => (
                 <Pressable
                   key={p}
+                  testID={`anchor-pattern-${p}`}
                   style={({
                     pressed,
                     hovered,

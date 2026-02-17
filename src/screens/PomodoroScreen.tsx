@@ -142,8 +142,10 @@ const PomodoroScreen = () => {
 
         <View style={styles.timerCard}>
           <View style={[styles.phaseIndicator, phaseIndicatorStyle]} />
-          <Text style={styles.timer}>{formattedTime}</Text>
-          <Text style={[styles.phaseText, phaseTextStyle]}>
+          <Text testID="timer-display" style={styles.timer}>
+            {formattedTime}
+          </Text>
+          <Text testID="pomodoro-phase" style={[styles.phaseText, phaseTextStyle]}>
             {isWorking ? '🔥 FOCUS' : '🌿 REST'}
           </Text>
         </View>

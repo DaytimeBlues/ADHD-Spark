@@ -165,7 +165,7 @@ const FogCutterScreen = ({
     );
   };
 
-  const renderMicroStep = ({
+const renderMicroStep = ({
     item,
     index,
   }: {
@@ -173,7 +173,7 @@ const FogCutterScreen = ({
     index: number;
   }) => (
     <View style={styles.microStep}>
-      <Text style={styles.stepNumber}>
+      <Text testID={`microstep-number-${index + 1}`} style={styles.stepNumber}>
         {(index + 1).toString().padStart(2, '0')}
       </Text>
       <Text style={styles.stepText}>{item}</Text>
