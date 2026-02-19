@@ -192,10 +192,7 @@ const renderMicroStep = ({
           <View style={styles.rationaleCard}>
             <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
             <Text style={styles.rationaleText}>
-              CBT/CADDI research shows ADHD paralysis comes from seeing tasks as 
-              monolithic. Breaking tasks into micro-steps (2-5 minutes each) 
-              reduces cognitive load and creates multiple "completion wins" 
-              that build dopamine and momentum.
+              CBT/CADDI research shows ADHD paralysis comes from seeing tasks as monolithic. Breaking tasks into micro-steps (2-5 minutes each) reduces cognitive load and creates multiple completion wins that build dopamine and momentum.
             </Text>
           </View>
 
@@ -434,7 +431,8 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.lineHeight.relaxed,
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
   creationCard: {
     marginBottom: Tokens.spacing[6],

@@ -197,9 +197,7 @@ const IgniteScreen = () => {
           <View style={styles.rationaleCard}>
             <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
             <Text style={styles.rationaleText}>
-              Based on CBT/CADDI principles, the hardest part of ADHD is often 
-              starting. This 5-minute timer creates a low-commitment entry point 
-              to bypass procrastination and build behavioral activation momentum.
+              Based on CBT/CADDI principles, the hardest part of ADHD is often starting. This 5-minute timer creates a low-commitment entry point to bypass procrastination and build behavioral activation momentum.
             </Text>
           </View>
 
@@ -433,7 +431,8 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.lineHeight.relaxed,
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
 });
 

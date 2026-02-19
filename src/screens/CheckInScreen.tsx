@@ -153,10 +153,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
           <View style={styles.rationaleCard}>
             <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
             <Text style={styles.rationaleText}>
-              Self-monitoring is a core CBT skill for ADHD. Tracking mood and 
-              energy helps identify patterns, predict challenges, and choose 
-              appropriate interventions. This metacognitive awareness creates 
-              space between feeling and action.
+              Self-monitoring is a core CBT skill for ADHD. Tracking mood and energy helps identify patterns, predict challenges, and choose appropriate interventions. This metacognitive awareness creates space between feeling and action.
             </Text>
           </View>
 
@@ -310,7 +307,8 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.lineHeight.relaxed,
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
   section: {
     marginBottom: Tokens.spacing[8],

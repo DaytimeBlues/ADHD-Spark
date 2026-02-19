@@ -143,10 +143,7 @@ const PomodoroScreen = () => {
         <View style={styles.rationaleCard}>
           <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
           <Text style={styles.rationaleText}>
-            Structured work/break cycles align with ADHD dopamine regulation. 
-            Short bursts (25 min) prevent hyperfocus burnout, while mandatory 
-            breaks restore attention. Evidence-based from CBT time-management 
-            protocols for sustained task persistence.
+            Structured work/break cycles align with ADHD dopamine regulation. Short bursts (25 min) prevent hyperfocus burnout, while mandatory breaks restore attention. Evidence-based from CBT time-management protocols for sustained task persistence.
           </Text>
         </View>
 
@@ -254,7 +251,8 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.lineHeight.relaxed,
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
   sessionCounter: {
     flexDirection: 'row',

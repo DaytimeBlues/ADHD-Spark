@@ -150,10 +150,7 @@ const AnchorScreen = () => {
           <View style={styles.rationaleCard}>
             <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
             <Text style={styles.rationaleText}>
-              Emotional dysregulation is core to ADHD. These breathing patterns 
-              activate the parasympathetic nervous system, reducing cortisol and 
-              creating a "pause" between stimulus and response. CBT techniques 
-              for emotional regulation, made tangible through guided breath.
+              Emotional dysregulation is core to ADHD. These breathing patterns activate the parasympathetic nervous system, reducing cortisol and creating a pause between stimulus and response. CBT techniques for emotional regulation, made tangible through guided breath.
             </Text>
           </View>
 
@@ -297,7 +294,8 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.lineHeight.relaxed,
+    lineHeight: 22,
+    flexWrap: 'wrap',
   },
   activeContainer: {
     alignItems: 'center',
