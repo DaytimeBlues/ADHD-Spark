@@ -140,6 +140,12 @@ public class OverlayModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void isRunning(Promise promise) {
+    OverlayService service = OverlayService.getInstance();
+    promise.resolve(service != null);
+  }
+
+  @ReactMethod
   public void requestOverlayPermission(Promise promise) {
     if (Settings.canDrawOverlays(reactContext)) {
       WritableMap payload = Arguments.createMap();

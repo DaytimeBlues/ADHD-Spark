@@ -20,9 +20,18 @@ export type OverlayIntentPayload = {
   autoRecord?: boolean;
 };
 
+const OVERLAY_ROUTE_ALIASES: Record<string, string> = {
+  Ignite: ROUTES.FOCUS,
+  BrainDump: ROUTES.TASKS,
+  FogCutter: ROUTES.FOG_CUTTER,
+  CheckIn: ROUTES.CHECK_IN,
+};
+
 const ALLOWED_OVERLAY_ROUTES = new Set<string>([
+  ROUTES.FOCUS,
   ROUTES.CBT_GUIDE,
   ROUTES.FOG_CUTTER,
+  ROUTES.POMODORO,
   ROUTES.TASKS,
   ROUTES.ANCHOR,
   ROUTES.CHECK_IN,
@@ -30,22 +39,28 @@ const ALLOWED_OVERLAY_ROUTES = new Set<string>([
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
+function normalizeOverlayRoute(route: string): string {
+  return OVERLAY_ROUTE_ALIASES[route] ?? route;
+}
+
 export function handleOverlayIntent(payload: OverlayIntentPayload): boolean {
   if (!navigationRef.isReady() || !payload.route) {
     return false;
   }
 
-  if (!ALLOWED_OVERLAY_ROUTES.has(payload.route)) {
+  const normalizedRoute = normalizeOverlayRoute(payload.route);
+
+  if (!ALLOWED_OVERLAY_ROUTES.has(normalizedRoute)) {
     return false;
   }
 
-  if (payload.route === ROUTES.TASKS) {
+  if (normalizedRoute === ROUTES.TASKS) {
     navigationRef.navigate(ROUTES.TASKS, {
       autoRecord: payload.autoRecord === true,
     });
     return true;
   }
 
-  navigationRef.navigate(payload.route as keyof RootStackParamList);
+  navigationRef.navigate(normalizedRoute as keyof RootStackParamList);
   return true;
 }

@@ -13,6 +13,7 @@ const { OverlayModule } = NativeModules as {
     canDrawOverlays: () => Promise<boolean>;
     requestOverlayPermission: () => Promise<boolean>;
     canPostNotifications: () => Promise<boolean>;
+    isRunning: () => Promise<boolean>;
     collapseOverlay?: () => void;
     isExpanded?: () => Promise<boolean>;
     addListener?: (eventName: string) => void;
@@ -99,6 +100,21 @@ const OverlayService = {
       return true; // Assume granted if method not available
     }
     return OverlayModule.canPostNotifications();
+  },
+
+  async isRunning(): Promise<boolean> {
+    if (Platform.OS !== 'android') {
+      return false;
+    }
+    if (!OverlayModule?.isRunning) {
+      return false;
+    }
+    try {
+      return await OverlayModule.isRunning();
+    } catch (error) {
+      console.warn('OverlayService.isRunning failed:', error);
+      return false;
+    }
   },
 
   startOverlay() {

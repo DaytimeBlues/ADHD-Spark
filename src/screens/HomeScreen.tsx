@@ -223,10 +223,15 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     modes.map(() => new Animated.Value(ENTRANCE_OFFSET_Y)),
   ).current;
 
-  const checkOverlayPermission = useCallback(async () => {
+  const checkOverlayState = useCallback(async () => {
     if (Platform.OS === 'android') {
-      const hasPermission = await OverlayService.canDrawOverlays();
-      setIsOverlayEnabled(hasPermission);
+      try {
+        const running = await OverlayService.isRunning();
+        setIsOverlayEnabled(running);
+      } catch (error) {
+        console.warn('Failed to check overlay state:', error);
+        setIsOverlayEnabled(false);
+      }
     }
   }, []);
 
@@ -271,7 +276,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   useEffect(() => {
     loadStreak();
-    checkOverlayPermission();
+    checkOverlayState();
 
     if (prefersReducedMotion) {
       fadeAnims.forEach((anim) => anim.setValue(1));
@@ -298,7 +303,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
     Animated.stagger(ANIMATION_STAGGER, animations).start();
   }, [
-    checkOverlayPermission,
+    checkOverlayState,
     fadeAnims,
     loadStreak,
     modes,
@@ -315,7 +320,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       'change',
       (nextState: AppStateStatus) => {
         if (nextState === 'active') {
-          checkOverlayPermission();
+          checkOverlayState();
         }
       },
     );
@@ -323,7 +328,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     return () => {
       appStateSubscription.remove();
     };
-  }, [checkOverlayPermission]);
+  }, [checkOverlayState]);
 
   useEffect(() => {
     if (Platform.OS !== 'android') {
@@ -374,11 +379,27 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       },
     );
 
+    const unsubscribeOverlayStarted = OverlayService.addEventListener(
+      'overlay_started',
+      () => {
+        setIsOverlayEnabled(true);
+      },
+    );
+
+    const unsubscribeOverlayStopped = OverlayService.addEventListener(
+      'overlay_stopped',
+      () => {
+        setIsOverlayEnabled(false);
+      },
+    );
+
     return () => {
       unsubscribePermissionRequested?.();
       unsubscribePermissionResult?.();
       unsubscribePermissionTimeout?.();
       unsubscribePermissionError?.();
+      unsubscribeOverlayStarted?.();
+      unsubscribeOverlayStopped?.();
     };
   }, [addOverlayEvent]);
 

@@ -263,9 +263,10 @@ public class OverlayService extends Service {
     addMenuItem("Anchor", "Anchor", false);
     addMenuItem("Check In", "CheckIn", false);
     addMenuItem("Brain Dump", "BrainDump", true);
+    addMenuItem("Disable Overlay", null, false);
   }
 
-  private void addMenuItem(String label, String route, boolean autoRecord) {
+  private void addMenuItem(String label, @Nullable String route, boolean autoRecord) {
     TextView menuItem = new TextView(this);
     menuItem.setText(label.toUpperCase());
     menuItem.setTextColor(0xFFFFFFFF);
@@ -303,7 +304,11 @@ public class OverlayService extends Service {
     });
     
     menuItem.setOnClickListener((ignored) -> {
-      launchRoute(route, autoRecord);
+      if (route != null) {
+        launchRoute(route, autoRecord);
+      } else {
+        stopSelf();
+      }
       collapseMenu();
     });
     menuView.addView(menuItem);
