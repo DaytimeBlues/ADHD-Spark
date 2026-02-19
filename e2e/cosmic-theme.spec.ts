@@ -129,7 +129,7 @@ const screenRoutes: { id: string; verifyText: string }[] = [
     { id: 'fogcutter', verifyText: 'FOG_CUTTER' },
     { id: 'pomodoro', verifyText: 'START TIMER' },
     { id: 'anchor', verifyText: 'BREATHING EXERCISES' },
-    { id: 'checkin', verifyText: 'CHECK IN' },
+    { id: 'checkin', verifyText: 'HOW ARE YOU FEELING RIGHT NOW?' },
     { id: 'cbtguide', verifyText: 'EVIDENCE-BASED STRATEGIES' },
 ];
 

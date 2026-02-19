@@ -36,7 +36,7 @@ export const THEME_STORAGE_KEY = 'theme';
 /**
  * Default theme variant
  */
-export const DEFAULT_THEME_VARIANT: ThemeVariant = 'linear';
+export const DEFAULT_THEME_VARIANT: ThemeVariant = 'cosmic';
 
 // ============================================================================
 // MIGRATION UTILITIES
@@ -50,7 +50,7 @@ const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   // Direct mappings
   'linear': 'linear',
   'cosmic': 'cosmic',
-  
+
   // Legacy/deprecated values (if any existed)
   'default': 'linear',
   'dark': 'linear',
@@ -72,17 +72,17 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
   if (!value) {
     return DEFAULT_THEME_VARIANT;
   }
-  
+
   // Check if it's a known legacy value
   if (value in LEGACY_THEME_MAP) {
     return LEGACY_THEME_MAP[value];
   }
-  
+
   // Validate it's a current variant
   if (value === 'linear' || value === 'cosmic') {
     return value;
   }
-  
+
   // Unknown value, default to linear for safety
   console.warn(`[Theme] Unknown theme value "${value}", defaulting to "${DEFAULT_THEME_VARIANT}"`);
   return DEFAULT_THEME_VARIANT;

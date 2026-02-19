@@ -471,32 +471,11 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.maxWidthWrapper}>
-          <View style={styles.header}>
-            <View>
-              <Text
-                style={styles.title}
-                testID="home-title"
-                accessibilityLabel="home-title"
-              >
-                SPARK_PRO
-              </Text>
-              <View style={styles.systemStatusRow}>
-                <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
-                <View style={styles.statusDot} />
-              </View>
-            </View>
-            <View
-              style={styles.streakBadge}
-              testID="home-streak-badge"
-              accessibilityRole="text"
-              accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? 'days' : 'day'}`}
-            >
-              <Text
-                style={styles.streakText}
-                testID="home-streak"
-                accessibilityLabel="home-streak"
-              >
-                STREAK.{streak.toString().padStart(3, '0')}
+            <View style={styles.header}>
+              <View>
+                <Text
+                  style={styles.title}
+                  STREAK.{streak.toString().padStart(3, '0')}
               </Text>
             </View>
           </View>
@@ -551,12 +530,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
               {(reentryPromptLevel === 'gentle_restart' ||
                 reentryPromptLevel === 'fresh_restart') && (
-                <ReEntryPrompt
-                  level={reentryPromptLevel}
-                  onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
-                  testID="reentry-prompt"
-                />
-              )}
+                  <ReEntryPrompt
+                    level={reentryPromptLevel}
+                    onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
+                    testID="reentry-prompt"
+                  />
+                )}
             </View>
           )}
 
@@ -662,7 +641,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-    </CosmicBackground>
+    </CosmicBackground >
   );
 };
 
@@ -796,6 +775,26 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
   },
   overlayCardActive: {
     borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Tokens.spacing[3],
+  },
+  settingsButton: {
+    width: 32,
+    height: 32,
+    borderRadius: isCosmic ? 8 : 0,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsButtonText: {
+    fontSize: 18,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+    marginTop: Platform.OS === 'web' ? -2 : 0,
   },
   overlayTextGroup: {
     flex: 1,
