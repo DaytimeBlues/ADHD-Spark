@@ -4,7 +4,8 @@ import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
 import useTimer from '../hooks/useTimer';
 import { LinearButton } from '../components/ui/LinearButton';
-import { Tokens } from '../theme/tokens';
+import { Tokens, useTheme } from '../theme/tokens';
+import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
 
 type PomodoroState = {
   isWorking: boolean;
@@ -14,23 +15,12 @@ type PomodoroState = {
 
 const SESSION_BADGE_SIZE = 28;
 const TIMER_CARD_SIZE = 280;
-const TIMER_TEXT_SHADOW = '0 0 0 rgba(0,0,0,0)'; // Removed shadow
 const FOCUS_DURATION_SECONDS = 25 * 60;
 const BREAK_DURATION_SECONDS = 5 * 60;
 const PERSIST_INTERVAL_MS = 5000;
 
-const PHASE_STYLES = {
-  focus: {
-    bg: 'rgba(239, 68, 68, 0.05)',
-    glow: '0 0 0 transparent',
-  },
-  break: {
-    bg: 'rgba(34, 197, 94, 0.05)',
-    glow: '0 0 0 transparent',
-  },
-};
-
 const PomodoroScreen = () => {
+  const { isCosmic } = useTheme();
   const [isWorking, setIsWorking] = useState(true);
   const [sessions, setSessions] = useState(0);
   const isWorkingRef = useRef(isWorking);
@@ -122,83 +112,145 @@ const PomodoroScreen = () => {
     setTime(FOCUS_DURATION_SECONDS);
   };
 
-  const phaseIndicatorStyle = isWorking
-    ? styles.phaseIndicatorFocus
-    : styles.phaseIndicatorBreak;
+  const getTotalDuration = () => {
+    return isWorking ? FOCUS_DURATION_SECONDS : BREAK_DURATION_SECONDS;
+  };
 
-  const phaseTextStyle = isWorking
-    ? styles.phaseTextFocus
-    : styles.phaseTextBreak;
+  const styles = getStyles(isCosmic);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>POMODORO</Text>
-          <Text style={styles.subtitle}>
-            {isWorking ? 'FOCUS BLOCK' : 'RECOVERY BREAK'}
-          </Text>
-        </View>
-
-        <View style={styles.rationaleCard}>
-          <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
-          <Text style={styles.rationaleText}>
-            Structured work/break cycles align with ADHD dopamine regulation. Short bursts (25 min) prevent hyperfocus burnout, while mandatory breaks restore attention. Evidence-based from CBT time-management protocols for sustained task persistence.
-          </Text>
-        </View>
-
-        <View style={styles.timerCard}>
-          <View style={[styles.phaseIndicator, phaseIndicatorStyle]} />
-          <Text testID="timer-display" style={styles.timer}>
-            {formattedTime}
-          </Text>
-          <Text testID="pomodoro-phase" style={[styles.phaseText, phaseTextStyle]}>
-            {isWorking ? '🔥 FOCUS' : '🌿 REST'}
-          </Text>
-        </View>
-
-        <View style={styles.sessionCounter}>
-          <View style={styles.sessionBadge}>
-            <Text style={styles.sessionCount}>{sessions}</Text>
+    <CosmicBackground variant="nebula" style={StyleSheet.absoluteFill}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.title}>POMODORO</Text>
+            <Text style={styles.subtitle}>
+              {isWorking ? 'FOCUS BLOCK' : 'RECOVERY BREAK'}
+            </Text>
           </View>
-          <Text style={styles.sessionLabel}>COMPLETED SESSIONS</Text>
-        </View>
 
-        <View style={styles.controls}>
-          {!isRunning ? (
-            <LinearButton
-              title="Start Timer"
-              onPress={startTimer}
-              variant={isWorking ? 'primary' : 'secondary'}
-              size="lg"
-              style={styles.controlBtn}
-            />
-          ) : (
-            <LinearButton
-              title="Pause"
-              onPress={pauseTimer}
-              variant="secondary"
-              size="lg"
-              style={styles.controlBtn}
-            />
-          )}
-          <LinearButton
-            title="Reset"
-            onPress={resetTimer}
-            variant="ghost"
-            size="md"
-          />
+          <View style={styles.rationaleCard}>
+            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+            <Text style={styles.rationaleText}>
+              Structured work/break cycles align with ADHD dopamine regulation. Short bursts (25 min) prevent hyperfocus burnout, while mandatory breaks restore attention. Evidence-based from CBT time-management protocols for sustained task persistence.
+            </Text>
+          </View>
+
+          <View style={styles.timerCard}>
+            {isCosmic ? (
+              <>
+                <HaloRing
+                  mode="progress"
+                  progress={1 - timeLeft / getTotalDuration()}
+                  size={TIMER_CARD_SIZE}
+                  glow={isRunning ? 'strong' : 'medium'}
+                  color={isWorking ? '#EF4444' : '#22C55E'}
+                />
+                <View style={styles.timerOverlay}>
+                  <ChronoDigits
+                    value={formattedTime}
+                    size="hero"
+                    glow={isRunning ? 'strong' : 'none'}
+                    color={isWorking ? '#EEF2FF' : '#22C55E'}
+                  />
+                  <Text
+                    testID="pomodoro-phase"
+                    style={[styles.phaseText, isWorking ? styles.phaseTextFocus : styles.phaseTextBreak]}
+                  >
+                    {isWorking ? '🔥 FOCUS' : '🌿 REST'}
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={[styles.phaseIndicator, isWorking ? styles.phaseIndicatorFocus : styles.phaseIndicatorBreak]} />
+                <Text testID="timer-display" style={styles.timer}>
+                  {formattedTime}
+                </Text>
+                <Text testID="pomodoro-phase" style={[styles.phaseText, isWorking ? styles.phaseTextFocus : styles.phaseTextBreak]}>
+                  {isWorking ? '🔥 FOCUS' : '🌿 REST'}
+                </Text>
+              </>
+            )}
+          </View>
+
+          <View style={styles.sessionCounter}>
+            <View style={styles.sessionBadge}>
+              <Text style={styles.sessionCount}>{sessions}</Text>
+            </View>
+            <Text style={styles.sessionLabel}>COMPLETED SESSIONS</Text>
+          </View>
+
+          <View style={styles.controls}>
+            {!isRunning ? (
+              isCosmic ? (
+                <RuneButton
+                  variant="primary"
+                  size="lg"
+                  glow="medium"
+                  onPress={startTimer}
+                  style={styles.controlBtn}
+                >
+                  Start Timer
+                </RuneButton>
+              ) : (
+                <LinearButton
+                  title="Start Timer"
+                  onPress={startTimer}
+                  variant={isWorking ? 'primary' : 'secondary'}
+                  size="lg"
+                  style={styles.controlBtn}
+                />
+              )
+            ) : (
+              isCosmic ? (
+                <RuneButton
+                  variant="secondary"
+                  size="lg"
+                  onPress={pauseTimer}
+                  style={styles.controlBtn}
+                >
+                  Pause
+                </RuneButton>
+              ) : (
+                <LinearButton
+                  title="Pause"
+                  onPress={pauseTimer}
+                  variant="secondary"
+                  size="lg"
+                  style={styles.controlBtn}
+                />
+              )
+            )}
+            {isCosmic ? (
+              <RuneButton
+                variant="ghost"
+                size="md"
+                onPress={resetTimer}
+                style={styles.controlBtn}
+              >
+                Reset
+              </RuneButton>
+            ) : (
+              <LinearButton
+                title="Reset"
+                onPress={resetTimer}
+                variant="ghost"
+                size="md"
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </CosmicBackground>
   );
 };
 
-const styles = StyleSheet.create({
+// Theme-aware styles
+const getStyles = (isCosmic: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
-    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   content: {
     flex: 1,
@@ -216,7 +268,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
     letterSpacing: 2,
     textAlign: 'center',
@@ -224,7 +276,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
-    color: Tokens.colors.text.tertiary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
     textAlign: 'center',
     letterSpacing: 1,
     ...Platform.select({
@@ -232,17 +284,18 @@ const styles = StyleSheet.create({
     }),
   },
   rationaleCard: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[6],
+    borderRadius: isCosmic ? 12 : 0,
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
@@ -250,7 +303,7 @@ const styles = StyleSheet.create({
   rationaleText: {
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     lineHeight: 22,
     flexWrap: 'wrap',
   },
@@ -258,33 +311,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Tokens.spacing[8],
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[2],
-    borderRadius: Tokens.radii.none, // Sharp
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
     gap: Tokens.spacing[3],
   },
   sessionBadge: {
-    backgroundColor: Tokens.colors.brand[900],
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.brand[900],
     width: SESSION_BADGE_SIZE,
     height: SESSION_BADGE_SIZE,
-    borderRadius: 0, // Square
+    borderRadius: isCosmic ? 6 : 0,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: Tokens.colors.brand[700],
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[700],
   },
   sessionCount: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.brand[100],
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.brand[100],
     fontSize: Tokens.type.sm,
     fontWeight: '700',
   },
   sessionLabel: {
     fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.tertiary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
     fontSize: Tokens.type.sm,
     letterSpacing: 0.5,
   },
@@ -295,10 +348,15 @@ const styles = StyleSheet.create({
     width: TIMER_CARD_SIZE,
     height: TIMER_CARD_SIZE,
     position: 'relative',
-    borderRadius: Tokens.radii.full, // Keep circle for timer
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderRadius: Tokens.radii.full,
+    backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darker,
+    borderWidth: isCosmic ? 0 : 1,
+    borderColor: isCosmic ? 'transparent' : Tokens.colors.neutral.borderSubtle,
+  },
+  timerOverlay: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   phaseIndicator: {
     position: 'absolute',
@@ -316,28 +374,19 @@ const styles = StyleSheet.create({
   phaseIndicatorFocus: {
     borderColor: Tokens.colors.error.main,
     backgroundColor: 'transparent',
-    ...Platform.select({
-      web: { boxShadow: PHASE_STYLES.focus.glow },
-    }),
   },
   phaseIndicatorBreak: {
     borderColor: Tokens.colors.success.main,
     backgroundColor: 'transparent',
-    ...Platform.select({
-      web: { boxShadow: PHASE_STYLES.break.glow },
-    }),
   },
   timer: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.giga,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontVariant: ['tabular-nums'],
     textAlign: 'center',
     letterSpacing: -2,
-    ...Platform.select({
-      web: { textShadow: TIMER_TEXT_SHADOW },
-    }),
   },
   phaseText: {
     fontFamily: Tokens.type.fontFamily.sans,
@@ -351,10 +400,10 @@ const styles = StyleSheet.create({
     }),
   },
   phaseTextFocus: {
-    color: Tokens.colors.error.main,
+    color: isCosmic ? '#EF4444' : Tokens.colors.error.main,
   },
   phaseTextBreak: {
-    color: Tokens.colors.success.main,
+    color: isCosmic ? '#22C55E' : Tokens.colors.success.main,
   },
   controls: {
     width: '100%',
@@ -364,6 +413,7 @@ const styles = StyleSheet.create({
   },
   controlBtn: {
     width: '100%',
+    borderRadius: isCosmic ? 8 : 0,
   },
 });
 

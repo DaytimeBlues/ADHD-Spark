@@ -31,7 +31,8 @@ import { generateId } from '../utils/helpers';
 import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
-import { Tokens } from '../theme/tokens';
+import { CosmicBackground, GlowCard, RuneButton } from '../components/ui/cosmic';
+import { Tokens, useTheme } from '../theme/tokens';
 
 const HIT_SLOP = {
   top: Tokens.spacing[4],
@@ -117,6 +118,8 @@ const toFogCutterTask = (item: SortedItem): StoredFogCutterTask | null => {
 };
 
 const BrainDumpScreen = () => {
+  const { isCosmic } = useTheme();
+  const styles = getStyles(isCosmic);
   const route = useRoute<BrainDumpRoute>();
   const [input, setInput] = useState('');
   const [items, setItems] = useState<DumpItem[]>([]);
@@ -513,7 +516,7 @@ const BrainDumpScreen = () => {
     </View>
   );
 
-  return (
+  const content = (
     <SafeAreaView style={styles.container}>
       <View style={styles.centerContainer}>
         <View style={styles.contentWrapper}>
@@ -522,12 +525,24 @@ const BrainDumpScreen = () => {
             <View style={styles.headerLine} />
           </View>
 
-          <View style={styles.rationaleCard}>
-            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
-            <Text style={styles.rationaleText}>
-              Cognitive offloading is essential for ADHD working memory. Externalizing thoughts reduces mental clutter and prevents thought chasing. CBT/CADDI uses this to create space for prioritization and prevent overwhelm from competing demands.
-            </Text>
-          </View>
+          {isCosmic ? (
+            <GlowCard
+              style={styles.rationaleCard}
+              testID="rationale-card"
+            >
+              <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+              <Text style={styles.rationaleText}>
+                Cognitive offloading is essential for ADHD working memory. Externalizing thoughts reduces mental clutter and prevents thought chasing. CBT/CADDI uses this to create space for prioritization and prevent overwhelm from competing demands.
+              </Text>
+            </GlowCard>
+          ) : (
+            <View style={styles.rationaleCard}>
+              <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+              <Text style={styles.rationaleText}>
+                Cognitive offloading is essential for ADHD working memory. Externalizing thoughts reduces mental clutter and prevents thought chasing. CBT/CADDI uses this to create space for prioritization and prevent overwhelm from competing demands.
+              </Text>
+            </View>
+          )}
 
           <View style={styles.inputSection}>
             <View
@@ -694,32 +709,61 @@ const BrainDumpScreen = () => {
           {sortingError && <Text style={styles.errorText}>{sortingError}</Text>}
 
           {!isLoading && groupedSortedItems.length > 0 && (
-            <View style={styles.sortedSection}>
-              <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
-              {groupedSortedItems.map(({ category, items: categoryItems }) => (
-                <View key={category} style={styles.sortedGroup}>
-                  <Text style={styles.sortedCategory}>
-                    {category.toUpperCase()}
-                  </Text>
-                  {categoryItems.map((item, index) => (
-                    <View
-                      key={`${category}-${index}-${item.text}`}
-                      style={styles.sortedItemRow}
-                    >
-                      <Text style={styles.sortedItemText}>{item.text}</Text>
+            isCosmic ? (
+              <GlowCard style={styles.sortedSection} testID="ai-analysis-section">
+                <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
+                {groupedSortedItems.map(({ category, items: categoryItems }) => (
+                  <View key={category} style={styles.sortedGroup}>
+                    <Text style={styles.sortedCategory}>
+                      {category.toUpperCase()}
+                    </Text>
+                    {categoryItems.map((item, index) => (
                       <View
-                        style={[
-                          styles.priorityBadge,
-                          getPriorityStyle(item.priority),
-                        ]}
+                        key={`${category}-${index}-${item.text}`}
+                        style={styles.sortedItemRow}
                       >
-                        <Text style={styles.priorityText}>{item.priority}</Text>
+                        <Text style={styles.sortedItemText}>{item.text}</Text>
+                        <View
+                          style={[
+                            styles.priorityBadge,
+                            getPriorityStyle(item.priority),
+                          ]}
+                        >
+                          <Text style={styles.priorityText}>{item.priority}</Text>
+                        </View>
                       </View>
-                    </View>
-                  ))}
-                </View>
-              ))}
-            </View>
+                    ))}
+                  </View>
+                ))}
+              </GlowCard>
+            ) : (
+              <View style={styles.sortedSection}>
+                <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
+                {groupedSortedItems.map(({ category, items: categoryItems }) => (
+                  <View key={category} style={styles.sortedGroup}>
+                    <Text style={styles.sortedCategory}>
+                      {category.toUpperCase()}
+                    </Text>
+                    {categoryItems.map((item, index) => (
+                      <View
+                        key={`${category}-${index}-${item.text}`}
+                        style={styles.sortedItemRow}
+                      >
+                        <Text style={styles.sortedItemText}>{item.text}</Text>
+                        <View
+                          style={[
+                            styles.priorityBadge,
+                            getPriorityStyle(item.priority),
+                          ]}
+                        >
+                          <Text style={styles.priorityText}>{item.priority}</Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                ))}
+              </View>
+            )
           )}
 
           {!isLoading && (
@@ -757,23 +801,34 @@ const BrainDumpScreen = () => {
       </View>
     </SafeAreaView>
   );
+
+  if (isCosmic) {
+    return (
+      <CosmicBackground variant="moon" dimmer>
+        {content}
+      </CosmicBackground>
+    );
+  }
+
+  return content;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
-  },
-  centerContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  contentWrapper: {
-    flex: 1,
-    width: '100%',
-    maxWidth: Tokens.layout.maxWidth.prose,
-    padding: Tokens.spacing[4], // Reduced
-  },
+const getStyles = (isCosmic: boolean) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: Tokens.colors.neutral.darkest,
+    },
+    centerContainer: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    contentWrapper: {
+      flex: 1,
+      width: '100%',
+      maxWidth: Tokens.layout.maxWidth.prose,
+      padding: Tokens.spacing[4], // Reduced
+    },
   header: {
     marginBottom: Tokens.spacing[6],
     borderBottomWidth: 1,
@@ -798,11 +853,16 @@ const styles = StyleSheet.create({
     marginLeft: Tokens.spacing[4],
   },
   rationaleCard: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic
+      ? Tokens.colors.neutral.darkest
+      : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic
+      ? Tokens.colors.neutral.border
+      : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[4],
+    ...(isCosmic && Tokens.shadows.glow),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -920,11 +980,14 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[4],
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[4],
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic
+      ? Tokens.colors.neutral.darkest
+      : Tokens.colors.neutral.darker,
     borderRadius: Tokens.radii.none,
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: Tokens.colors.neutral.border,
+    ...(isCosmic && Tokens.shadows.glow),
   },
   sortedTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -1110,7 +1173,9 @@ const styles = StyleSheet.create({
     gap: Tokens.spacing[4],
   },
   guideBanner: {
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic
+      ? Tokens.colors.neutral.darkest
+      : Tokens.colors.neutral.dark,
     borderWidth: 1,
     borderColor: Tokens.colors.brand[500],
     padding: Tokens.spacing[3],
@@ -1119,6 +1184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: Tokens.spacing[4],
+    ...(isCosmic && Tokens.shadows.glow),
   },
   guideContent: {
     flex: 1,

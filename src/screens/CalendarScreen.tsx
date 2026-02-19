@@ -8,7 +8,8 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Tokens } from '../theme/tokens';
+import { Tokens, useTheme } from '../theme/tokens';
+import { CosmicBackground, GlowCard } from '../ui/cosmic';
 import { GoogleTasksSyncService } from '../services/PlaudService';
 
 type CalendarConnectionStatus =
@@ -18,6 +19,7 @@ type CalendarConnectionStatus =
   | 'unsupported';
 
 const CalendarScreen = () => {
+  const { isCosmic } = useTheme();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [connectionStatus, setConnectionStatus] =
     useState<CalendarConnectionStatus>('checking');
@@ -136,7 +138,8 @@ const CalendarScreen = () => {
     isConnecting;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, isCosmic && styles.containerCosmic]}>
+      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill} />
       <View style={styles.webContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -144,16 +147,16 @@ const CalendarScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.content}>
-            <Text style={styles.title}>CALENDAR</Text>
+            <Text style={[styles.title, isCosmic && styles.titleCosmic]}>CALENDAR</Text>
 
-            <View style={styles.rationaleCard}>
-              <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
-              <Text style={styles.rationaleText}>
+            <GlowCard glow="none" style={styles.rationaleCard}>
+              <Text style={[styles.rationaleTitle, isCosmic && styles.rationaleTitleCosmic]}>WHY THIS WORKS</Text>
+              <Text style={[styles.rationaleText, isCosmic && styles.rationaleTextCosmic]}>
                 Externalizing time through visual calendars reduces ADHD time-blindness and improves prospective memory. Seeing commitments spatially helps with planning, transitions, and preventing double-booking. CBT emphasizes external structure as cognitive support.
               </Text>
-            </View>
+            </GlowCard>
 
-            <View style={styles.calendarCard}>
+            <GlowCard glow="none" style={styles.calendarCard}>
               <View style={styles.header}>
                 <Pressable
                   onPress={prevMonth}
@@ -165,13 +168,16 @@ const CalendarScreen = () => {
                     hovered?: boolean;
                   }) => [
                     styles.navButton,
+                    isCosmic && styles.navButtonCosmic,
                     hovered && styles.navButtonHovered,
+                    hovered && isCosmic && styles.navButtonHoveredCosmic,
                     pressed && styles.navButtonPressed,
+                    pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
                 >
-                  <Text style={styles.navButtonText}>‹</Text>
+                  <Text style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}>‹</Text>
                 </Pressable>
-                <Text style={styles.monthText}>
+                <Text style={[styles.monthText, isCosmic && styles.monthTextCosmic]}>
                   {months[currentDate.getMonth()].toUpperCase()}{' '}
                   {currentDate.getFullYear()}
                 </Text>
@@ -185,17 +191,20 @@ const CalendarScreen = () => {
                     hovered?: boolean;
                   }) => [
                     styles.navButton,
+                    isCosmic && styles.navButtonCosmic,
                     hovered && styles.navButtonHovered,
+                    hovered && isCosmic && styles.navButtonHoveredCosmic,
                     pressed && styles.navButtonPressed,
+                    pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
                 >
-                  <Text style={styles.navButtonText}>›</Text>
+                  <Text style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}>›</Text>
                 </Pressable>
               </View>
 
               <View style={styles.weekdays}>
                 {days.map((day) => (
-                  <Text key={day} style={styles.weekdayText}>
+                  <Text key={day} style={[styles.weekdayText, isCosmic && styles.weekdayTextCosmic]}>
                     {day}
                   </Text>
                 ))}
@@ -205,7 +214,7 @@ const CalendarScreen = () => {
                 {Array(firstDay)
                   .fill(0)
                   .map((_, i) => (
-                    <View key={`empty-${i}`} style={styles.dayCell} />
+                    <View key={`empty-${i}`} style={[styles.dayCell, isCosmic && styles.dayCellCosmic]} />
                   ))}
                 {daysArray.map((day) => {
                   const isToday =
@@ -223,13 +232,22 @@ const CalendarScreen = () => {
                         hovered?: boolean;
                       }) => [
                         styles.dayCell,
+                        isCosmic && styles.dayCellCosmic,
                         isToday && styles.todayCell,
+                        isToday && isCosmic && styles.todayCellCosmic,
                         hovered && !isToday && styles.dayCellHovered,
+                        hovered && !isToday && isCosmic && styles.dayCellHoveredCosmic,
                         pressed && !isToday && styles.dayCellPressed,
+                        pressed && !isToday && isCosmic && styles.dayCellPressedCosmic,
                       ]}
                     >
                       <Text
-                        style={[styles.dayText, isToday && styles.todayText]}
+                        style={[
+                          styles.dayText,
+                          isCosmic && styles.dayTextCosmic,
+                          isToday && styles.todayText,
+                          isToday && isCosmic && styles.todayTextCosmic,
+                        ]}
                       >
                         {day}
                       </Text>
@@ -237,18 +255,22 @@ const CalendarScreen = () => {
                   );
                 })}
               </View>
-            </View>
+            </GlowCard>
 
             <View style={styles.legend}>
               <View style={styles.legendItem}>
-                <View style={[styles.legendDot, styles.todayDot]} />
-                <Text style={styles.legendText}>TODAY</Text>
+                <View style={[
+                  styles.legendDot,
+                  styles.todayDot,
+                  isCosmic && styles.todayDotCosmic,
+                ]} />
+                <Text style={[styles.legendText, isCosmic && styles.legendTextCosmic]}>TODAY</Text>
               </View>
             </View>
 
-            <View style={styles.googleCalendarCard}>
-              <Text style={styles.googleCalendarTitle}>GOOGLE CALENDAR</Text>
-              <Text style={styles.googleCalendarStatus}>
+            <GlowCard glow="none" style={styles.googleCalendarCard}>
+              <Text style={[styles.googleCalendarTitle, isCosmic && styles.googleCalendarTitleCosmic]}>GOOGLE CALENDAR</Text>
+              <Text style={[styles.googleCalendarStatus, isCosmic && styles.googleCalendarStatusCosmic]}>
                 {statusTextByConnectionStatus[connectionStatus]}
               </Text>
               <Pressable
@@ -262,21 +284,33 @@ const CalendarScreen = () => {
                   hovered?: boolean;
                 }) => [
                   styles.googleCalendarButton,
+                  isCosmic && styles.googleCalendarButtonCosmic,
                   hovered &&
                     !isConnectButtonDisabled &&
                     styles.googleCalendarButtonHovered,
+                  hovered &&
+                    !isConnectButtonDisabled &&
+                    isCosmic &&
+                    styles.googleCalendarButtonHoveredCosmic,
                   pressed &&
                     !isConnectButtonDisabled &&
                     styles.googleCalendarButtonPressed,
+                  pressed &&
+                    !isConnectButtonDisabled &&
+                    isCosmic &&
+                    styles.googleCalendarButtonPressedCosmic,
                   isConnectButtonDisabled &&
                     styles.googleCalendarButtonDisabled,
+                  isConnectButtonDisabled &&
+                    isCosmic &&
+                    styles.googleCalendarButtonDisabledCosmic,
                 ]}
               >
-                <Text style={styles.googleCalendarButtonText}>
+                <Text style={[styles.googleCalendarButtonText, isCosmic && styles.googleCalendarButtonTextCosmic]}>
                   {buttonTextByConnectionStatus[connectionStatus]}
                 </Text>
               </Pressable>
-            </View>
+            </GlowCard>
           </View>
         </ScrollView>
       </View>
@@ -542,6 +576,91 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
+  },
+  // Cosmic theme overrides
+  containerCosmic: {
+    backgroundColor: 'transparent',
+  },
+  titleCosmic: {
+    color: '#EEF2FF',
+  },
+  rationaleTitleCosmic: {
+    color: '#8B5CF6',
+  },
+  rationaleTextCosmic: {
+    color: '#EEF2FF',
+  },
+  navButtonCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.3)',
+    borderColor: 'rgba(42, 53, 82, 0.5)',
+    borderRadius: 8,
+  },
+  navButtonHoveredCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.5)',
+    borderColor: '#8B5CF6',
+  },
+  navButtonPressedCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.7)',
+  },
+  navButtonTextCosmic: {
+    color: '#EEF2FF',
+  },
+  monthTextCosmic: {
+    color: '#EEF2FF',
+  },
+  weekdayTextCosmic: {
+    color: '#8B5CF6',
+  },
+  dayCellCosmic: {
+    borderColor: 'rgba(42, 53, 82, 0.3)',
+  },
+  dayCellHoveredCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.3)',
+    borderColor: '#8B5CF6',
+  },
+  dayCellPressedCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.5)',
+  },
+  dayTextCosmic: {
+    color: '#EEF2FF',
+  },
+  todayCellCosmic: {
+    backgroundColor: '#F6C177',
+    borderColor: '#F6C177',
+  },
+  todayTextCosmic: {
+    color: '#0F172A',
+  },
+  todayDotCosmic: {
+    backgroundColor: '#F6C177',
+  },
+  legendTextCosmic: {
+    color: '#EEF2FF',
+  },
+  googleCalendarTitleCosmic: {
+    color: '#EEF2FF',
+  },
+  googleCalendarStatusCosmic: {
+    color: '#8B5CF6',
+  },
+  googleCalendarButtonCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.3)',
+    borderColor: 'rgba(42, 53, 82, 0.5)',
+    borderRadius: 8,
+  },
+  googleCalendarButtonHoveredCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.5)',
+    borderColor: '#8B5CF6',
+  },
+  googleCalendarButtonPressedCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.7)',
+  },
+  googleCalendarButtonDisabledCosmic: {
+    backgroundColor: 'rgba(42, 53, 82, 0.2)',
+    borderColor: 'rgba(42, 53, 82, 0.3)',
+  },
+  googleCalendarButtonTextCosmic: {
+    color: '#EEF2FF',
   },
 });
 

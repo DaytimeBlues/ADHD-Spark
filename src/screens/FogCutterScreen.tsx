@@ -24,8 +24,9 @@ import {
 } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
-import { Tokens } from '../theme/tokens';
+import { Tokens, useTheme } from '../theme/tokens';
 import { ROUTES } from '../navigation/routes';
+import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 
 interface Task {
   id: string;
@@ -55,6 +56,7 @@ const FogCutterScreen = ({
     null,
   );
   const taskInputRef = useRef<TextInput>(null);
+  const { isCosmic } = useTheme();
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -180,204 +182,209 @@ const renderMicroStep = ({
     </View>
   );
 
+  const styles = getStyles(isCosmic);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.scrollContent}>
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>FOG_CUTTER</Text>
-            <View style={styles.headerLine} />
-          </View>
-
-          <View style={styles.rationaleCard}>
-            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
-            <Text style={styles.rationaleText}>
-              CBT/CADDI research shows ADHD paralysis comes from seeing tasks as monolithic. Breaking tasks into micro-steps (2-5 minutes each) reduces cognitive load and creates multiple completion wins that build dopamine and momentum.
-            </Text>
-          </View>
-
-          <View style={styles.creationCard}>
-            <View style={styles.creationHeader}>
-              <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
+    <CosmicBackground variant="ridge" dimmer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.scrollContent}>
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <Text style={styles.title}>FOG_CUTTER</Text>
+              <View style={styles.headerLine} />
             </View>
-            <TextInput
-              ref={taskInputRef}
-              style={[
-                styles.input,
-                focusedInput === 'main' && styles.inputFocused,
-              ]}
-              placeholder="> INPUT_OVERWHELMING_TASK"
-              placeholderTextColor={Tokens.colors.text.placeholder}
-              value={task}
-              onChangeText={setTask}
-              onFocus={() => setFocusedInput('main')}
-              onBlur={() => setFocusedInput(null)}
-            />
 
-            <View style={styles.addStepRow}>
+            <View style={styles.rationaleCard}>
+              <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+              <Text style={styles.rationaleText}>
+                CBT/CADDI research shows ADHD paralysis comes from seeing tasks as monolithic. Breaking tasks into micro-steps (2-5 minutes each) reduces cognitive load and creates multiple completion wins that build dopamine and momentum.
+              </Text>
+            </View>
+
+            <View style={styles.creationCard}>
+              <View style={styles.creationHeader}>
+                <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
+              </View>
               <TextInput
+                ref={taskInputRef}
                 style={[
-                  styles.stepInput,
-                  focusedInput === 'step' && styles.inputFocused,
+                  styles.input,
+                  focusedInput === 'main' && styles.inputFocused,
                 ]}
-                placeholder="> ADD_MICRO_STEP"
+                placeholder="> INPUT_OVERWHELMING_TASK"
                 placeholderTextColor={Tokens.colors.text.placeholder}
-                value={newStep}
-                onChangeText={setNewStep}
-                onSubmitEditing={addMicroStep}
-                onFocus={() => setFocusedInput('step')}
+                value={task}
+                onChangeText={setTask}
+                onFocus={() => setFocusedInput('main')}
                 onBlur={() => setFocusedInput(null)}
               />
+
+              <View style={styles.addStepRow}>
+                <TextInput
+                  style={[
+                    styles.stepInput,
+                    focusedInput === 'step' && styles.inputFocused,
+                  ]}
+                  placeholder="> ADD_MICRO_STEP"
+                  placeholderTextColor={Tokens.colors.text.placeholder}
+                  value={newStep}
+                  onChangeText={setNewStep}
+                  onSubmitEditing={addMicroStep}
+                  onFocus={() => setFocusedInput('step')}
+                  onBlur={() => setFocusedInput(null)}
+                />
+                <LinearButton
+                  title="+"
+                  onPress={addMicroStep}
+                  variant="secondary"
+                  style={styles.addButton}
+                />
+              </View>
+
+              {microSteps.length > 0 && (
+                <View style={styles.previewContainer}>
+                  <Text style={styles.previewTitle}>SEQUENCE:</Text>
+                  <FlatList
+                    data={microSteps}
+                    renderItem={renderMicroStep}
+                    keyExtractor={(_, index) => index.toString()}
+                    scrollEnabled={false}
+                  />
+                </View>
+              )}
+
               <LinearButton
-                title="+"
-                onPress={addMicroStep}
-                variant="secondary"
-                style={styles.addButton}
+                title="EXECUTE_SAVE"
+                onPress={addTask}
+                disabled={microSteps.length === 0}
+                size="lg"
+                style={styles.saveButton}
               />
             </View>
 
-            {microSteps.length > 0 && (
-              <View style={styles.previewContainer}>
-                <Text style={styles.previewTitle}>SEQUENCE:</Text>
-                <FlatList
-                  data={microSteps}
-                  renderItem={renderMicroStep}
-                  keyExtractor={(_, index) => index.toString()}
-                  scrollEnabled={false}
-                />
+            <View style={styles.divider} />
+
+            {showGuide && (
+              <View style={styles.guideBanner}>
+                <View style={styles.guideContent}>
+                  <Text style={styles.guideTitle}>CLARITY_ACHIEVED</Text>
+                  <Text style={styles.guideText}>
+                    READY. INITIATE_IGNITE_PROTOCOL.
+                  </Text>
+                </View>
+                <Pressable
+                  onPress={dismissGuide}
+                  style={({ pressed }) => [
+                    styles.guideButton,
+                    pressed && styles.guideButtonPressed,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Dismiss guidance"
+                >
+                  <Text style={styles.guideButtonText}>ACK</Text>
+                </Pressable>
               </View>
             )}
 
-            <LinearButton
-              title="EXECUTE_SAVE"
-              onPress={addTask}
-              disabled={microSteps.length === 0}
-              size="lg"
-              style={styles.saveButton}
-            />
-          </View>
+            <Text style={styles.sectionHeader}>ACTIVE_OPERATIONS</Text>
 
-          <View style={styles.divider} />
-
-          {showGuide && (
-            <View style={styles.guideBanner}>
-              <View style={styles.guideContent}>
-                <Text style={styles.guideTitle}>CLARITY_ACHIEVED</Text>
-                <Text style={styles.guideText}>
-                  READY. INITIATE_IGNITE_PROTOCOL.
-                </Text>
-              </View>
-              <Pressable
-                onPress={dismissGuide}
-                style={({ pressed }) => [
-                  styles.guideButton,
-                  pressed && styles.guideButtonPressed,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Dismiss guidance"
-              >
-                <Text style={styles.guideButtonText}>ACK</Text>
-              </Pressable>
-            </View>
-          )}
-
-          <Text style={styles.sectionHeader}>ACTIVE_OPERATIONS</Text>
-
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator
-                size="small"
-                color={Tokens.colors.text.primary}
-              />
-              <Text style={styles.loadingText}>LOADING...</Text>
-            </View>
-          ) : (
-            <FlatList
-              data={tasks}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={styles.listContent}
-              renderItem={({ item }) => (
-                <Pressable
-                  style={({
-                    pressed,
-                    hovered,
-                  }: {
-                    pressed: boolean;
-                    hovered?: boolean;
-                  }) => [
-                    styles.taskCard,
-                    item.completed && styles.taskCardCompleted,
-                    hovered && !item.completed && styles.taskCardHovered,
-                    pressed && !item.completed && styles.taskCardPressed,
-                  ]}
-                  onPress={() => toggleTask(item.id)}
-                >
-                  <View style={styles.taskHeader}>
-                    <Text
-                      style={[
-                        styles.taskText,
-                        item.completed && styles.completed,
-                      ]}
-                    >
-                      {item.text}
-                    </Text>
-                    {item.completed ? (
-                      <Text style={styles.doneBadge}>CMPLTD</Text>
-                    ) : (
-                      <Text style={styles.stepCountText}>
-                        {getTaskProgressSummary(item.microSteps)}
-                      </Text>
-                    )}
-                  </View>
-
-                  {!item.completed && (
-                    <View style={styles.activeStepContainer}>
-                      <Text style={styles.activeStepLabel}>
-                        {item.microSteps.find((s) => s.status === 'in_progress')
-                          ? 'CURRENT_STEP >>'
-                          : 'NEXT_STEP >>'}
-                      </Text>
-                      <Text style={styles.activeStepText} numberOfLines={1}>
-                        {
-                          (
-                            item.microSteps.find(
-                              (s) => s.status === 'in_progress',
-                            ) ||
-                            item.microSteps.find(
-                              (s) => s.status === 'next',
-                            ) || {
-                              text: '...',
-                            }
-                          ).text
-                        }
-                      </Text>
-                    </View>
-                  )}
-                </Pressable>
-              )}
-              style={styles.taskList}
-              ListEmptyComponent={
-                <EmptyState
-                  icon="⛰️"
-                  title="NO_ACTIVE_TASKS."
-                  primaryActionLabel="CREATE FIRST TASK"
-                  onPrimaryAction={() => taskInputRef.current?.focus()}
-                  primaryVariant="secondary"
-                  style={styles.emptyState}
+            {isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                  size="small"
+                  color={Tokens.colors.text.primary}
                 />
-              }
-            />
-          )}
+                <Text style={styles.loadingText}>LOADING...</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={tasks}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.listContent}
+                renderItem={({ item }) => (
+                  <Pressable
+                    style={({
+                      pressed,
+                      hovered,
+                    }: {
+                      pressed: boolean;
+                      hovered?: boolean;
+                    }) => [
+                      styles.taskCard,
+                      item.completed && styles.taskCardCompleted,
+                      hovered && !item.completed && styles.taskCardHovered,
+                      pressed && !item.completed && styles.taskCardPressed,
+                    ]}
+                    onPress={() => toggleTask(item.id)}
+                  >
+                    <View style={styles.taskHeader}>
+                      <Text
+                        style={[
+                          styles.taskText,
+                          item.completed && styles.completed,
+                        ]}
+                      >
+                        {item.text}
+                      </Text>
+                      {item.completed ? (
+                        <Text style={styles.doneBadge}>CMPLTD</Text>
+                      ) : (
+                        <Text style={styles.stepCountText}>
+                          {getTaskProgressSummary(item.microSteps)}
+                        </Text>
+                      )}
+                    </View>
+
+                    {!item.completed && (
+                      <View style={styles.activeStepContainer}>
+                        <Text style={styles.activeStepLabel}>
+                          {item.microSteps.find((s) => s.status === 'in_progress')
+                            ? 'CURRENT_STEP >>'
+                            : 'NEXT_STEP >>'}
+                        </Text>
+                        <Text style={styles.activeStepText} numberOfLines={1}>
+                          {
+                            (
+                              item.microSteps.find(
+                                (s) => s.status === 'in_progress',
+                              ) ||
+                              item.microSteps.find(
+                                (s) => s.status === 'next',
+                              ) || {
+                                text: '...',
+                              }
+                            ).text
+                          }
+                        </Text>
+                      </View>
+                    )}
+                  </Pressable>
+                )}
+                style={styles.taskList}
+                ListEmptyComponent={
+                  <EmptyState
+                    icon="⛰️"
+                    title="NO_ACTIVE_TASKS."
+                    primaryActionLabel="CREATE FIRST TASK"
+                    onPrimaryAction={() => taskInputRef.current?.focus()}
+                    primaryVariant="secondary"
+                    style={styles.emptyState}
+                  />
+                }
+              />
+            )}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </CosmicBackground>
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isCosmic: boolean) =>
+  StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darkest,
   },
   scrollContent: {
     flex: 1,
@@ -401,28 +408,29 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   headerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.dark,
     marginLeft: Tokens.spacing[4],
   },
   rationaleCard: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[4],
+    borderRadius: isCosmic ? 12 : 0,
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
@@ -430,17 +438,17 @@ const styles = StyleSheet.create({
   rationaleText: {
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     lineHeight: 22,
     flexWrap: 'wrap',
   },
   creationCard: {
     marginBottom: Tokens.spacing[6],
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
     padding: Tokens.spacing[4], // Reduced
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 12 : 0,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
   },
   creationHeader: {
     marginBottom: Tokens.spacing[4],
@@ -449,28 +457,28 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   input: {
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+    borderRadius: isCosmic ? 8 : 0,
     paddingHorizontal: Tokens.spacing[3],
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.mono, // Mono for input
     fontSize: Tokens.type.sm, // Smaller text
     marginBottom: Tokens.spacing[3],
     height: 48,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     ...Platform.select({
       web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
   },
   inputFocused: {
-    borderColor: Tokens.colors.brand[500],
-    backgroundColor: Tokens.colors.neutral.darkest,
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
   },
   addStepRow: {
     flexDirection: 'row',
@@ -479,15 +487,15 @@ const styles = StyleSheet.create({
   },
   stepInput: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+    borderRadius: isCosmic ? 8 : 0,
     paddingHorizontal: Tokens.spacing[3],
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     height: 48,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     ...Platform.select({
       web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
     }),
@@ -498,16 +506,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : 0,
   },
   previewContainer: {
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 8 : 0,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[3],
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
   },
   previewTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -533,7 +541,7 @@ const styles = StyleSheet.create({
   },
   stepText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     fontSize: Tokens.type.sm,
   },
   saveButton: {
@@ -541,7 +549,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: Tokens.colors.neutral.border,
+    backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     width: '100%',
     marginBottom: Tokens.spacing[6],
   },
@@ -561,12 +569,12 @@ const styles = StyleSheet.create({
     paddingBottom: Tokens.spacing[20],
   },
   taskCard: {
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 12 : 0,
     padding: Tokens.spacing[4],
-    marginBottom: -1,
+    marginBottom: Tokens.spacing[2],
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     minHeight: 64, // Reduced height
     justifyContent: 'center',
     ...Platform.select({
@@ -577,15 +585,15 @@ const styles = StyleSheet.create({
     }),
   },
   taskCardHovered: {
-    borderColor: Tokens.colors.brand[500],
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     zIndex: 1,
   },
   taskCardPressed: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
   },
   taskCardCompleted: {
     opacity: 0.5,
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
   },
   taskHeader: {
     flexDirection: 'row',
@@ -595,7 +603,7 @@ const styles = StyleSheet.create({
   },
   taskText: {
     fontFamily: Tokens.type.fontFamily.sans,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontSize: Tokens.type.base,
     fontWeight: '700',
     flex: 1,
@@ -603,16 +611,16 @@ const styles = StyleSheet.create({
   },
   completed: {
     textDecorationLine: 'line-through',
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
   },
   doneBadge: {
-    backgroundColor: Tokens.colors.neutral.dark,
-    color: Tokens.colors.text.secondary,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.dark,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : 0,
     overflow: 'hidden',
     fontFamily: Tokens.type.fontFamily.mono,
   },
@@ -620,7 +628,7 @@ const styles = StyleSheet.create({
     marginTop: Tokens.spacing[2],
     paddingLeft: Tokens.spacing[2],
     borderLeftWidth: 1,
-    borderLeftColor: Tokens.colors.brand[500],
+    borderLeftColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
   },
   activeStepLabel: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -632,7 +640,7 @@ const styles = StyleSheet.create({
   activeStepText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
   },
   stepCountText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -648,7 +656,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
@@ -657,15 +665,16 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   guideBanner: {
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.dark,
     borderWidth: 1,
-    borderColor: Tokens.colors.brand[500],
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     padding: Tokens.spacing[3],
     marginBottom: Tokens.spacing[6],
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: Tokens.spacing[4],
+    borderRadius: isCosmic ? 12 : 0,
   },
   guideContent: {
     flex: 1,
@@ -674,30 +683,31 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
   guideText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
   },
   guideButton: {
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 8 : 0,
   },
   guideButtonPressed: {
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
   },
   guideButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     textTransform: 'uppercase',
   },
 });
