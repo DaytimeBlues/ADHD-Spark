@@ -30,10 +30,25 @@ const cosmicColors = {
 
 // ============================================================================
 // GLOW DEFINITIONS
+// Per research spec: multi-layer shadows with border highlights
 // ============================================================================
 
 export type GlowLevel = 'none' | 'soft' | 'medium' | 'strong';
 
+/**
+ * Web-specific box shadows per research spec
+ * Multi-layer composition for depth
+ */
+export const webBoxShadows = {
+  none: 'none',
+  soft: '0 0 0 1px rgba(139, 92, 246, 0.18), 0 10px 24px rgba(7, 7, 18, 0.55)',
+  medium: '0 0 0 1px rgba(139, 92, 246, 0.28), 0 0 26px rgba(139, 92, 246, 0.22), 0 14px 30px rgba(7, 7, 18, 0.55)',
+  strong: '0 0 0 1px rgba(45, 212, 191, 0.34), 0 0 34px rgba(45, 212, 191, 0.26), 0 0 70px rgba(139, 92, 246, 0.18), 0 18px 44px rgba(7, 7, 18, 0.62)',
+} as const;
+
+/**
+ * Native shadow styles per research spec
+ */
 export const glowStyles = {
   none: {
     shadowColor: 'transparent',
@@ -43,25 +58,25 @@ export const glowStyles = {
     elevation: 0,
   },
   soft: {
-    shadowColor: `${cosmicColors.nebulaViolet}40`, // 25% opacity
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: cosmicColors.nebulaViolet,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    elevation: 2,
   },
   medium: {
-    shadowColor: `${cosmicColors.nebulaViolet}80`, // 50% opacity
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
+    shadowColor: cosmicColors.nebulaViolet,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.22,
     shadowRadius: 16,
-    elevation: 8,
+    elevation: 4,
   },
   strong: {
-    shadowColor: cosmicColors.nebulaViolet, // 100% opacity
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 32,
-    elevation: 16,
+    shadowColor: cosmicColors.auroraTeal, // Teal tint for strong glow per spec
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.28,
+    shadowRadius: 22,
+    elevation: 6,
   },
 } as const;
 
@@ -70,19 +85,19 @@ export const textGlowStyles = {
   none: undefined,
   soft: Platform.select({
     web: {
-      textShadow: `0 0 16px ${cosmicColors.nebulaViolet}80`,
+      textShadow: '0 0 18px rgba(139, 92, 246, 0.28)',
     },
     default: undefined,
   }),
   medium: Platform.select({
     web: {
-      textShadow: `0 0 24px ${cosmicColors.nebulaViolet}B3, 0 0 48px ${cosmicColors.nebulaViolet}66`,
+      textShadow: '0 0 24px rgba(139, 92, 246, 0.40), 0 0 48px rgba(139, 92, 246, 0.20)',
     },
     default: undefined,
   }),
   strong: Platform.select({
     web: {
-      textShadow: `0 0 32px ${cosmicColors.nebulaViolet}, 0 0 64px ${cosmicColors.nebulaViolet}80`,
+      textShadow: '0 0 32px rgba(45, 212, 191, 0.50), 0 0 64px rgba(139, 92, 246, 0.30)',
     },
     default: undefined,
   }),
@@ -133,6 +148,28 @@ const brandScale = {
 } as const;
 
 // ============================================================================
+// SURFACE COLORS (RGBA per research spec for depth)
+// ============================================================================
+
+export const surfaceColors = {
+  base: 'rgba(14, 20, 40, 0.78)',
+  raised: 'rgba(18, 26, 52, 0.86)',
+  sunken: 'rgba(10, 14, 30, 0.82)',
+  border: 'rgba(185, 194, 217, 0.16)',
+} as const;
+
+// ============================================================================
+// TEXT COLORS (per research spec)
+// ============================================================================
+
+export const textColors = {
+  primary: '#EEF2FF',
+  secondary: 'rgba(238, 242, 255, 0.78)',
+  muted: 'rgba(238, 242, 255, 0.56)',
+  onAccent: '#070712',
+} as const;
+
+// ============================================================================
 // UTILITY COLORS
 // ============================================================================
 
@@ -169,18 +206,16 @@ export const cosmicSpacing = {
 } as const;
 
 // ============================================================================
-// RADIUS (cosmic uses rounded corners vs linear's sharp)
+// RADIUS (per research spec: sm 8, md 12, lg 16, xl 22)
 // ============================================================================
 
 export const cosmicRadii = {
   none: 0,
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
-  '2xl': 24,
-  '3xl': 32,
-  full: 9999,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 22,
+  pill: 9999,
 } as const;
 
 // ============================================================================
@@ -226,13 +261,16 @@ export const cosmicElevation = {
 } as const;
 
 // ============================================================================
-// TYPOGRAPHY
+// TYPOGRAPHY (per research spec)
+// - Body: Inter
+// - Timer: Space Grotesk with tabular numerals
+// - Mono: System mono
 // ============================================================================
 
 export const cosmicTypography = {
   heading: {
     fontFamily: Platform.select({
-      web: 'Inter, system-ui, sans-serif',
+      web: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       ios: 'Inter-SemiBold',
       android: 'Inter-SemiBold',
       default: 'sans-serif',
@@ -242,7 +280,7 @@ export const cosmicTypography = {
   },
   body: {
     fontFamily: Platform.select({
-      web: 'Inter, system-ui, sans-serif',
+      web: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       ios: 'Inter-Regular',
       android: 'Inter-Regular',
       default: 'sans-serif',
@@ -260,6 +298,23 @@ export const cosmicTypography = {
     fontWeight: '400' as const,
     letterSpacing: 0,
   },
+  timer: {
+    fontFamily: Platform.select({
+      web: '"Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      ios: 'Menlo', // Fallback on iOS
+      android: 'monospace', // Fallback on Android
+      default: 'monospace',
+    }),
+    fontWeight: '400' as const,
+    letterSpacing: 0.8, // Per spec
+  },
+} as const;
+
+// Per research spec: timer font sizes
+export const cosmicTimerSizes = {
+  xl: 64,
+  lg: 48,
+  md: 32,
 } as const;
 
 // Font size scale (matches LinearTokens structure)
