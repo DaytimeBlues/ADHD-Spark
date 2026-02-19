@@ -14,6 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { surfaceColors, webBoxShadows } from '../../theme/cosmicTokens';
 import { GlowLevel, SurfaceTone, CosmicPressableProps, CardPadding } from './types';
 
 // ============================================================================
@@ -77,6 +78,7 @@ export const GlowCard = memo(function GlowCard({
   const { isCosmic, t } = useTheme();
 
   // Get surface background color based on tone
+  // Per research spec: use RGBA surface colors for depth
   const getBackgroundColor = useMemo(() => {
     if (!isCosmic) {
       return t.colors.neutral.dark;
@@ -84,17 +86,18 @@ export const GlowCard = memo(function GlowCard({
 
     switch (tone) {
       case 'base':
-        return '#111A33'; // deepSpace
+        return surfaceColors.base; // rgba(14, 20, 40, 0.78)
       case 'raised':
-        return '#111A33'; // deepSpace with subtle highlight
+        return surfaceColors.raised; // rgba(18, 26, 52, 0.86)
       case 'sunken':
-        return '#0B1022'; // midnight
+        return surfaceColors.sunken; // rgba(10, 14, 30, 0.82)
       default:
-        return '#111A33';
+        return surfaceColors.base;
     }
   }, [isCosmic, t, tone]);
 
   // Get glow shadow styles
+  // Per research spec: use multi-layer webBoxShadows
   const getGlowStyle = useMemo((): ViewStyle => {
     if (!isCosmic || glow === 'none') {
       return {};
@@ -106,42 +109,42 @@ export const GlowCard = memo(function GlowCard({
       case 'soft':
         return Platform.select({
           web: {
-            boxShadow: `0 0 16px ${glowColor}40`,
+            boxShadow: webBoxShadows.soft,
           },
           default: {
             shadowColor: glowColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.25,
-            shadowRadius: 8,
-            elevation: 4,
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.12,
+            shadowRadius: 10,
+            elevation: 2,
           },
         }) as ViewStyle;
 
       case 'medium':
         return Platform.select({
           web: {
-            boxShadow: `0 0 24px ${glowColor}80, 0 0 48px ${glowColor}40`,
+            boxShadow: webBoxShadows.medium,
           },
           default: {
             shadowColor: glowColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.5,
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.22,
             shadowRadius: 16,
-            elevation: 8,
+            elevation: 4,
           },
         }) as ViewStyle;
 
       case 'strong':
         return Platform.select({
           web: {
-            boxShadow: `0 0 32px ${glowColor}, 0 0 64px ${glowColor}80`,
+            boxShadow: webBoxShadows.strong,
           },
           default: {
-            shadowColor: glowColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.8,
-            shadowRadius: 32,
-            elevation: 16,
+            shadowColor: '#2DD4BF', // auroraTeal for strong glow per spec
+            shadowOffset: { width: 0, height: 12 },
+            shadowOpacity: 0.28,
+            shadowRadius: 22,
+            elevation: 6,
           },
         }) as ViewStyle;
 
@@ -167,6 +170,7 @@ export const GlowCard = memo(function GlowCard({
   }, [padding]);
 
   // Get border style
+  // Per research spec: use surfaceColors.border (rgba(185, 194, 217, 0.16))
   const getBorderStyle = useMemo((): ViewStyle => {
     if (!isCosmic) {
       return {
@@ -177,7 +181,7 @@ export const GlowCard = memo(function GlowCard({
 
     return {
       borderWidth: 1,
-      borderColor: 'rgba(42, 53, 82, 0.3)', // slate at 30% opacity
+      borderColor: surfaceColors.border, // rgba(185, 194, 217, 0.16)
       ...(tone === 'raised' && Platform.OS === 'web' && {
         borderTopColor: 'rgba(255, 255, 255, 0.05)', // Subtle inner highlight
       }),
@@ -185,13 +189,14 @@ export const GlowCard = memo(function GlowCard({
   }, [isCosmic, t, tone]);
 
   // Combine all styles
+  // Per research spec: radii.lg = 16
   const containerStyle = useMemo((): ViewStyle => ({
     backgroundColor: getBackgroundColor,
-    borderRadius: 12, // lg
+    borderRadius: isCosmic ? 16 : 0, // lg per spec, sharp for linear
     ...getGlowStyle,
     ...getPaddingStyle,
     ...getBorderStyle,
-  }), [getBackgroundColor, getGlowStyle, getPaddingStyle, getBorderStyle]);
+  }), [getBackgroundColor, getGlowStyle, getPaddingStyle, getBorderStyle, isCosmic]);
 
   // Render as Pressable if onPress provided, otherwise as View
   if (onPress) {

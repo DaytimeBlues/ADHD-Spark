@@ -8,6 +8,7 @@
 import React, { memo, useMemo } from 'react';
 import { Text, StyleSheet, TextStyle, Platform } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { cosmicTypography, textGlowStyles } from '../../theme/cosmicTokens';
 import { TimerSize, TimerColor, GlowLevel } from './types';
 
 // ============================================================================
@@ -115,63 +116,56 @@ export const ChronoDigits = memo(function ChronoDigits({
   }, [isCosmic, t, color]);
 
   // Get glow text shadow style
+  // Per research spec: use textGlowStyles from tokens
   const getGlowStyle = useMemo((): TextStyle => {
     if (!isCosmic || glow === 'none') {
       return {};
     }
 
-    const glowColor = color === 'success' 
-      ? '#2DD4BF' // auroraTeal for success
-      : color === 'warning'
-      ? '#F6C177' // starlightGold for warning
-      : '#8B5CF6'; // nebulaViolet for default
-
-    switch (glow) {
-      case 'soft':
-        return Platform.select({
-          web: {
-            textShadow: `0 0 16px ${glowColor}80`,
-          },
-          default: {},
-        }) || {};
-
-      case 'medium':
-        return Platform.select({
-          web: {
-            textShadow: `0 0 24px ${glowColor}B3, 0 0 48px ${glowColor}66`,
-          },
-          default: {},
-        }) || {};
-
-      case 'strong':
-        return Platform.select({
-          web: {
-            textShadow: `0 0 32px ${glowColor}, 0 0 64px ${glowColor}80`,
-          },
-          default: {},
-        }) || {};
-
-      default:
-        return {};
+    // Use textGlowStyles from cosmicTokens for consistency
+    const baseGlow = textGlowStyles[glow] || {};
+    
+    // Adjust color based on variant
+    if (color === 'success') {
+      return Platform.select({
+        web: {
+          textShadow: '0 0 18px rgba(45, 212, 191, 0.40)',
+        },
+        default: {},
+      }) || {};
     }
+    
+    if (color === 'warning') {
+      return Platform.select({
+        web: {
+          textShadow: '0 0 18px rgba(246, 193, 119, 0.40)',
+        },
+        default: {},
+      }) || {};
+    }
+    
+    return baseGlow;
   }, [isCosmic, glow, color]);
 
   // Combine all styles
+  // Per research spec: Space Grotesk for timer in cosmic theme
   const textStyle = useMemo((): TextStyle => ({
     fontSize: getFontSize,
-    fontWeight: getFontWeight,
+    fontWeight: isCosmic ? '400' : getFontWeight,
     color: getColor,
-    fontFamily: Platform.select({
-      web: 'JetBrains Mono, Fira Code, SF Mono, Consolas, monospace',
-      ios: 'Menlo',
-      android: 'monospace',
-      default: 'monospace',
-    }),
+    fontFamily: isCosmic 
+      ? cosmicTypography.timer.fontFamily
+      : Platform.select({
+          web: 'JetBrains Mono, Fira Code, SF Mono, Consolas, monospace',
+          ios: 'Menlo',
+          android: 'monospace',
+          default: 'monospace',
+        }),
     // Tabular nums prevents layout shift during countdown
     fontVariant: ['tabular-nums'],
-    letterSpacing: size === 'hero' ? -0.02 : 0,
+    letterSpacing: isCosmic ? cosmicTypography.timer.letterSpacing : (size === 'hero' ? -0.02 : 0),
     ...getGlowStyle,
-  }), [getFontSize, getFontWeight, getColor, getGlowStyle, size]);
+  }), [getFontSize, getFontWeight, getColor, getGlowStyle, size, isCosmic]);
 
   return (
     <Text

@@ -4,22 +4,25 @@
  * Timer progress ring and breathing animation component.
  * Uses Reanimated for smooth, performant animations.
  * Respects reduced motion preferences.
+ * 
+ * Per research spec:
+ * - Web: CSS conic-gradient for progress mode (better performance)
+ * - Native: SVG-based ring
+ * - Breathing: Scale animation with Reanimated
  */
 
 import React, { memo, useEffect, useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import Animated, {
   useSharedValue,
-  useAnimatedProps,
   useAnimatedStyle,
   withTiming,
   withRepeat,
-  withSpring,
   Easing,
   interpolate,
   Extrapolate,
+  ReduceMotion,
 } from 'react-native-reanimated';
-import Svg, { Circle } from 'react-native-svg';
 import { useTheme } from '../../theme/ThemeProvider';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { HaloMode, GlowLevel } from './types';
@@ -57,6 +60,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
  * - Progress indication (timers)
  * - Breathing exercises (Anchor mode)
  * 
+ * Web progress mode uses CSS conic-gradient per research spec.
  * Respects reduced motion preferences.
  * 
  * @example
@@ -84,17 +88,12 @@ export const HaloRing = memo(function HaloRing({
   glow = 'medium',
   testID,
 }: HaloRingProps) {
-  const { isCosmic } = useTheme();
+  const { isCosmic, t } = useTheme();
   const reduceMotion = useReducedMotion();
+  const isWeb = Platform.OS === 'web';
 
   // Animation values
   const breathingProgress = useSharedValue(0);
-  const progressValue = useSharedValue(0);
-
-  // Ring calculations
-  const radius = useMemo(() => (size - strokeWidth) / 2, [size, strokeWidth]);
-  const circumference = useMemo(() => 2 * Math.PI * radius, [radius]);
-  const center = useMemo(() => size / 2, [size]);
 
   // Colors based on theme
   const colors = useMemo(() => {
@@ -107,62 +106,48 @@ export const HaloRing = memo(function HaloRing({
     }
 
     return {
-      track: 'rgba(42, 53, 82, 0.3)', // slate at 30%
+      track: 'rgba(185, 194, 217, 0.16)', // slate border color per spec
       progress: '#8B5CF6', // nebulaViolet
       glow: '#8B5CF6',
     };
   }, [isCosmic]);
 
-  // Progress animation
+  // Clamp progress to 0-1
+  const t01 = Math.max(0, Math.min(1, progress));
+  const deg = Math.round(t01 * 360);
+
+  // Breathing animation per spec: 4200ms cycle
   useEffect(() => {
-    if (mode === 'progress') {
-      if (reduceMotion) {
-        progressValue.value = progress;
-      } else {
-        progressValue.value = withSpring(progress, {
-          damping: 20,
-          stiffness: 100,
-        });
-      }
+    if (mode !== 'breath') return;
+    
+    if (reduceMotion) {
+      breathingProgress.value = 1;
+      return;
     }
-  }, [mode, progress, progressValue, reduceMotion]);
-
-  // Breathing animation
-  useEffect(() => {
-    if (mode === 'breath' && !reduceMotion) {
-      // 6 second cycle: 2s inhale, 2s hold, 2s exhale
-      breathingProgress.value = withRepeat(
-        withTiming(1, {
-          duration: 6000,
-          easing: Easing.inOut(Easing.sin),
-        }),
-        -1, // Infinite
-        true // Reverse (yoyo)
-      );
-    } else if (mode === 'breath' && reduceMotion) {
-      // Static state for reduced motion
-      breathingProgress.value = 0.5;
-    }
-  }, [mode, breathingProgress, reduceMotion]);
-
-  // Animated progress stroke
-  const progressAnimatedProps = useAnimatedProps(() => ({
-    strokeDashoffset: circumference * (1 - progressValue.value),
-  }));
-
-  // Breathing animated styles for outer ring
-  const breathingAnimatedStyle = useAnimatedStyle(() => {
-    const scale = interpolate(
-      breathingProgress.value,
-      [0, 1],
-      [1, 1.1],
-      Extrapolate.CLAMP
+    
+    // Per research spec: breathCycle 4200ms
+    const breathDuration = (t as any).motion?.durations?.breathCycle ?? 4200;
+    
+    breathingProgress.value = withRepeat(
+      withTiming(1.06, {
+        duration: breathDuration,
+        easing: Easing.inOut(Easing.cubic),
+        reduceMotion: ReduceMotion.System,
+      }),
+      -1, // Infinite
+      true // Reverse (yoyo)
     );
+  }, [mode, reduceMotion, breathingProgress, t]);
 
+  // Breathing animated styles
+  const breathingAnimatedStyle = useAnimatedStyle(() => {
+    if (mode !== 'breath') return {};
+    
+    const scale = breathingProgress.value;
     const opacity = interpolate(
       breathingProgress.value,
-      [0, 0.5, 1],
-      [0.5, 1, 0.5],
+      [1, 1.06],
+      [0.5, 1],
       Extrapolate.CLAMP
     );
 
@@ -172,19 +157,21 @@ export const HaloRing = memo(function HaloRing({
     };
   });
 
-  // Inner ring style (inverse of outer for "hold" visualization)
+  // Inner ring breathing (inverse phase)
   const innerAnimatedStyle = useAnimatedStyle(() => {
+    if (mode !== 'breath') return {};
+    
     const scale = interpolate(
       breathingProgress.value,
-      [0, 1],
-      [1.05, 0.95],
+      [1, 1.06],
+      [1.03, 0.97],
       Extrapolate.CLAMP
     );
-
+    
     const opacity = interpolate(
       breathingProgress.value,
-      [0, 0.5, 1],
-      [0.3, 0.6, 0.3],
+      [1, 1.06],
+      [0.3, 0.6],
       Extrapolate.CLAMP
     );
 
@@ -198,58 +185,111 @@ export const HaloRing = memo(function HaloRing({
   const glowStyle = useMemo((): ViewStyle => {
     if (!isCosmic || glow === 'none') return {};
 
-    const glowIntensity = {
-      soft: '40',
-      medium: '80',
-      strong: '',
+    const glowColor = colors.glow;
+    const glowOpacity = {
+      soft: 0.12,
+      medium: 0.22,
+      strong: 0.28,
     }[glow];
-
-    const glowColor = colors.glow + glowIntensity;
+    
+    const glowRadius = {
+      soft: 10,
+      medium: 16,
+      strong: 22,
+    }[glow];
 
     return Platform.select({
       web: {
-        filter: `drop-shadow(0 0 ${glow === 'soft' ? 8 : glow === 'medium' ? 16 : 32}px ${glowColor})`,
+        filter: `drop-shadow(0 0 ${glowRadius}px ${glowColor}${Math.round(glowOpacity * 255).toString(16).padStart(2, '0')})`,
       },
       default: {
-        shadowColor: colors.glow,
+        shadowColor: glowColor,
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: glow === 'soft' ? 0.25 : glow === 'medium' ? 0.5 : 0.8,
-        shadowRadius: glow === 'soft' ? 8 : glow === 'medium' ? 16 : 32,
+        shadowOpacity: glowOpacity,
+        shadowRadius: glowRadius,
       },
     }) as ViewStyle;
   }, [isCosmic, glow, colors.glow]);
 
-  if (mode === 'progress') {
+  // Web progress mode: conic-gradient per research spec
+  if (mode === 'progress' && isWeb) {
+    const nebulaViolet = (t as any).colors?.cosmic?.nebulaViolet ?? '#8B5CF6';
+    const trackColor = colors.track;
+    
+    const webProgressStyle: ViewStyle = {
+      backgroundImage: `conic-gradient(${nebulaViolet} 0deg ${deg}deg, ${trackColor} ${deg}deg 360deg)`,
+    } as any;
+
+    const innerSize = size - strokeWidth * 2;
+
     return (
       <View 
         testID={testID}
         style={[styles.container, { width: size, height: size }, glowStyle]}
       >
-        <Svg width={size} height={size} style={styles.svg}>
-          {/* Background track */}
-          <Circle
-            cx={center}
-            cy={center}
-            r={radius}
-            stroke={colors.track}
-            strokeWidth={strokeWidth}
-            fill="transparent"
+        <View
+          style={[
+            styles.ring,
+            { 
+              width: size, 
+              height: size, 
+              borderRadius: size / 2,
+              padding: strokeWidth,
+            },
+            webProgressStyle,
+          ]}
+        >
+          {/* Inner cutout for ring effect */}
+          <View
+            style={[
+              styles.inner,
+              {
+                width: innerSize,
+                height: innerSize,
+                borderRadius: innerSize / 2,
+                backgroundColor: 'rgba(7, 7, 18, 0.62)',
+              },
+            ]}
           />
-          
-          {/* Progress arc */}
-          <AnimatedCircle
-            cx={center}
-            cy={center}
-            r={radius}
-            stroke={colors.progress}
-            strokeWidth={strokeWidth}
-            fill="transparent"
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            animatedProps={progressAnimatedProps}
-            transform={`rotate(-90 ${center} ${center})`}
+        </View>
+      </View>
+    );
+  }
+
+  // Native progress mode or breathing mode
+  if (mode === 'progress') {
+    // Native: Use simple border ring
+    return (
+      <View 
+        testID={testID}
+        style={[styles.container, { width: size, height: size }, glowStyle]}
+      >
+        <View
+          style={[
+            styles.ring,
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+              borderWidth: strokeWidth,
+              borderColor: colors.track,
+            },
+          ]}
+        >
+          <View
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                borderRadius: size / 2,
+                borderWidth: strokeWidth,
+                borderColor: colors.progress,
+                borderTopColor: 'transparent',
+                borderRightColor: 'transparent',
+                transform: [{ rotate: `${-90 + deg}deg` }],
+              },
+            ]}
           />
-        </Svg>
+        </View>
       </View>
     );
   }
@@ -263,7 +303,7 @@ export const HaloRing = memo(function HaloRing({
       {/* Outer breathing ring */}
       <Animated.View
         style={[
-          styles.breathRing,
+          styles.ring,
           {
             width: size,
             height: size,
@@ -279,7 +319,7 @@ export const HaloRing = memo(function HaloRing({
       {/* Inner breathing ring */}
       <Animated.View
         style={[
-          styles.breathRing,
+          styles.ring,
           {
             width: size * 0.7,
             height: size * 0.7,
