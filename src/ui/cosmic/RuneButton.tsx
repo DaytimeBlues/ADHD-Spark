@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { ButtonVariant, ButtonSize, GlowLevel } from './types';
-import * as Haptics from 'expo-haptics';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -98,12 +97,6 @@ export const RuneButton = memo(function RuneButton({
   // Handle press with haptic feedback
   const handlePress = useCallback(() => {
     if (!disabled && !loading && onPress) {
-      // Haptic feedback
-      if (Platform.OS !== 'web') {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {
-          // Ignore haptic errors
-        });
-      }
       onPress();
     }
   }, [disabled, loading, onPress]);

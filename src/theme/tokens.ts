@@ -13,19 +13,33 @@ import { Motion } from './motion';
 // Cosmic theme tokens
 export {
   CosmicTokens,
-  CosmicColors,
-  CosmicSpacing,
-  CosmicRadii,
-  CosmicTypography,
-  CosmicElevation,
-  CosmicMotion,
+  cosmicSpacing as CosmicSpacing,
+  cosmicRadii as CosmicRadii,
+  cosmicTypography as CosmicTypography,
+  cosmicElevation as CosmicElevation,
+  cosmicTimerSizes,
+  surfaceColors,
+  textColors,
+  webBoxShadows,
   glowStyles,
   textGlowStyles,
   backgroundStyles,
+  dimmerOverlay,
   type BackgroundVariant,
   type GlowLevel,
   type CosmicTokensType,
+  type CosmicColor,
+  type CosmicSpacing,
+  type CosmicRadii,
 } from './cosmicTokens';
+
+export {
+  CosmicMotion,
+  cosmicDurations,
+  cosmicEasings,
+  cosmicPresets,
+  type CosmicMotionType,
+} from './cosmicMotion';
 
 // Theme variant types and utilities
 export {
@@ -37,14 +51,6 @@ export {
   assertThemeVariant,
   THEME_METADATA,
 } from './themeVariant';
-
-// Theme provider
-export {
-  ThemeProvider,
-  useTheme,
-  withTheme,
-  type ThemeContextValue,
-} from './ThemeProvider';
 
 export const Colors = LinearColors;
 export const Spacing = LinearSpacing;

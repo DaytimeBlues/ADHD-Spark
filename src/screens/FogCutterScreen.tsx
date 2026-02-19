@@ -24,7 +24,8 @@ import {
 } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 

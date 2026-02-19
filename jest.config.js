@@ -8,6 +8,9 @@ module.exports = {
     '/android.e2e.test.ts/',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  moduleNameMapper: {
+    '^react-native-reanimated$': '<rootDir>/__tests__/__mocks__/react-native-reanimated.js',
+  },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   coverageThreshold: {

@@ -4,7 +4,8 @@ import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
 import useTimer from '../hooks/useTimer';
 import { LinearButton } from '../components/ui/LinearButton';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
 
 type PomodoroState = {

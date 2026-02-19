@@ -82,6 +82,12 @@ export const enableE2ETestMode = async (page: Page): Promise<void> => {
   });
 };
 
+export const enableCosmicTheme = async (page: Page): Promise<void> => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('theme', 'cosmic');
+  });
+};
+
 export const enableRecordingMock = async (page: Page): Promise<void> => {
   await page.addInitScript(() => {
     const globalRecord = window as unknown as Record<string, unknown>;

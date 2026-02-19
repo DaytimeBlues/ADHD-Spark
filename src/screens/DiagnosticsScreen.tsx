@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { Tokens, useTheme, THEME_METADATA } from '../theme/tokens';
+import { Tokens, THEME_METADATA } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { config } from '../config';
 import StorageService from '../services/StorageService';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';

@@ -13,7 +13,8 @@ import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import ActivationService from '../services/ActivationService';
 import useTimer from '../hooks/useTimer';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { LinearButton } from '../components/ui/LinearButton';
 import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
 

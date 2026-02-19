@@ -7,7 +7,7 @@
  * 
  * Per research spec:
  * - Web: CSS conic-gradient for progress mode (better performance)
- * - Native: SVG-based ring
+ * - Native: lightweight border-ring fallback
  * - Breathing: Scale animation with Reanimated
  */
 
@@ -45,9 +45,6 @@ export interface HaloRingProps {
   /** Test ID for testing */
   testID?: string;
 }
-
-// Animated Circle component for SVG
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 // ============================================================================
 // COMPONENT
@@ -346,11 +343,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  svg: {
-    transform: [{ rotate: '-90deg' }],
+  ring: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'solid',
   },
-  breathRing: {
-    position: 'absolute',
+  inner: {
     borderStyle: 'solid',
   },
 });

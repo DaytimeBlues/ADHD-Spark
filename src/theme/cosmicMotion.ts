@@ -5,8 +5,6 @@
  * Respectful of reduced motion preferences
  */
 
-import { Easing } from 'react-native-reanimated';
-
 // ============================================================================
 // DURATION TOKENS (in milliseconds)
 // ============================================================================
@@ -14,7 +12,8 @@ import { Easing } from 'react-native-reanimated';
 export const cosmicDurations = {
   // Micro-interactions
   press: 100,        // 80-120ms range - button presses
-  hover: 150,        // 120-180ms range - hover states
+  hover: 140,        // 120-180ms range - hover states
+  focus: 140,
   
   // Standard transitions
   base: 200,         // Default transition
@@ -22,10 +21,11 @@ export const cosmicDurations = {
   exit: 250,         // Element exit
   
   // Screen transitions
-  screen: 400,       // 320-480ms range - screen transitions
+  screenEnter: 420,  // Per research spec
+  screenExit: 220,
   
   // Ambient animations
-  breathing: 6000,   // 4-6s range - breathing exercises
+  breathCycle: 4200, // Per research spec
   pulse: 2000,       // Subtle ambient pulse
   glow: 3000,        // Glow intensity shift
 } as const;
@@ -36,25 +36,26 @@ export const cosmicDurations = {
 
 export const cosmicEasings = {
   // Standard
-  linear: Easing.linear,
+  linear: 'linear',
   
   // Entrance (deceleration)
-  easeOut: Easing.out(Easing.ease),
-  easeOutCubic: Easing.out(Easing.cubic),
-  easeOutQuart: Easing.out(Easing.poly(4)),
+  easeOut: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  easeOutCubic: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  easeOutQuart: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
   
   // Exit (acceleration)
-  easeIn: Easing.in(Easing.ease),
-  easeInCubic: Easing.in(Easing.cubic),
+  easeIn: 'cubic-bezier(0.4, 0.0, 1, 1)',
+  easeInCubic: 'cubic-bezier(0.4, 0.0, 1, 1)',
   
   // Both (for symmetric animations like breathing)
-  easeInOut: Easing.inOut(Easing.ease),
-  easeInOutSine: Easing.inOut(Easing.sin),
-  easeInOutCubic: Easing.inOut(Easing.cubic),
+  easeInOut: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  easeInOutSine: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  easeInOutCubic: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
   
-  // Spring-like (for playful interactions)
-  spring: Easing.elastic(0.7),
-  bounce: Easing.bounce,
+  // Aliases
+  standard: 'cubic-bezier(0.2, 0.0, 0.2, 1)',
+  out: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  inOut: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 } as const;
 
 // ============================================================================
@@ -106,13 +107,13 @@ export const cosmicPresets = {
   
   // Scale in (for modals, cards)
   scaleIn: {
-    duration: cosmicDurations.screen,
+    duration: cosmicDurations.screenEnter,
     easing: cosmicEasings.easeOutCubic,
   },
   
   // Breathing cycle (6 seconds total: 2s in, 2s hold, 2s out)
   breathing: {
-    duration: cosmicDurations.breathing,
+    duration: cosmicDurations.breathCycle,
     easing: cosmicEasings.easeInOutSine,
   },
   
@@ -132,7 +133,7 @@ export const cosmicReducedMotion = {
   // or minimal opacity changes instead of scale/movement
   press: {
     duration: 0,
-    easing: Easing.linear,
+    easing: 'linear',
   },
   fadeIn: {
     duration: cosmicDurations.base,

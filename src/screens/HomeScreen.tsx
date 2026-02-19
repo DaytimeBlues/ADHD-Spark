@@ -31,7 +31,8 @@ import ActivationService, {
 import RetentionService from '../services/RetentionService';
 import { ReentryPromptLevel } from '../services/RetentionService';
 import useReducedMotion from '../hooks/useReducedMotion';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
 import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';

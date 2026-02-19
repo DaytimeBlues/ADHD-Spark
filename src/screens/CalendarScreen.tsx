@@ -8,7 +8,8 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
 import { GoogleTasksSyncService } from '../services/PlaudService';
 

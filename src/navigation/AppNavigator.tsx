@@ -3,7 +3,8 @@ import { View, ActivityIndicator, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Tokens, ThemeProvider, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
 import { WebNavBar } from './WebNavBar';
 import { ROUTES } from './routes';
 

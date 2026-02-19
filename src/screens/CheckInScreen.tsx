@@ -13,7 +13,8 @@ import ActivationService, {
   ActivationSource,
 } from '../services/ActivationService';
 import { ROUTES } from '../navigation/routes';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 
 const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 

@@ -9,7 +9,8 @@ import {
   Linking,
   Platform,
 } from 'react-native';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { CADDI_OVERVIEW, CADDI_SOURCES } from '../config/caddi';
 import { EvidenceBadge } from '../components/ui/EvidenceBadge';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';

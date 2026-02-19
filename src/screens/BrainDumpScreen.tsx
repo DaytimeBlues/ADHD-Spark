@@ -31,8 +31,9 @@ import { generateId } from '../utils/helpers';
 import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
-import { CosmicBackground, GlowCard, RuneButton } from '../components/ui/cosmic';
-import { Tokens, useTheme } from '../theme/tokens';
+import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 
 const HIT_SLOP = {
   top: Tokens.spacing[4],

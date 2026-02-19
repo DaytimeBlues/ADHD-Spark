@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { LinearButton } from '../components/ui/LinearButton';
 import useTimer from '../hooks/useTimer';
-import { Tokens, useTheme } from '../theme/tokens';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
 
 type BreathingPattern = '478' | 'box' | 'energize';
