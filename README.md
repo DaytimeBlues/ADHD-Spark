@@ -75,6 +75,36 @@ The native Android shell is a secondary wrapper used for platform-specific featu
 3. `cd android && ./gradlew clean`
 4. `npm run android`
 
+### Android Phone-Only Deployment (No Store)
+
+If you only want to run Spark on your own Android phone, use the local profiles below.
+
+1. Connect phone with USB debugging enabled.
+2. Build/install one of the profiles:
+
+```bash
+# Development profile (fastest, debuggable)
+npm run install:android:dev
+
+# Preview profile (release-like, installable without release keystore)
+npm run install:android:preview
+
+# Production profile (requires release keystore env vars)
+npm run build:android:prod
+```
+
+Profile package IDs:
+
+- Dev: `com.sparkadhd.dev`
+- Preview: `com.sparkadhd.preview`
+- Production: `com.sparkadhd`
+
+### Backend Options for Personal Use
+
+- Default API endpoint is `https://spark-adhd-api.vercel.app` (used for AI sorting).
+- If the API is unavailable, core app flows still work; AI sort shows a graceful error.
+- For a zero-cloud personal workflow, avoid AI sort and use local features (timers, notes, check-in, routines).
+
 ### Native Tests
 
 ```bash

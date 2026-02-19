@@ -1,19 +1,19 @@
 // Spark Industrial Design Tokens
-// "Nothing" Aesthetic: Monochrome, Red Accent, Dot Matrix, Raw.
+// "Nothing" Aesthetic: Monochrome, Purple Accent, Dot Matrix, Raw.
 
 export const LinearColors = {
-  // Brand - Red Accent (Nothing Style)
+  // Brand - Purple Accent (Nothing Style)
   brand: {
-    50: '#FFF0F0',
-    100: '#FFE0E0',
-    200: '#FFC0C0',
-    300: '#FF9090',
-    400: '#FF5050',
-    500: '#FF0033', // Primary Accent (Signal Red)
-    600: '#D8002B',
-    700: '#B00023',
-    800: '#88001B',
-    900: '#600013',
+    50: '#F5F0FF',
+    100: '#EDE0FF',
+    200: '#DBC0FF',
+    300: '#C290FF',
+    400: '#A350FF',
+    500: '#8000FF', // Primary Accent (Electric Purple)
+    600: '#6C00D8',
+    700: '#5800B0',
+    800: '#440088',
+    900: '#300060',
   },
 
   // Alias indigo to red for backward compatibility but using new aesthetic

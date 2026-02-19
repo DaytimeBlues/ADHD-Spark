@@ -34,6 +34,16 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
+        preview {
+            initWith release
+            matchingFallbacks = ['release']
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            applicationIdSuffix ".preview"
+            versionNameSuffix "-preview"
         }
         release {
             signingConfig signingConfigs.release
