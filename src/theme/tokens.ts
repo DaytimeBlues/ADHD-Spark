@@ -10,6 +10,42 @@ import {
 } from './linearTokens';
 import { Motion } from './motion';
 
+// Cosmic theme tokens
+export {
+  CosmicTokens,
+  CosmicColors,
+  CosmicSpacing,
+  CosmicRadii,
+  CosmicTypography,
+  CosmicElevation,
+  CosmicMotion,
+  glowStyles,
+  textGlowStyles,
+  backgroundStyles,
+  type BackgroundVariant,
+  type GlowLevel,
+  type CosmicTokensType,
+} from './cosmicTokens';
+
+// Theme variant types and utilities
+export {
+  type ThemeVariant,
+  THEME_VARIANTS,
+  DEFAULT_THEME_VARIANT,
+  migrateThemeVariant,
+  isValidThemeVariant,
+  assertThemeVariant,
+  THEME_METADATA,
+} from './themeVariant';
+
+// Theme provider
+export {
+  ThemeProvider,
+  useTheme,
+  withTheme,
+  type ThemeContextValue,
+} from './ThemeProvider';
+
 export const Colors = LinearColors;
 export const Spacing = LinearSpacing;
 export const TypeScale = {

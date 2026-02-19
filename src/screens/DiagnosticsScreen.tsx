@@ -13,9 +13,10 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { Tokens } from '../theme/tokens';
+import { Tokens, useTheme, THEME_METADATA } from '../theme/tokens';
 import { config } from '../config';
 import StorageService from '../services/StorageService';
+import { CosmicBackground, GlowCard } from '../ui/cosmic';
 
 interface DiagnosticEntry {
   label: string;
@@ -38,6 +39,7 @@ type NavigationNode = {
 };
 
 const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
+  const { isCosmic, setVariant, variant } = useTheme();
   const [diagnostics, setDiagnostics] = useState<DiagnosticEntry[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [backupJson, setBackupJson] = useState('');
@@ -453,8 +455,9 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <CosmicBackground variant="ridge" dimmer>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
@@ -641,9 +644,88 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
               <Text style={styles.backupStatusText}>{backupStatus}</Text>
             ) : null}
           </View>
+
+          {/* Appearance / Theme Toggle */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>APPEARANCE</Text>
+            <GlowCard
+              glow={variant === 'linear' ? 'soft' : 'none'}
+              onPress={() => setVariant('linear')}
+              style={styles.themeOption}
+              accessibilityLabel="Select Linear theme"
+              accessibilityRole="button"
+              accessibilityState={{ selected: variant === 'linear' }}
+            >
+              <View style={styles.themeOptionContent}>
+                <View style={styles.themePreview}>
+                  <View
+                    style={[
+                      styles.themePreviewBox,
+                      { backgroundColor: THEME_METADATA.linear.preview.background },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.themePreviewAccent,
+                        { backgroundColor: THEME_METADATA.linear.preview.accent },
+                      ]}
+                    />
+                  </View>
+                </View>
+                <View style={styles.themeText}>
+                  <Text style={styles.themeTitle}>{THEME_METADATA.linear.label}</Text>
+                  <Text style={styles.themeDescription}>
+                    {THEME_METADATA.linear.description}
+                  </Text>
+                </View>
+                {variant === 'linear' && (
+                  <Text style={styles.checkmark}>✓</Text>
+                )}
+              </View>
+            </GlowCard>
+
+            <View style={{ height: 8 }} />
+
+            <GlowCard
+              glow={variant === 'cosmic' ? 'soft' : 'none'}
+              onPress={() => setVariant('cosmic')}
+              style={styles.themeOption}
+              accessibilityLabel="Select Cosmic theme"
+              accessibilityRole="button"
+              accessibilityState={{ selected: variant === 'cosmic' }}
+            >
+              <View style={styles.themeOptionContent}>
+                <View style={styles.themePreview}>
+                  <View
+                    style={[
+                      styles.themePreviewBox,
+                      { backgroundColor: THEME_METADATA.cosmic.preview.background },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.themePreviewAccent,
+                        { backgroundColor: THEME_METADATA.cosmic.preview.accent },
+                      ]}
+                    />
+                  </View>
+                </View>
+                <View style={styles.themeText}>
+                  <Text style={styles.themeTitle}>{THEME_METADATA.cosmic.label}</Text>
+                  <Text style={styles.themeDescription}>
+                    {THEME_METADATA.cosmic.description}
+                  </Text>
+                </View>
+                {variant === 'cosmic' && (
+                  <Text style={styles.checkmark}>✓</Text>
+                )}
+              </View>
+            </GlowCard>
+          </View>
         </ScrollView>
       </View>
     </SafeAreaView>
+    </CosmicBackground>
   );
 };
 
@@ -834,6 +916,50 @@ const styles = StyleSheet.create({
   },
   modeButtonTextActive: {
     color: Tokens.colors.text.primary,
+  },
+  themeOption: {
+    marginBottom: 0,
+  },
+  themeOptionContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  themePreview: {
+    marginRight: Tokens.spacing.md,
+  },
+  themePreviewBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  themePreviewAccent: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+  },
+  themeText: {
+    flex: 1,
+  },
+  themeTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.base,
+    fontWeight: '700',
+    color: Tokens.colors.text.primary,
+    marginBottom: 2,
+  },
+  themeDescription: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+  },
+  checkmark: {
+    fontSize: 20,
+    color: Tokens.colors.success,
+    marginLeft: Tokens.spacing.sm,
   },
 });
 

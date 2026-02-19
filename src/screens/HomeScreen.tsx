@@ -31,10 +31,11 @@ import ActivationService, {
 import RetentionService from '../services/RetentionService';
 import { ReentryPromptLevel } from '../services/RetentionService';
 import useReducedMotion from '../hooks/useReducedMotion';
-import { Tokens } from '../theme/tokens';
+import { Tokens, useTheme } from '../theme/tokens';
 import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
 import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';
+import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 
 const ANIMATION_DURATION = 300; // Faster
 const ANIMATION_STAGGER = 50; // Faster
@@ -59,6 +60,7 @@ type OverlayEvent = {
 };
 
 const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
+  const { isCosmic, t } = useTheme();
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
@@ -461,10 +463,13 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     [navigateByRouteName],
   );
 
+  const styles = getStyles(isCosmic);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.maxWidthWrapper}>
+    <CosmicBackground variant="ridge" style={StyleSheet.absoluteFill}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.maxWidthWrapper}>
           <View style={styles.header}>
             <View>
               <Text
@@ -656,17 +661,19 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </CosmicBackground>
   );
 };
 
-const styles = StyleSheet.create({
+// Theme-aware styles function
+const getStyles = (isCosmic: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: 'transparent', // Handled by CosmicBackground
   },
   scrollContent: {
     flexGrow: 1,
-    padding: Tokens.spacing[4], // Tighter padding
+    padding: Tokens.spacing[4],
     alignItems: 'center',
   },
   maxWidthWrapper: {
@@ -680,14 +687,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingTop: Tokens.spacing[2],
     borderBottomWidth: 1,
-    borderBottomColor: Tokens.colors.neutral.dark,
+    borderBottomColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.dark,
     paddingBottom: Tokens.spacing[4],
   },
   title: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xl,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: -1,
   },
   systemStatusRow: {
@@ -698,39 +705,39 @@ const styles = StyleSheet.create({
   systemStatusText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.tertiary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
     marginRight: 6,
   },
   statusDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: Tokens.colors.success.main,
+    backgroundColor: isCosmic ? '#2DD4BF' : Tokens.colors.success.main,
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[3],
     paddingVertical: 4,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
   },
   streakText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     letterSpacing: 1,
   },
   activationCard: {
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[4],
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    borderRadius: Tokens.radii.none,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+    borderRadius: isCosmic ? 12 : Tokens.radii.none,
   },
   activationHeader: {
     flexDirection: 'row',
@@ -738,20 +745,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Tokens.spacing[4],
     borderBottomWidth: 1,
-    borderBottomColor: Tokens.colors.neutral.dark,
+    borderBottomColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.dark,
     paddingBottom: Tokens.spacing[2],
   },
   activationTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     letterSpacing: 1,
   },
   activationRate: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
   },
   activationGrid: {
     flexDirection: 'row',
@@ -763,31 +770,31 @@ const styles = StyleSheet.create({
   statLabel: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.tertiary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
     marginBottom: 2,
   },
   statValue: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.base,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontWeight: '700',
   },
-  textSuccess: { color: Tokens.colors.success.main },
-  textError: { color: Tokens.colors.error.main },
-  textNeutral: { color: Tokens.colors.text.secondary },
+  textSuccess: { color: isCosmic ? '#2DD4BF' : Tokens.colors.success.main },
+  textError: { color: isCosmic ? '#FB7185' : Tokens.colors.error.main },
+  textNeutral: { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
   overlayCard: {
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[3],
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 12 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   overlayCardActive: {
-    borderColor: Tokens.colors.brand[500],
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
   },
   overlayTextGroup: {
     flex: 1,
@@ -796,43 +803,44 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: 1,
   },
   overlayStatus: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     marginTop: 2,
   },
   overlayStatusActive: {
-    color: Tokens.colors.success.main,
+    color: isCosmic ? '#2DD4BF' : Tokens.colors.success.main,
   },
   modesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    rowGap: Tokens.spacing[3], // Tighter gap
+    rowGap: Tokens.spacing[3],
   },
   debugPanel: {
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[3],
-    backgroundColor: Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     borderStyle: 'dashed',
+    borderRadius: isCosmic ? 8 : 0,
   },
   debugTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.tertiary,
+    color: isCosmic ? '#6B7A9C' : Tokens.colors.text.tertiary,
     marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
   },
   debugText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     marginBottom: 2,
   },
   debugButtonRow: {
@@ -843,15 +851,16 @@ const styles = StyleSheet.create({
   debugButton: {
     paddingVertical: 4,
     paddingHorizontal: 8,
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+    borderRadius: isCosmic ? 4 : 0,
   },
   debugButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
   },
 });
 

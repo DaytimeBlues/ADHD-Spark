@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Tokens } from '../theme/tokens';
+import { Tokens, ThemeProvider, useTheme } from '../theme/tokens';
 import { WebNavBar } from './WebNavBar';
 import { ROUTES } from './routes';
 
@@ -62,75 +62,85 @@ const HomeStack = () => (
   </Stack.Navigator>
 );
 
-const TabNavigator = () => (
-  <Tab.Navigator
-    tabBar={
-      Platform.OS === 'web' ? (props) => <WebNavBar {...props} /> : undefined
-    }
-    sceneContainerStyle={
-      Platform.OS === 'web'
-        ? {
-            paddingTop: 64,
-            backgroundColor: Tokens.colors.neutral.darkest,
-            height: '100%', // Ensure full height
-          }
-        : undefined
-    }
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused }) => {
-        const icons: Record<string, string> = {
-          Home: 'home',
-          Focus: 'fire',
-          Tasks: 'text-box-outline',
-          Calendar: 'calendar',
-        };
-        return (
-          <Icon
-            name={icons[route.name]}
-            size={24}
-            color={
-              focused
-                ? Tokens.colors.indigo.primary
-                : Tokens.colors.text.tertiary
+const TabNavigator = () => {
+  const { isCosmic, t } = useTheme();
+  
+  return (
+    <Tab.Navigator
+      tabBar={
+        Platform.OS === 'web' ? (props) => <WebNavBar {...props} /> : undefined
+      }
+      sceneContainerStyle={
+        Platform.OS === 'web'
+          ? {
+              paddingTop: 64,
+              backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darkest,
+              height: '100%',
             }
-          />
-        );
-      },
-      tabBarActiveTintColor: Tokens.colors.indigo.primary,
-      tabBarInactiveTintColor: Tokens.colors.text.tertiary,
-      headerShown: false,
-      tabBarStyle: {
-        backgroundColor: Tokens.colors.neutral.darker,
-        borderTopWidth: 1,
-        borderTopColor: Tokens.colors.neutral.borderSubtle,
-        height: 60,
-        paddingBottom: 8,
-        elevation: 0,
-        shadowOpacity: 0,
-      },
-      tabBarLabelStyle: {
-        fontFamily: Tokens.type.fontFamily.sans,
-        fontSize: 10,
-        fontWeight: '700',
-        letterSpacing: 1, // Uppercase style
-        textTransform: 'uppercase',
-      },
-    })}
-  >
-    <Tab.Screen name={ROUTES.HOME} component={HomeStack} />
-    <Tab.Screen name={ROUTES.FOCUS} component={IgniteScreen} />
-    <Tab.Screen name={ROUTES.TASKS} component={LazyBrainDump} />
-    <Tab.Screen name={ROUTES.CALENDAR} component={LazyCalendar} />
-  </Tab.Navigator>
-);
+          : undefined
+      }
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          const icons: Record<string, string> = {
+            Home: 'home',
+            Focus: 'fire',
+            Tasks: 'text-box-outline',
+            Calendar: 'calendar',
+          };
+          return (
+            <Icon
+              name={icons[route.name]}
+              size={24}
+              color={
+                focused
+                  ? (isCosmic ? '#8B5CF6' : Tokens.colors.indigo.primary)
+                  : (isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary)
+              }
+            />
+          );
+        },
+        tabBarActiveTintColor: isCosmic ? '#8B5CF6' : Tokens.colors.indigo.primary,
+        tabBarInactiveTintColor: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+          borderTopWidth: 1,
+          borderTopColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+          height: 60,
+          paddingBottom: 8,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        tabBarLabelStyle: {
+          fontFamily: Tokens.type.fontFamily.sans,
+          fontSize: 10,
+          fontWeight: '700',
+          letterSpacing: 1,
+          textTransform: 'uppercase',
+        },
+      })}
+    >
+      <Tab.Screen name={ROUTES.HOME} component={HomeStack} />
+      <Tab.Screen name={ROUTES.FOCUS} component={IgniteScreen} />
+      <Tab.Screen name={ROUTES.TASKS} component={LazyBrainDump} />
+      <Tab.Screen name={ROUTES.CALENDAR} component={LazyCalendar} />
+    </Tab.Navigator>
+  );
+};
 
-const AppNavigator = () => (
+const AppNavigatorContent = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name={ROUTES.MAIN} component={TabNavigator} />
     <Stack.Screen name={ROUTES.FOG_CUTTER} component={LazyFogCutter} />
     <Stack.Screen name={ROUTES.POMODORO} component={LazyPomodoro} />
     <Stack.Screen name={ROUTES.ANCHOR} component={LazyAnchor} />
   </Stack.Navigator>
+);
+
+const AppNavigator = () => (
+  <ThemeProvider>
+    <AppNavigatorContent />
+  </ThemeProvider>
 );
 
 export default AppNavigator;
