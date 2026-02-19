@@ -122,14 +122,22 @@ public class OverlayService extends Service {
     int persistedCount = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getInt(KEY_LAST_COUNT, 0);
     countView.setText(String.valueOf(persistedCount));
     countView.setTextColor(0xFFFFFFFF);
-    countView.setTextSize(16f);
+    countView.setTextSize(18f);
     countView.setGravity(Gravity.CENTER);
+    countView.setTypeface(android.graphics.Typeface.MONOSPACE);
 
+    // Modern minimalist bubble with purple accent
     GradientDrawable background = new GradientDrawable();
-    background.setColor(0xFF2D89EF);
+    background.setColor(0xFF141414); // Dark surface
     background.setCornerRadius(size / 2f);
+    background.setStroke(dpToPx(2), 0xFF7C3AED); // Purple accent border
 
     bubbleView.setBackground(background);
+    
+    // Add subtle shadow/elevation
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      bubbleView.setElevation(dpToPx(4));
+    }
     FrameLayout.LayoutParams bubbleLayout = new FrameLayout.LayoutParams(size, size);
     bubbleLayout.gravity = Gravity.CENTER;
     bubbleView.addView(countView, bubbleLayout);
@@ -225,30 +233,75 @@ public class OverlayService extends Service {
 
     menuView = new LinearLayout(this);
     menuView.setOrientation(LinearLayout.VERTICAL);
-    menuView.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
+    menuView.setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16));
 
+    // Modern glassmorphism menu with purple accent
     GradientDrawable background = new GradientDrawable();
-    background.setColor(0xFF1A1A2E);
-    background.setCornerRadius(dpToPx(16));
-    background.setStroke(dpToPx(1), 0xFF2D89EF);
+    background.setColor(0xE61A1A2E); // Semi-transparent dark
+    background.setCornerRadius(dpToPx(12));
+    background.setStroke(dpToPx(2), 0xFF7C3AED); // Purple accent
     menuView.setBackground(background);
+    
+    // Add elevation for shadow
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      menuView.setElevation(dpToPx(8));
+    }
 
-    addMenuItem("CBT", "CBTGuide", false);
-    addMenuItem("Tasks", "FogCutter", false);
-    addMenuItem("TODO", "Tasks", false);
-    addMenuItem("Breathing", "Anchor", false);
-    addMenuItem("Thinking Help", "CheckIn", false);
-    addMenuItem("Voice Task", "Tasks", true);
+    // Add header
+    TextView headerView = new TextView(this);
+    headerView.setText("QUICK ACCESS");
+    headerView.setTextColor(0xFF7C3AED); // Purple accent
+    headerView.setTextSize(11f);
+    headerView.setTypeface(android.graphics.Typeface.MONOSPACE, android.graphics.Typeface.BOLD);
+    headerView.setLetterSpacing(0.15f);
+    headerView.setPadding(0, 0, 0, dpToPx(12));
+    menuView.addView(headerView);
+
+    addMenuItem("Ignite", "Ignite", false);
+    addMenuItem("Fog Cutter", "FogCutter", false);
+    addMenuItem("Pomodoro", "Pomodoro", false);
+    addMenuItem("Anchor", "Anchor", false);
+    addMenuItem("Check In", "CheckIn", false);
+    addMenuItem("Brain Dump", "BrainDump", true);
   }
 
   private void addMenuItem(String label, String route, boolean autoRecord) {
     TextView menuItem = new TextView(this);
-    menuItem.setText(label);
+    menuItem.setText(label.toUpperCase());
     menuItem.setTextColor(0xFFFFFFFF);
-    menuItem.setTextSize(15f);
-    menuItem.setMinHeight(dpToPx(48));
-    menuItem.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
+    menuItem.setTextSize(13f);
+    menuItem.setTypeface(android.graphics.Typeface.MONOSPACE);
+    menuItem.setMinHeight(dpToPx(44));
+    menuItem.setPadding(dpToPx(12), dpToPx(10), dpToPx(12), dpToPx(10));
     menuItem.setGravity(Gravity.CENTER_VERTICAL);
+    menuItem.setLetterSpacing(0.08f);
+    
+    // Add subtle divider between items (except last)
+    if (menuView.getChildCount() > 1) {
+      View divider = new View(this);
+      divider.setBackgroundColor(0x22FFFFFF); // Very subtle white
+      LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.MATCH_PARENT, 
+        dpToPx(1)
+      );
+      dividerParams.setMargins(0, 0, 0, 0);
+      menuView.addView(divider, dividerParams);
+    }
+    
+    // Add hover/press effect
+    menuItem.setOnTouchListener((v, event) -> {
+      switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+          menuItem.setBackgroundColor(0x22FFFFFF);
+          break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_CANCEL:
+          menuItem.setBackgroundColor(0x00000000);
+          break;
+      }
+      return false;
+    });
+    
     menuItem.setOnClickListener((ignored) -> {
       launchRoute(route, autoRecord);
       collapseMenu();
@@ -263,7 +316,7 @@ public class OverlayService extends Service {
 
     if (scrimView == null) {
       scrimView = new View(this);
-      scrimView.setBackgroundColor(0x29000000);
+      scrimView.setBackgroundColor(0x66000000); // Darker scrim for better contrast
       scrimView.setOnClickListener((ignored) -> collapseMenu());
     }
 

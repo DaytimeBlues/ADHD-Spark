@@ -189,6 +189,16 @@ const renderMicroStep = ({
             <View style={styles.headerLine} />
           </View>
 
+          <View style={styles.rationaleCard}>
+            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+            <Text style={styles.rationaleText}>
+              CBT/CADDI research shows ADHD paralysis comes from seeing tasks as 
+              monolithic. Breaking tasks into micro-steps (2-5 minutes each) 
+              reduces cognitive load and creates multiple "completion wins" 
+              that build dopamine and momentum.
+            </Text>
+          </View>
+
           <View style={styles.creationCard}>
             <View style={styles.creationHeader}>
               <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
@@ -403,6 +413,28 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Tokens.colors.neutral.dark,
     marginLeft: Tokens.spacing[4],
+  },
+  rationaleCard: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[4],
+  },
+  rationaleTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+  },
+  rationaleText: {
+    fontFamily: Tokens.type.fontFamily.body,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: Tokens.type.lineHeight.relaxed,
   },
   creationCard: {
     marginBottom: Tokens.spacing[6],

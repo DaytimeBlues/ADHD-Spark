@@ -2,26 +2,26 @@
 // "Nothing" Aesthetic: Monochrome, Purple Accent, Dot Matrix, Raw.
 
 export const LinearColors = {
-  // Brand - Purple Accent (Nothing Style)
+  // Brand - Purple Accent (Refined Indigo/Violet)
   brand: {
-    50: '#F5F0FF',
-    100: '#EDE0FF',
-    200: '#DBC0FF',
-    300: '#C290FF',
-    400: '#A350FF',
-    500: '#8000FF', // Primary Accent (Electric Purple)
-    600: '#6C00D8',
-    700: '#5800B0',
-    800: '#440088',
-    900: '#300060',
+    50: '#F5F3FF',
+    100: '#EDE9FE',
+    200: '#DDD6FE',
+    300: '#C4B5FD',
+    400: '#A78BFA',
+    500: '#8B5CF6',
+    600: '#7C3AED', // Primary Accent (High Contrast Violet)
+    700: '#6D28D9',
+    800: '#5B21B6',
+    900: '#4C1D95',
   },
 
-  // Alias indigo to red for backward compatibility but using new aesthetic
+  // Indigo alias mapped to the new brand palette
   indigo: {
-    primary: '#FF0033',
-    hover: '#D8002B',
-    active: '#B00023',
-    subtle: 'rgba(255, 0, 51, 0.1)',
+    primary: '#7C3AED',
+    hover: '#6D28D9',
+    active: '#5B21B6',
+    subtle: 'rgba(124, 58, 237, 0.1)',
   },
 
   // Danger/Error
@@ -72,7 +72,7 @@ export const LinearColors = {
     secondary: '#888888',
     tertiary: '#555555',
     disabled: '#333333',
-    link: '#FF0033',
+    link: '#7C3AED',
   },
 
   // Semantic

@@ -146,6 +146,16 @@ const CalendarScreen = () => {
           <View style={styles.content}>
             <Text style={styles.title}>CALENDAR</Text>
 
+            <View style={styles.rationaleCard}>
+              <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+              <Text style={styles.rationaleText}>
+                Externalizing time through visual calendars reduces ADHD 
+                time-blindness and improves prospective memory. Seeing commitments 
+                spatially helps with planning, transitions, and preventing 
+                double-booking. CBT emphasizes external structure as cognitive support.
+              </Text>
+            </View>
+
             <View style={styles.calendarCard}>
               <View style={styles.header}>
                 <Pressable
@@ -303,8 +313,30 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.h1,
     fontWeight: '800',
     color: Tokens.colors.text.primary,
-    marginBottom: Tokens.spacing[6],
+    marginBottom: Tokens.spacing[4],
     letterSpacing: 2,
+  },
+  rationaleCard: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[6],
+  },
+  rationaleTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+  },
+  rationaleText: {
+    fontFamily: Tokens.type.fontFamily.body,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: Tokens.type.lineHeight.relaxed,
   },
   calendarCard: {
     backgroundColor: Tokens.colors.neutral.darker,

@@ -194,6 +194,15 @@ const IgniteScreen = () => {
             </View>
           </View>
 
+          <View style={styles.rationaleCard}>
+            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+            <Text style={styles.rationaleText}>
+              Based on CBT/CADDI principles, the hardest part of ADHD is often 
+              starting. This 5-minute timer creates a low-commitment entry point 
+              to bypass procrastination and build behavioral activation momentum.
+            </Text>
+          </View>
+
           {isRestoring ? (
             <View style={styles.timerCard}>
               <ActivityIndicator
@@ -402,6 +411,29 @@ const styles = StyleSheet.create({
   buttonPressed: {
     opacity: 0.8,
     backgroundColor: Tokens.colors.neutral.dark,
+  },
+  rationaleCard: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[4],
+    marginTop: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[2],
+  },
+  rationaleTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+  },
+  rationaleText: {
+    fontFamily: Tokens.type.fontFamily.body,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: Tokens.type.lineHeight.relaxed,
   },
 });
 

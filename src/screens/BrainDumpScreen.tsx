@@ -522,6 +522,16 @@ const BrainDumpScreen = () => {
             <View style={styles.headerLine} />
           </View>
 
+          <View style={styles.rationaleCard}>
+            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+            <Text style={styles.rationaleText}>
+              Cognitive offloading is essential for ADHD working memory. 
+              Externalizing thoughts reduces mental clutter and prevents 
+              "thought chasing." CBT/CADDI uses this to create space for 
+              prioritization and prevent overwhelm from competing demands.
+            </Text>
+          </View>
+
           <View style={styles.inputSection}>
             <View
               style={[
@@ -789,6 +799,28 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: Tokens.colors.neutral.dark,
     marginLeft: Tokens.spacing[4],
+  },
+  rationaleCard: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[4],
+  },
+  rationaleTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+  },
+  rationaleText: {
+    fontFamily: Tokens.type.fontFamily.body,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: Tokens.type.lineHeight.relaxed,
   },
   // Input
   inputSection: {

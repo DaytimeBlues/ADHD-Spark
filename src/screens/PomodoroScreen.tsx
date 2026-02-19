@@ -140,6 +140,16 @@ const PomodoroScreen = () => {
           </Text>
         </View>
 
+        <View style={styles.rationaleCard}>
+          <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
+          <Text style={styles.rationaleText}>
+            Structured work/break cycles align with ADHD dopamine regulation. 
+            Short bursts (25 min) prevent hyperfocus burnout, while mandatory 
+            breaks restore attention. Evidence-based from CBT time-management 
+            protocols for sustained task persistence.
+          </Text>
+        </View>
+
         <View style={styles.timerCard}>
           <View style={[styles.phaseIndicator, phaseIndicatorStyle]} />
           <Text testID="timer-display" style={styles.timer}>
@@ -223,6 +233,28 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: { transition: Tokens.motion.transitions.base },
     }),
+  },
+  rationaleCard: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderWidth: 1,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+    padding: Tokens.spacing[4],
+    marginBottom: Tokens.spacing[6],
+  },
+  rationaleTitle: {
+    fontFamily: Tokens.type.fontFamily.mono,
+    fontSize: Tokens.type.xs,
+    fontWeight: '700',
+    color: Tokens.colors.brand[500],
+    letterSpacing: 1,
+    marginBottom: Tokens.spacing[2],
+    textTransform: 'uppercase',
+  },
+  rationaleText: {
+    fontFamily: Tokens.type.fontFamily.body,
+    fontSize: Tokens.type.sm,
+    color: Tokens.colors.text.secondary,
+    lineHeight: Tokens.type.lineHeight.relaxed,
   },
   sessionCounter: {
     flexDirection: 'row',
