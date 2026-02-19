@@ -11,7 +11,8 @@ module.exports = (env, argv) => {
     entry: './index.web.js',
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: 'bundle.[contenthash].js',
+      filename: isProduction ? 'bundle.[contenthash].js' : 'bundle.js',
+      chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].js',
       publicPath: isProduction ? '' : '/',
     },
     resolve: {
@@ -71,6 +72,9 @@ module.exports = (env, argv) => {
     devServer: {
       static: {
         directory: path.join(__dirname, 'public'),
+      },
+      headers: {
+        'Cache-Control': 'no-store',
       },
       client: {
         overlay: !disableDevOverlay,
