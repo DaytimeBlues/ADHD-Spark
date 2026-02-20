@@ -21,6 +21,7 @@ const AnchorScreen = lazy(() => import('../screens/AnchorScreen'));
 const CheckInScreen = lazy(() => import('../screens/CheckInScreen'));
 const CBTGuideScreen = lazy(() => import('../screens/CBTGuideScreen'));
 const DiagnosticsScreen = lazy(() => import('../screens/DiagnosticsScreen'));
+const ChatScreen = lazy(() => import('../screens/ChatScreen'));
 
 // Lazy loading wrapper
 const withSuspense = (Component: React.ComponentType<any>) => (props: any) => (
@@ -50,6 +51,7 @@ const LazyAnchor = withSuspense(AnchorScreen);
 const LazyCheckIn = withSuspense(CheckInScreen);
 const LazyCBTGuide = withSuspense(CBTGuideScreen);
 const LazyDiagnostics = withSuspense(DiagnosticsScreen);
+const LazyChat = withSuspense(ChatScreen);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,7 +67,7 @@ const HomeStack = () => (
 
 const TabNavigator = () => {
   const { isCosmic, t } = useTheme();
-  
+
   return (
     <Tab.Navigator
       tabBar={
@@ -74,10 +76,10 @@ const TabNavigator = () => {
       sceneContainerStyle={
         Platform.OS === 'web'
           ? {
-              paddingTop: 64,
-              backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darkest,
-              height: '100%',
-            }
+            paddingTop: 64,
+            backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darkest,
+            height: '100%',
+          }
           : undefined
       }
       screenOptions={({ route }) => ({
@@ -87,6 +89,7 @@ const TabNavigator = () => {
             Focus: 'fire',
             Tasks: 'text-box-outline',
             Calendar: 'calendar',
+            Chat: 'message-text-outline',
           };
           return (
             <Icon
@@ -125,6 +128,7 @@ const TabNavigator = () => {
       <Tab.Screen name={ROUTES.FOCUS} component={IgniteScreen} />
       <Tab.Screen name={ROUTES.TASKS} component={LazyBrainDump} />
       <Tab.Screen name={ROUTES.CALENDAR} component={LazyCalendar} />
+      <Tab.Screen name={ROUTES.CHAT} component={LazyChat} />
     </Tab.Navigator>
   );
 };

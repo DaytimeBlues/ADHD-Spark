@@ -7,7 +7,7 @@
 
 export type AiProvider = 'vercel' | 'gemini-direct';
 
-interface Config {
+export interface Config {
   apiBaseUrl: string;
   environment: 'development' | 'staging' | 'production';
   googleWebClientId?: string;

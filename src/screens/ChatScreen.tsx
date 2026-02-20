@@ -41,7 +41,7 @@ const ChatScreen = () => {
     const styles = getStyles(isCosmic);
 
     return (
-        <CosmicBackground variant="starfield">
+        <CosmicBackground variant="nebula">
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 style={styles.container}

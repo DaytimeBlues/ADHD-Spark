@@ -78,7 +78,7 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 // COMPONENT PROP TYPES
 // ============================================================================
 
-import { ViewStyle, TextStyle, PressableProps, AccessibilityRole } from 'react-native';
+import { ViewStyle, TextStyle, StyleProp, PressableProps, AccessibilityRole } from 'react-native';
 
 /**
  * Base cosmic component props
@@ -87,7 +87,7 @@ export interface CosmicComponentProps {
   /** Test ID for testing */
   testID?: string;
   /** Custom styles */
-  style?: ViewStyle | TextStyle;
+  style?: StyleProp<ViewStyle | TextStyle>;
 }
 
 /**

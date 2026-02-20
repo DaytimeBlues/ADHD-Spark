@@ -13,6 +13,7 @@ export const ROUTES = {
   FOCUS: 'Focus' as const,
   TASKS: 'Tasks' as const,
   CALENDAR: 'Calendar' as const,
+  CHAT: 'Chat' as const,
 
   // Home Stack
   HOME_MAIN: 'HomeMain' as const,

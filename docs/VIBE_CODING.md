@@ -24,7 +24,7 @@ For GenAI features specifically, this means:
 ### AI Provider Strategy
 
 | Provider | When | Trade-off |
-|---|---|---|
+| :--- | :--- | :--- |
 | `vercel` (default) | API key is private, no CORS risk | Requires server round-trip |
 | `gemini-direct` | Set `REACT_APP_GEMINI_API_KEY` | Faster, but key is in bundle |
 
@@ -48,7 +48,7 @@ This means:
 - Easy to add/remove agent tools without touching screens
 - Subscribing components can add confirmation dialogs before acting
 
-```
+```text
 Agent → WebMCPService.tool() → agentEventBus.emit() → useAgentEvents() → React screen
 ```
 
@@ -67,7 +67,7 @@ The user should never see a blank screen or a crash caused by AI.
 When running in a WebMCP-capable browser, external agents can call:
 
 | Tool | Description |
-|---|---|
+| :--- | :--- |
 | `start_timer` | Start a pomodoro / ignite / anchor timer |
 | `navigate_to_screen` | Navigate to any named screen |
 | `add_brain_dump` | Write to the brain dump list |
@@ -88,18 +88,18 @@ await globalThis.navigator.modelContext.callTool('navigate_to_screen', { screen:
 ## New Services
 
 | Service | Purpose |
-|---|---|
+| :--- | :--- |
 | `AISortService` | Hardened brain dump sorter (retry, cache, timeout) |
 | `FogCutterAIService` | Generates 3–5 micro-steps from a vague task |
 | `CheckInInsightService` | Produces personalised insight from local check-in data |
 | `AgentEventBus` | Typed pub/sub bridge between agents and React |
 | `WebMCPService` | Registers tools for external AI agents |
+| `ChatService` | Manages conversation state and AI chat history |
 
 ---
 
 ## What's Next (Future Branches)
 
-- **Chat screen** (`ChatScreen.tsx`) — conversational Spark coach with streaming
 - **Gemini Nano / window.ai** — on-device inference for `CheckInInsightService`
 - **Agent confirmation dialogs** — let users preview and approve agent actions before they execute
 - **Voice input** — connect PlaudService transcripts to FogCutter AI

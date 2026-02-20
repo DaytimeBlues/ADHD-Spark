@@ -22,6 +22,8 @@ import {
   navigationRef,
 } from './src/navigation/navigationRef';
 
+import { agentEventBus } from './src/services/AgentEventBus';
+
 const App = () => {
   const [isReady, setIsReady] = useState(false);
   const pollingStartedRef = useRef(false);
@@ -30,18 +32,18 @@ const App = () => {
     const initializeApp = async () => {
       try {
         await StorageService.init();
-        
+
         // Validate Google configuration before attempting sync
-        const hasGoogleConfig = Platform.OS === 'web' || 
+        const hasGoogleConfig = Platform.OS === 'web' ||
           (config.googleWebClientId || config.googleIosClientId);
-        
+
         if (!hasGoogleConfig && Platform.OS !== 'web') {
           console.warn(
             '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
             'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.'
           );
         }
-        
+
         await GoogleTasksSyncService.syncToBrainDump();
         WebMCPService.init();
       } catch (error) {
@@ -97,6 +99,17 @@ const App = () => {
     return () => {
       subscription.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    const unsub = agentEventBus.on('navigate:screen', ({ screen }) => {
+      if (navigationRef.isReady()) {
+        // @ts-ignore - navigationRef type mismatch in older react-navigation
+        navigationRef.navigate(screen);
+      }
+    });
+
+    return unsub;
   }, []);
 
   if (!isReady) {
