@@ -868,21 +868,25 @@ const getStyles = (isCosmic: boolean) =>
   },
   rationaleCard: {
     backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.6)'
+      ? 'rgba(17, 26, 51, 0.5)'
       : Tokens.colors.neutral.darker,
     borderWidth: 1,
     borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
+      ? 'rgba(139, 92, 246, 0.2)'
       : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[4],
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
+    borderRadius: isCosmic ? 16 : Tokens.radii.none,
     ...(isCosmic
       ? Platform.select({
           web: {
-            backdropFilter: 'blur(12px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            boxShadow: `
+              0 0 0 1px rgba(139, 92, 246, 0.15),
+              0 4px 24px rgba(7, 7, 18, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05)
+            `,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           },
         })
       : {}),
@@ -913,18 +917,30 @@ const getStyles = (isCosmic: boolean) =>
   inputWrapper: {
     flex: 1,
     backgroundColor: isCosmic
-      ? '#0B1022'
+      ? 'rgba(11, 16, 34, 0.8)'
       : Tokens.colors.neutral.darker,
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
+    borderRadius: isCosmic ? 12 : Tokens.radii.none,
     borderWidth: 1,
     borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
+      ? 'rgba(139, 92, 246, 0.25)'
       : Tokens.colors.neutral.border,
     minHeight: 48,
     justifyContent: 'center',
-    ...Platform.select({
-      web: { transition: 'all 0.2s ease' },
-    }),
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(12px)',
+            boxShadow: `
+              0 0 0 1px rgba(139, 92, 246, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03),
+              0 4px 16px rgba(7, 7, 18, 0.3)
+            `,
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          },
+        })
+      : Platform.select({
+          web: { transition: 'all 0.2s ease' },
+        })),
   },
   inputWrapperFocused: {
     borderColor: isCosmic
