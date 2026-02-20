@@ -475,172 +475,202 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
               <View>
                 <Text
                   style={styles.title}
-                  STREAK.{streak.toString().padStart(3, '0')}
-              </Text>
-            </View>
-          </View>
-
-          {activationSummary && activationSummary.started > 0 && (
-            <View style={styles.activationCard}>
-              <View style={styles.activationHeader}>
-                <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
-                <Text style={styles.activationRate}>
-                  {Math.round(activationSummary.completionRate * 100)}%
-                </Text>
-              </View>
-              <View style={styles.activationGrid}>
-                <View style={styles.statBox}>
-                  <Text style={styles.statLabel}>STARTED</Text>
-                  <Text style={styles.statValue}>
-                    {activationSummary.started}
-                  </Text>
-                </View>
-                <View style={styles.statBox}>
-                  <Text style={styles.statLabel}>COMPLETED</Text>
-                  <Text style={styles.statValue}>
-                    {activationSummary.completed}
-                  </Text>
-                </View>
-                {trendMetrics && (
-                  <>
-                    <View style={styles.statBox}>
-                      <Text style={styles.statLabel}>TODAY</Text>
-                      <Text style={styles.statValue}>
-                        {trendMetrics.todayCount}
-                      </Text>
-                    </View>
-                    <View style={styles.statBox}>
-                      <Text style={styles.statLabel}>DELTA</Text>
-                      <Text
-                        style={[
-                          styles.statValue,
-                          trendMetrics.isPositive
-                            ? styles.textSuccess
-                            : trendMetrics.isNeutral
-                              ? styles.textNeutral
-                              : styles.textError,
-                        ]}
-                      >
-                        {trendMetrics.deltaStr}
-                      </Text>
-                    </View>
-                  </>
-                )}
-              </View>
-
-              {(reentryPromptLevel === 'gentle_restart' ||
-                reentryPromptLevel === 'fresh_restart') && (
-                  <ReEntryPrompt
-                    level={reentryPromptLevel}
-                    onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
-                    testID="reentry-prompt"
-                  />
-                )}
-            </View>
-          )}
-
-          {Platform.OS === 'android' && (
-            <View
-              style={[
-                styles.overlayCard,
-                isOverlayEnabled && styles.overlayCardActive,
-              ]}
-            >
-              <View style={styles.overlayTextGroup}>
-                <Text style={styles.overlayTitle}>FOCUS_OVERLAY</Text>
-                <Text
-                  style={[
-                    styles.overlayStatus,
-                    isOverlayEnabled && styles.overlayStatusActive,
-                  ]}
-                  accessibilityLiveRegion="polite"
+                  testID="home-title"
+                  accessibilityLabel="home-title"
                 >
-                  {isOverlayPermissionRequesting
-                    ? 'REQ_PERM...'
-                    : isOverlayEnabled
-                      ? 'ACTIVE'
-                      : 'INACTIVE'}
+                  SPARK_PRO
                 </Text>
+                <View style={styles.systemStatusRow}>
+                  <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
+                  <View style={styles.statusDot} />
+                </View>
               </View>
-              <Switch
-                testID="home-overlay-toggle"
-                accessibilityRole="switch"
-                accessibilityLabel="home-overlay-toggle"
-                accessibilityState={{
-                  checked: isOverlayEnabled,
-                  busy: isOverlayPermissionRequesting,
-                  disabled: isOverlayPermissionRequesting,
-                }}
-                trackColor={{
-                  false: Tokens.colors.neutral[700],
-                  true: Tokens.colors.brand[500],
-                }}
-                thumbColor={Tokens.colors.neutral[0]}
-                ios_backgroundColor={Tokens.colors.neutral[700]}
-                onValueChange={toggleOverlay}
-                disabled={isOverlayPermissionRequesting}
-                value={isOverlayEnabled}
-                style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
-              />
-            </View>
-          )}
-
-          {Platform.OS === 'android' && __DEV__ && (
-            <View style={styles.debugPanel}>
-              <Text style={styles.debugTitle}>LOGS</Text>
-              {overlayEvents.length === 0 ? (
-                <Text style={styles.debugText}>NULL</Text>
-              ) : (
-                overlayEvents.map((event) => (
-                  <Text key={event.id} style={styles.debugText}>
-                    {new Date(event.timestamp).toLocaleTimeString([], {
-                      hour12: false,
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit',
-                    })}{' '}
-                    :: {event.label}
-                  </Text>
-                ))
-              )}
-              <View style={styles.debugButtonRow}>
-                <TouchableOpacity
-                  onPress={handleCopyDiagnostics}
-                  style={styles.debugButton}
-                >
-                  <Text style={styles.debugButtonText}>COPY_DIAG</Text>
-                </TouchableOpacity>
+              <View style={styles.headerRight}>
                 <TouchableOpacity
                   onPress={() => navigateByRouteName(ROUTES.DIAGNOSTICS)}
-                  style={styles.debugButton}
+                  style={styles.settingsButton}
+                  accessibilityLabel="Settings and Diagnostics"
                 >
-                  <Text style={styles.debugButtonText}>DIAGNOSTICS</Text>
+                  <Text style={styles.settingsButtonText}>⚙</Text>
                 </TouchableOpacity>
+                <View
+                  style={styles.streakBadge}
+                  testID="home-streak-badge"
+                  accessibilityRole="text"
+                  accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? 'days' : 'day'}`}
+                >
+                  <Text
+                    style={styles.streakText}
+                    testID="home-streak"
+                    accessibilityLabel="home-streak"
+                  >
+                    STREAK.{streak.toString().padStart(3, '0')}
+                  </Text>
+                </View>
               </View>
             </View>
-          )}
 
-          <View style={styles.modesGrid}>
-            {modes.map((mode, index) => (
-              <Animated.View
-                key={mode.id}
-                style={{
-                  width: cardWidth,
-                  opacity: fadeAnims[index],
-                  transform: [{ translateY: slideAnims[index] }],
-                }}
+            {activationSummary && activationSummary.started > 0 && (
+              <View style={styles.activationCard}>
+                <View style={styles.activationHeader}>
+                  <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
+                  <Text style={styles.activationRate}>
+                    {Math.round(activationSummary.completionRate * 100)}%
+                  </Text>
+                </View>
+                <View style={styles.activationGrid}>
+                  <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>STARTED</Text>
+                    <Text style={styles.statValue}>
+                      {activationSummary.started}
+                    </Text>
+                  </View>
+                  <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>COMPLETED</Text>
+                    <Text style={styles.statValue}>
+                      {activationSummary.completed}
+                    </Text>
+                  </View>
+                  {trendMetrics && (
+                    <>
+                      <View style={styles.statBox}>
+                        <Text style={styles.statLabel}>TODAY</Text>
+                        <Text style={styles.statValue}>
+                          {trendMetrics.todayCount}
+                        </Text>
+                      </View>
+                      <View style={styles.statBox}>
+                        <Text style={styles.statLabel}>DELTA</Text>
+                        <Text
+                          style={[
+                            styles.statValue,
+                            trendMetrics.isPositive
+                              ? styles.textSuccess
+                              : trendMetrics.isNeutral
+                                ? styles.textNeutral
+                                : styles.textError,
+                          ]}
+                        >
+                          {trendMetrics.deltaStr}
+                        </Text>
+                      </View>
+                    </>
+                  )}
+                </View>
+
+                {(reentryPromptLevel === 'gentle_restart' ||
+                  reentryPromptLevel === 'fresh_restart') && (
+                    <ReEntryPrompt
+                      level={reentryPromptLevel}
+                      onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
+                      testID="reentry-prompt"
+                    />
+                  )}
+              </View>
+            )}
+
+            {Platform.OS === 'android' && (
+              <View
+                style={[
+                  styles.overlayCard,
+                  isOverlayEnabled && styles.overlayCardActive,
+                ]}
               >
-                <ModeCard
-                  mode={mode}
-                  onPress={() => handlePress(mode.id)}
-                  testID={`mode-${mode.id}`}
+                <View style={styles.overlayTextGroup}>
+                  <Text style={styles.overlayTitle}>FOCUS_OVERLAY</Text>
+                  <Text
+                    style={[
+                      styles.overlayStatus,
+                      isOverlayEnabled && styles.overlayStatusActive,
+                    ]}
+                    accessibilityLiveRegion="polite"
+                  >
+                    {isOverlayPermissionRequesting
+                      ? 'REQ_PERM...'
+                      : isOverlayEnabled
+                        ? 'ACTIVE'
+                        : 'INACTIVE'}
+                  </Text>
+                </View>
+                <Switch
+                  testID="home-overlay-toggle"
+                  accessibilityRole="switch"
+                  accessibilityLabel="home-overlay-toggle"
+                  accessibilityState={{
+                    checked: isOverlayEnabled,
+                    busy: isOverlayPermissionRequesting,
+                    disabled: isOverlayPermissionRequesting,
+                  }}
+                  trackColor={{
+                    false: Tokens.colors.neutral[700],
+                    true: Tokens.colors.brand[500],
+                  }}
+                  thumbColor={Tokens.colors.neutral[0]}
+                  ios_backgroundColor={Tokens.colors.neutral[700]}
+                  onValueChange={toggleOverlay}
+                  disabled={isOverlayPermissionRequesting}
+                  value={isOverlayEnabled}
+                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                 />
-              </Animated.View>
-            ))}
+              </View>
+            )}
+
+            {Platform.OS === 'android' && __DEV__ && (
+              <View style={styles.debugPanel}>
+                <Text style={styles.debugTitle}>LOGS</Text>
+                {overlayEvents.length === 0 ? (
+                  <Text style={styles.debugText}>NULL</Text>
+                ) : (
+                  overlayEvents.map((event) => (
+                    <Text key={event.id} style={styles.debugText}>
+                      {new Date(event.timestamp).toLocaleTimeString([], {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                      })}{' '}
+                      :: {event.label}
+                    </Text>
+                  ))
+                )}
+                <View style={styles.debugButtonRow}>
+                  <TouchableOpacity
+                    onPress={handleCopyDiagnostics}
+                    style={styles.debugButton}
+                  >
+                    <Text style={styles.debugButtonText}>COPY_DIAG</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigateByRouteName(ROUTES.DIAGNOSTICS)}
+                    style={styles.debugButton}
+                  >
+                    <Text style={styles.debugButtonText}>DIAGNOSTICS</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
+            <View style={styles.modesGrid}>
+              {modes.map((mode, index) => (
+                <Animated.View
+                  key={mode.id}
+                  style={{
+                    width: cardWidth,
+                    opacity: fadeAnims[index],
+                    transform: [{ translateY: slideAnims[index] }],
+                  }}
+                >
+                  <ModeCard
+                    mode={mode}
+                    onPress={() => handlePress(mode.id)}
+                    testID={`mode-${mode.id}`}
+                  />
+                </Animated.View>
+              ))}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
     </CosmicBackground >
   );
 };
