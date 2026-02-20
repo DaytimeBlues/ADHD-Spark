@@ -24,7 +24,7 @@ import Animated, {
   ReduceMotion,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeProvider';
-import { useReducedMotion } from '../../hooks/useReducedMotion';
+import useReducedMotion from '../../hooks/useReducedMotion';
 import { HaloMode, GlowLevel } from './types';
 
 // ============================================================================

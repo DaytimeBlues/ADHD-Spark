@@ -10,7 +10,7 @@
  */
 
 import React, { memo, useMemo } from 'react';
-import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
+import { View, StyleSheet, ViewStyle, Platform, StyleProp } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { BackgroundVariant } from './types';
 
@@ -26,7 +26,7 @@ export interface CosmicBackgroundProps {
   /** Apply dimmer overlay for focus screens */
   dimmer?: boolean;
   /** Custom styles applied to container */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   /** Test ID for testing */
   testID?: string;
 }
@@ -87,7 +87,7 @@ export const CosmicBackground = memo(function CosmicBackground({
     // Per spec: colors.bg.obsidian, midnight, deepSpace
     const c = {
       obsidian: '#070712',
-      midnight: '#0B1022', 
+      midnight: '#0B1022',
       deepSpace: '#111A33',
     };
 
@@ -117,30 +117,29 @@ export const CosmicBackground = memo(function CosmicBackground({
   }, [isCosmic, variant]);
 
   // Get native background color
-  const getBackgroundStyle = (): ViewStyle => {
+  const backgroundStyle = useMemo((): ViewStyle => {
     if (!isCosmic) {
       return { backgroundColor: t.colors.neutral.darkest };
     }
     // Per spec: use midnight as base on native
     return { backgroundColor: '#0B1022' };
-  };
+  }, [isCosmic, t.colors.neutral.darkest]);
 
   // Web-specific styles with multi-layer backgrounds
-  const webStyle: ViewStyle | null = 
-    Platform.OS === 'web' && isCosmic && webBackgroundImage
+  const webStyle: ViewStyle | null = useMemo(() => {
+    return Platform.OS === 'web' && isCosmic && webBackgroundImage
       ? {
-          backgroundImage: webBackgroundImage,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: variant === 'ridge' 
-            ? 'center center, center center, center bottom' 
-            : 'center',
-          backgroundSize: variant === 'ridge' 
-            ? 'cover, cover, 100% 34%' 
-            : 'cover',
-        } as any
+        backgroundImage: webBackgroundImage,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: variant === 'ridge'
+          ? 'center center, center center, center bottom'
+          : 'center',
+        backgroundSize: variant === 'ridge'
+          ? 'cover, cover, 100% 34%'
+          : 'cover',
+      } as any
       : null;
-
-  const backgroundStyle = getBackgroundStyle();
+  }, [isCosmic, webBackgroundImage, variant]);
 
   return (
     <View
@@ -153,7 +152,7 @@ export const CosmicBackground = memo(function CosmicBackground({
       ]}
     >
       {children}
-      
+
       {/* Dimmer overlay per spec: 35% opacity */}
       {dimmer && (
         <View
@@ -176,11 +175,11 @@ export const CosmicBackground = memo(function CosmicBackground({
 // ============================================================================
 
 const styles = StyleSheet.create({
-  root: { 
+  root: {
     flex: 1,
     position: 'relative',
   },
-  dimmer: { 
+  dimmer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
   },

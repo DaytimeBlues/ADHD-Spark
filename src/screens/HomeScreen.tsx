@@ -464,7 +464,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     [navigateByRouteName],
   );
 
-  const styles = getStyles(isCosmic);
+  // Memoize styles to prevent unnecessary re-renders
+  const styles = useMemo(() => getStyles(isCosmic), [isCosmic]);
 
   return (
     <CosmicBackground variant="ridge" style={StyleSheet.absoluteFill}>

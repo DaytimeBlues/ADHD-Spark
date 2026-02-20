@@ -20,6 +20,10 @@ module.exports = (env, argv) => {
       alias: {
         'react-native$': 'react-native-web',
         'react-native-vector-icons': 'react-native-vector-icons/dist',
+        'react-native-reanimated': path.resolve(
+          __dirname,
+          'src/mocks/react-native-reanimated.web.js',
+        ),
       },
     },
     module: {
@@ -43,7 +47,9 @@ module.exports = (env, argv) => {
                   '@babel/plugin-transform-private-property-in-object',
                   { loose: true },
                 ],
-                'react-native-reanimated/plugin',
+                // NOTE: react-native-reanimated/plugin is intentionally omitted here.
+                // On web, reanimated is aliased to a no-op stub (src/mocks/react-native-reanimated.web.js).
+                // The plugin is only needed for Metro (native) builds.
               ],
             },
           },

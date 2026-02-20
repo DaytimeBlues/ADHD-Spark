@@ -33,6 +33,7 @@ import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 import { Tokens } from '../theme/tokens';
+import { glowStyles } from '../theme/cosmicTokens';
 import { useTheme } from '../theme/ThemeProvider';
 
 const HIT_SLOP = {
@@ -863,7 +864,7 @@ const getStyles = (isCosmic: boolean) =>
       : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[4],
-    ...(isCosmic && Tokens.shadows.glow),
+    ...(isCosmic && glowStyles),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -988,7 +989,7 @@ const getStyles = (isCosmic: boolean) =>
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: Tokens.colors.neutral.border,
-    ...(isCosmic && Tokens.shadows.glow),
+    ...(isCosmic && glowStyles),
   },
   sortedTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -1185,7 +1186,7 @@ const getStyles = (isCosmic: boolean) =>
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: Tokens.spacing[4],
-    ...(isCosmic && Tokens.shadows.glow),
+    ...(isCosmic && glowStyles),
   },
   guideContent: {
     flex: 1,

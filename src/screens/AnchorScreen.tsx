@@ -174,19 +174,21 @@ const AnchorScreen = () => {
                     ]}
                   />
                 )}
-                <Text style={getStyles(isCosmic).phaseText}>{getPhaseText()}</Text>
-                {isCosmic ? (
-                  <ChronoDigits 
-                    value={count.toString().padStart(2, '0')} 
-                    size="hero" 
-                    glow="medium"
-                    testID="anchor-count"
-                  />
-                ) : (
-                  <Text testID="anchor-count" style={getStyles(isCosmic).countText}>
-                    {count}
-                  </Text>
-                )}
+                <View style={getStyles(isCosmic).breathingOverlay}>
+                  <Text style={getStyles(isCosmic).phaseText}>{getPhaseText()}</Text>
+                  {isCosmic ? (
+                    <ChronoDigits 
+                      value={count.toString().padStart(2, '0')} 
+                      size="hero" 
+                      glow="medium"
+                      testID="anchor-count"
+                    />
+                  ) : (
+                    <Text testID="anchor-count" style={getStyles(isCosmic).countText}>
+                      {count}
+                    </Text>
+                  )}
+                </View>
               </View>
 
               {isCosmic ? (
@@ -361,6 +363,15 @@ const getStyles = (isCosmic: boolean) =>
       justifyContent: 'center',
       position: 'relative',
       marginVertical: Tokens.spacing[8],
+    },
+    breathingOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     circle: {
       width: INNER_CIRCLE_SIZE,
