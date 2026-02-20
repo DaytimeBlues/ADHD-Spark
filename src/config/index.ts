@@ -5,7 +5,7 @@
  * and AI provider settings.
  */
 
-export type AiProvider = 'vercel' | 'gemini-direct';
+export type AiProvider = 'vercel' | 'gemini-direct' | 'kimi-direct';
 
 export interface Config {
   apiBaseUrl: string;
@@ -16,6 +16,10 @@ export interface Config {
   aiProvider: AiProvider;
   /** Gemini API key — only used when aiProvider === 'gemini-direct' */
   geminiApiKey?: string;
+  /** Moonshot (Kimi) API key — only used when aiProvider === 'kimi-direct' */
+  moonshotApiKey?: string;
+  /** Kimi model name (default: kimi-k2.5) */
+  kimiModel: string;
   /** AI request timeout in milliseconds (default 8000) */
   aiTimeout: number;
   /** Maximum AI request retry attempts (default 3) */
@@ -30,6 +34,8 @@ const getConfig = (): Config => {
     googleIosClientId: undefined,
     aiProvider: 'vercel',
     geminiApiKey: undefined,
+    moonshotApiKey: undefined,
+    kimiModel: 'kimi-k2.5',
     aiTimeout: 8000,
     aiMaxRetries: 3,
   };
@@ -53,11 +59,25 @@ const getConfig = (): Config => {
       config.aiProvider = 'gemini-direct';
     }
 
+    if (process.env.REACT_APP_MOONSHOT_API_KEY) {
+      config.moonshotApiKey = process.env.REACT_APP_MOONSHOT_API_KEY;
+      // Default to kimi-direct if key provided but no provider set
+      if (!process.env.REACT_APP_AI_PROVIDER) {
+        config.aiProvider = 'kimi-direct';
+      }
+    }
+
+    if (process.env.REACT_APP_KIMI_MODEL) {
+      config.kimiModel = process.env.REACT_APP_KIMI_MODEL;
+    }
+
     // Allow explicit override of provider
     if (process.env.REACT_APP_AI_PROVIDER === 'vercel') {
       config.aiProvider = 'vercel';
     } else if (process.env.REACT_APP_AI_PROVIDER === 'gemini-direct') {
       config.aiProvider = 'gemini-direct';
+    } else if (process.env.REACT_APP_AI_PROVIDER === 'kimi-direct') {
+      config.aiProvider = 'kimi-direct';
     }
 
     if (process.env.REACT_APP_AI_TIMEOUT) {

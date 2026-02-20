@@ -598,24 +598,33 @@ const styles = StyleSheet.create({
     color: '#B9C2D9',
   },
   navButtonCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.6)',
-    borderColor: 'rgba(185, 194, 217, 0.12)',
-    borderRadius: 8,
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.25)',
+    borderRadius: 12,
     ...Platform.select({
       web: {
-        backdropFilter: 'blur(12px)',
-        boxShadow:
-          '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+        backdropFilter: 'blur(16px) saturate(180%)',
+        boxShadow: `
+          0 0 0 1px rgba(139, 92, 246, 0.15),
+          0 4px 20px rgba(7, 7, 18, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06)
+        `,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       },
     }),
   },
   navButtonHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.8)',
-    borderColor: 'rgba(139, 92, 246, 0.4)',
+    backgroundColor: 'rgba(17, 26, 51, 0.7)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
     ...Platform.select({
       web: {
-        boxShadow:
-          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+        boxShadow: `
+          0 0 0 2px rgba(139, 92, 246, 0.3),
+          0 0 24px rgba(139, 92, 246, 0.2),
+          0 8px 28px rgba(7, 7, 18, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08)
+        `,
+        transform: 'translateY(-1px)',
       },
     }),
   },
@@ -632,15 +641,29 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
   dayCellCosmic: {
-    borderColor: 'rgba(185, 194, 217, 0.12)',
-  },
-  dayCellHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.6)',
-    borderColor: 'rgba(139, 92, 246, 0.4)',
+    borderColor: 'rgba(139, 92, 246, 0.15)',
+    backgroundColor: 'rgba(17, 26, 51, 0.2)',
+    borderRadius: 8,
     ...Platform.select({
       web: {
-        boxShadow:
-          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+        backdropFilter: 'blur(8px)',
+        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+    }),
+  },
+  dayCellHoveredCosmic: {
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
+    ...Platform.select({
+      web: {
+        boxShadow: `
+          0 0 0 2px rgba(139, 92, 246, 0.25),
+          0 0 20px rgba(139, 92, 246, 0.2),
+          0 8px 24px rgba(7, 7, 18, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05)
+        `,
+        transform: 'scale(1.05)',
+        backdropFilter: 'blur(12px) saturate(150%)',
       },
     }),
   },
@@ -670,22 +693,33 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
   googleCalendarButtonCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.6)',
-    borderColor: 'rgba(185, 194, 217, 0.12)',
-    borderRadius: 8,
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.25)',
+    borderRadius: 12,
     ...Platform.select({
       web: {
-        backdropFilter: 'blur(12px)',
+        backdropFilter: 'blur(16px) saturate(180%)',
+        boxShadow: `
+          0 0 0 1px rgba(139, 92, 246, 0.15),
+          0 4px 20px rgba(7, 7, 18, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06)
+        `,
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       },
     }),
   },
   googleCalendarButtonHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.8)',
-    borderColor: 'rgba(139, 92, 246, 0.4)',
+    backgroundColor: 'rgba(17, 26, 51, 0.7)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
     ...Platform.select({
       web: {
-        boxShadow:
-          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+        boxShadow: `
+          0 0 0 2px rgba(139, 92, 246, 0.3),
+          0 0 24px rgba(139, 92, 246, 0.2),
+          0 8px 28px rgba(7, 7, 18, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08)
+        `,
+        transform: 'translateY(-1px)',
       },
     }),
   },
