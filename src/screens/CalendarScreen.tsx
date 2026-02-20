@@ -584,24 +584,43 @@ const styles = StyleSheet.create({
   },
   titleCosmic: {
     color: '#EEF2FF',
+    fontFamily: 'Space Grotesk',
+    ...Platform.select({
+      web: {
+        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+      },
+    }),
   },
   rationaleTitleCosmic: {
     color: '#8B5CF6',
   },
   rationaleTextCosmic: {
-    color: '#EEF2FF',
+    color: '#B9C2D9',
   },
   navButtonCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.3)',
-    borderColor: 'rgba(42, 53, 82, 0.5)',
+    backgroundColor: 'rgba(17, 26, 51, 0.6)',
+    borderColor: 'rgba(185, 194, 217, 0.12)',
     borderRadius: 8,
+    ...Platform.select({
+      web: {
+        backdropFilter: 'blur(12px)',
+        boxShadow:
+          '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+      },
+    }),
   },
   navButtonHoveredCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.5)',
-    borderColor: '#8B5CF6',
+    backgroundColor: 'rgba(17, 26, 51, 0.8)',
+    borderColor: 'rgba(139, 92, 246, 0.4)',
+    ...Platform.select({
+      web: {
+        boxShadow:
+          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+      },
+    }),
   },
   navButtonPressedCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.7)',
+    backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
   navButtonTextCosmic: {
     color: '#EEF2FF',
@@ -613,14 +632,20 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
   dayCellCosmic: {
-    borderColor: 'rgba(42, 53, 82, 0.3)',
+    borderColor: 'rgba(185, 194, 217, 0.12)',
   },
   dayCellHoveredCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.3)',
-    borderColor: '#8B5CF6',
+    backgroundColor: 'rgba(17, 26, 51, 0.6)',
+    borderColor: 'rgba(139, 92, 246, 0.4)',
+    ...Platform.select({
+      web: {
+        boxShadow:
+          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+      },
+    }),
   },
   dayCellPressedCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.5)',
+    backgroundColor: 'rgba(17, 26, 51, 0.8)',
   },
   dayTextCosmic: {
     color: '#EEF2FF',
@@ -645,20 +670,31 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
   googleCalendarButtonCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.3)',
-    borderColor: 'rgba(42, 53, 82, 0.5)',
+    backgroundColor: 'rgba(17, 26, 51, 0.6)',
+    borderColor: 'rgba(185, 194, 217, 0.12)',
     borderRadius: 8,
+    ...Platform.select({
+      web: {
+        backdropFilter: 'blur(12px)',
+      },
+    }),
   },
   googleCalendarButtonHoveredCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.5)',
-    borderColor: '#8B5CF6',
+    backgroundColor: 'rgba(17, 26, 51, 0.8)',
+    borderColor: 'rgba(139, 92, 246, 0.4)',
+    ...Platform.select({
+      web: {
+        boxShadow:
+          '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+      },
+    }),
   },
   googleCalendarButtonPressedCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.7)',
+    backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
   googleCalendarButtonDisabledCosmic: {
-    backgroundColor: 'rgba(42, 53, 82, 0.2)',
-    borderColor: 'rgba(42, 53, 82, 0.3)',
+    backgroundColor: 'rgba(11, 16, 34, 0.4)',
+    borderColor: 'rgba(185, 194, 217, 0.08)',
   },
   googleCalendarButtonTextCosmic: {
     color: '#EEF2FF',

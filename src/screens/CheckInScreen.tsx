@@ -15,6 +15,7 @@ import ActivationService, {
 import { ROUTES } from '../navigation/routes';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
+import CheckInInsightService from '../services/CheckInInsightService';
 
 const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 
@@ -66,9 +67,22 @@ export const getRecommendationAction = (
 const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
   const [mood, setMood] = useState<number | null>(null);
   const [energy, setEnergy] = useState<number | null>(null);
+  const [insight, setInsight] = useState<string | null>(null);
   const [isRecommendationPending, setIsRecommendationPending] = useState(false);
 
   const { isCosmic } = useTheme();
+
+  React.useEffect(() => {
+    if (mood !== null && energy !== null) {
+      const fetchInsight = async () => {
+        const result = await CheckInInsightService.getPersonalizedInsight();
+        if (result) {
+          setInsight(result);
+        }
+      };
+      fetchInsight();
+    }
+  }, [mood, energy]);
 
   const moods = [
     { emoji: '😢', label: 'Low', value: 1 },
@@ -176,11 +190,11 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                      styles.option,
-                      mood === m.value && styles.selected,
-                      hovered && !mood && styles.optionHovered,
-                      pressed && styles.optionPressed,
-                    ]}
+                        styles.option,
+                        mood === m.value && styles.selected,
+                        hovered && !mood && styles.optionHovered,
+                        pressed && styles.optionPressed,
+                      ]}
                     onPress={() => setMood(m.value)}
                   >
                     <Text style={styles.emoji}>{m.emoji}</Text>
@@ -211,11 +225,11 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                      styles.option,
-                      energy === e.value && styles.selected,
-                      hovered && !energy && styles.optionHovered,
-                      pressed && styles.optionPressed,
-                    ]}
+                        styles.option,
+                        energy === e.value && styles.selected,
+                        hovered && !energy && styles.optionHovered,
+                        pressed && styles.optionPressed,
+                      ]}
                     onPress={() => setEnergy(e.value)}
                   >
                     <Text style={styles.emoji}>{e.emoji}</Text>
@@ -242,6 +256,12 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
                 <Text style={styles.recommendationSubtitle}>RECOMMENDED FOR YOU</Text>
                 <Text style={styles.recommendationText}>{recommendation.desc}</Text>
+                {insight && (
+                  <View style={styles.insightBox}>
+                    <Text style={styles.insightLabel}>AI_INSIGHT:</Text>
+                    <Text style={styles.insightText}>{insight}</Text>
+                  </View>
+                )}
                 <EvidenceBadge tier="heuristic" style={styles.evidenceBadge} />
                 <RuneButton
                   variant="primary"
@@ -423,6 +443,28 @@ const getStyles = (isCosmic: boolean) =>
     evidenceBadge: {
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[4],
+    },
+    insightBox: {
+      backgroundColor: isCosmic ? 'rgba(139, 92, 246, 0.1)' : Tokens.colors.neutral.darkest,
+      borderLeftWidth: 2,
+      borderLeftColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      padding: Tokens.spacing[3],
+      marginVertical: Tokens.spacing[4],
+      borderRadius: isCosmic ? 4 : 0,
+    },
+    insightLabel: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      marginBottom: 4,
+      letterSpacing: 1,
+    },
+    insightText: {
+      fontFamily: Tokens.type.fontFamily.sans,
+      fontSize: Tokens.type.sm,
+      fontStyle: 'italic',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      lineHeight: 20,
     },
   });
 

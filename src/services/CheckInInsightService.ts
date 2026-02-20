@@ -98,6 +98,21 @@ const CheckInInsightService = {
         }
     },
 
+    /**
+     * High-level helper for UI: fetches history, generates (or returns cached) insight.
+     */
+    async getPersonalizedInsight(): Promise<string | null> {
+        // In a real app, we'd fetch actual history. 
+        // For the Vibe Coding demo, we'll fetch what's in storage or use a mock if empty.
+        const entries = await StorageService.getJSON<CheckInEntry[]>('checkInHistory') || [];
+
+        // If no history yet, we'll provide a placeholder or skip AI to avoid empty context
+        if (entries.length === 0) return null;
+
+        const result = await this.generateInsight(entries);
+        return result?.text || null;
+    },
+
     /** Force-expire the cached insight (call after the user submits a new check-in). */
     async invalidateCache(): Promise<void> {
         await StorageService.setJSON(INSIGHT_CACHE_KEY, null);
