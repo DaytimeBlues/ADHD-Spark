@@ -266,13 +266,16 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     marginBottom: Tokens.spacing[10],
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.sans,
+    fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
     fontSize: Tokens.type['4xl'],
     fontWeight: '800',
     color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[2],
     letterSpacing: 2,
     textAlign: 'center',
+    ...(isCosmic && Platform.OS === 'web' ? {
+      textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+    } : {}),
   },
   subtitle: {
     fontFamily: Tokens.type.fontFamily.sans,
@@ -285,12 +288,16 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     }),
   },
   rationaleCard: {
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[6],
     borderRadius: isCosmic ? 12 : 0,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(12px)',
+      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+    } : {}),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -312,13 +319,17 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Tokens.spacing[8],
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[2],
     borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
     gap: Tokens.spacing[3],
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(8px)',
+      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+    } : {}),
   },
   sessionBadge: {
     backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.brand[900],

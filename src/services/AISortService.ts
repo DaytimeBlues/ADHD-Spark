@@ -135,8 +135,8 @@ function classifyError(error: unknown): AiSortError {
 async function fetchWithRetry(
   items: string[],
   timezone: string | undefined,
-  maxRetries: number,
-  timeoutMs: number,
+  maxRetries: number = 0,
+  timeoutMs: number = 8000,
 ): Promise<SortedItem[]> {
   let lastError: AiSortError | null = null;
 

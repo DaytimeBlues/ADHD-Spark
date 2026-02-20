@@ -1,6 +1,5 @@
 import AISortService, { AiSortError } from '../../src/services/AISortService';
 
-// Mock fetch
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
@@ -11,14 +10,18 @@ const SORTED_RESPONSE = {
     ],
 };
 
+// Use a very short timeout so AbortController doesn't hang tests
+jest.mock('../../src/config', () => ({
+    config: {
+        apiBaseUrl: 'https://test.example.com',
+        aiTimeout: 100,
+        aiMaxRetries: 0,
+    },
+}));
+
 beforeEach(() => {
     jest.clearAllMocks();
     AISortService.clearCache();
-    jest.useFakeTimers();
-});
-
-afterEach(() => {
-    jest.useRealTimers();
 });
 
 describe('AISortService.sortItems', () => {
@@ -53,12 +56,25 @@ describe('AISortService.sortItems', () => {
         expect(second).toHaveLength(2);
     });
 
-    it('throws AI_NETWORK error on fetch failure', async () => {
-        const networkError = Object.assign(new Error('Failed to fetch'), {});
-        mockFetch.mockRejectedValue(networkError);
+    it('does not use cache after clearCache()', async () => {
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: async () => SORTED_RESPONSE,
+        });
 
-        await expect(AISortService.sortItems(['a'])).rejects.toBeInstanceOf(AiSortError);
+        const items = ['Buy milk'];
+        await AISortService.sortItems(items);
+        AISortService.clearCache();
+        await AISortService.sortItems(items);
+
+        expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('throws AI_NETWORK error on fetch failure', async () => {
+        mockFetch.mockRejectedValue(new Error('Failed to fetch'));
+
         const err = await AISortService.sortItems(['a']).catch((e) => e);
+        expect(err).toBeInstanceOf(AiSortError);
         expect(err.code).toBe('AI_NETWORK');
     });
 
@@ -80,5 +96,16 @@ describe('AISortService.sortItems', () => {
         const err = await AISortService.sortItems(['a']).catch((e) => e);
         expect(err).toBeInstanceOf(AiSortError);
         expect(err.code).toBe('AI_INVALID_RESPONSE');
+    });
+
+    it('throws AI_SERVER_ERROR for non-ok response', async () => {
+        mockFetch.mockResolvedValueOnce({
+            ok: false,
+            json: async () => ({ error: 'Rate limit hit' }),
+        });
+
+        const err = await AISortService.sortItems(['a']).catch((e) => e);
+        expect(err).toBeInstanceOf(AiSortError);
+        expect(err.code).toBe('AI_SERVER_ERROR');
     });
 });
