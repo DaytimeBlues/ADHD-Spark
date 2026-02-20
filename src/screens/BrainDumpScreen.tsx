@@ -33,7 +33,6 @@ import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 import { Tokens } from '../theme/tokens';
-import { glowStyles } from '../theme/cosmicTokens';
 import { useTheme } from '../theme/ThemeProvider';
 
 const HIT_SLOP = {
@@ -819,7 +818,9 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic
+        ? 'transparent'
+        : Tokens.colors.neutral.darkest,
     },
     centerContainer: {
       flex: 1,
@@ -834,43 +835,63 @@ const getStyles = (isCosmic: boolean) =>
   header: {
     marginBottom: Tokens.spacing[6],
     borderBottomWidth: 1,
-    borderColor: Tokens.colors.neutral.border, // Darker
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
     paddingBottom: Tokens.spacing[2],
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.mono,
+    fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: 1,
     textTransform: 'uppercase',
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+          },
+        })
+      : {}),
   },
   headerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.dark,
     marginLeft: Tokens.spacing[4],
   },
   rationaleCard: {
     backgroundColor: isCosmic
-      ? Tokens.colors.neutral.darkest
+      ? 'rgba(17, 26, 51, 0.6)'
       : Tokens.colors.neutral.darker,
     borderWidth: 1,
     borderColor: isCosmic
-      ? Tokens.colors.neutral.border
+      ? 'rgba(185, 194, 217, 0.12)'
       : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginBottom: Tokens.spacing[4],
-    ...(isCosmic && glowStyles),
+    borderRadius: isCosmic ? 12 : Tokens.radii.none,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(12px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+          },
+        })
+      : {}),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
     textTransform: 'uppercase',
@@ -878,7 +899,7 @@ const getStyles = (isCosmic: boolean) =>
   rationaleText: {
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     lineHeight: 22,
     flexWrap: 'wrap',
   },
@@ -891,22 +912,36 @@ const getStyles = (isCosmic: boolean) =>
   },
   inputWrapper: {
     flex: 1,
-    backgroundColor: Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic
+      ? '#0B1022'
+      : Tokens.colors.neutral.darker,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    minHeight: 48, // Reduced
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
+    minHeight: 48,
     justifyContent: 'center',
     ...Platform.select({
-      web: { transition: 'border-color 0.2s ease' },
+      web: { transition: 'all 0.2s ease' },
     }),
   },
   inputWrapperFocused: {
-    borderColor: Tokens.colors.text.primary,
+    borderColor: isCosmic
+      ? 'rgba(139, 92, 246, 0.6)'
+      : Tokens.colors.text.primary,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)',
+          },
+        })
+      : {}),
   },
   input: {
     paddingHorizontal: Tokens.spacing[3],
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     minHeight: 48,
@@ -918,10 +953,10 @@ const getStyles = (isCosmic: boolean) =>
   },
   addButton: {
     minHeight: 48,
-    width: 60, // Reduced
+    width: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
   },
   // Actions
   actionsBar: {
@@ -939,9 +974,11 @@ const getStyles = (isCosmic: boolean) =>
   actionButton: {
     paddingVertical: 4,
     paddingHorizontal: 8,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
     ...Platform.select({
       web: { transition: 'all 0.2s ease' },
     }),
@@ -951,28 +988,38 @@ const getStyles = (isCosmic: boolean) =>
     pointerEvents: 'none',
   },
   clearHovered: {
-    backgroundColor: Tokens.colors.neutral.dark,
+    backgroundColor: isCosmic
+      ? 'rgba(17, 26, 51, 0.6)'
+      : Tokens.colors.neutral.dark,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+          },
+        })
+      : {}),
   },
   clearPressed: {
     opacity: 0.7,
   },
   countText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   clearText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
   },
   aiSortText: {
     fontFamily: Tokens.type.fontFamily.mono,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
     letterSpacing: 1,
@@ -983,19 +1030,29 @@ const getStyles = (isCosmic: boolean) =>
     marginBottom: Tokens.spacing[6],
     padding: Tokens.spacing[4],
     backgroundColor: isCosmic
-      ? Tokens.colors.neutral.darkest
+      ? 'rgba(17, 26, 51, 0.6)'
       : Tokens.colors.neutral.darker,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 12 : Tokens.radii.none,
     borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: Tokens.colors.neutral.border,
-    ...(isCosmic && glowStyles),
+    borderStyle: isCosmic ? 'solid' : 'dashed',
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(12px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+          },
+        })
+      : {}),
   },
   sortedTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[4],
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -1007,7 +1064,7 @@ const getStyles = (isCosmic: boolean) =>
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.text.secondary,
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
@@ -1024,25 +1081,27 @@ const getStyles = (isCosmic: boolean) =>
     flex: 1,
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     lineHeight: Tokens.type.sm * 1.5,
     marginRight: Tokens.spacing[3],
   },
   priorityBadge: {
     paddingHorizontal: 6,
     paddingVertical: 0,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 4 : Tokens.radii.none,
     minWidth: 40,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
   },
   priorityText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
     textTransform: 'uppercase',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
   },
   priorityHigh: {
     backgroundColor: Tokens.colors.brand[500],
@@ -1058,26 +1117,39 @@ const getStyles = (isCosmic: boolean) =>
     paddingBottom: 120,
   },
   item: {
-    backgroundColor: Tokens.colors.neutral.darkest,
-    borderRadius: Tokens.radii.none,
+    backgroundColor: isCosmic
+      ? 'rgba(17, 26, 51, 0.6)'
+      : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[3],
-    marginBottom: -1,
+    marginBottom: isCosmic ? Tokens.spacing[2] : -1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    minHeight: 48, // Reduced
-    ...Platform.select({
-      web: {
-        transition: 'all 0.2s ease',
-      },
-    }),
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
+    minHeight: 48,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(8px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+            transition: 'all 0.2s ease',
+          },
+        })
+      : Platform.select({
+          web: {
+            transition: 'all 0.2s ease',
+          },
+        })),
   },
   itemText: {
     flex: 1,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     lineHeight: Tokens.type.base * 1.2,
@@ -1085,7 +1157,7 @@ const getStyles = (isCosmic: boolean) =>
   },
   deleteButton: {
     padding: 0,
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 6 : Tokens.radii.none,
     width: 32,
     height: 32,
     alignItems: 'center',
@@ -1101,7 +1173,7 @@ const getStyles = (isCosmic: boolean) =>
     backgroundColor: Tokens.colors.neutral.border,
   },
   deleteText: {
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     fontSize: Tokens.type.lg,
     fontWeight: '300',
     marginTop: -2,
@@ -1120,28 +1192,50 @@ const getStyles = (isCosmic: boolean) =>
   recordButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Tokens.colors.neutral.darkest,
+    backgroundColor: isCosmic
+      ? 'rgba(17, 26, 51, 0.6)'
+      : Tokens.colors.neutral.darkest,
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[2],
-    borderRadius: Tokens.radii.none,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
     minWidth: 140,
     minHeight: 48,
     justifyContent: 'center',
-    ...Platform.select({
-      web: {
-        transition: 'all 0.2s ease',
-        cursor: 'pointer',
-      },
-    }),
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(8px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer',
+          },
+        })
+      : Platform.select({
+          web: {
+            transition: 'all 0.2s ease',
+            cursor: 'pointer',
+          },
+        })),
   },
   recordButtonHovered: {
-    borderColor: Tokens.colors.text.primary,
+    borderColor: isCosmic ? 'rgba(139, 92, 246, 0.4)' : Tokens.colors.text.primary,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+          },
+        })
+      : {}),
   },
   recordButtonActive: {
-    backgroundColor: Tokens.colors.brand[500],
-    borderColor: Tokens.colors.brand[500],
+    backgroundColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
   },
   recordButtonProcessing: {
     opacity: 0.5,
@@ -1176,17 +1270,28 @@ const getStyles = (isCosmic: boolean) =>
   },
   guideBanner: {
     backgroundColor: isCosmic
-      ? Tokens.colors.neutral.darkest
+      ? 'rgba(17, 26, 51, 0.6)'
       : Tokens.colors.neutral.dark,
     borderWidth: 1,
-    borderColor: Tokens.colors.brand[500],
+    borderColor: isCosmic
+      ? 'rgba(139, 92, 246, 0.3)'
+      : Tokens.colors.brand[500],
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
     padding: Tokens.spacing[3],
     marginBottom: Tokens.spacing[6],
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: Tokens.spacing[4],
-    ...(isCosmic && glowStyles),
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(12px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+          },
+        })
+      : {}),
   },
   guideContent: {
     flex: 1,
@@ -1195,21 +1300,33 @@ const getStyles = (isCosmic: boolean) =>
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     fontWeight: '700',
-    color: Tokens.colors.brand[500],
+    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
   guideText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.primary,
   },
   guideButton: {
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    backgroundColor: Tokens.colors.neutral.darkest,
+    borderColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.12)'
+      : Tokens.colors.neutral.border,
+    backgroundColor: isCosmic
+      ? 'rgba(17, 26, 51, 0.6)'
+      : Tokens.colors.neutral.darkest,
+    borderRadius: isCosmic ? 8 : Tokens.radii.none,
+    ...(isCosmic
+      ? Platform.select({
+          web: {
+            backdropFilter: 'blur(8px)',
+          },
+        })
+      : {}),
   },
   guideButtonPressed: {
     backgroundColor: Tokens.colors.neutral.darker,
@@ -1218,13 +1335,13 @@ const getStyles = (isCosmic: boolean) =>
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xxs,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     textTransform: 'uppercase',
   },
   loadingText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
-    color: Tokens.colors.text.secondary,
+    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
