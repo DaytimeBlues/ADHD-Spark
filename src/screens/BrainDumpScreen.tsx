@@ -634,7 +634,7 @@ const BrainDumpScreen = () => {
                 />
               ) : (
                 <Text style={styles.recordIcon}>
-                  {recordingState === 'recording' ? '⏹️' : '🎙️'}
+                  {recordingState === 'recording' ? '■' : '●'}
                 </Text>
               )}
               <Text style={styles.recordText}>
@@ -783,7 +783,7 @@ const BrainDumpScreen = () => {
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={
                 <EmptyState
-                  icon="☁️"
+                  icon="◌"
                   title="NULL_DATA."
                   primaryActionLabel="ADD FIRST ITEM"
                   onPrimaryAction={() => {

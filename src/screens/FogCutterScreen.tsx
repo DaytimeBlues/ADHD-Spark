@@ -403,7 +403,7 @@ const FogCutterScreen = ({
                 style={styles.taskList}
                 ListEmptyComponent={
                   <EmptyState
-                    icon="⛰️"
+                    icon="◈"
                     title="NO_ACTIVE_TASKS."
                     primaryActionLabel="CREATE FIRST TASK"
                     onPrimaryAction={() => taskInputRef.current?.focus()}
