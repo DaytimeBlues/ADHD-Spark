@@ -1,26 +1,39 @@
 /**
  * Application Configuration
  *
- * Environment-based configuration for API endpoints and feature flags.
+ * Environment-based configuration for API endpoints, feature flags,
+ * and AI provider settings.
  */
+
+export type AiProvider = 'vercel' | 'gemini-direct';
 
 interface Config {
   apiBaseUrl: string;
   environment: 'development' | 'staging' | 'production';
   googleWebClientId?: string;
   googleIosClientId?: string;
+  /** AI provider: 'vercel' uses the Vercel backend; 'gemini-direct' calls Gemini API from client */
+  aiProvider: AiProvider;
+  /** Gemini API key — only used when aiProvider === 'gemini-direct' */
+  geminiApiKey?: string;
+  /** AI request timeout in milliseconds (default 8000) */
+  aiTimeout: number;
+  /** Maximum AI request retry attempts (default 3) */
+  aiMaxRetries: number;
 }
 
 const getConfig = (): Config => {
-  // Default to production config
   const config: Config = {
     apiBaseUrl: 'https://spark-adhd-api.vercel.app',
     environment: 'production',
     googleWebClientId: undefined,
     googleIosClientId: undefined,
+    aiProvider: 'vercel',
+    geminiApiKey: undefined,
+    aiTimeout: 8000,
+    aiMaxRetries: 3,
   };
 
-  // Override with environment variables if available
   if (typeof process !== 'undefined' && process.env) {
     if (process.env.REACT_APP_API_BASE_URL) {
       config.apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -32,6 +45,27 @@ const getConfig = (): Config => {
 
     if (process.env.REACT_APP_GOOGLE_IOS_CLIENT_ID) {
       config.googleIosClientId = process.env.REACT_APP_GOOGLE_IOS_CLIENT_ID;
+    }
+
+    if (process.env.REACT_APP_GEMINI_API_KEY) {
+      config.geminiApiKey = process.env.REACT_APP_GEMINI_API_KEY;
+      // If a Gemini key is explicitly provided, default to direct mode
+      config.aiProvider = 'gemini-direct';
+    }
+
+    // Allow explicit override of provider
+    if (process.env.REACT_APP_AI_PROVIDER === 'vercel') {
+      config.aiProvider = 'vercel';
+    } else if (process.env.REACT_APP_AI_PROVIDER === 'gemini-direct') {
+      config.aiProvider = 'gemini-direct';
+    }
+
+    if (process.env.REACT_APP_AI_TIMEOUT) {
+      config.aiTimeout = parseInt(process.env.REACT_APP_AI_TIMEOUT, 10) || 8000;
+    }
+
+    if (process.env.REACT_APP_AI_MAX_RETRIES) {
+      config.aiMaxRetries = parseInt(process.env.REACT_APP_AI_MAX_RETRIES, 10) || 3;
     }
 
     if (

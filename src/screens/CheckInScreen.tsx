@@ -280,13 +280,16 @@ const getStyles = (isCosmic: boolean) =>
       padding: Tokens.spacing[6],
     },
     title: {
-      fontFamily: Tokens.type.fontFamily.sans,
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type['4xl'],
       fontWeight: '800',
       color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
+      ...(isCosmic && Platform.OS === 'web' ? {
+        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+      } : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
@@ -336,16 +339,19 @@ const getStyles = (isCosmic: boolean) =>
       flexBasis: 100,
       alignItems: 'center',
       padding: Tokens.spacing[2],
-      borderRadius: Tokens.radii.none,
-      backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.darker,
       minHeight: 100,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
       justifyContent: 'center',
       ...Platform.select({
         web: {
-          transition: Tokens.motion.transitions.base,
+          transition: 'all 0.2s ease',
           cursor: 'pointer',
+          ...(isCosmic ? {
+            backdropFilter: 'blur(8px)',
+          } : {}),
         },
       }),
     },

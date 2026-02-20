@@ -364,20 +364,27 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     paddingBottom: Tokens.spacing[4],
   },
   title: {
-    fontFamily: Tokens.type.fontFamily.mono,
+    fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.lg,
     fontWeight: '700',
     color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: 1,
     textTransform: 'uppercase',
+    ...(isCosmic && Platform.OS === 'web' ? {
+      textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+    } : {}),
   },
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+    borderColor: isCosmic ? 'rgba(139, 92, 246, 0.2)' : Tokens.colors.neutral.border,
     borderRadius: isCosmic ? 4 : 0,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(8px)',
+      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.1), 0 4px 12px rgba(7, 7, 18, 0.3)',
+    } : {}),
   },
   statusText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -435,9 +442,14 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
-    backgroundColor: 'transparent',
+    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.border,
+    backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : 'transparent',
     borderRadius: isCosmic ? 4 : 0,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(8px)',
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+    } : {}),
   },
   resetButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -452,13 +464,21 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
-    backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.border,
+    backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.darker,
     borderRadius: isCosmic ? 4 : 0,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(8px)',
+      transition: 'all 0.2s ease',
+      cursor: 'pointer',
+    } : {}),
   },
   soundButtonActive: {
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
-    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.8)' : Tokens.colors.neutral.dark,
+    borderColor: isCosmic ? 'rgba(139, 92, 246, 0.4)' : Tokens.colors.brand[500],
+    ...(isCosmic && Platform.OS === 'web' ? {
+      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15)',
+    } : {}),
   },
   soundButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -475,13 +495,17 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
   },
   rationaleCard: {
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
+    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
     borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
     padding: Tokens.spacing[4],
     marginTop: Tokens.spacing[4],
     marginBottom: Tokens.spacing[2],
     borderRadius: isCosmic ? 12 : 0,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      backdropFilter: 'blur(12px)',
+      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+    } : {}),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,

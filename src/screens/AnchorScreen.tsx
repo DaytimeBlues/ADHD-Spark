@@ -297,13 +297,16 @@ const getStyles = (isCosmic: boolean) =>
       alignItems: 'center',
     },
     title: {
-      fontFamily: Tokens.type.fontFamily.sans,
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type['4xl'],
       fontWeight: '800',
       color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
+      ...(isCosmic && Platform.OS === 'web' ? {
+        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+      } : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
@@ -315,12 +318,16 @@ const getStyles = (isCosmic: boolean) =>
       letterSpacing: 1,
     },
     rationaleCard: {
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
       padding: Tokens.spacing[4],
       marginBottom: Tokens.spacing[6],
       borderRadius: isCosmic ? 12 : 0,
+      ...(isCosmic && Platform.OS === 'web' ? {
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+      } : {}),
     },
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
@@ -411,38 +418,45 @@ const getStyles = (isCosmic: boolean) =>
       maxWidth: 500,
     },
     patternButton: {
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
       borderRadius: isCosmic ? 12 : Tokens.radii.none,
       padding: Tokens.spacing[5],
       flexDirection: 'row',
       alignItems: 'center',
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
-          transition: Tokens.motion.transitions.base,
+          transition: 'all 0.2s ease',
           cursor: 'pointer',
+          ...(isCosmic ? {
+            backdropFilter: 'blur(8px)',
+          } : {}),
         },
       }),
     },
     patternButtonHovered: {
-      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      borderColor: isCosmic ? 'rgba(139, 92, 246, 0.4)' : Tokens.colors.brand[500],
       transform: [{ translateY: -2 }],
       ...Platform.select({
         web: {
-          boxShadow: HOVER_SHADOW,
+          ...(isCosmic ? {
+            boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+          } : {
+            boxShadow: HOVER_SHADOW,
+          }),
         },
       }),
     },
     patternButtonPressed: {
       transform: [{ scale: Tokens.motion.scales.press }],
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.8)' : Tokens.colors.neutral.dark,
     },
     patternIcon: {
       width: Tokens.spacing[12],
       height: Tokens.spacing[12],
       borderRadius: isCosmic ? Tokens.radii.md : 0,
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.dark,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: Tokens.spacing[4],
