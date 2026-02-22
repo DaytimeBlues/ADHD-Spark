@@ -18,6 +18,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.web.tsx', '.web.ts', '.web.js', '.tsx', '.ts', '.js'],
       alias: {
+        '@': path.resolve(__dirname, 'src'),
         'react-native$': 'react-native-web',
         'react-native-vector-icons': 'react-native-vector-icons/dist',
         'react-native-reanimated': path.resolve(
