@@ -43,7 +43,7 @@ describe('RecordingService', () => {
     });
 
     it('should return false when denied', async () => {
-      (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValue({
+      (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValueOnce({
         status: 'denied',
         granted: false,
       });
@@ -61,7 +61,7 @@ describe('RecordingService', () => {
     });
 
     it('should fail to start when permissions are denied', async () => {
-      (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValue({
+      (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValueOnce({
         status: 'denied',
       });
       const result = await RecordingService.startRecording();
