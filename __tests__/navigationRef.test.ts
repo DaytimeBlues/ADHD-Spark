@@ -63,4 +63,54 @@ describe('handleOverlayIntent', () => {
     expect(result).toBe(true);
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.CBT_GUIDE);
   });
+
+  it('normalizes legacy "Ignite" route to ROUTES.FOCUS', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: 'Ignite' });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.FOCUS);
+  });
+
+  it('normalizes legacy "BrainDump" route to ROUTES.TASKS', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: 'BrainDump', autoRecord: true });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.TASKS, {
+      autoRecord: true,
+    });
+  });
+
+  it('navigates to ROUTES.FOCUS when requested directly', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: ROUTES.FOCUS });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.FOCUS);
+  });
+
+  it('navigates to ROUTES.POMODORO when requested directly', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: ROUTES.POMODORO });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.POMODORO);
+  });
+
+  it('normalizes legacy "FogCutter" route to ROUTES.FOG_CUTTER', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: 'FogCutter' });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.FOG_CUTTER);
+  });
+
+  it('normalizes legacy "CheckIn" route to ROUTES.CHECK_IN', () => {
+    const { handleOverlayIntent } = loadNavigationRefModule();
+    const result = handleOverlayIntent({ route: 'CheckIn' });
+
+    expect(result).toBe(true);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.CHECK_IN);
+  });
 });

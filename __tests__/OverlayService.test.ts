@@ -5,6 +5,8 @@ const mockOverlayModule = {
   stopOverlay: jest.fn(),
   updateCount: jest.fn(),
   canDrawOverlays: jest.fn().mockResolvedValue(false),
+  canPostNotifications: jest.fn().mockResolvedValue(true),
+  isRunning: jest.fn().mockResolvedValue(false),
   requestOverlayPermission: jest.fn(),
   collapseOverlay: jest.fn(),
   isExpanded: jest.fn().mockResolvedValue(false),
@@ -103,5 +105,15 @@ describe('OverlayService', () => {
     unsubscribe?.();
     reactNative.__emitOverlayEvent(OVERLAY_EVENTS.permissionTimeout);
     expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns running state from native overlay module', async () => {
+    const { default: OverlayService } = loadOverlayService();
+    mockOverlayModule.isRunning.mockResolvedValueOnce(true);
+
+    const running = await OverlayService.isRunning();
+
+    expect(running).toBe(true);
+    expect(mockOverlayModule.isRunning).toHaveBeenCalledTimes(1);
   });
 });

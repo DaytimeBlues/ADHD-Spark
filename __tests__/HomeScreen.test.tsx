@@ -71,6 +71,7 @@ jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
 jest.mock('../src/services/OverlayService', () => ({
   __esModule: true,
   default: {
+    isRunning: jest.fn().mockResolvedValue(false),
     canDrawOverlays: jest.fn().mockResolvedValue(false),
     requestOverlayPermission: jest.fn().mockResolvedValue(false),
     startOverlay: jest.fn(),
@@ -191,5 +192,34 @@ describe('HomeScreen', () => {
       fireEvent.press(screen.getByText('COPY_DIAG'));
     });
     expect(Share.share).toHaveBeenCalled();
+  });
+
+  it('syncs overlay toggle from running state and lifecycle events', async () => {
+    Object.defineProperty(Platform, 'OS', {
+      configurable: true,
+      get: () => 'android',
+    });
+
+    const overlayService = require('../src/services/OverlayService').default as {
+      isRunning: jest.Mock;
+    };
+    overlayService.isRunning.mockResolvedValueOnce(true);
+
+    await renderHomeScreen();
+
+    await waitFor(() => {
+      expect(overlayService.isRunning).toHaveBeenCalled();
+      expect(screen.getByText('ACTIVE')).toBeTruthy();
+    });
+
+    await act(async () => {
+      emitOverlayEvent('overlay_stopped');
+    });
+    expect(screen.getByText('INACTIVE')).toBeTruthy();
+
+    await act(async () => {
+      emitOverlayEvent('overlay_started');
+    });
+    expect(screen.getByText('ACTIVE')).toBeTruthy();
   });
 });
