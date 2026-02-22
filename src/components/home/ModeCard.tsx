@@ -55,18 +55,19 @@ function ModeCardComponent({
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? {
-          borderColor: Tokens.colors.brand[500],
-        }
+        borderColor: mode.accent,
+        boxShadow: `0 8px 24px rgba(7,7,18,0.4), 0 0 16px ${mode.accent}20`,
+      } as any
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && isFocused
       ? {
-          outlineColor: Tokens.colors.brand[500],
-          outlineStyle: 'solid',
-          outlineWidth: 2,
-          outlineOffset: 2,
-        }
+        outlineColor: mode.accent,
+        outlineStyle: 'solid',
+        outlineWidth: 2,
+        outlineOffset: 2,
+      } as any
       : undefined;
 
   const handlePress = useCallback(() => {
@@ -88,11 +89,12 @@ function ModeCardComponent({
         onBlur={() => setIsFocused(false)}
         style={({ pressed }) => [
           styles.card,
+          { borderTopColor: mode.accent },
           Platform.OS === 'web' && {
             cursor: 'pointer',
-            transition: 'border-color 0.1s linear',
-          },
-          pressed && { opacity: 0.8 },
+            transition: 'border-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
+          } as any,
+          pressed && { opacity: 0.9, transform: [{ scale: 0.97 }] },
           hoverStyle,
           focusStyle,
         ]}
@@ -132,11 +134,12 @@ function ModeCardComponent({
 
 const styles = StyleSheet.create({
   card: {
-    padding: Tokens.spacing[4],
-    borderRadius: Tokens.radii.none,
+    padding: Tokens.spacing[5] || 20,
+    borderRadius: Tokens.radii.xl || 22,
     borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border, // White border
-    backgroundColor: Tokens.colors.neutral.darkest, // Black bg
+    borderTopWidth: 2,
+    borderColor: 'rgba(185, 194, 217, 0.15)', // Emulate top-down light source on other borders
+    backgroundColor: 'rgba(14, 20, 40, 0.65)', // Glassmorphic background letting cosmic theme through
     minHeight: CARD_MIN_HEIGHT,
     justifyContent: 'space-between',
   },
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
-    borderRadius: 0, // Square
+    borderRadius: DOT_SIZE / 2, // Round instead of square
     backgroundColor: 'transparent',
   },
   accentDotActive: {

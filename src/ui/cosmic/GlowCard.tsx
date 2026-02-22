@@ -195,11 +195,11 @@ export const GlowCard = memo(function GlowCard({
   // Per research spec: radii.lg = 16
   const containerStyle = useMemo((): ViewStyle => ({
     backgroundColor: getBackgroundColor,
-    borderRadius: isCosmic ? 16 : 0, // lg per spec, sharp for linear
+    borderRadius: isCosmic ? 24 : 8, // Softer curves (squricle-esq) per ADHD guidelines
     ...getGlowStyle,
     ...getPaddingStyle,
     ...getBorderStyle, ...(onPress && Platform.OS === "web" ? { cursor: "pointer", transition: "all 0.2s ease-in-out" } as any : {}),
-  }), [getBackgroundColor, getGlowStyle, getPaddingStyle, getBorderStyle, isCosmic]);
+  }), [getBackgroundColor, getGlowStyle, getPaddingStyle, getBorderStyle, isCosmic, onPress]);
 
   // Render as Pressable if onPress provided, otherwise as View
   if (onPress) {
