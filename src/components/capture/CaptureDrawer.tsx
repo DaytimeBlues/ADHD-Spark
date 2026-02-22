@@ -48,6 +48,7 @@ const MODES: Array<{ id: DrawerMode; icon: string; label: string }> = [
   { id: 'photo', icon: '📷', label: 'PHOTO' },
   { id: 'paste', icon: '📋', label: 'PASTE' },
   { id: 'meeting', icon: '👥', label: 'MEETING' },
+  { id: 'checkin', icon: '🎯', label: 'CHECK-IN' },
 ];
 
 const MEETING_TEMPLATE = (now: Date): string => {
@@ -506,6 +507,56 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
 });
 
 // ============================================================================
+// CHECK-IN MODE
+// ============================================================================
+
+interface CheckInModeProps {
+  onCapture: (raw: string) => void;
+}
+
+const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
+  const [text, setText] = useState('');
+
+  const handleConfirm = useCallback(() => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    onCapture(`[Check-In]\n${trimmed}`);
+    setText('');
+  }, [text, onCapture]);
+
+  return (
+    <View style={styles.modeContent}>
+      <Text style={[styles.meetingLabel, { color: C.starlight, marginBottom: 8, fontSize: 16, lineHeight: 22 }]}>
+        What are you doing?{"\n"}What should you be doing?
+      </Text>
+      <TextInput
+        testID="capture-checkin-input"
+        style={[styles.textInput, { color: C.starlight, borderColor: C.border }]}
+        value={text}
+        onChangeText={setText}
+        placeholder="Log your progress here..."
+        placeholderTextColor={C.mutedText}
+        multiline
+        autoFocus
+        numberOfLines={6}
+        textAlignVertical="top"
+        accessibilityLabel="Check-in input"
+      />
+      <Pressable
+        testID="capture-checkin-confirm"
+        style={[styles.confirmBtn, { backgroundColor: text.trim() ? C.gold : C.border, marginTop: 12 }]}
+        onPress={handleConfirm}
+        disabled={!text.trim()}
+        accessibilityLabel="Save check-in"
+        accessibilityRole="button"
+      >
+        <Text style={[styles.confirmBtnText, { color: text.trim() ? '#070712' : '#888' }]}>LOG PROGRESS</Text>
+      </Pressable>
+    </View>
+  );
+});
+
+// ============================================================================
 // MAIN DRAWER
 // ============================================================================
 
@@ -517,6 +568,12 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 }: CaptureDrawerProps) {
   const [activeMode, setActiveMode] = useState<DrawerMode>('text');
   const [successMsg, setSuccessMsg] = useState('');
+
+  React.useEffect(() => {
+    if (visible && currentBubbleState === 'needs-checkin') {
+      setActiveMode('checkin');
+    }
+  }, [visible, currentBubbleState]);
 
   const showSuccess = useCallback((msg: string) => {
     setSuccessMsg(msg);
@@ -557,6 +614,10 @@ export const CaptureDrawer = memo(function CaptureDrawer({
   );
   const handleMeetingCapture = useCallback(
     (raw: string) => handleCapture('meeting', raw),
+    [handleCapture],
+  );
+  const handleCheckInCapture = useCallback(
+    (raw: string) => handleCapture('checkin', raw),
     [handleCapture],
   );
   const handlePhotoCapture = useCallback(
@@ -629,6 +690,9 @@ export const CaptureDrawer = memo(function CaptureDrawer({
         )}
         {activeMode === 'meeting' && (
           <MeetingMode onCapture={handleMeetingCapture} />
+        )}
+        {activeMode === 'checkin' && (
+          <CheckInMode onCapture={handleCheckInCapture} />
         )}
         {activeMode === 'photo' && (
           <PhotoMode onCapture={handlePhotoCapture} />

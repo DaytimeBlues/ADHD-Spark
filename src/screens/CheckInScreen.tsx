@@ -85,19 +85,19 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
   }, [mood, energy]);
 
   const moods = [
-    { emoji: '😢', label: 'Low', value: 1 },
-    { emoji: '😕', label: 'Down', value: 2 },
-    { emoji: '😐', label: 'Neutral', value: 3 },
-    { emoji: '🙂', label: 'Good', value: 4 },
-    { emoji: '😊', label: 'Great', value: 5 },
+    { quote: '“I am a forest, and a night of dark trees.”', author: 'Nietzsche', label: 'Low', value: 1 },
+    { quote: '“A melancholy of mine own.”', author: 'Shakespeare', label: 'Down', value: 2 },
+    { quote: '“I simply am.”', author: 'Kafka', label: 'Neutral', value: 3 },
+    { quote: '“I celebrate myself, and sing myself.”', author: 'Whitman', label: 'Good', value: 4 },
+    { quote: '“I dwell in possibility.”', author: 'Dickinson', label: 'Great', value: 5 },
   ];
 
   const energyLevels = [
-    { emoji: '🪫', label: 'Drained', value: 1 },
-    { emoji: '🔋', label: 'Low', value: 2 },
-    { emoji: '⚡', label: 'Medium', value: 3 },
-    { emoji: '🚀', label: 'High', value: 4 },
-    { emoji: '🔥', label: 'Full', value: 5 },
+    { quote: '“I am worn out with dreams.”', author: 'Wilde', label: 'Drained', value: 1 },
+    { quote: '“A strange languor has come over me.”', author: 'Shelley', label: 'Low', value: 2 },
+    { quote: '“I am awake, and the world is awake.”', author: 'Thoreau', label: 'Medium', value: 3 },
+    { quote: '“There is a vitality, a life force.”', author: 'Graham', label: 'High', value: 4 },
+    { quote: '“I contain multitudes.”', author: 'Whitman', label: 'Full', value: 5 },
   ];
 
   const getRecommendation = () => {
@@ -197,15 +197,13 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       ]}
                     onPress={() => setMood(m.value)}
                   >
-                    <Text style={styles.emoji}>{m.emoji}</Text>
-                    <Text
-                      style={[
-                        styles.label,
-                        mood === m.value && styles.selectedLabel,
-                      ]}
-                    >
-                      {m.label.toUpperCase()}
-                    </Text>
+                    <View style={styles.optionContent}>
+                      <Text style={[styles.label, mood === m.value && styles.selectedLabel]}>
+                        {m.label.toUpperCase()}
+                      </Text>
+                      <Text style={[styles.quote, mood === m.value && styles.selectedQuote]}>{m.quote}</Text>
+                      <Text style={styles.author}>— {m.author}</Text>
+                    </View>
                   </Pressable>
                 ))}
               </View>
@@ -232,15 +230,13 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       ]}
                     onPress={() => setEnergy(e.value)}
                   >
-                    <Text style={styles.emoji}>{e.emoji}</Text>
-                    <Text
-                      style={[
-                        styles.label,
-                        energy === e.value && styles.selectedLabel,
-                      ]}
-                    >
-                      {e.label.toUpperCase()}
-                    </Text>
+                    <View style={styles.optionContent}>
+                      <Text style={[styles.label, energy === e.value && styles.selectedLabel]}>
+                        {e.label.toUpperCase()}
+                      </Text>
+                      <Text style={[styles.quote, energy === e.value && styles.selectedQuote]}>{e.quote}</Text>
+                      <Text style={styles.author}>— {e.author}</Text>
+                    </View>
                   </Pressable>
                 ))}
               </View>
@@ -350,21 +346,15 @@ const getStyles = (isCosmic: boolean) =>
       letterSpacing: 1,
     },
     options: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
+      flexDirection: 'column',
       gap: Tokens.spacing[3],
     },
     option: {
-      flexGrow: 1,
-      flexBasis: 100,
-      alignItems: 'center',
-      padding: Tokens.spacing[2],
+      padding: Tokens.spacing[4],
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.darker,
-      minHeight: 100,
       borderWidth: 1,
       borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
-      justifyContent: 'center',
       ...Platform.select({
         web: {
           transition: 'all 0.2s ease',
@@ -401,21 +391,37 @@ const getStyles = (isCosmic: boolean) =>
         },
       }),
     },
-    emoji: {
-      fontSize: Tokens.type['3xl'],
-      marginBottom: Tokens.spacing[2],
+    optionContent: {
+      flexDirection: 'column',
+      gap: 2,
+    },
+    quote: {
+      fontFamily: isCosmic ? '"Space Grotesk", sans-serif' : Tokens.type.fontFamily.serif,
+      fontSize: Tokens.type.md || 16,
+      fontStyle: 'italic',
+      color: isCosmic ? 'rgba(238, 242, 255, 0.78)' : Tokens.colors.text.secondary,
+      lineHeight: 22,
+      marginTop: Tokens.spacing[2],
+      marginBottom: Tokens.spacing[1],
+    },
+    selectedQuote: {
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+    },
+    author: {
+      fontFamily: Tokens.type.fontFamily.sans,
+      fontSize: Tokens.type.xs,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      alignSelf: 'flex-end',
     },
     label: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      fontFamily: Tokens.type.fontFamily.mono,
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       fontSize: Tokens.type.xs,
-      textAlign: 'center',
-      fontWeight: '500',
-      letterSpacing: 0.5,
+      fontWeight: '700',
+      letterSpacing: 1,
     },
     selectedLabel: {
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      fontWeight: '700',
+      color: isCosmic ? '#2DD4BF' : Tokens.colors.text.primary,
     },
     recommendation: {
       marginTop: Tokens.spacing[4],

@@ -20,6 +20,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import CaptureService from '../../services/CaptureService';
+import { CheckInService } from '../../services/CheckInService';
 import { CaptureDrawer } from './CaptureDrawer';
 
 // ============================================================================
@@ -32,7 +33,8 @@ export type BubbleState =
   | 'processing'
   | 'needs-review'
   | 'failed'
-  | 'offline';
+  | 'offline'
+  | 'needs-checkin';
 
 // ============================================================================
 // CONSTANTS
@@ -51,6 +53,7 @@ const COLORS = {
   processing: '#8B5CF6', // nebulaViolet
   failed: '#FB7185',     // cometRose
   offline: '#6B7A9C',    // neutral.medium (muted)
+  needsCheckin: '#F6C177', // gold
   badge: '#FB7185',      // cometRose
   badgeText: '#EEF2FF',  // starlight
   fabText: '#EEF2FF',    // starlight
@@ -85,9 +88,21 @@ export const CaptureBubble = memo(function CaptureBubble() {
     return unsub;
   }, [bubbleState]);
 
+  // Subscribe to check-in interval
+  useEffect(() => {
+    const unsub = CheckInService.subscribe((isPending) => {
+      if (isPending && bubbleState !== 'recording' && bubbleState !== 'processing') {
+        setBubbleState('needs-checkin');
+      } else if (!isPending && bubbleState === 'needs-checkin') {
+        setBubbleState(badgeCount > 0 ? 'needs-review' : 'idle');
+      }
+    });
+    return unsub;
+  }, [bubbleState, badgeCount]);
+
   // Pulse animation (recording state)
   useEffect(() => {
-    if (bubbleState === 'recording') {
+    if (bubbleState === 'recording' || bubbleState === 'needs-checkin') {
       pulseLoop.current = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
@@ -172,6 +187,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
       case 'processing': return COLORS.processing;
       case 'failed': return COLORS.failed;
       case 'offline': return COLORS.offline;
+      case 'needs-checkin': return COLORS.needsCheckin;
       default: return COLORS.idle;
     }
   }, [bubbleState]);
@@ -188,6 +204,8 @@ export const CaptureBubble = memo(function CaptureBubble() {
         return { boxShadow: `0 0 0 2px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.3)` } as ViewStyle;
       case 'offline':
         return { boxShadow: `0 4px 16px rgba(7,7,18,0.5)` } as ViewStyle;
+      case 'needs-checkin':
+        return { boxShadow: `0 0 0 3px rgba(246, 193, 119, 0.35), 0 0 28px rgba(246, 193, 119, 0.4), 0 8px 24px rgba(7,7,18,0.6)` } as ViewStyle;
       default:
         return { boxShadow: `0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 24px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(7,7,18,0.6)` } as ViewStyle;
     }
@@ -200,6 +218,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
       case 'processing': return '⟳';
       case 'failed': return '✕';
       case 'offline': return '⊗';
+      case 'needs-checkin': return '🎯';
       default: return '+';
     }
   }, [bubbleState]);
@@ -209,6 +228,9 @@ export const CaptureBubble = memo(function CaptureBubble() {
       return; // non-interactive
     }
     setDrawerOpen(true);
+    if (bubbleState === 'needs-checkin') {
+      CheckInService.setPending(false);
+    }
   }, [bubbleState]);
 
   const handleDrawerClose = useCallback(() => {
@@ -244,8 +266,8 @@ export const CaptureBubble = memo(function CaptureBubble() {
             bubbleState === 'recording'
               ? 'Stop recording'
               : bubbleState === 'needs-review'
-              ? `Capture inbox, ${badgeCount} item${badgeCount !== 1 ? 's' : ''} to review`
-              : 'Open capture'
+                ? `Capture inbox, ${badgeCount} item${badgeCount !== 1 ? 's' : ''} to review`
+                : 'Open capture'
           }
           accessibilityRole="button"
           style={[

@@ -14,7 +14,7 @@ import StorageService from './StorageService';
 // TYPES
 // ============================================================================
 
-export type CaptureSource = 'voice' | 'text' | 'photo' | 'paste' | 'meeting';
+export type CaptureSource = 'voice' | 'text' | 'photo' | 'paste' | 'meeting' | 'checkin';
 export type CaptureStatus = 'unreviewed' | 'promoted' | 'discarded';
 
 export interface CaptureItem {

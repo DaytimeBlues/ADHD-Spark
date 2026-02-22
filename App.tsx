@@ -17,12 +17,9 @@ import OverlayService from './src/services/OverlayService';
 import WebMCPService from './src/services/WebMCPService';
 import { Tokens } from './src/theme/tokens';
 import { config } from './src/config';
-import {
-  handleOverlayIntent,
-  navigationRef,
-} from './src/navigation/navigationRef';
-
+import { handleOverlayIntent, navigationRef } from './src/navigation/navigationRef';
 import { agentEventBus } from './src/services/AgentEventBus';
+import { CheckInService } from './src/services/CheckInService';
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);
@@ -46,6 +43,7 @@ const App = () => {
 
         await GoogleTasksSyncService.syncToBrainDump();
         WebMCPService.init();
+        CheckInService.start();
       } catch (error) {
         console.error('App initialization error:', error);
       } finally {
