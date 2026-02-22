@@ -338,6 +338,17 @@ export const cosmicLineHeights = {
 } as const;
 
 // ============================================================================
+// TIME AND ANIMATION MOTION TOKENS
+// ============================================================================
+export const cosmicMotion = {
+  press: 100,
+  hover: 140,
+  screenEnter: 420,
+  screenExit: 220,
+  breathCycle: 4200,
+} as const;
+
+// ============================================================================
 // BACKGROUND VARIANTS
 // ============================================================================
 
@@ -415,6 +426,7 @@ export const CosmicTokens = {
   typography: cosmicTypography,
   fontSizes: cosmicFontSizes,
   lineHeights: cosmicLineHeights,
+  motion: cosmicMotion,
   glow: glowStyles,
   textGlow: textGlowStyles,
   background: backgroundStyles,
