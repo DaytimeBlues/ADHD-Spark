@@ -198,7 +198,7 @@ export const GlowCard = memo(function GlowCard({
     borderRadius: isCosmic ? 16 : 0, // lg per spec, sharp for linear
     ...getGlowStyle,
     ...getPaddingStyle,
-    ...getBorderStyle,
+    ...getBorderStyle, ...(onPress && Platform.OS === "web" ? { cursor: "pointer", transition: "all 0.2s ease-in-out" } as any : {}),
   }), [getBackgroundColor, getGlowStyle, getPaddingStyle, getBorderStyle, isCosmic]);
 
   // Render as Pressable if onPress provided, otherwise as View

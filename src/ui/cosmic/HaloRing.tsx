@@ -210,7 +210,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Web progress mode: conic-gradient per research spec
   if (mode === 'progress' && isWeb) {
-    const nebulaViolet = (t as any).colors?.cosmic?.nebulaViolet ?? '#8B5CF6';
+    const nebulaViolet = (t as any).colors?.cosmic?.nebulaViolet ?? (t as any).colors?.brand?.[500] ?? "#8B5CF6";
     const trackColor = colors.track;
     
     const webProgressStyle: ViewStyle = {

@@ -63,7 +63,7 @@ export type TimerColor = 'default' | 'success' | 'warning' | 'neutral';
 /**
  * Timer digit size variants
  */
-export type TimerSize = 'sm' | 'md' | 'lg' | 'hero';
+export type TimerSize = 'md' | 'lg' | 'xl';
 
 // ============================================================================
 // CARD SYSTEM
