@@ -184,9 +184,11 @@ export const GlowCard = memo(function GlowCard({
 
     return {
       borderWidth: 1,
-      borderColor: surfaceColors.border, // rgba(185, 194, 217, 0.16)
-      ...(tone === 'raised' && Platform.OS === 'web' && {
-        borderTopColor: 'rgba(255, 255, 255, 0.05)', // Subtle inner highlight
+      borderColor: 'rgba(185, 194, 217, 0.12)', // Subtle default border
+      ...(tone === 'raised' && {
+        borderTopColor: 'rgba(255, 255, 255, 0.2)', // Concept #43: Top highlight
+        borderBottomColor: 'rgba(7, 7, 18, 0.4)', // Concept #43: Bottom shadow
+        borderTopWidth: 1.5,
       }),
     };
   }, [isCosmic, t, tone]);

@@ -297,20 +297,26 @@ export const RuneButton = memo(function RuneButton({
   const containerStyle = useMemo((): StyleProp<ViewStyle> => [
     {
       height: getHeight,
-      borderRadius: 8, // md
+      borderRadius: isCosmic ? 24 : 8, // Soft squircural feel per ADHD guidelines
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8,
+      borderWidth: 1,
+      borderColor: 'rgba(185, 194, 217, 0.12)',
       ...getPadding,
       ...getVariantStyles.container,
+      ...(variant === 'primary' && isCosmic && {
+        borderTopColor: 'rgba(255, 255, 255, 0.25)',
+        borderTopWidth: 1.5,
+      }),
       ...getGlowStyle,
       ...getFocusStyle,
       ...getDisabledStyle,
       ...getPressedStyle,
     },
     style,
-  ], [getHeight, getPadding, getVariantStyles, getGlowStyle, getFocusStyle, getDisabledStyle, getPressedStyle, style]);
+  ], [getHeight, getPadding, getVariantStyles, getGlowStyle, getFocusStyle, getDisabledStyle, getPressedStyle, style, isCosmic, variant]);
 
   // Text style
   const textStyle = useMemo((): TextStyle => ({

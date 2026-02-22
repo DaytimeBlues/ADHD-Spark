@@ -350,9 +350,9 @@ const getStyles = (isCosmic: boolean) =>
       gap: Tokens.spacing[3],
     },
     option: {
-      padding: Tokens.spacing[4],
-      borderRadius: isCosmic ? 8 : Tokens.radii.none,
-      backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.darker,
+      padding: Tokens.spacing[5],
+      borderRadius: isCosmic ? 20 : Tokens.radii.none,
+      backgroundColor: isCosmic ? 'rgba(14, 20, 40, 0.6)' : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
@@ -380,8 +380,10 @@ const getStyles = (isCosmic: boolean) =>
     },
     selected: {
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-      backgroundColor: isCosmic ? 'rgba(139, 92, 246, 0.15)' : Tokens.colors.brand[900],
-      transform: [{ translateY: -4 }],
+      borderTopColor: isCosmic ? '#A78BFA' : undefined, // Concept #43: Highlight
+      borderTopWidth: isCosmic ? 2 : 1,
+      backgroundColor: isCosmic ? 'rgba(139, 92, 246, 0.18)' : Tokens.colors.brand[900],
+      transform: [{ translateY: -4 }, { scale: 1.01 }],
       ...Tokens.elevation.none,
       ...Platform.select({
         web: isCosmic ? {
@@ -396,8 +398,8 @@ const getStyles = (isCosmic: boolean) =>
       gap: 2,
     },
     quote: {
-      fontFamily: isCosmic ? '"Space Grotesk", sans-serif' : Tokens.type.fontFamily.serif,
-      fontSize: Tokens.type.md || 16,
+      fontFamily: isCosmic ? '"Space Grotesk", sans-serif' : Tokens.type.fontFamily.sans,
+      fontSize: Tokens.type.lg,
       fontStyle: 'italic',
       color: isCosmic ? 'rgba(238, 242, 255, 0.78)' : Tokens.colors.text.secondary,
       lineHeight: 22,
