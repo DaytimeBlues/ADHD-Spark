@@ -11,6 +11,7 @@ export { GlowCard } from './GlowCard';
 export { RuneButton } from './RuneButton';
 export { ChronoDigits } from './ChronoDigits';
 export { HaloRing } from './HaloRing';
+export { BottomSheet } from './BottomSheet';
 
 // Types
 export type {
@@ -39,3 +40,4 @@ export type { GlowCardProps } from './GlowCard';
 export type { RuneButtonProps } from './RuneButton';
 export type { ChronoDigitsProps } from './ChronoDigits';
 export type { HaloRingProps } from './HaloRing';
+export type { BottomSheetProps } from './BottomSheet';

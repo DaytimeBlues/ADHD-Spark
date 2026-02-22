@@ -394,7 +394,9 @@ const getStyles = (isCosmic: boolean) =>
       transform: [{ translateY: -4 }],
       ...Tokens.elevation.none,
       ...Platform.select({
-        web: {
+        web: isCosmic ? {
+          boxShadow: '0 0 0 2px rgba(139,92,246,0.4), 0 0 20px rgba(139,92,246,0.25)',
+        } : {
           boxShadow: '0 0 0 0',
         },
       }),

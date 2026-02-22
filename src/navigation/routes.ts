@@ -25,6 +25,7 @@ export const ROUTES = {
   FOG_CUTTER: 'FogCutter' as const,
   POMODORO: 'Pomodoro' as const,
   ANCHOR: 'Anchor' as const,
+  INBOX: 'Inbox' as const,
 } as const;
 
 export type RouteNames = (typeof ROUTES)[keyof typeof ROUTES];

@@ -16,7 +16,7 @@ import useTimer from '../hooks/useTimer';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
 import { LinearButton } from '../components/ui/LinearButton';
-import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
+import { CosmicBackground, ChronoDigits, RuneButton, HaloRing, GlowCard } from '../ui/cosmic';
 
 const HERO_TIMER_SIZE = 120;
 const IGNITE_DURATION_SECONDS = 5 * 60;
@@ -200,12 +200,12 @@ const IgniteScreen = () => {
               </View>
             </View>
 
-            <View style={styles.rationaleCard}>
+            <GlowCard glow="soft" tone="base" padding="md" style={styles.rationaleCard}>
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
                 Based on CBT/CADDI principles, the hardest part of ADHD is often starting. This 5-minute timer creates a low-commitment entry point to bypass procrastination and build behavioral activation momentum.
               </Text>
-            </View>
+            </GlowCard>
 
             {isRestoring ? (
               <View style={styles.timerCard}>
@@ -495,17 +495,8 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
   },
   rationaleCard: {
-    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
-    borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
-    padding: Tokens.spacing[4],
     marginTop: Tokens.spacing[4],
     marginBottom: Tokens.spacing[2],
-    borderRadius: isCosmic ? 12 : 0,
-    ...(isCosmic && Platform.OS === 'web' ? {
-      backdropFilter: 'blur(12px)',
-      boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-    } : {}),
   },
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,

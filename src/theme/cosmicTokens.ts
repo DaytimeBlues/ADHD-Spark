@@ -425,7 +425,9 @@ export const CosmicTokens = {
 export type CosmicTokensType = typeof CosmicTokens;
 export type CosmicColor = keyof typeof cosmicColors;
 export type CosmicSpacing = keyof typeof cosmicSpacing;
+export type CosmicSpacingType = keyof typeof cosmicSpacing;
 export type CosmicRadii = keyof typeof cosmicRadii;
+export type CosmicRadiiType = keyof typeof cosmicRadii;
 
 // Default export for convenience
 export default CosmicTokens;

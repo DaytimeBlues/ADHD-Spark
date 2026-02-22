@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Pressable,
   SafeAreaView,
   Platform,
   LayoutAnimation,
@@ -13,7 +12,7 @@ import { LinearButton } from '../components/ui/LinearButton';
 import useTimer from '../hooks/useTimer';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
-import { CosmicBackground, ChronoDigits, RuneButton, HaloRing } from '../ui/cosmic';
+import { CosmicBackground, ChronoDigits, RuneButton, HaloRing, GlowCard } from '../ui/cosmic';
 
 type BreathingPattern = '478' | 'box' | 'energize';
 
@@ -26,7 +25,6 @@ const PATTERNS: Record<
   energize: { name: 'ENERGIZE', inhale: 6, hold: 0, exhale: 2, wait: 0 },
 };
 
-const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 const CIRCLE_TRANSITION = 'transform 1s ease-in-out';
 const BREATHING_CIRCLE_SIZE = 240;
 const INNER_CIRCLE_SIZE = 140;
@@ -150,12 +148,12 @@ const AnchorScreen = () => {
             </Text>
           </View>
 
-          <View style={getStyles(isCosmic).rationaleCard}>
+          <GlowCard glow="soft" tone="base" padding="md" style={getStyles(isCosmic).rationaleCard}>
             <Text style={getStyles(isCosmic).rationaleTitle}>WHY THIS WORKS</Text>
             <Text style={getStyles(isCosmic).rationaleText}>
               Emotional dysregulation is core to ADHD. These breathing patterns activate the parasympathetic nervous system, reducing cortisol and creating a pause between stimulus and response. CBT techniques for emotional regulation, made tangible through guided breath.
             </Text>
-          </View>
+          </GlowCard>
 
           {pattern && (
             <View style={getStyles(isCosmic).activeContainer}>
@@ -215,21 +213,14 @@ const AnchorScreen = () => {
           {!pattern && (
             <View style={getStyles(isCosmic).patternsContainer}>
               {(Object.keys(PATTERNS) as BreathingPattern[]).map((p) => (
-                <Pressable
+                <GlowCard
                   key={p}
                   testID={`anchor-pattern-${p}`}
-                  style={({
-                    pressed,
-                    hovered,
-                  }: {
-                    pressed: boolean;
-                    hovered?: boolean;
-                  }) => [
-                    getStyles(isCosmic).patternButton,
-                    hovered && getStyles(isCosmic).patternButtonHovered,
-                    pressed && getStyles(isCosmic).patternButtonPressed,
-                  ]}
+                  glow="soft"
+                  tone="base"
+                  padding="lg"
                   onPress={() => startPattern(p)}
+                  style={getStyles(isCosmic).patternButton}
                 >
                   <View style={getStyles(isCosmic).patternIcon}>
                     <Text style={getStyles(isCosmic).patternEmoji}>
@@ -252,7 +243,7 @@ const AnchorScreen = () => {
                         .join(' • ')}
                     </Text>
                   </View>
-                </Pressable>
+                </GlowCard>
               ))}
             </View>
           )}
@@ -318,16 +309,8 @@ const getStyles = (isCosmic: boolean) =>
       letterSpacing: 1,
     },
     rationaleCard: {
-      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
-      padding: Tokens.spacing[4],
       marginBottom: Tokens.spacing[6],
-      borderRadius: isCosmic ? 12 : 0,
-      ...(isCosmic && Platform.OS === 'web' ? {
-        backdropFilter: 'blur(12px)',
-        boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-      } : {}),
+      width: '100%',
     },
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
@@ -418,40 +401,11 @@ const getStyles = (isCosmic: boolean) =>
       maxWidth: 500,
     },
     patternButton: {
-      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.6)' : Tokens.colors.neutral.darker,
-      borderRadius: isCosmic ? 12 : Tokens.radii.none,
-      padding: Tokens.spacing[5],
       flexDirection: 'row',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
-      ...Platform.select({
-        web: {
-          transition: 'all 0.2s ease',
-          cursor: 'pointer',
-          ...(isCosmic ? {
-            backdropFilter: 'blur(8px)',
-          } : {}),
-        },
-      }),
     },
-    patternButtonHovered: {
-      borderColor: isCosmic ? 'rgba(139, 92, 246, 0.4)' : Tokens.colors.brand[500],
-      transform: [{ translateY: -2 }],
-      ...Platform.select({
-        web: {
-          ...(isCosmic ? {
-            boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
-          } : {
-            boxShadow: HOVER_SHADOW,
-          }),
-        },
-      }),
-    },
-    patternButtonPressed: {
-      transform: [{ scale: Tokens.motion.scales.press }],
-      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.8)' : Tokens.colors.neutral.dark,
-    },
+    patternButtonHovered: {},
+    patternButtonPressed: {},
     patternIcon: {
       width: Tokens.spacing[12],
       height: Tokens.spacing[12],

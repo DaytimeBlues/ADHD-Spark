@@ -29,8 +29,8 @@ export {
   type GlowLevel,
   type CosmicTokensType,
   type CosmicColor,
-  type CosmicSpacing,
-  type CosmicRadii,
+  type CosmicSpacingType,
+  type CosmicRadiiType,
 } from './cosmicTokens';
 
 export {

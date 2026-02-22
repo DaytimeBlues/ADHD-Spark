@@ -430,11 +430,11 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const getStatusColor = (status: DiagnosticEntry['status']) => {
     switch (status) {
       case 'ok':
-        return Tokens.colors.success;
+        return Tokens.colors.success.main;
       case 'warning':
-        return Tokens.colors.warning;
+        return Tokens.colors.warning.main;
       case 'error':
-        return Tokens.colors.error;
+        return Tokens.colors.error.main;
       case 'info':
       default:
         return Tokens.colors.text.secondary;
@@ -743,14 +743,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Tokens.spacing.md,
-    paddingVertical: Tokens.spacing.sm,
+    paddingHorizontal: Tokens.spacing[4],
+    paddingVertical: Tokens.spacing[2],
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.border,
   },
   backButton: {
-    paddingVertical: Tokens.spacing.xs,
-    paddingHorizontal: Tokens.spacing.sm,
+    paddingVertical: Tokens.spacing[1],
+    paddingHorizontal: Tokens.spacing[2],
   },
   backButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -767,8 +767,8 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   refreshButton: {
-    paddingVertical: Tokens.spacing.xs,
-    paddingHorizontal: Tokens.spacing.sm,
+    paddingVertical: Tokens.spacing[1],
+    paddingHorizontal: Tokens.spacing[2],
   },
   refreshButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -783,10 +783,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: Tokens.spacing.md,
+    padding: Tokens.spacing[4],
   },
   section: {
-    marginBottom: Tokens.spacing.lg,
+    marginBottom: Tokens.spacing[6],
   },
   sectionTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -794,13 +794,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Tokens.colors.text.secondary,
     letterSpacing: 1,
-    marginBottom: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing[2],
   },
   diagRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    paddingVertical: Tokens.spacing.sm,
+    paddingVertical: Tokens.spacing[2],
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.borderSubtle,
   },
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   diagIndicator: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 12,
-    marginRight: Tokens.spacing.xs,
+    marginRight: Tokens.spacing[1],
     width: 16,
   },
   diagLabel: {
@@ -831,21 +831,21 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: 13,
     color: Tokens.colors.text.secondary,
-    marginBottom: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing[2],
     lineHeight: 20,
   },
   instructionStep: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 11,
     color: Tokens.colors.text.primary,
-    marginBottom: Tokens.spacing.xs,
-    paddingLeft: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing[1],
+    paddingLeft: Tokens.spacing[2],
     lineHeight: 18,
   },
   backupActionsRow: {
     flexDirection: 'row',
-    gap: Tokens.spacing.sm,
-    marginBottom: Tokens.spacing.sm,
+    gap: Tokens.spacing[2],
+    marginBottom: Tokens.spacing[2],
   },
   backupButton: {
     flex: 1,
@@ -855,8 +855,8 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.dark,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Tokens.spacing.xs,
-    paddingHorizontal: Tokens.spacing.sm,
+    paddingVertical: Tokens.spacing[1],
+    paddingHorizontal: Tokens.spacing[2],
   },
   backupButtonDisabled: {
     opacity: 0.5,
@@ -876,10 +876,10 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    padding: Tokens.spacing.sm,
+    padding: Tokens.spacing[2],
   },
   backupStatusText: {
-    marginTop: Tokens.spacing.sm,
+    marginTop: Tokens.spacing[2],
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.secondary,
@@ -888,19 +888,19 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.tertiary,
-    marginBottom: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing[2],
     letterSpacing: 0.5,
   },
   modeSelectorContainer: {
     flexDirection: 'row',
-    marginBottom: Tokens.spacing.sm,
+    marginBottom: Tokens.spacing[2],
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
     backgroundColor: Tokens.colors.neutral.darker,
   },
   modeButton: {
     flex: 1,
-    paddingVertical: Tokens.spacing.xs,
+    paddingVertical: Tokens.spacing[1],
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   themePreview: {
-    marginRight: Tokens.spacing.md,
+    marginRight: Tokens.spacing[4],
   },
   themePreviewBox: {
     width: 48,
@@ -959,8 +959,8 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     fontSize: 20,
-    color: Tokens.colors.success,
-    marginLeft: Tokens.spacing.sm,
+    color: Tokens.colors.success.main,
+    marginLeft: Tokens.spacing[2],
   },
 });
 

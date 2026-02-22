@@ -7,6 +7,7 @@ import { Tokens } from '../theme/tokens';
 import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
 import { WebNavBar } from './WebNavBar';
 import { ROUTES } from './routes';
+import { CaptureBubble } from '../components/capture';
 
 // Critical screens - loaded normally
 import HomeScreen from '../screens/HomeScreen';
@@ -22,6 +23,7 @@ const CheckInScreen = lazy(() => import('../screens/CheckInScreen'));
 const CBTGuideScreen = lazy(() => import('../screens/CBTGuideScreen'));
 const DiagnosticsScreen = lazy(() => import('../screens/DiagnosticsScreen'));
 const ChatScreen = lazy(() => import('../screens/ChatScreen'));
+const InboxScreen = lazy(() => import('../screens/InboxScreen'));
 
 // Lazy loading wrapper
 const withSuspense = (Component: React.ComponentType<any>) => (props: any) => (
@@ -52,6 +54,7 @@ const LazyCheckIn = withSuspense(CheckInScreen);
 const LazyCBTGuide = withSuspense(CBTGuideScreen);
 const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 const LazyChat = withSuspense(ChatScreen);
+const LazyInbox = withSuspense(InboxScreen);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -133,12 +136,32 @@ const TabNavigator = () => {
   );
 };
 
+/**
+ * TabNavigatorWithBubble
+ *
+ * Wraps the TabNavigator in a flex-1 View and renders the CaptureBubble
+ * above all tab screens. The Bubble is NOT shown on fullscreen modals
+ * (Pomodoro, Anchor, FogCutter) — those are sibling Stack.Screens above
+ * this component, so the bubble is naturally hidden there.
+ */
+const TabNavigatorWithBubble = () => (
+  <View style={{ flex: 1 }}>
+    <TabNavigator />
+    <CaptureBubble />
+  </View>
+);
+
 const AppNavigatorContent = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name={ROUTES.MAIN} component={TabNavigator} />
+    <Stack.Screen name={ROUTES.MAIN} component={TabNavigatorWithBubble} />
     <Stack.Screen name={ROUTES.FOG_CUTTER} component={LazyFogCutter} />
     <Stack.Screen name={ROUTES.POMODORO} component={LazyPomodoro} />
     <Stack.Screen name={ROUTES.ANCHOR} component={LazyAnchor} />
+    <Stack.Screen
+      name={ROUTES.INBOX}
+      component={LazyInbox}
+      options={{ presentation: 'modal' }}
+    />
   </Stack.Navigator>
 );
 

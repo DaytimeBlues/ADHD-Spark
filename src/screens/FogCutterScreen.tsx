@@ -220,14 +220,14 @@ const FogCutterScreen = ({
               <View style={styles.headerLine} />
             </View>
 
-            <View style={styles.rationaleCard}>
+            <GlowCard glow="soft" tone="base" padding="md" style={styles.rationaleCard}>
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
                 CBT/CADDI research shows ADHD paralysis comes from seeing tasks as monolithic. Breaking tasks into micro-steps (2-5 minutes each) reduces cognitive load and creates multiple completion wins that build dopamine and momentum.
               </Text>
-            </View>
+            </GlowCard>
 
-            <View style={styles.creationCard}>
+            <GlowCard glow="medium" tone="raised" padding="md" style={styles.creationCard}>
               <View style={styles.creationHeader}>
                 <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
               </View>
@@ -293,14 +293,27 @@ const FogCutterScreen = ({
                 </View>
               )}
 
-              <LinearButton
-                title="EXECUTE_SAVE"
-                onPress={addTask}
-                disabled={microSteps.length === 0}
-                size="lg"
-                style={styles.saveButton}
-              />
-            </View>
+              {isCosmic ? (
+                <RuneButton
+                  variant="primary"
+                  size="lg"
+                  glow="medium"
+                  onPress={addTask}
+                  disabled={microSteps.length === 0}
+                  style={styles.saveButton}
+                >
+                  EXECUTE_SAVE
+                </RuneButton>
+              ) : (
+                <LinearButton
+                  title="EXECUTE_SAVE"
+                  onPress={addTask}
+                  disabled={microSteps.length === 0}
+                  size="lg"
+                  style={styles.saveButton}
+                />
+              )}
+            </GlowCard>
 
             <View style={styles.divider} />
 
@@ -459,12 +472,7 @@ const getStyles = (isCosmic: boolean) =>
       marginLeft: Tokens.spacing[4],
     },
     rationaleCard: {
-      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
-      padding: Tokens.spacing[4],
       marginBottom: Tokens.spacing[4],
-      borderRadius: isCosmic ? 12 : 0,
     },
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
@@ -484,11 +492,6 @@ const getStyles = (isCosmic: boolean) =>
     },
     creationCard: {
       marginBottom: Tokens.spacing[6],
-      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
-      padding: Tokens.spacing[4], // Reduced
-      borderRadius: isCosmic ? 12 : 0,
-      borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     },
     creationHeader: {
       marginBottom: Tokens.spacing[4],
@@ -525,6 +528,11 @@ const getStyles = (isCosmic: boolean) =>
     inputFocused: {
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
+      ...Platform.select({
+        web: isCosmic ? {
+          boxShadow: '0 0 0 2px rgba(139,92,246,0.3), 0 0 30px rgba(139,92,246,0.25)',
+        } : {},
+      }),
     },
     addStepRow: {
       flexDirection: 'row',
@@ -633,6 +641,11 @@ const getStyles = (isCosmic: boolean) =>
     taskCardHovered: {
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       zIndex: 1,
+      ...Platform.select({
+        web: isCosmic ? {
+          boxShadow: '0 0 0 1px rgba(139,92,246,0.3), 0 0 20px rgba(139,92,246,0.2)',
+        } : {},
+      }),
     },
     taskCardPressed: {
       backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,

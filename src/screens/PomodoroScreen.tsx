@@ -145,15 +145,14 @@ const PomodoroScreen = () => {
                   progress={1 - timeLeft / getTotalDuration()}
                   size={TIMER_CARD_SIZE}
                   glow={isRunning ? 'strong' : 'medium'}
-                  color={isWorking ? '#EF4444' : '#22C55E'}
                 />
                 <View style={styles.timerOverlay}>
-                  <ChronoDigits
-                    value={formattedTime}
-                    size="hero"
-                    glow={isRunning ? 'strong' : 'none'}
-                    color={isWorking ? '#EEF2FF' : '#22C55E'}
-                  />
+                   <ChronoDigits
+                     value={formattedTime}
+                     size="hero"
+                     glow={isRunning ? 'strong' : 'none'}
+                     color={isWorking ? 'default' : 'success'}
+                   />
                   <Text
                     testID="pomodoro-phase"
                     style={[styles.phaseText, isWorking ? styles.phaseTextFocus : styles.phaseTextBreak]}

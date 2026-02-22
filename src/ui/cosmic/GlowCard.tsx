@@ -14,6 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { LinearTokens } from '../../theme/linearTokens';
 import { surfaceColors, webBoxShadows } from '../../theme/cosmicTokens';
 import { GlowLevel, SurfaceTone, CosmicPressableProps, CardPadding } from './types';
 
@@ -173,9 +174,11 @@ export const GlowCard = memo(function GlowCard({
   // Per research spec: use surfaceColors.border (rgba(185, 194, 217, 0.16))
   const getBorderStyle = useMemo((): ViewStyle => {
     if (!isCosmic) {
+      // Cast is safe: !isCosmic guarantees t is LinearTokens
+      const lt = t as typeof LinearTokens;
       return {
         borderWidth: 1,
-        borderColor: t.colors.neutral.medium,
+        borderColor: lt.colors.neutral.borderSubtle,
       };
     }
 

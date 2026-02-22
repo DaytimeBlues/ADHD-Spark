@@ -8,6 +8,7 @@
 import React, { memo, useMemo } from 'react';
 import { Text, StyleSheet, TextStyle, Platform } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
+import { LinearTokens } from '../../theme/linearTokens';
 import { cosmicTypography, textGlowStyles } from '../../theme/cosmicTokens';
 import { TimerSize, TimerColor, GlowLevel } from './types';
 
@@ -95,13 +96,14 @@ export const ChronoDigits = memo(function ChronoDigits({
   // Get text color based on variant
   const getColor = useMemo(() => {
     if (!isCosmic) {
-      // Linear theme colors
+      // Linear theme colors — cast is safe: !isCosmic guarantees t is LinearTokens
+      const lt = t as typeof LinearTokens;
       switch (color) {
-        case 'success': return t.colors.utility?.success || '#2DD4BF';
-        case 'warning': return t.colors.utility?.warning || '#F6C177';
-        case 'neutral': return t.colors.neutral.light;
+        case 'success': return lt.colors.success.main;
+        case 'warning': return lt.colors.warning.main;
+        case 'neutral': return lt.colors.neutral[400];
         case 'default':
-        default: return t.colors.neutral.lightest;
+        default: return lt.colors.neutral[0];
       }
     }
 
@@ -127,21 +129,21 @@ export const ChronoDigits = memo(function ChronoDigits({
     
     // Adjust color based on variant
     if (color === 'success') {
-      return Platform.select({
+      return (Platform.select({
         web: {
           textShadow: '0 0 18px rgba(45, 212, 191, 0.40)',
         },
         default: {},
-      }) || {};
+      }) ?? {}) as TextStyle;
     }
     
     if (color === 'warning') {
-      return Platform.select({
+      return (Platform.select({
         web: {
           textShadow: '0 0 18px rgba(246, 193, 119, 0.40)',
         },
         default: {},
-      }) || {};
+      }) ?? {}) as TextStyle;
     }
     
     return baseGlow;

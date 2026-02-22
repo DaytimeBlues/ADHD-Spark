@@ -12,6 +12,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  StyleProp,
   View,
   Platform,
 } from 'react-native';
@@ -49,6 +50,8 @@ export interface RuneButtonProps {
   leftIcon?: React.ReactNode;
   /** Right icon element */
   rightIcon?: React.ReactNode;
+  /** Additional container style override */
+  style?: StyleProp<ViewStyle>;
 }
 
 // ============================================================================
@@ -88,6 +91,7 @@ export const RuneButton = memo(function RuneButton({
   accessibilityHint,
   leftIcon,
   rightIcon,
+  style,
 }: RuneButtonProps) {
   const { isCosmic, t } = useTheme();
   const [isPressed, setIsPressed] = useState(false);
@@ -290,20 +294,23 @@ export const RuneButton = memo(function RuneButton({
   }, [isPressed]);
 
   // Container style
-  const containerStyle = useMemo((): ViewStyle => ({
-    height: getHeight,
-    borderRadius: 8, // md
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    ...getPadding,
-    ...getVariantStyles.container,
-    ...getGlowStyle,
-    ...getFocusStyle,
-    ...getDisabledStyle,
-    ...getPressedStyle,
-  }), [getHeight, getPadding, getVariantStyles, getGlowStyle, getFocusStyle, getDisabledStyle, getPressedStyle]);
+  const containerStyle = useMemo((): StyleProp<ViewStyle> => [
+    {
+      height: getHeight,
+      borderRadius: 8, // md
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+      ...getPadding,
+      ...getVariantStyles.container,
+      ...getGlowStyle,
+      ...getFocusStyle,
+      ...getDisabledStyle,
+      ...getPressedStyle,
+    },
+    style,
+  ], [getHeight, getPadding, getVariantStyles, getGlowStyle, getFocusStyle, getDisabledStyle, getPressedStyle, style]);
 
   // Text style
   const textStyle = useMemo((): TextStyle => ({

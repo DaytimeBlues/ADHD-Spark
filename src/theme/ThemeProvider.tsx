@@ -30,7 +30,7 @@ export interface ThemeContextValue {
   setVariant: (variant: ThemeVariant) => Promise<void>;
   
   /** Resolved token set for current theme */
-  t: typeof LinearTokens;
+  t: typeof LinearTokens | typeof CosmicTokens;
   
   /** Convenience flag for cosmic theme */
   isCosmic: boolean;

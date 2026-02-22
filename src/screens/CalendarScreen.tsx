@@ -140,7 +140,7 @@ const CalendarScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container, isCosmic && styles.containerCosmic]}>
-      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill} />
+      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>{null}</CosmicBackground>
       <View style={styles.webContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         cursor: 'not-allowed',
-      },
+      } as object,
     }),
   },
   googleCalendarButtonText: {

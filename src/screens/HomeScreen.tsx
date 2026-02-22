@@ -512,7 +512,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
             </View>
 
             {activationSummary && activationSummary.started > 0 && (
-              <View style={styles.activationCard}>
+              <GlowCard glow="medium" tone="raised" padding="md" style={styles.activationCard}>
                 <View style={styles.activationHeader}>
                   <Text style={styles.activationTitle}>WEEKLY_METRICS</Text>
                   <Text style={styles.activationRate}>
@@ -567,15 +567,15 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                       testID="reentry-prompt"
                     />
                   )}
-              </View>
+              </GlowCard>
             )}
 
             {Platform.OS === 'android' && (
-              <View
-                style={[
-                  styles.overlayCard,
-                  isOverlayEnabled && styles.overlayCardActive,
-                ]}
+              <GlowCard
+                glow={isOverlayEnabled ? 'medium' : 'soft'}
+                tone={isOverlayEnabled ? 'raised' : 'base'}
+                padding="sm"
+                style={[styles.overlayCard, isOverlayEnabled && styles.overlayCardActive]}
               >
                 <View style={styles.overlayTextGroup}>
                   <Text style={styles.overlayTitle}>FOCUS_OVERLAY</Text>
@@ -613,7 +613,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   value={isOverlayEnabled}
                   style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
                 />
-              </View>
+              </GlowCard>
             )}
 
             {Platform.OS === 'android' && __DEV__ && (
@@ -707,6 +707,9 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
     fontWeight: '700',
     color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     letterSpacing: -1,
+    ...(isCosmic && Platform.OS === 'web' ? {
+      textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+    } : {}),
   },
   systemStatusRow: {
     flexDirection: 'row',
@@ -744,11 +747,6 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
   },
   activationCard: {
     marginBottom: Tokens.spacing[6],
-    padding: Tokens.spacing[4],
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
-    borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
   },
   activationHeader: {
     flexDirection: 'row',
@@ -795,17 +793,12 @@ const getStyles = (isCosmic: boolean) => StyleSheet.create({
   textNeutral: { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
   overlayCard: {
     marginBottom: Tokens.spacing[6],
-    padding: Tokens.spacing[3],
-    backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
-    borderWidth: 1,
-    borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   overlayCardActive: {
-    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+    // active state handled by GlowCard glow prop dynamically
   },
   headerRight: {
     flexDirection: 'row',

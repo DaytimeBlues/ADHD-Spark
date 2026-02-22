@@ -23,6 +23,7 @@ const STORAGE_KEYS = {
   googleTasksLastSyncAt: 'googleTasksLastSyncAt',
   googleTasksExportedFingerprints: 'googleTasksExportedFingerprints',
   backupLastExportAt: 'backupLastExportAt',
+  captureInbox: 'captureInbox',
 };
 
 /**
