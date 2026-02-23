@@ -1,0 +1,81 @@
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-server] Project is running at:
+
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-server] Loopback: [36mhttp://localhost:3000/[39m, [36mhttp://[::1]:3000/[39m
+[2m[WebServer] [22m<i> [webpack-dev-server] On Your Network (IPv4): [36mhttp://10.75.60.232:3000/[39m
+
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-server] Content not from webpack is served from '[36mC:\Users\Steve\OneDrive\Desktop\Github Repos\spark-adhd\public[39m' directory
+
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-server] 404s will fallback to '[36m/index.html[39m'
+
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-middleware] wait until bundle finished: /
+
+[1A[2K[2m[WebServer] [22m<i> [webpack-dev-middleware] wait until bundle finished: /
+
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [chromium] › e2e\alex-scenarios.spec.ts:130:9 › Alex Persona - E2E Scenarios › Suite B: Prep Period Black Hole › B.4 Phase Transition: Break phase trigger
+[1A[2K[chromium] › e2e\alex-scenarios.spec.ts:130:9 › Alex Persona - E2E Scenarios › Suite B: Prep Period Black Hole › B.4 Phase Transition: Break phase trigger
+BROWSER CONSOLE: [webpack-dev-server] Server started: Hot Module Replacement enabled, Live Reloading enabled, Progress disabled, Overlay enabled.
+
+[1A[2KBROWSER CONSOLE: [HMR] Waiting for update signal from WDS...
+
+[1A[2KBROWSER CONSOLE: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+
+[1A[2KBROWSER CONSOLE: "shadow*" style props are deprecated. Use "boxShadow".
+
+[1A[2KBROWSER CONSOLE: The global process.env.EXPO_OS is not defined. This should be inlined by babel-preset-expo during transformation.
+
+[1A[2KBROWSER CONSOLE: [expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect.
+
+[1A[2KBROWSER CONSOLE: Running application "SparkADHD" with appParams:
+ {rootTag: #root} 
+Development-level warnings: ON.
+Performance optimizations: OFF.
+
+[1A[2KBROWSER CONSOLE: WebMCP: API not found, retrying...
+
+[1A[2KBROWSER CONSOLE: props.pointerEvents is deprecated. Use style.pointerEvents
+
+[1A[2KBROWSER CONSOLE: Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
+
+[1A[2KBROWSER CONSOLE: WebMCP: API not found, retrying...
+
+[1A[2KBROWSER CONSOLE: WebMCP: API not found, retrying...
+
+[1A[2K  1) [chromium] › e2e\alex-scenarios.spec.ts:130:9 › Alex Persona - E2E Scenarios › Suite B: Prep Period Black Hole › B.4 Phase Transition: Break phase trigger 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('pomodoro-phase')
+    Expected substring: [32m"REST"[39m
+    Received string:    [31m"🔥 FOCUS"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 5000ms[22m
+    [2m  - waiting for getByTestId('pomodoro-phase')[22m
+    [2m    8 × locator resolved to <div dir="auto" data-testid="pomodoro-phase" class="css-text-146c3p1 r-fontFamily-u56b22 r-fontSize-1i10wst r-fontWeight-1kfrs79 r-letterSpacing-1upy0dh r-marginTop-knv0ih r-textTransform-tsynxw r-transition-z47rfc r-color-1tsma7m">🔥 FOCUS</div>[22m
+    [2m      - unexpected value "🔥 FOCUS"[22m
+
+
+      140 |       });
+      141 |
+    > 142 |       await expect(page.getByTestId('pomodoro-phase')).toContainText('REST');
+          |                                                        ^
+      143 |     });
+      144 |   });
+      145 |
+        at C:\Users\Steve\OneDrive\Desktop\Github Repos\spark-adhd\e2e\alex-scenarios.spec.ts:142:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\alex-scenarios-Alex-Person-41aa5-nsition-Break-phase-trigger-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\alex-scenarios-Alex-Person-41aa5-nsition-Break-phase-trigger-chromium\error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › e2e\alex-scenarios.spec.ts:130:9 › Alex Persona - E2E Scenarios › Suite B: Prep Period Black Hole › B.4 Phase Transition: Break phase trigger 
+
+[36m  Serving HTML report at http://localhost:64193. Press Ctrl+C to quit.[39m

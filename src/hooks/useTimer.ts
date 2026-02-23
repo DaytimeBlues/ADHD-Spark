@@ -72,10 +72,9 @@ const useTimer = ({
 
     globalRecord.__SPARK_E2E_TIMER_CONTROLS__ = {
       complete: () => {
-        useTimerStore.getState().tick(); // sync manual overrides if needed
-        // Force complete for E2E
-        useTimerStore.setState({ remainingSeconds: 0, isRunning: false });
-        onComplete?.();
+        // Zero out the remaining seconds and erase the future target time
+        // This will allow the component's useEffect `store.remainingSeconds === 0` to organically fire
+        useTimerStore.setState({ remainingSeconds: 0, targetEndTime: null });
       },
       fastForward: (seconds: number) => {
         if (!Number.isFinite(seconds) || seconds <= 0) {
@@ -104,8 +103,22 @@ const useTimer = ({
   }, []);
 
   const start = useCallback(() => {
-    store.start(id as TimerMode, initialTime);
-  }, [id, initialTime, store]);
+    const currentState = useTimerStore.getState();
+    const isThisActive = currentState.activeMode === id;
+
+    if (isThisActive && currentState.remainingSeconds > 0 && !currentState.isRunning) {
+      if (currentState.remainingSeconds === currentState.durationSeconds) {
+        // It's a fresh start of a phase (e.g. from completePhase setting nextDurationSeconds)
+        currentState.start(id as TimerMode, currentState.durationSeconds, currentState.isWorking);
+      } else {
+        // It's a resume from a paused state
+        currentState.resume();
+      }
+    } else {
+      // It's a first time initialization, restart from 0, or overriding
+      currentState.start(id as TimerMode, initialTime, id === 'pomodoro' ? true : undefined);
+    }
+  }, [id, initialTime]);
 
   const pause = useCallback(() => {
     if (isActive) {
