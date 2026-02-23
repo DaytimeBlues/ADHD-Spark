@@ -1,5 +1,5 @@
 if (typeof process === 'undefined') {
-  global.process = { env: {} } as any;
+  global.process = { env: {} };
 }
 
 import { AppRegistry } from 'react-native';
@@ -8,7 +8,7 @@ import { name as appName } from './app.json';
 import * as Sentry from '@sentry/react-native';
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN || 'YOUR_FALLBACK_DSN',
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || 'YOUR_FALLBACK_DSN',
   debug: __DEV__, // Print useful debugging info in dev
   tracesSampleRate: 1.0, // Adjust in production
   _experiments: {
