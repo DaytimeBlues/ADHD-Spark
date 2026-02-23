@@ -85,19 +85,64 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
   }, [mood, energy]);
 
   const moods = [
-    { quote: '“I am a forest, and a night of dark trees.”', author: 'Nietzsche', label: 'Low', value: 1 },
-    { quote: '“A melancholy of mine own.”', author: 'Shakespeare', label: 'Down', value: 2 },
+    {
+      quote: '“I am a forest, and a night of dark trees.”',
+      author: 'Nietzsche',
+      label: 'Low',
+      value: 1,
+    },
+    {
+      quote: '“A melancholy of mine own.”',
+      author: 'Shakespeare',
+      label: 'Down',
+      value: 2,
+    },
     { quote: '“I simply am.”', author: 'Kafka', label: 'Neutral', value: 3 },
-    { quote: '“I celebrate myself, and sing myself.”', author: 'Whitman', label: 'Good', value: 4 },
-    { quote: '“I dwell in possibility.”', author: 'Dickinson', label: 'Great', value: 5 },
+    {
+      quote: '“I celebrate myself, and sing myself.”',
+      author: 'Whitman',
+      label: 'Good',
+      value: 4,
+    },
+    {
+      quote: '“I dwell in possibility.”',
+      author: 'Dickinson',
+      label: 'Great',
+      value: 5,
+    },
   ];
 
   const energyLevels = [
-    { quote: '“I am worn out with dreams.”', author: 'Wilde', label: 'Drained', value: 1 },
-    { quote: '“A strange languor has come over me.”', author: 'Shelley', label: 'Low', value: 2 },
-    { quote: '“I am awake, and the world is awake.”', author: 'Thoreau', label: 'Medium', value: 3 },
-    { quote: '“There is a vitality, a life force.”', author: 'Graham', label: 'High', value: 4 },
-    { quote: '“I contain multitudes.”', author: 'Whitman', label: 'Full', value: 5 },
+    {
+      quote: '“I am worn out with dreams.”',
+      author: 'Wilde',
+      label: 'Drained',
+      value: 1,
+    },
+    {
+      quote: '“A strange languor has come over me.”',
+      author: 'Shelley',
+      label: 'Low',
+      value: 2,
+    },
+    {
+      quote: '“I am awake, and the world is awake.”',
+      author: 'Thoreau',
+      label: 'Medium',
+      value: 3,
+    },
+    {
+      quote: '“There is a vitality, a life force.”',
+      author: 'Graham',
+      label: 'High',
+      value: 4,
+    },
+    {
+      quote: '“I contain multitudes.”',
+      author: 'Whitman',
+      label: 'Full',
+      value: 5,
+    },
   ];
 
   const getRecommendation = () => {
@@ -169,10 +214,18 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
             <Text style={styles.title}>CHECK IN</Text>
             <Text style={styles.subtitle}>HOW ARE YOU FEELING RIGHT NOW?</Text>
 
-            <GlowCard glow="soft" tone="base" padding="md" style={styles.rationaleCard}>
+            <GlowCard
+              glow="soft"
+              tone="base"
+              padding="md"
+              style={styles.rationaleCard}
+            >
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
-                Self-monitoring is a core CBT skill for ADHD. Tracking mood and energy helps identify patterns, predict challenges, and choose appropriate interventions. This metacognitive awareness creates space between feeling and action.
+                Self-monitoring is a core CBT skill for ADHD. Tracking mood and
+                energy helps identify patterns, predict challenges, and choose
+                appropriate interventions. This metacognitive awareness creates
+                space between feeling and action.
               </Text>
             </GlowCard>
 
@@ -190,18 +243,30 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                        styles.option,
-                        mood === m.value && styles.selected,
-                        hovered && !mood && styles.optionHovered,
-                        pressed && styles.optionPressed,
-                      ]}
+                      styles.option,
+                      mood === m.value && styles.selected,
+                      hovered && !mood && styles.optionHovered,
+                      pressed && styles.optionPressed,
+                    ]}
                     onPress={() => setMood(m.value)}
                   >
                     <View style={styles.optionContent}>
-                      <Text style={[styles.label, mood === m.value && styles.selectedLabel]}>
+                      <Text
+                        style={[
+                          styles.label,
+                          mood === m.value && styles.selectedLabel,
+                        ]}
+                      >
                         {m.label.toUpperCase()}
                       </Text>
-                      <Text style={[styles.quote, mood === m.value && styles.selectedQuote]}>{m.quote}</Text>
+                      <Text
+                        style={[
+                          styles.quote,
+                          mood === m.value && styles.selectedQuote,
+                        ]}
+                      >
+                        {m.quote}
+                      </Text>
                       <Text style={styles.author}>— {m.author}</Text>
                     </View>
                   </Pressable>
@@ -223,18 +288,30 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                        styles.option,
-                        energy === e.value && styles.selected,
-                        hovered && !energy && styles.optionHovered,
-                        pressed && styles.optionPressed,
-                      ]}
+                      styles.option,
+                      energy === e.value && styles.selected,
+                      hovered && !energy && styles.optionHovered,
+                      pressed && styles.optionPressed,
+                    ]}
                     onPress={() => setEnergy(e.value)}
                   >
                     <View style={styles.optionContent}>
-                      <Text style={[styles.label, energy === e.value && styles.selectedLabel]}>
+                      <Text
+                        style={[
+                          styles.label,
+                          energy === e.value && styles.selectedLabel,
+                        ]}
+                      >
                         {e.label.toUpperCase()}
                       </Text>
-                      <Text style={[styles.quote, energy === e.value && styles.selectedQuote]}>{e.quote}</Text>
+                      <Text
+                        style={[
+                          styles.quote,
+                          energy === e.value && styles.selectedQuote,
+                        ]}
+                      >
+                        {e.quote}
+                      </Text>
                       <Text style={styles.author}>— {e.author}</Text>
                     </View>
                   </Pressable>
@@ -249,9 +326,15 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 padding="lg"
                 style={styles.recommendation}
               >
-                <Text style={styles.recommendationTitle}>{recommendation.title}</Text>
-                <Text style={styles.recommendationSubtitle}>RECOMMENDED FOR YOU</Text>
-                <Text style={styles.recommendationText}>{recommendation.desc}</Text>
+                <Text style={styles.recommendationTitle}>
+                  {recommendation.title}
+                </Text>
+                <Text style={styles.recommendationSubtitle}>
+                  RECOMMENDED FOR YOU
+                </Text>
+                <Text style={styles.recommendationText}>
+                  {recommendation.desc}
+                </Text>
                 {insight && (
                   <View style={styles.insightBox}>
                     <Text style={styles.insightLabel}>AI_INSIGHT:</Text>
@@ -303,9 +386,11 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
-      ...(isCosmic && Platform.OS === 'web' ? {
-        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-      } : {}),
+      ...(isCosmic && Platform.OS === 'web'
+        ? {
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+          }
+        : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
@@ -352,21 +437,29 @@ const getStyles = (isCosmic: boolean) =>
     option: {
       padding: Tokens.spacing[5],
       borderRadius: isCosmic ? 20 : Tokens.radii.none,
-      backgroundColor: isCosmic ? 'rgba(14, 20, 40, 0.6)' : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic
+        ? 'rgba(14, 20, 40, 0.6)'
+        : Tokens.colors.neutral.darker,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           transition: 'all 0.2s ease',
           cursor: 'pointer',
-          ...(isCosmic ? {
-            backdropFilter: 'blur(8px)',
-          } : {}),
+          ...(isCosmic
+            ? {
+                backdropFilter: 'blur(8px)',
+              }
+            : {}),
         },
       }),
     },
     optionHovered: {
-      borderColor: isCosmic ? 'rgba(139, 92, 246, 0.5)' : Tokens.colors.text.tertiary,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.5)'
+        : Tokens.colors.text.tertiary,
       transform: [{ translateY: -2 }],
       ...Platform.select({
         web: {
@@ -382,15 +475,20 @@ const getStyles = (isCosmic: boolean) =>
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       borderTopColor: isCosmic ? '#A78BFA' : undefined, // Concept #43: Highlight
       borderTopWidth: isCosmic ? 2 : 1,
-      backgroundColor: isCosmic ? 'rgba(139, 92, 246, 0.18)' : Tokens.colors.brand[900],
+      backgroundColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.18)'
+        : Tokens.colors.brand[900],
       transform: [{ translateY: -4 }, { scale: 1.01 }],
       ...Tokens.elevation.none,
       ...Platform.select({
-        web: isCosmic ? {
-          boxShadow: '0 0 0 2px rgba(139,92,246,0.4), 0 0 20px rgba(139,92,246,0.25)',
-        } : {
-          boxShadow: '0 0 0 0',
-        },
+        web: isCosmic
+          ? {
+              boxShadow:
+                '0 0 0 2px rgba(139,92,246,0.4), 0 0 20px rgba(139,92,246,0.25)',
+            }
+          : {
+              boxShadow: '0 0 0 0',
+            },
       }),
     },
     optionContent: {
@@ -398,10 +496,14 @@ const getStyles = (isCosmic: boolean) =>
       gap: 2,
     },
     quote: {
-      fontFamily: isCosmic ? '"Space Grotesk", sans-serif' : Tokens.type.fontFamily.sans,
+      fontFamily: isCosmic
+        ? '"Space Grotesk", sans-serif'
+        : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
       fontStyle: 'italic',
-      color: isCosmic ? 'rgba(238, 242, 255, 0.78)' : Tokens.colors.text.secondary,
+      color: isCosmic
+        ? 'rgba(238, 242, 255, 0.78)'
+        : Tokens.colors.text.secondary,
       lineHeight: 22,
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[1],
@@ -455,7 +557,9 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[4],
     },
     insightBox: {
-      backgroundColor: isCosmic ? 'rgba(139, 92, 246, 0.1)' : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.1)'
+        : Tokens.colors.neutral.darkest,
       borderLeftWidth: 2,
       borderLeftColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       padding: Tokens.spacing[3],

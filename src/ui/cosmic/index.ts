@@ -1,6 +1,6 @@
 /**
  * Cosmic UI Components
- * 
+ *
  * Cosmic-themed UI primitives for the Spark ADHD redesign.
  * Import from this barrel file for all cosmic components.
  */

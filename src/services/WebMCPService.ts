@@ -15,7 +15,9 @@ class WebMCPService {
   private isInitialized = false;
 
   public init() {
-    if (this.isInitialized || Platform.OS !== 'web') return;
+    if (this.isInitialized || Platform.OS !== 'web') {
+      return;
+    }
 
     const registerTools = () => {
       const modelContext = (globalThis as any).navigator?.modelContext;
@@ -29,7 +31,8 @@ class WebMCPService {
       // ── 1. Start Timer ────────────────────────────────────────────────────
       modelContext.registerTool({
         name: 'start_timer',
-        description: 'Navigates to and starts a specific focus or breathing timer.',
+        description:
+          'Navigates to and starts a specific focus or breathing timer.',
         parameters: {
           type: 'object',
           properties: {
@@ -41,7 +44,11 @@ class WebMCPService {
           },
           required: ['timerType'],
         },
-        execute: async ({ timerType }: { timerType: 'pomodoro' | 'ignite' | 'anchor' }) => {
+        execute: async ({
+          timerType,
+        }: {
+          timerType: 'pomodoro' | 'ignite' | 'anchor';
+        }) => {
           agentEventBus.emit('timer:start', { timerType });
           agentEventBus.emit('navigate:screen', { screen: timerType });
           return { success: true, message: `${timerType} timer requested` };
@@ -105,10 +112,10 @@ class WebMCPService {
               timestamp: Date.now(),
               type: 'text',
             };
-            await StorageService.setJSON(StorageService.STORAGE_KEYS.brainDump, [
-              newItem,
-              ...items,
-            ]);
+            await StorageService.setJSON(
+              StorageService.STORAGE_KEYS.brainDump,
+              [newItem, ...items],
+            );
             agentEventBus.emit('braindump:add', { text });
             return { success: true, item: newItem };
           } catch (error) {

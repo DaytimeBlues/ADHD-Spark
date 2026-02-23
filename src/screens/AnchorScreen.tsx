@@ -12,7 +12,13 @@ import { LinearButton } from '../components/ui/LinearButton';
 import useTimer from '../hooks/useTimer';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
-import { CosmicBackground, ChronoDigits, RuneButton, HaloRing, GlowCard } from '../ui/cosmic';
+import {
+  ChronoDigits,
+  RuneButton,
+  HaloRing,
+  GlowCard,
+  CosmicBackground,
+} from '../ui/cosmic';
 
 type BreathingPattern = '478' | 'box' | 'energize';
 
@@ -40,9 +46,7 @@ const AnchorScreen = () => {
 
   const {
     timeLeft: count,
-    isRunning: isActive,
     start,
-    pause,
     reset,
     setTime,
   } = useTimer({
@@ -148,22 +152,40 @@ const AnchorScreen = () => {
             </Text>
           </View>
 
-          <GlowCard glow="soft" tone="base" padding="md" style={getStyles(isCosmic).rationaleCard}>
-            <Text style={getStyles(isCosmic).rationaleTitle}>WHY THIS WORKS</Text>
+          <GlowCard
+            glow="soft"
+            tone="base"
+            padding="md"
+            style={getStyles(isCosmic).rationaleCard}
+          >
+            <Text style={getStyles(isCosmic).rationaleTitle}>
+              WHY THIS WORKS
+            </Text>
             <Text style={getStyles(isCosmic).rationaleText}>
-              Emotional dysregulation is core to ADHD. These breathing patterns activate the parasympathetic nervous system, reducing cortisol and creating a pause between stimulus and response. CBT techniques for emotional regulation, made tangible through guided breath.
+              Emotional dysregulation is core to ADHD. These breathing patterns
+              activate the parasympathetic nervous system, reducing cortisol and
+              creating a pause between stimulus and response. CBT techniques for
+              emotional regulation, made tangible through guided breath.
             </Text>
           </GlowCard>
 
           {pattern && (
             <View style={getStyles(isCosmic).activeContainer}>
               <View style={getStyles(isCosmic).activeHeader}>
-                <Text style={getStyles(isCosmic).patternName}>{PATTERNS[pattern].name}</Text>
+                <Text style={getStyles(isCosmic).patternName}>
+                  {PATTERNS[pattern].name}
+                </Text>
               </View>
 
               <View style={getStyles(isCosmic).breathingCircle}>
                 {isCosmic ? (
-                  <HaloRing mode="breath" size={240} strokeWidth={6} glow="medium" testID="anchor-breathing-ring" />
+                  <HaloRing
+                    mode="breath"
+                    size={240}
+                    strokeWidth={6}
+                    glow="medium"
+                    testID="anchor-breathing-ring"
+                  />
                 ) : (
                   <View
                     style={[
@@ -173,16 +195,21 @@ const AnchorScreen = () => {
                   />
                 )}
                 <View style={getStyles(isCosmic).breathingOverlay}>
-                  <Text style={getStyles(isCosmic).phaseText}>{getPhaseText()}</Text>
+                  <Text style={getStyles(isCosmic).phaseText}>
+                    {getPhaseText()}
+                  </Text>
                   {isCosmic ? (
-                    <ChronoDigits 
-                      value={count.toString().padStart(2, '0')} 
-                      size="hero" 
+                    <ChronoDigits
+                      value={count.toString().padStart(2, '0')}
+                      size="hero"
                       glow="medium"
                       testID="anchor-count"
                     />
                   ) : (
-                    <Text testID="anchor-count" style={getStyles(isCosmic).countText}>
+                    <Text
+                      testID="anchor-count"
+                      style={getStyles(isCosmic).countText}
+                    >
                       {count}
                     </Text>
                   )}
@@ -190,7 +217,7 @@ const AnchorScreen = () => {
               </View>
 
               {isCosmic ? (
-                <RuneButton 
+                <RuneButton
                   onPress={stopPattern}
                   variant="danger"
                   size="lg"
@@ -295,9 +322,11 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
-      ...(isCosmic && Platform.OS === 'web' ? {
-        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-      } : {}),
+      ...(isCosmic && Platform.OS === 'web'
+        ? {
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+          }
+        : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
@@ -410,7 +439,9 @@ const getStyles = (isCosmic: boolean) =>
       width: Tokens.spacing[12],
       height: Tokens.spacing[12],
       borderRadius: isCosmic ? Tokens.radii.md : 0,
-      backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic
+        ? 'rgba(11, 16, 34, 0.5)'
+        : Tokens.colors.neutral.dark,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: Tokens.spacing[4],

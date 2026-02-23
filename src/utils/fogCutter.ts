@@ -47,13 +47,17 @@ export const ensureSingleNext = (steps: MicroStep[]): MicroStep[] => {
 
 export const advanceTaskProgress = <
   T extends { microSteps: MicroStep[]; completed: boolean },
->(task: T): T => {
+>(
+  task: T,
+): T => {
   if (task.completed || task.microSteps.length === 0) {
     return task;
   }
 
   const steps = [...task.microSteps];
-  const inProgressIndex = steps.findIndex((step) => step.status === 'in_progress');
+  const inProgressIndex = steps.findIndex(
+    (step) => step.status === 'in_progress',
+  );
 
   if (inProgressIndex >= 0) {
     steps[inProgressIndex] = {
@@ -63,7 +67,9 @@ export const advanceTaskProgress = <
   } else {
     const nextIndex = steps.findIndex((step) => step.status === 'next');
     const fallbackIndex =
-      nextIndex >= 0 ? nextIndex : steps.findIndex((step) => step.status === 'new');
+      nextIndex >= 0
+        ? nextIndex
+        : steps.findIndex((step) => step.status === 'new');
 
     if (fallbackIndex >= 0) {
       steps[fallbackIndex] = {

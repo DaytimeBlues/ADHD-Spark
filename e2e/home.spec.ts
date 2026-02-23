@@ -37,11 +37,11 @@ test.describe('Home Screen', () => {
 
     await page.getByTestId('mode-fogcutter').click({ force: true });
     await expect(page.getByText('FOG_CUTTER')).toBeVisible({ timeout: 15000 });
-    await expect(page.getByPlaceholder('> INPUT_OVERWHELMING_TASK')).toBeVisible(
-      {
-        timeout: 15000,
-      },
-    );
+    await expect(
+      page.getByPlaceholder('> INPUT_OVERWHELMING_TASK'),
+    ).toBeVisible({
+      timeout: 15000,
+    });
   });
 
   test('should display bottom tab navigation', async ({ page }) => {

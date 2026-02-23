@@ -443,8 +443,7 @@ class GoogleTasksSyncServiceClass {
       if (error.status === 429) {
         return {
           code: 'rate_limited',
-          message:
-            'Google API rate limit reached. Try sync again in a moment.',
+          message: 'Google API rate limit reached. Try sync again in a moment.',
           authRequired: false,
         };
       }
@@ -685,7 +684,9 @@ class GoogleTasksSyncServiceClass {
     }
   }
 
-  async syncSortedItemsToGoogle(items: SortedItem[]): Promise<GoogleExportResult> {
+  async syncSortedItemsToGoogle(
+    items: SortedItem[],
+  ): Promise<GoogleExportResult> {
     const result: GoogleExportResult = {
       createdTasks: 0,
       createdEvents: 0,
@@ -769,7 +770,11 @@ class GoogleTasksSyncServiceClass {
         normalizedItem.category === 'task' ||
         normalizedItem.category === 'reminder'
       ) {
-        const taskCreated = await this.createTask(accessToken, listId, normalizedItem);
+        const taskCreated = await this.createTask(
+          accessToken,
+          listId,
+          normalizedItem,
+        );
         if (taskCreated) {
           result.createdTasks += 1;
           exportedSet.add(fingerprint);

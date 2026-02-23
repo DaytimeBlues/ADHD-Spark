@@ -14,7 +14,13 @@ import StorageService from './StorageService';
 // TYPES
 // ============================================================================
 
-export type CaptureSource = 'voice' | 'text' | 'photo' | 'paste' | 'meeting' | 'checkin';
+export type CaptureSource =
+  | 'voice'
+  | 'text'
+  | 'photo'
+  | 'paste'
+  | 'meeting'
+  | 'checkin';
 export type CaptureStatus = 'unreviewed' | 'promoted' | 'discarded';
 
 export interface CaptureItem {
@@ -77,7 +83,8 @@ class CaptureServiceClass {
    */
   async getAll(filter?: { status?: CaptureStatus }): Promise<CaptureItem[]> {
     try {
-      const items = await StorageService.getJSON<CaptureItem[]>(CAPTURE_INBOX_KEY);
+      const items =
+        await StorageService.getJSON<CaptureItem[]>(CAPTURE_INBOX_KEY);
       if (!items) {
         return [];
       }
@@ -129,7 +136,8 @@ class CaptureServiceClass {
     } catch (error) {
       console.error('[CaptureService] save error:', error);
       // Still return the item — the UI should show a sync error
-      item.syncError = error instanceof Error ? error.message : 'Unknown storage error';
+      item.syncError =
+        error instanceof Error ? error.message : 'Unknown storage error';
     }
 
     return item;
@@ -226,7 +234,9 @@ class CaptureServiceClass {
     // Immediately emit current count
     this.getUnreviewedCount()
       .then((count) => callback(count))
-      .catch((err) => console.error('[CaptureService] subscribe init error:', err));
+      .catch((err) =>
+        console.error('[CaptureService] subscribe init error:', err),
+      );
 
     return () => {
       this.subscribers.delete(callback);

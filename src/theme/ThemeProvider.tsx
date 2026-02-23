@@ -1,18 +1,25 @@
 /**
  * ThemeProvider
- * 
+ *
  * React Context provider for theme management with AsyncStorage persistence.
  * Provides resolved tokens based on current theme variant.
  */
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 import { LinearTokens } from './linearTokens';
 import { CosmicTokens } from './cosmicTokens';
-import { 
-  ThemeVariant, 
-  migrateThemeVariant, 
+import {
+  ThemeVariant,
+  migrateThemeVariant,
   DEFAULT_THEME_VARIANT,
-  THEME_METADATA 
+  THEME_METADATA,
 } from './themeVariant';
 
 // ============================================================================
@@ -25,24 +32,24 @@ import {
 export interface ThemeContextValue {
   /** Current theme variant */
   variant: ThemeVariant;
-  
+
   /** Set theme variant and persist to storage */
   setVariant: (variant: ThemeVariant) => Promise<void>;
-  
+
   /** Resolved token set for current theme */
   t: typeof LinearTokens | typeof CosmicTokens;
-  
+
   /** Convenience flag for cosmic theme */
   isCosmic: boolean;
-  
+
   /** Convenience flag for linear theme */
   isLinear: boolean;
-  
+
   /** Whether theme has been loaded from storage */
   isLoaded: boolean;
-  
+
   /** Theme metadata for UI display */
-  metadata: typeof THEME_METADATA[ThemeVariant];
+  metadata: (typeof THEME_METADATA)[ThemeVariant];
 }
 
 // ============================================================================
@@ -64,7 +71,7 @@ const fallbackThemeContextValue: ThemeContextValue = {
 const getStorageService = () => {
   try {
     // Lazy load to avoid test environment AsyncStorage module resolution failures
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+
     const mod = require('../services/StorageService');
     return mod.default as {
       get: (key: string) => Promise<string | null>;
@@ -83,7 +90,7 @@ const getStorageService = () => {
 /**
  * Hook to access theme context
  * Must be used within ThemeProvider
- * 
+ *
  * @example
  * function MyComponent() {
  *   const { variant, setVariant, t, isCosmic } = useTheme();
@@ -107,10 +114,10 @@ interface ThemeProviderProps {
 
 /**
  * Theme Provider Component
- * 
+ *
  * Manages theme state with AsyncStorage persistence.
  * Wrap your app with this provider to enable theme switching.
- * 
+ *
  * @example
  * function App() {
  *   return (
@@ -122,15 +129,20 @@ interface ThemeProviderProps {
  *   );
  * }
  */
-export function ThemeProvider({ children, initialVariant }: ThemeProviderProps): JSX.Element {
+export function ThemeProvider({
+  children,
+  initialVariant,
+}: ThemeProviderProps): JSX.Element {
   // Theme state
-  const [variant, setVariantState] = useState<ThemeVariant>(DEFAULT_THEME_VARIANT);
+  const [variant, setVariantState] = useState<ThemeVariant>(
+    DEFAULT_THEME_VARIANT,
+  );
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load theme from storage on mount
   useEffect(() => {
     let isMounted = true;
-    
+
     async function loadTheme() {
       try {
         // Check if initial variant was provided
@@ -141,14 +153,14 @@ export function ThemeProvider({ children, initialVariant }: ThemeProviderProps):
           }
           return;
         }
-        
+
         // Read from storage
         const storageService = getStorageService();
         const storedValue = storageService
           ? await storageService.get(storageService.STORAGE_KEYS.theme)
           : null;
         const resolvedVariant = migrateThemeVariant(storedValue);
-        
+
         if (isMounted) {
           setVariantState(resolvedVariant);
           setIsLoaded(true);
@@ -161,9 +173,9 @@ export function ThemeProvider({ children, initialVariant }: ThemeProviderProps):
         }
       }
     }
-    
+
     loadTheme();
-    
+
     return () => {
       isMounted = false;
     };
@@ -174,7 +186,7 @@ export function ThemeProvider({ children, initialVariant }: ThemeProviderProps):
     try {
       // Update state immediately for responsive UI
       setVariantState(newVariant);
-      
+
       // Persist to storage
       const storageService = getStorageService();
       if (storageService) {
@@ -199,15 +211,18 @@ export function ThemeProvider({ children, initialVariant }: ThemeProviderProps):
   const metadata = THEME_METADATA[variant];
 
   // Context value
-  const contextValue: ThemeContextValue = useMemo(() => ({
-    variant,
-    setVariant,
-    t: tokens,
-    isCosmic,
-    isLinear,
-    isLoaded,
-    metadata,
-  }), [variant, setVariant, tokens, isCosmic, isLinear, isLoaded, metadata]);
+  const contextValue: ThemeContextValue = useMemo(
+    () => ({
+      variant,
+      setVariant,
+      t: tokens,
+      isCosmic,
+      isLinear,
+      isLoaded,
+      metadata,
+    }),
+    [variant, setVariant, tokens, isCosmic, isLinear, isLoaded, metadata],
+  );
 
   return (
     <ThemeContext.Provider value={contextValue}>
@@ -225,7 +240,7 @@ export function ThemeProvider({ children, initialVariant }: ThemeProviderProps):
  * Alternative to useTheme hook for class components
  */
 export function withTheme<P extends object>(
-  Component: React.ComponentType<P & { theme: ThemeContextValue }>
+  Component: React.ComponentType<P & { theme: ThemeContextValue }>,
 ): React.FC<P> {
   return function WithThemeWrapper(props: P) {
     const theme = useTheme();
@@ -236,24 +251,5 @@ export function withTheme<P extends object>(
 // ============================================================================
 // DEBUG UTILITIES (development only)
 // ============================================================================
-
-if (__DEV__) {
-  // Expose theme debugging on global object in development
-  (globalThis as any).__THEME_DEBUG__ = {
-    getVariant: () => {
-      try {
-        // This will only work if called within a component
-        // Useful for debugging in console
-        return 'Call useTheme() from within a component';
-      } catch {
-        return 'Not within ThemeProvider';
-      }
-    },
-    getTokens: () => ({
-      linear: LinearTokens,
-      cosmic: CosmicTokens,
-    }),
-  };
-}
 
 export default ThemeProvider;

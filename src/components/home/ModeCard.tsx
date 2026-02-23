@@ -54,20 +54,20 @@ function ModeCardComponent({
 
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
-      ? {
-        borderColor: mode.accent,
-        boxShadow: `0 8px 24px rgba(7,7,18,0.4), 0 0 16px ${mode.accent}20`,
-      } as any
+      ? ({
+          borderColor: mode.accent,
+          boxShadow: `0 8px 24px rgba(7,7,18,0.4), 0 0 16px ${mode.accent}20`,
+        } as any)
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && isFocused
-      ? {
-        outlineColor: mode.accent,
-        outlineStyle: 'solid',
-        outlineWidth: 2,
-        outlineOffset: 2,
-      } as any
+      ? ({
+          outlineColor: mode.accent,
+          outlineStyle: 'solid',
+          outlineWidth: 2,
+          outlineOffset: 2,
+        } as any)
       : undefined;
 
   const handlePress = useCallback(() => {
@@ -90,10 +90,12 @@ function ModeCardComponent({
         style={({ pressed }) => [
           styles.card,
           { borderTopColor: mode.accent },
-          Platform.OS === 'web' && {
-            cursor: 'pointer',
-            transition: 'border-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
-          } as any,
+          Platform.OS === 'web' &&
+            ({
+              cursor: 'pointer',
+              transition:
+                'border-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
+            } as any),
           pressed && { opacity: 0.9, transform: [{ scale: 0.97 }] },
           hoverStyle,
           focusStyle,

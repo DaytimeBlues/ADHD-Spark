@@ -28,11 +28,13 @@ const RetentionService = {
     const today = getDateOnly(now.toISOString());
     const [lastUseDate, streakRaw, graceWindowStart, graceDaysUsedRaw] =
       await Promise.all([
-      StorageService.get(StorageService.STORAGE_KEYS.lastUseDate),
-      StorageService.get(StorageService.STORAGE_KEYS.streakCount),
-      StorageService.get(StorageService.STORAGE_KEYS.retentionGraceWindowStart),
-      StorageService.get(StorageService.STORAGE_KEYS.retentionGraceDaysUsed),
-    ]);
+        StorageService.get(StorageService.STORAGE_KEYS.lastUseDate),
+        StorageService.get(StorageService.STORAGE_KEYS.streakCount),
+        StorageService.get(
+          StorageService.STORAGE_KEYS.retentionGraceWindowStart,
+        ),
+        StorageService.get(StorageService.STORAGE_KEYS.retentionGraceDaysUsed),
+      ]);
 
     const currentStreak = Number.parseInt(streakRaw ?? '0', 10) || 0;
     const activeWindowStart =
@@ -74,7 +76,9 @@ const RetentionService = {
       diff === 2 && graceDaysUsed < GRACE_DAYS_PER_WINDOW && currentStreak > 0;
     const nextStreak =
       diff === 1 || canUseGraceDay ? Math.max(1, currentStreak + 1) : 1;
-    const nextGraceDaysUsed = canUseGraceDay ? graceDaysUsed + 1 : graceDaysUsed;
+    const nextGraceDaysUsed = canUseGraceDay
+      ? graceDaysUsed + 1
+      : graceDaysUsed;
 
     if (typeof StorageService.set === 'function') {
       await Promise.all([
@@ -97,7 +101,9 @@ const RetentionService = {
     return nextStreak;
   },
 
-  async getReentryPromptLevel(now: Date = new Date()): Promise<ReentryPromptLevel> {
+  async getReentryPromptLevel(
+    now: Date = new Date(),
+  ): Promise<ReentryPromptLevel> {
     const lastUseDate = await StorageService.get(
       StorageService.STORAGE_KEYS.lastUseDate,
     );

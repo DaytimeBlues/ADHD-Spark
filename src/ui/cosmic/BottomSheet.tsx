@@ -164,10 +164,7 @@ export const BottomSheet = memo(function BottomSheet({
 
       {/* Sheet */}
       <Animated.View
-        style={[
-          styles.sheetWrapper,
-          { transform: [{ translateY }] },
-        ]}
+        style={[styles.sheetWrapper, { transform: [{ translateY }] }]}
         pointerEvents="box-none"
       >
         <View
@@ -178,9 +175,11 @@ export const BottomSheet = memo(function BottomSheet({
               backgroundColor: sheetBackground,
               borderColor,
               maxHeight,
-              ...(Platform.OS === 'web' && {
-                boxShadow: '0 -8px 40px rgba(7, 7, 18, 0.7), 0 0 0 1px rgba(139, 92, 246, 0.15)',
-              } as ViewStyle),
+              ...(Platform.OS === 'web' &&
+                ({
+                  boxShadow:
+                    '0 -8px 40px rgba(7, 7, 18, 0.7), 0 0 0 1px rgba(139, 92, 246, 0.15)',
+                } as ViewStyle)),
             },
             style,
           ]}
@@ -190,7 +189,11 @@ export const BottomSheet = memo(function BottomSheet({
             <View
               style={[
                 styles.handle,
-                { backgroundColor: isCosmic ? 'rgba(185, 194, 217, 0.3)' : 'rgba(255,255,255,0.2)' },
+                {
+                  backgroundColor: isCosmic
+                    ? 'rgba(185, 194, 217, 0.3)'
+                    : 'rgba(255,255,255,0.2)',
+                },
               ]}
             />
           </View>
@@ -203,7 +206,11 @@ export const BottomSheet = memo(function BottomSheet({
                   <Text
                     style={[
                       styles.headerTitle,
-                      { color: isCosmic ? textColors.secondary : 'rgba(255,255,255,0.6)' },
+                      {
+                        color: isCosmic
+                          ? textColors.secondary
+                          : 'rgba(255,255,255,0.6)',
+                      },
                     ]}
                   >
                     {title}
@@ -222,7 +229,11 @@ export const BottomSheet = memo(function BottomSheet({
                   <Text
                     style={[
                       styles.closeIcon,
-                      { color: isCosmic ? textColors.muted : 'rgba(255,255,255,0.4)' },
+                      {
+                        color: isCosmic
+                          ? textColors.muted
+                          : 'rgba(255,255,255,0.4)',
+                      },
                     ]}
                   >
                     ✕

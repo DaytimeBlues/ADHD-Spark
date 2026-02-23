@@ -52,7 +52,8 @@ export const CADDI_SOURCES: CaddiEvidenceSource[] = [
   {
     id: 'caddi-qual-2024',
     label: 'QUALITATIVE',
-    title: "Clients' perceptions of group CBT for ADHD inattentive presentation",
+    title:
+      "Clients' perceptions of group CBT for ADHD inattentive presentation",
     tier: 'B',
     sourceType: 'qualitative',
     claimStrength: 'practice-informed',

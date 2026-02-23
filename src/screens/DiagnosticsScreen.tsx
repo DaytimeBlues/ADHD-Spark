@@ -40,7 +40,7 @@ type NavigationNode = {
 };
 
 const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
-  const { isCosmic, setVariant, variant } = useTheme();
+  const { variant, setVariant } = useTheme();
   const [diagnostics, setDiagnostics] = useState<DiagnosticEntry[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [backupJson, setBackupJson] = useState('');
@@ -459,273 +459,289 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     <CosmicBackground variant="ridge" dimmer>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-            accessibilityLabel="Go back"
-            accessibilityRole="button"
-          >
-            <Text style={styles.backButtonText}>← BACK</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>DIAGNOSTICS</Text>
-          <TouchableOpacity
-            onPress={handleRefresh}
-            style={styles.refreshButton}
-            disabled={isRefreshing}
-            accessibilityLabel="Refresh diagnostics"
-            accessibilityRole="button"
-          >
-            <Text
-              style={[
-                styles.refreshButtonText,
-                isRefreshing && styles.refreshButtonTextDisabled,
-              ]}
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+              accessibilityLabel="Go back"
+              accessibilityRole="button"
             >
-              {isRefreshing ? '...' : '↻'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text style={styles.backButtonText}>← BACK</Text>
+            </TouchableOpacity>
+            <Text style={styles.title}>DIAGNOSTICS</Text>
+            <TouchableOpacity
+              onPress={handleRefresh}
+              style={styles.refreshButton}
+              disabled={isRefreshing}
+              accessibilityLabel="Refresh diagnostics"
+              accessibilityRole="button"
+            >
+              <Text
+                style={[
+                  styles.refreshButtonText,
+                  isRefreshing && styles.refreshButtonTextDisabled,
+                ]}
+              >
+                {isRefreshing ? '...' : '↻'}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Diagnostics list */}
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-        >
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>SYSTEM STATUS</Text>
-            {diagnostics.map((entry, index) => (
-              <View key={index} style={styles.diagRow}>
-                <View style={styles.diagLabelContainer}>
+          {/* Diagnostics list */}
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+          >
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>SYSTEM STATUS</Text>
+              {diagnostics.map((entry, index) => (
+                <View key={index} style={styles.diagRow}>
+                  <View style={styles.diagLabelContainer}>
+                    <Text
+                      style={[
+                        styles.diagIndicator,
+                        { color: getStatusColor(entry.status) },
+                      ]}
+                    >
+                      {getStatusIndicator(entry.status)}
+                    </Text>
+                    <Text style={styles.diagLabel}>{entry.label}</Text>
+                  </View>
                   <Text
                     style={[
-                      styles.diagIndicator,
+                      styles.diagValue,
                       { color: getStatusColor(entry.status) },
                     ]}
+                    numberOfLines={2}
                   >
-                    {getStatusIndicator(entry.status)}
+                    {entry.value}
                   </Text>
-                  <Text style={styles.diagLabel}>{entry.label}</Text>
                 </View>
-                <Text
-                  style={[
-                    styles.diagValue,
-                    { color: getStatusColor(entry.status) },
-                  ]}
-                  numberOfLines={2}
-                >
-                  {entry.value}
-                </Text>
-              </View>
-            ))}
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>SETUP INSTRUCTIONS</Text>
-            <Text style={styles.instructionText}>
-              To enable Google Tasks/Calendar sync:
-            </Text>
-            <Text style={styles.instructionStep}>
-              1. Create a Firebase project at console.firebase.google.com
-            </Text>
-            <Text style={styles.instructionStep}>
-              2. Add Android app with package ID: com.sparkadhd
-            </Text>
-            <Text style={styles.instructionStep}>
-              3. Download google-services.json to android/app/
-            </Text>
-            <Text style={styles.instructionStep}>
-              4. Enable Google Tasks API in Google Cloud Console
-            </Text>
-            <Text style={styles.instructionStep}>
-              5. Set REACT_APP_GOOGLE_WEB_CLIENT_ID environment variable
-            </Text>
-            <Text style={styles.instructionStep}>6. Rebuild the app</Text>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>DATA BACKUP</Text>
-            <Text style={styles.instructionText}>
-              Export local data as JSON and import it later to restore this
-              device state.
-            </Text>
-            <Text style={styles.backupMetaText}>
-              LAST EXPORT:{' '}
-              {lastBackupExportAt
-                ? new Date(lastBackupExportAt).toLocaleString()
-                : 'NEVER'}
-            </Text>
-
-            <View style={styles.modeSelectorContainer}>
-              <TouchableOpacity
-                onPress={() => setImportMode('overwrite')}
-                style={[
-                  styles.modeButton,
-                  importMode === 'overwrite' && styles.modeButtonActive,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Set import mode to overwrite"
-                testID="import-mode-overwrite"
-              >
-                <Text
-                  style={[
-                    styles.modeButtonText,
-                    importMode === 'overwrite' && styles.modeButtonTextActive,
-                  ]}
-                >
-                  OVERWRITE
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setImportMode('merge')}
-                style={[
-                  styles.modeButton,
-                  importMode === 'merge' && styles.modeButtonActive,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Set import mode to merge"
-                testID="import-mode-merge"
-              >
-                <Text
-                  style={[
-                    styles.modeButtonText,
-                    importMode === 'merge' && styles.modeButtonTextActive,
-                  ]}
-                >
-                  MERGE
-                </Text>
-              </TouchableOpacity>
+              ))}
             </View>
 
-            <View style={styles.backupActionsRow}>
-              <TouchableOpacity
-                testID="diagnostics-export-backup"
-                onPress={handleExportBackup}
-                disabled={isBackupBusy}
-                style={[
-                  styles.backupButton,
-                  isBackupBusy && styles.backupButtonDisabled,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Export backup JSON"
-              >
-                <Text style={styles.backupButtonText}>EXPORT JSON</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                testID="diagnostics-import-backup"
-                onPress={handleImportBackupPress}
-                disabled={isBackupBusy || !backupJson.trim()}
-                style={[
-                  styles.backupButton,
-                  (isBackupBusy || !backupJson.trim()) &&
-                    styles.backupButtonDisabled,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Import backup JSON"
-              >
-                <Text style={styles.backupButtonText}>IMPORT JSON</Text>
-              </TouchableOpacity>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>SETUP INSTRUCTIONS</Text>
+              <Text style={styles.instructionText}>
+                To enable Google Tasks/Calendar sync:
+              </Text>
+              <Text style={styles.instructionStep}>
+                1. Create a Firebase project at console.firebase.google.com
+              </Text>
+              <Text style={styles.instructionStep}>
+                2. Add Android app with package ID: com.sparkadhd
+              </Text>
+              <Text style={styles.instructionStep}>
+                3. Download google-services.json to android/app/
+              </Text>
+              <Text style={styles.instructionStep}>
+                4. Enable Google Tasks API in Google Cloud Console
+              </Text>
+              <Text style={styles.instructionStep}>
+                5. Set REACT_APP_GOOGLE_WEB_CLIENT_ID environment variable
+              </Text>
+              <Text style={styles.instructionStep}>6. Rebuild the app</Text>
             </View>
 
-            <TextInput
-              testID="diagnostics-backup-input"
-              style={styles.backupInput}
-              value={backupJson}
-              onChangeText={setBackupJson}
-              multiline
-              placeholder="Paste backup JSON here"
-              placeholderTextColor={Tokens.colors.text.placeholder}
-              textAlignVertical="top"
-              accessibilityLabel="Backup JSON input"
-            />
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>DATA BACKUP</Text>
+              <Text style={styles.instructionText}>
+                Export local data as JSON and import it later to restore this
+                device state.
+              </Text>
+              <Text style={styles.backupMetaText}>
+                LAST EXPORT:{' '}
+                {lastBackupExportAt
+                  ? new Date(lastBackupExportAt).toLocaleString()
+                  : 'NEVER'}
+              </Text>
 
-            {backupStatus ? (
-              <Text style={styles.backupStatusText}>{backupStatus}</Text>
-            ) : null}
-          </View>
-
-          {/* Appearance / Theme Toggle */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>APPEARANCE</Text>
-            <GlowCard
-              glow={variant === 'linear' ? 'soft' : 'none'}
-              onPress={() => setVariant('linear')}
-              style={styles.themeOption}
-              accessibilityLabel="Select Linear theme"
-              accessibilityRole="button"
-              accessibilityState={{ selected: variant === 'linear' }}
-            >
-              <View style={styles.themeOptionContent}>
-                <View style={styles.themePreview}>
-                  <View
+              <View style={styles.modeSelectorContainer}>
+                <TouchableOpacity
+                  onPress={() => setImportMode('overwrite')}
+                  style={[
+                    styles.modeButton,
+                    importMode === 'overwrite' && styles.modeButtonActive,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Set import mode to overwrite"
+                  testID="import-mode-overwrite"
+                >
+                  <Text
                     style={[
-                      styles.themePreviewBox,
-                      { backgroundColor: THEME_METADATA.linear.preview.background },
+                      styles.modeButtonText,
+                      importMode === 'overwrite' && styles.modeButtonTextActive,
                     ]}
                   >
-                    <View
-                      style={[
-                        styles.themePreviewAccent,
-                        { backgroundColor: THEME_METADATA.linear.preview.accent },
-                      ]}
-                    />
-                  </View>
-                </View>
-                <View style={styles.themeText}>
-                  <Text style={styles.themeTitle}>{THEME_METADATA.linear.label}</Text>
-                  <Text style={styles.themeDescription}>
-                    {THEME_METADATA.linear.description}
+                    OVERWRITE
                   </Text>
-                </View>
-                {variant === 'linear' && (
-                  <Text style={styles.checkmark}>✓</Text>
-                )}
-              </View>
-            </GlowCard>
-
-            <View style={{ height: 8 }} />
-
-            <GlowCard
-              glow={variant === 'cosmic' ? 'soft' : 'none'}
-              onPress={() => setVariant('cosmic')}
-              style={styles.themeOption}
-              accessibilityLabel="Select Cosmic theme"
-              accessibilityRole="button"
-              accessibilityState={{ selected: variant === 'cosmic' }}
-            >
-              <View style={styles.themeOptionContent}>
-                <View style={styles.themePreview}>
-                  <View
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setImportMode('merge')}
+                  style={[
+                    styles.modeButton,
+                    importMode === 'merge' && styles.modeButtonActive,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Set import mode to merge"
+                  testID="import-mode-merge"
+                >
+                  <Text
                     style={[
-                      styles.themePreviewBox,
-                      { backgroundColor: THEME_METADATA.cosmic.preview.background },
+                      styles.modeButtonText,
+                      importMode === 'merge' && styles.modeButtonTextActive,
                     ]}
                   >
+                    MERGE
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.backupActionsRow}>
+                <TouchableOpacity
+                  testID="diagnostics-export-backup"
+                  onPress={handleExportBackup}
+                  disabled={isBackupBusy}
+                  style={[
+                    styles.backupButton,
+                    isBackupBusy && styles.backupButtonDisabled,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Export backup JSON"
+                >
+                  <Text style={styles.backupButtonText}>EXPORT JSON</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  testID="diagnostics-import-backup"
+                  onPress={handleImportBackupPress}
+                  disabled={isBackupBusy || !backupJson.trim()}
+                  style={[
+                    styles.backupButton,
+                    (isBackupBusy || !backupJson.trim()) &&
+                      styles.backupButtonDisabled,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Import backup JSON"
+                >
+                  <Text style={styles.backupButtonText}>IMPORT JSON</Text>
+                </TouchableOpacity>
+              </View>
+
+              <TextInput
+                testID="diagnostics-backup-input"
+                style={styles.backupInput}
+                value={backupJson}
+                onChangeText={setBackupJson}
+                multiline
+                placeholder="Paste backup JSON here"
+                placeholderTextColor={Tokens.colors.text.placeholder}
+                textAlignVertical="top"
+                accessibilityLabel="Backup JSON input"
+              />
+
+              {backupStatus ? (
+                <Text style={styles.backupStatusText}>{backupStatus}</Text>
+              ) : null}
+            </View>
+
+            {/* Appearance / Theme Toggle */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>APPEARANCE</Text>
+              <GlowCard
+                glow={variant === 'linear' ? 'soft' : 'none'}
+                onPress={() => setVariant('linear')}
+                style={styles.themeOption}
+                accessibilityLabel="Select Linear theme"
+                accessibilityRole="button"
+                accessibilityState={{ selected: variant === 'linear' }}
+              >
+                <View style={styles.themeOptionContent}>
+                  <View style={styles.themePreview}>
                     <View
                       style={[
-                        styles.themePreviewAccent,
-                        { backgroundColor: THEME_METADATA.cosmic.preview.accent },
+                        styles.themePreviewBox,
+                        {
+                          backgroundColor:
+                            THEME_METADATA.linear.preview.background,
+                        },
                       ]}
-                    />
+                    >
+                      <View
+                        style={[
+                          styles.themePreviewAccent,
+                          {
+                            backgroundColor:
+                              THEME_METADATA.linear.preview.accent,
+                          },
+                        ]}
+                      />
+                    </View>
                   </View>
+                  <View style={styles.themeText}>
+                    <Text style={styles.themeTitle}>
+                      {THEME_METADATA.linear.label}
+                    </Text>
+                    <Text style={styles.themeDescription}>
+                      {THEME_METADATA.linear.description}
+                    </Text>
+                  </View>
+                  {variant === 'linear' && (
+                    <Text style={styles.checkmark}>✓</Text>
+                  )}
                 </View>
-                <View style={styles.themeText}>
-                  <Text style={styles.themeTitle}>{THEME_METADATA.cosmic.label}</Text>
-                  <Text style={styles.themeDescription}>
-                    {THEME_METADATA.cosmic.description}
-                  </Text>
+              </GlowCard>
+
+              <View style={{ height: 8 }} />
+
+              <GlowCard
+                glow={variant === 'cosmic' ? 'soft' : 'none'}
+                onPress={() => setVariant('cosmic')}
+                style={styles.themeOption}
+                accessibilityLabel="Select Cosmic theme"
+                accessibilityRole="button"
+                accessibilityState={{ selected: variant === 'cosmic' }}
+              >
+                <View style={styles.themeOptionContent}>
+                  <View style={styles.themePreview}>
+                    <View
+                      style={[
+                        styles.themePreviewBox,
+                        {
+                          backgroundColor:
+                            THEME_METADATA.cosmic.preview.background,
+                        },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.themePreviewAccent,
+                          {
+                            backgroundColor:
+                              THEME_METADATA.cosmic.preview.accent,
+                          },
+                        ]}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.themeText}>
+                    <Text style={styles.themeTitle}>
+                      {THEME_METADATA.cosmic.label}
+                    </Text>
+                    <Text style={styles.themeDescription}>
+                      {THEME_METADATA.cosmic.description}
+                    </Text>
+                  </View>
+                  {variant === 'cosmic' && (
+                    <Text style={styles.checkmark}>✓</Text>
+                  )}
                 </View>
-                {variant === 'cosmic' && (
-                  <Text style={styles.checkmark}>✓</Text>
-                )}
-              </View>
-            </GlowCard>
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+              </GlowCard>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     </CosmicBackground>
   );
 };

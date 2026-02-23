@@ -74,7 +74,10 @@ describe('handleOverlayIntent', () => {
 
   it('normalizes legacy "BrainDump" route to ROUTES.TASKS', () => {
     const { handleOverlayIntent } = loadNavigationRefModule();
-    const result = handleOverlayIntent({ route: 'BrainDump', autoRecord: true });
+    const result = handleOverlayIntent({
+      route: 'BrainDump',
+      autoRecord: true,
+    });
 
     expect(result).toBe(true);
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.TASKS, {

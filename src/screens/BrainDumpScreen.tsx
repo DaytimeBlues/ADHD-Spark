@@ -31,7 +31,7 @@ import { generateId } from '../utils/helpers';
 import { normalizeMicroSteps } from '../utils/fogCutter';
 import { LinearButton } from '../components/ui/LinearButton';
 import { EmptyState } from '../components/ui/EmptyState';
-import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
+import { CosmicBackground, GlowCard } from '../ui/cosmic';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
 
@@ -527,20 +527,23 @@ const BrainDumpScreen = () => {
           </View>
 
           {isCosmic ? (
-            <GlowCard
-              style={styles.rationaleCard}
-              testID="rationale-card"
-            >
+            <GlowCard style={styles.rationaleCard} testID="rationale-card">
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
-                Cognitive offloading is essential for ADHD working memory. Externalizing thoughts reduces mental clutter and prevents thought chasing. CBT/CADDI uses this to create space for prioritization and prevent overwhelm from competing demands.
+                Cognitive offloading is essential for ADHD working memory.
+                Externalizing thoughts reduces mental clutter and prevents
+                thought chasing. CBT/CADDI uses this to create space for
+                prioritization and prevent overwhelm from competing demands.
               </Text>
             </GlowCard>
           ) : (
             <View style={styles.rationaleCard}>
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
-                Cognitive offloading is essential for ADHD working memory. Externalizing thoughts reduces mental clutter and prevents thought chasing. CBT/CADDI uses this to create space for prioritization and prevent overwhelm from competing demands.
+                Cognitive offloading is essential for ADHD working memory.
+                Externalizing thoughts reduces mental clutter and prevents
+                thought chasing. CBT/CADDI uses this to create space for
+                prioritization and prevent overwhelm from competing demands.
               </Text>
             </View>
           )}
@@ -709,63 +712,74 @@ const BrainDumpScreen = () => {
 
           {sortingError && <Text style={styles.errorText}>{sortingError}</Text>}
 
-          {!isLoading && groupedSortedItems.length > 0 && (
-            isCosmic ? (
-              <GlowCard style={styles.sortedSection} testID="ai-analysis-section">
+          {!isLoading &&
+            groupedSortedItems.length > 0 &&
+            (isCosmic ? (
+              <GlowCard
+                style={styles.sortedSection}
+                testID="ai-analysis-section"
+              >
                 <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
-                {groupedSortedItems.map(({ category, items: categoryItems }) => (
-                  <View key={category} style={styles.sortedGroup}>
-                    <Text style={styles.sortedCategory}>
-                      {category.toUpperCase()}
-                    </Text>
-                    {categoryItems.map((item, index) => (
-                      <View
-                        key={`${category}-${index}-${item.text}`}
-                        style={styles.sortedItemRow}
-                      >
-                        <Text style={styles.sortedItemText}>{item.text}</Text>
+                {groupedSortedItems.map(
+                  ({ category, items: categoryItems }) => (
+                    <View key={category} style={styles.sortedGroup}>
+                      <Text style={styles.sortedCategory}>
+                        {category.toUpperCase()}
+                      </Text>
+                      {categoryItems.map((item, index) => (
                         <View
-                          style={[
-                            styles.priorityBadge,
-                            getPriorityStyle(item.priority),
-                          ]}
+                          key={`${category}-${index}-${item.text}`}
+                          style={styles.sortedItemRow}
                         >
-                          <Text style={styles.priorityText}>{item.priority}</Text>
+                          <Text style={styles.sortedItemText}>{item.text}</Text>
+                          <View
+                            style={[
+                              styles.priorityBadge,
+                              getPriorityStyle(item.priority),
+                            ]}
+                          >
+                            <Text style={styles.priorityText}>
+                              {item.priority}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    ))}
-                  </View>
-                ))}
+                      ))}
+                    </View>
+                  ),
+                )}
               </GlowCard>
             ) : (
               <View style={styles.sortedSection}>
                 <Text style={styles.sortedTitle}>AI_ANALYSIS</Text>
-                {groupedSortedItems.map(({ category, items: categoryItems }) => (
-                  <View key={category} style={styles.sortedGroup}>
-                    <Text style={styles.sortedCategory}>
-                      {category.toUpperCase()}
-                    </Text>
-                    {categoryItems.map((item, index) => (
-                      <View
-                        key={`${category}-${index}-${item.text}`}
-                        style={styles.sortedItemRow}
-                      >
-                        <Text style={styles.sortedItemText}>{item.text}</Text>
+                {groupedSortedItems.map(
+                  ({ category, items: categoryItems }) => (
+                    <View key={category} style={styles.sortedGroup}>
+                      <Text style={styles.sortedCategory}>
+                        {category.toUpperCase()}
+                      </Text>
+                      {categoryItems.map((item, index) => (
                         <View
-                          style={[
-                            styles.priorityBadge,
-                            getPriorityStyle(item.priority),
-                          ]}
+                          key={`${category}-${index}-${item.text}`}
+                          style={styles.sortedItemRow}
                         >
-                          <Text style={styles.priorityText}>{item.priority}</Text>
+                          <Text style={styles.sortedItemText}>{item.text}</Text>
+                          <View
+                            style={[
+                              styles.priorityBadge,
+                              getPriorityStyle(item.priority),
+                            ]}
+                          >
+                            <Text style={styles.priorityText}>
+                              {item.priority}
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    ))}
-                  </View>
-                ))}
+                      ))}
+                    </View>
+                  ),
+                )}
               </View>
-            )
-          )}
+            ))}
 
           {!isLoading && (
             <FlatList
@@ -818,9 +832,7 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: isCosmic
-        ? 'transparent'
-        : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darkest,
     },
     centerContainer: {
       flex: 1,
@@ -832,559 +844,561 @@ const getStyles = (isCosmic: boolean) =>
       maxWidth: Tokens.layout.maxWidth.prose,
       padding: Tokens.spacing[4], // Reduced
     },
-  header: {
-    marginBottom: Tokens.spacing[6],
-    borderBottomWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
-      : Tokens.colors.neutral.border,
-    paddingBottom: Tokens.spacing[2],
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  title: {
-    fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.lg,
-    fontWeight: '700',
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-          },
-        })
-      : {}),
-  },
-  headerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
-      : Tokens.colors.neutral.dark,
-    marginLeft: Tokens.spacing[4],
-  },
-  rationaleCard: {
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.5)'
-      : Tokens.colors.neutral.darker,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.2)'
-      : Tokens.colors.neutral.borderSubtle,
-    padding: isCosmic ? 12 : Tokens.spacing[3],
-    marginBottom: isCosmic ? 12 : Tokens.spacing[3],
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(20px) saturate(180%)',
-            boxShadow: `
+    header: {
+      marginBottom: Tokens.spacing[6],
+      borderBottomWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.border,
+      paddingBottom: Tokens.spacing[2],
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    title: {
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.lg,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+            },
+          })
+        : {}),
+    },
+    headerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.dark,
+      marginLeft: Tokens.spacing[4],
+    },
+    rationaleCard: {
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.5)'
+        : Tokens.colors.neutral.darker,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.2)'
+        : Tokens.colors.neutral.borderSubtle,
+      padding: isCosmic ? 12 : Tokens.spacing[3],
+      marginBottom: isCosmic ? 12 : Tokens.spacing[3],
+      borderRadius: isCosmic ? 12 : Tokens.radii.none,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(20px) saturate(180%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.15),
               0 4px 24px rgba(7, 7, 18, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.05)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
-      : {}),
-  },
-  rationaleTitle: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-    letterSpacing: 1,
-    marginBottom: isCosmic ? 4 : Tokens.spacing[2],
-    textTransform: 'uppercase',
-  },
-  rationaleText: {
-    fontFamily: Tokens.type.fontFamily.body,
-    fontSize: Tokens.type.xs,
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-    lineHeight: 18,
-    flexWrap: 'wrap',
-  },
-  // Input
-  inputSection: {
-    flexDirection: 'row',
-    marginBottom: isCosmic ? 16 : Tokens.spacing[5],
-    gap: isCosmic ? 8 : Tokens.spacing[2],
-    alignItems: 'center',
-  },
-  inputWrapper: {
-    flex: 1,
-    backgroundColor: isCosmic
-      ? 'rgba(11, 16, 34, 0.8)'
-      : Tokens.colors.neutral.darker,
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.25)'
-      : Tokens.colors.neutral.border,
-    minHeight: 48,
-    justifyContent: 'center',
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(12px)',
-            boxShadow: `
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
+        : {}),
+    },
+    rationaleTitle: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      letterSpacing: 1,
+      marginBottom: isCosmic ? 4 : Tokens.spacing[2],
+      textTransform: 'uppercase',
+    },
+    rationaleText: {
+      fontFamily: Tokens.type.fontFamily.body,
+      fontSize: Tokens.type.xs,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      lineHeight: 18,
+      flexWrap: 'wrap',
+    },
+    // Input
+    inputSection: {
+      flexDirection: 'row',
+      marginBottom: isCosmic ? 16 : Tokens.spacing[5],
+      gap: isCosmic ? 8 : Tokens.spacing[2],
+      alignItems: 'center',
+    },
+    inputWrapper: {
+      flex: 1,
+      backgroundColor: isCosmic
+        ? 'rgba(11, 16, 34, 0.8)'
+        : Tokens.colors.neutral.darker,
+      borderRadius: isCosmic ? 12 : Tokens.radii.none,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.25)'
+        : Tokens.colors.neutral.border,
+      minHeight: 48,
+      justifyContent: 'center',
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(12px)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.03),
               0 4px 16px rgba(7, 7, 18, 0.3)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
-      : Platform.select({
-          web: { transition: 'all 0.2s ease' },
-        })),
-  },
-  inputWrapperFocused: {
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.8)'
-      : Tokens.colors.text.primary,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            boxShadow: `
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
+        : Platform.select({
+            web: { transition: 'all 0.2s ease' },
+          })),
+    },
+    inputWrapperFocused: {
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.8)'
+        : Tokens.colors.text.primary,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              boxShadow: `
               0 0 0 2px rgba(139, 92, 246, 0.3),
               0 0 30px rgba(139, 92, 246, 0.25),
               inset 0 1px 0 rgba(255, 255, 255, 0.05)
             `,
-          },
-        })
-      : {}),
-  },
-  input: {
-    paddingHorizontal: Tokens.spacing[3],
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
-    minHeight: 48,
-    textAlignVertical: 'center',
-    paddingVertical: 0,
-    ...Platform.select({
-      web: { outlineStyle: 'none' },
-    }),
-  },
-  addButton: {
-    minHeight: 48,
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
-  },
-  // Actions
-  actionsBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: Tokens.spacing[4],
-    paddingHorizontal: Tokens.spacing[2],
-    alignItems: 'center',
-  },
-  actionsRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Tokens.spacing[4],
-  },
-  actionButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
-      : Tokens.colors.neutral.border,
-    ...Platform.select({
-      web: { transition: 'all 0.2s ease' },
-    }),
-  },
-  actionButtonDisabled: {
-    opacity: 0.5,
-    pointerEvents: 'none',
-  },
-  clearHovered: {
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.6)'
-      : Tokens.colors.neutral.dark,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
-          },
-        })
-      : {}),
-  },
-  clearPressed: {
-    opacity: 0.7,
-  },
-  countText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-    fontSize: Tokens.type.xs,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  clearText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-    fontSize: Tokens.type.xs,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  aiSortText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    fontSize: Tokens.type.xs,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  // Sorted Section
-  sortedSection: {
-    marginTop: isCosmic ? 12 : Tokens.spacing[3],
-    marginBottom: isCosmic ? 16 : Tokens.spacing[5],
-    padding: isCosmic ? 12 : Tokens.spacing[3],
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.4)'
-      : Tokens.colors.neutral.darker,
-    borderRadius: isCosmic ? 12 : Tokens.radii.none,
-    borderWidth: 1,
-    borderStyle: isCosmic ? 'solid' : 'dashed',
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.25)'
-      : Tokens.colors.neutral.border,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(24px) saturate(150%)',
-            boxShadow: `
+            },
+          })
+        : {}),
+    },
+    input: {
+      paddingHorizontal: Tokens.spacing[3],
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.sm,
+      minHeight: 48,
+      textAlignVertical: 'center',
+      paddingVertical: 0,
+      ...Platform.select({
+        web: { outlineStyle: 'none' },
+      }),
+    },
+    addButton: {
+      minHeight: 48,
+      width: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+    },
+    // Actions
+    actionsBar: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: Tokens.spacing[4],
+      paddingHorizontal: Tokens.spacing[2],
+      alignItems: 'center',
+    },
+    actionsRight: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: Tokens.spacing[4],
+    },
+    actionButton: {
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.border,
+      ...Platform.select({
+        web: { transition: 'all 0.2s ease' },
+      }),
+    },
+    actionButtonDisabled: {
+      opacity: 0.5,
+      pointerEvents: 'none',
+    },
+    clearHovered: {
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.6)'
+        : Tokens.colors.neutral.dark,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              boxShadow:
+                '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+            },
+          })
+        : {}),
+    },
+    clearPressed: {
+      opacity: 0.7,
+    },
+    countText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      fontSize: Tokens.type.xs,
+      fontWeight: '700',
+      letterSpacing: 1,
+    },
+    clearText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      fontSize: Tokens.type.xs,
+      fontWeight: '700',
+      letterSpacing: 1,
+    },
+    aiSortText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontSize: Tokens.type.xs,
+      fontWeight: '700',
+      letterSpacing: 1,
+    },
+    // Sorted Section
+    sortedSection: {
+      marginTop: isCosmic ? 12 : Tokens.spacing[3],
+      marginBottom: isCosmic ? 16 : Tokens.spacing[5],
+      padding: isCosmic ? 12 : Tokens.spacing[3],
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.4)'
+        : Tokens.colors.neutral.darker,
+      borderRadius: isCosmic ? 12 : Tokens.radii.none,
+      borderWidth: 1,
+      borderStyle: isCosmic ? 'solid' : 'dashed',
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.25)'
+        : Tokens.colors.neutral.border,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(24px) saturate(150%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.15),
               0 8px 32px rgba(7, 7, 18, 0.5),
               inset 0 1px 0 rgba(255, 255, 255, 0.06)
             `,
-            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
-      : {}),
-  },
-  sortedTitle: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    marginBottom: isCosmic ? 8 : Tokens.spacing[3],
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  sortedGroup: {
-    marginBottom: isCosmic ? 8 : Tokens.spacing[3],
-  },
-  sortedCategory: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    color: isCosmic ? '#8B5CF6' : Tokens.colors.text.secondary,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: isCosmic ? 4 : Tokens.spacing[1],
-    opacity: 0.9,
-  },
-  sortedItemRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingVertical: 4,
-    marginBottom: 0,
-  },
-  sortedItemText: {
-    flex: 1,
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-    lineHeight: Tokens.type.sm * 1.5,
-    marginRight: Tokens.spacing[3],
-  },
-  priorityBadge: {
-    paddingHorizontal: 6,
-    paddingVertical: 0,
-    borderRadius: isCosmic ? 4 : Tokens.radii.none,
-    minWidth: 40,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
-      : Tokens.colors.neutral.border,
-  },
-  priorityText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-  },
-  priorityHigh: {
-    backgroundColor: Tokens.colors.brand[500],
-    borderColor: Tokens.colors.brand[500],
-  },
-  priorityMedium: {
-    backgroundColor: Tokens.colors.neutral.border,
-  },
-  priorityLow: {
-    backgroundColor: Tokens.colors.neutral.dark,
-  },
-  listContent: {
-    paddingBottom: 120,
-  },
-  item: {
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.4)'
-      : Tokens.colors.neutral.darkest,
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
-    paddingHorizontal: isCosmic ? 12 : Tokens.spacing[3],
-    paddingVertical: isCosmic ? 8 : Tokens.spacing[2],
-    marginBottom: isCosmic ? 6 : -1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.2)'
-      : Tokens.colors.neutral.border,
-    minHeight: isCosmic ? 40 : 48,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(12px) saturate(150%)',
-            boxShadow: `
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
+        : {}),
+    },
+    sortedTitle: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      marginBottom: isCosmic ? 8 : Tokens.spacing[3],
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+    },
+    sortedGroup: {
+      marginBottom: isCosmic ? 8 : Tokens.spacing[3],
+    },
+    sortedCategory: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.text.secondary,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      marginBottom: isCosmic ? 4 : Tokens.spacing[1],
+      opacity: 0.9,
+    },
+    sortedItemRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      paddingVertical: 4,
+      marginBottom: 0,
+    },
+    sortedItemText: {
+      flex: 1,
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      lineHeight: Tokens.type.sm * 1.5,
+      marginRight: Tokens.spacing[3],
+    },
+    priorityBadge: {
+      paddingHorizontal: 6,
+      paddingVertical: 0,
+      borderRadius: isCosmic ? 4 : Tokens.radii.none,
+      minWidth: 40,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.border,
+    },
+    priorityText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+    },
+    priorityHigh: {
+      backgroundColor: Tokens.colors.brand[500],
+      borderColor: Tokens.colors.brand[500],
+    },
+    priorityMedium: {
+      backgroundColor: Tokens.colors.neutral.border,
+    },
+    priorityLow: {
+      backgroundColor: Tokens.colors.neutral.dark,
+    },
+    listContent: {
+      paddingBottom: 120,
+    },
+    item: {
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.4)'
+        : Tokens.colors.neutral.darkest,
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      paddingHorizontal: isCosmic ? 12 : Tokens.spacing[3],
+      paddingVertical: isCosmic ? 8 : Tokens.spacing[2],
+      marginBottom: isCosmic ? 6 : -1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.2)'
+        : Tokens.colors.neutral.border,
+      minHeight: isCosmic ? 40 : 48,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(12px) saturate(150%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.1),
               0 4px 20px rgba(7, 7, 18, 0.35),
               inset 0 1px 0 rgba(255, 255, 255, 0.04)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
-      : Platform.select({
-          web: {
-            transition: 'all 0.2s ease',
-          },
-        })),
-  },
-  itemText: {
-    flex: 1,
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    lineHeight: 16,
-    marginRight: isCosmic ? 8 : Tokens.spacing[3],
-  },
-  deleteButton: {
-    padding: 0,
-    borderRadius: isCosmic ? 6 : Tokens.radii.none,
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...Platform.select({
-      web: { transition: 'all 0.2s ease' },
-    }),
-  },
-  deleteButtonHovered: {
-    backgroundColor: Tokens.colors.neutral.dark,
-  },
-  deleteButtonPressed: {
-    backgroundColor: Tokens.colors.neutral.border,
-  },
-  deleteText: {
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-    fontSize: Tokens.type.lg,
-    fontWeight: '300',
-    marginTop: -2,
-  },
-  // Empty
-  emptyState: {
-    marginTop: Tokens.spacing[12],
-    opacity: 0.3,
-  },
-  // Recording
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
+        : Platform.select({
+            web: {
+              transition: 'all 0.2s ease',
+            },
+          })),
+    },
+    itemText: {
+      flex: 1,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      lineHeight: 16,
+      marginRight: isCosmic ? 8 : Tokens.spacing[3],
+    },
+    deleteButton: {
+      padding: 0,
+      borderRadius: isCosmic ? 6 : Tokens.radii.none,
+      width: 32,
+      height: 32,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...Platform.select({
+        web: { transition: 'all 0.2s ease' },
+      }),
+    },
+    deleteButtonHovered: {
+      backgroundColor: Tokens.colors.neutral.dark,
+    },
+    deleteButtonPressed: {
+      backgroundColor: Tokens.colors.neutral.border,
+    },
+    deleteText: {
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      fontSize: Tokens.type.lg,
+      fontWeight: '300',
+      marginTop: -2,
+    },
+    // Empty
+    emptyState: {
+      marginTop: Tokens.spacing[12],
+      opacity: 0.3,
+    },
+    // Recording
 
-  recordSection: {
-    alignItems: 'center',
-    marginBottom: isCosmic ? 16 : Tokens.spacing[5],
-  },
-  recordButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.5)'
-      : Tokens.colors.neutral.darkest,
-    paddingHorizontal: isCosmic ? 12 : Tokens.spacing[3],
-    paddingVertical: isCosmic ? 6 : Tokens.spacing[1],
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.3)'
-      : Tokens.colors.neutral.border,
-    minWidth: isCosmic ? 120 : 140,
-    minHeight: isCosmic ? 36 : 48,
-    justifyContent: 'center',
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(16px) saturate(180%)',
-            boxShadow: `
+    recordSection: {
+      alignItems: 'center',
+      marginBottom: isCosmic ? 16 : Tokens.spacing[5],
+    },
+    recordButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.5)'
+        : Tokens.colors.neutral.darkest,
+      paddingHorizontal: isCosmic ? 12 : Tokens.spacing[3],
+      paddingVertical: isCosmic ? 6 : Tokens.spacing[1],
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.3)'
+        : Tokens.colors.neutral.border,
+      minWidth: isCosmic ? 120 : 140,
+      minHeight: isCosmic ? 36 : 48,
+      justifyContent: 'center',
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(16px) saturate(180%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.2),
               0 4px 24px rgba(7, 7, 18, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.08)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            cursor: 'pointer',
-          },
-        })
-      : Platform.select({
-          web: {
-            transition: 'all 0.2s ease',
-            cursor: 'pointer',
-          },
-        })),
-  },
-  recordButtonHovered: {
-    borderColor: isCosmic ? 'rgba(139, 92, 246, 0.6)' : Tokens.colors.text.primary,
-    backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.7)' : undefined,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            boxShadow: `
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+            },
+          })
+        : Platform.select({
+            web: {
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
+            },
+          })),
+    },
+    recordButtonHovered: {
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.6)'
+        : Tokens.colors.text.primary,
+      backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.7)' : undefined,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              boxShadow: `
               0 0 0 2px rgba(139, 92, 246, 0.3),
               0 0 30px rgba(139, 92, 246, 0.25),
               0 8px 32px rgba(7, 7, 18, 0.5),
               inset 0 1px 0 rgba(255, 255, 255, 0.1)
             `,
-            transform: 'translateY(-1px)',
-          },
-        })
-      : {}),
-  },
-  recordButtonActive: {
-    backgroundColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-    borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-  },
-  recordButtonProcessing: {
-    opacity: 0.5,
-    backgroundColor: Tokens.colors.neutral.dark,
-  },
-  recordButtonPressed: {
-    opacity: 0.8,
-  },
-  recordIcon: {
-    fontSize: Tokens.type.base,
-    marginRight: Tokens.spacing[2],
-    color: Tokens.colors.text.primary,
-  },
-  recordText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    fontWeight: '700',
-    color: Tokens.colors.text.primary,
-    letterSpacing: 1,
-  },
-  errorText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.brand[500],
-    marginTop: Tokens.spacing[2],
-    textAlign: 'center',
-  },
-  loadingContainer: {
-    padding: Tokens.spacing[8],
-    alignItems: 'center',
-    gap: Tokens.spacing[4],
-  },
-  guideBanner: {
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.45)'
-      : Tokens.colors.neutral.dark,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(139, 92, 246, 0.35)'
-      : Tokens.colors.brand[500],
-    borderRadius: isCosmic ? 10 : Tokens.radii.none,
-    padding: isCosmic ? 10 : Tokens.spacing[3],
-    marginBottom: isCosmic ? 16 : Tokens.spacing[5],
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: isCosmic ? 8 : Tokens.spacing[3],
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(20px) saturate(160%)',
-            boxShadow: `
+              transform: 'translateY(-1px)',
+            },
+          })
+        : {}),
+    },
+    recordButtonActive: {
+      backgroundColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+    },
+    recordButtonProcessing: {
+      opacity: 0.5,
+      backgroundColor: Tokens.colors.neutral.dark,
+    },
+    recordButtonPressed: {
+      opacity: 0.8,
+    },
+    recordIcon: {
+      fontSize: Tokens.type.base,
+      marginRight: Tokens.spacing[2],
+      color: Tokens.colors.text.primary,
+    },
+    recordText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      fontWeight: '700',
+      color: Tokens.colors.text.primary,
+      letterSpacing: 1,
+    },
+    errorText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: Tokens.colors.brand[500],
+      marginTop: Tokens.spacing[2],
+      textAlign: 'center',
+    },
+    loadingContainer: {
+      padding: Tokens.spacing[8],
+      alignItems: 'center',
+      gap: Tokens.spacing[4],
+    },
+    guideBanner: {
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.45)'
+        : Tokens.colors.neutral.dark,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.35)'
+        : Tokens.colors.brand[500],
+      borderRadius: isCosmic ? 10 : Tokens.radii.none,
+      padding: isCosmic ? 10 : Tokens.spacing[3],
+      marginBottom: isCosmic ? 16 : Tokens.spacing[5],
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: isCosmic ? 8 : Tokens.spacing[3],
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(20px) saturate(160%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.2),
               0 6px 28px rgba(7, 7, 18, 0.45),
               inset 0 1px 0 rgba(255, 255, 255, 0.06)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
-      : {}),
-  },
-  guideContent: {
-    flex: 1,
-  },
-  guideTitle: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-    marginBottom: isCosmic ? 2 : Tokens.spacing[1],
-    letterSpacing: 1,
-  },
-  guideText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    lineHeight: 14,
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.primary,
-  },
-  guideButton: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.12)'
-      : Tokens.colors.neutral.border,
-    backgroundColor: isCosmic
-      ? 'rgba(17, 26, 51, 0.6)'
-      : Tokens.colors.neutral.darkest,
-    borderRadius: isCosmic ? 8 : Tokens.radii.none,
-    ...(isCosmic
-      ? Platform.select({
-          web: {
-            backdropFilter: 'blur(8px)',
-          },
-        })
-      : {}),
-  },
-  guideButtonPressed: {
-    backgroundColor: Tokens.colors.neutral.darker,
-  },
-  guideButtonText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xxs,
-    fontWeight: '700',
-    color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    textTransform: 'uppercase',
-  },
-  loadingText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.sm,
-    color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-});
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
+        : {}),
+    },
+    guideContent: {
+      flex: 1,
+    },
+    guideTitle: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      marginBottom: isCosmic ? 2 : Tokens.spacing[1],
+      letterSpacing: 1,
+    },
+    guideText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      lineHeight: 14,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.primary,
+    },
+    guideButton: {
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(185, 194, 217, 0.12)'
+        : Tokens.colors.neutral.border,
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.6)'
+        : Tokens.colors.neutral.darkest,
+      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      ...(isCosmic
+        ? Platform.select({
+            web: {
+              backdropFilter: 'blur(8px)',
+            },
+          })
+        : {}),
+    },
+    guideButtonPressed: {
+      backgroundColor: Tokens.colors.neutral.darker,
+    },
+    guideButtonText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xxs,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      textTransform: 'uppercase',
+    },
+    loadingText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.sm,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+    },
+  });
 
 export default BrainDumpScreen;

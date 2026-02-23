@@ -62,10 +62,14 @@ const FogCutterScreen = ({
   const { isCosmic } = useTheme();
 
   const handleAiBreakdown = async () => {
-    if (!task.trim() || isAiLoading) return;
+    if (!task.trim() || isAiLoading) {
+      return;
+    }
 
     setIsAiLoading(true);
-    UXMetricsService.track('fog_cutter_ai_breakdown_requested', { taskLength: task.length });
+    UXMetricsService.track('fog_cutter_ai_breakdown_requested', {
+      taskLength: task.length,
+    });
 
     try {
       const steps = await FogCutterAIService.generateMicroSteps(task);
@@ -220,14 +224,27 @@ const FogCutterScreen = ({
               <View style={styles.headerLine} />
             </View>
 
-            <GlowCard glow="soft" tone="base" padding="md" style={styles.rationaleCard}>
+            <GlowCard
+              glow="soft"
+              tone="base"
+              padding="md"
+              style={styles.rationaleCard}
+            >
               <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
               <Text style={styles.rationaleText}>
-                CBT/CADDI research shows ADHD paralysis comes from seeing tasks as monolithic. Breaking tasks into micro-steps (2-5 minutes each) reduces cognitive load and creates multiple completion wins that build dopamine and momentum.
+                CBT/CADDI research shows ADHD paralysis comes from seeing tasks
+                as monolithic. Breaking tasks into micro-steps (2-5 minutes
+                each) reduces cognitive load and creates multiple completion
+                wins that build dopamine and momentum.
               </Text>
             </GlowCard>
 
-            <GlowCard glow="medium" tone="raised" padding="md" style={styles.creationCard}>
+            <GlowCard
+              glow="medium"
+              tone="raised"
+              padding="md"
+              style={styles.creationCard}
+            >
               <View style={styles.creationHeader}>
                 <Text style={styles.cardTitle}>DECOMPOSE_TASK</Text>
               </View>
@@ -363,11 +380,11 @@ const FogCutterScreen = ({
                       pressed: boolean;
                       hovered?: boolean;
                     }) => [
-                        styles.taskCard,
-                        item.completed && styles.taskCardCompleted,
-                        hovered && !item.completed && styles.taskCardHovered,
-                        pressed && !item.completed && styles.taskCardPressed,
-                      ]}
+                      styles.taskCard,
+                      item.completed && styles.taskCardCompleted,
+                      hovered && !item.completed && styles.taskCardHovered,
+                      pressed && !item.completed && styles.taskCardPressed,
+                    ]}
                     onPress={() => toggleTask(item.id)}
                   >
                     <View style={styles.taskHeader}>
@@ -391,7 +408,9 @@ const FogCutterScreen = ({
                     {!item.completed && (
                       <View style={styles.activeStepContainer}>
                         <Text style={styles.activeStepLabel}>
-                          {item.microSteps.find((s) => s.status === 'in_progress')
+                          {item.microSteps.find(
+                            (s) => s.status === 'in_progress',
+                          )
                             ? 'CURRENT_STEP >>'
                             : 'NEXT_STEP >>'}
                         </Text>
@@ -520,7 +539,9 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[3],
       height: 48,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
       ...Platform.select({
         web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
       }),
@@ -529,9 +550,12 @@ const getStyles = (isCosmic: boolean) =>
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
       ...Platform.select({
-        web: isCosmic ? {
-          boxShadow: '0 0 0 2px rgba(139,92,246,0.3), 0 0 30px rgba(139,92,246,0.25)',
-        } : {},
+        web: isCosmic
+          ? {
+              boxShadow:
+                '0 0 0 2px rgba(139,92,246,0.3), 0 0 30px rgba(139,92,246,0.25)',
+            }
+          : {},
       }),
     },
     addStepRow: {
@@ -549,7 +573,9 @@ const getStyles = (isCosmic: boolean) =>
       fontSize: Tokens.type.sm,
       height: 48,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
       ...Platform.select({
         web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
       }),
@@ -569,7 +595,9 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[3],
       borderWidth: 1,
       borderStyle: 'dashed',
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
     },
     previewTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
@@ -603,7 +631,9 @@ const getStyles = (isCosmic: boolean) =>
     },
     divider: {
       height: 1,
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
       width: '100%',
       marginBottom: Tokens.spacing[6],
     },
@@ -628,7 +658,9 @@ const getStyles = (isCosmic: boolean) =>
       padding: Tokens.spacing[4],
       marginBottom: Tokens.spacing[2],
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
       minHeight: 64, // Reduced height
       justifyContent: 'center',
       ...Platform.select({
@@ -642,9 +674,12 @@ const getStyles = (isCosmic: boolean) =>
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       zIndex: 1,
       ...Platform.select({
-        web: isCosmic ? {
-          boxShadow: '0 0 0 1px rgba(139,92,246,0.3), 0 0 20px rgba(139,92,246,0.2)',
-        } : {},
+        web: isCosmic
+          ? {
+              boxShadow:
+                '0 0 0 1px rgba(139,92,246,0.3), 0 0 20px rgba(139,92,246,0.2)',
+            }
+          : {},
       }),
     },
     taskCardPressed: {
@@ -755,7 +790,9 @@ const getStyles = (isCosmic: boolean) =>
       paddingVertical: 4,
       paddingHorizontal: 8,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.border,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.border,
       backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darkest,
       borderRadius: isCosmic ? 8 : 0,
     },

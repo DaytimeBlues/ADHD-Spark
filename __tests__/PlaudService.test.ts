@@ -1,6 +1,8 @@
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PlaudService, { GoogleTasksSyncService } from '../src/services/PlaudService';
+import PlaudService, {
+  GoogleTasksSyncService,
+} from '../src/services/PlaudService';
 
 // Mock fetch
 // @ts-ignore
@@ -148,7 +150,9 @@ describe('PlaudService', () => {
       // @ts-ignore
       Platform.OS = 'android';
 
-      const { GoogleSignin } = require('@react-native-google-signin/google-signin');
+      const {
+        GoogleSignin,
+      } = require('@react-native-google-signin/google-signin');
       GoogleSignin.signInSilently.mockResolvedValue({});
       GoogleSignin.getTokens.mockResolvedValue({ accessToken: 'token-123' });
 
@@ -200,7 +204,9 @@ describe('PlaudService', () => {
       // @ts-ignore
       Platform.OS = 'android';
 
-      const { GoogleSignin } = require('@react-native-google-signin/google-signin');
+      const {
+        GoogleSignin,
+      } = require('@react-native-google-signin/google-signin');
       GoogleSignin.signInSilently.mockRejectedValue(new Error('not signed in'));
 
       const result = await GoogleTasksSyncService.syncSortedItemsToGoogle([
@@ -216,7 +222,9 @@ describe('PlaudService', () => {
       // @ts-ignore
       Platform.OS = 'android';
 
-      const { GoogleSignin } = require('@react-native-google-signin/google-signin');
+      const {
+        GoogleSignin,
+      } = require('@react-native-google-signin/google-signin');
       GoogleSignin.signInSilently.mockResolvedValue({});
       GoogleSignin.getTokens.mockResolvedValue({ accessToken: 'token-123' });
 

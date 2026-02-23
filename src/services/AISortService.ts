@@ -80,7 +80,9 @@ const ALLOWED_CATEGORIES: SortCategory[] = [
 const ALLOWED_PRIORITIES: SortPriority[] = ['high', 'medium', 'low'];
 
 function isSortedItem(value: unknown): value is SortedItem {
-  if (!value || typeof value !== 'object') return false;
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
   const c = value as Record<string, unknown>;
   return (
     typeof c.text === 'string' &&
@@ -91,11 +93,17 @@ function isSortedItem(value: unknown): value is SortedItem {
 
 function assertSortResponse(value: unknown): SortResponse {
   if (!value || typeof value !== 'object') {
-    throw new AiSortError('AI_INVALID_RESPONSE', 'Invalid AI sort response payload.');
+    throw new AiSortError(
+      'AI_INVALID_RESPONSE',
+      'Invalid AI sort response payload.',
+    );
   }
   const r = value as Record<string, unknown>;
   if (!Array.isArray(r.sorted) || !r.sorted.every(isSortedItem)) {
-    throw new AiSortError('AI_INVALID_RESPONSE', 'Invalid AI sort response schema.');
+    throw new AiSortError(
+      'AI_INVALID_RESPONSE',
+      'Invalid AI sort response schema.',
+    );
   }
   return { sorted: r.sorted };
 }
@@ -103,7 +111,9 @@ function assertSortResponse(value: unknown): SortResponse {
 // ─── Error classification ─────────────────────────────────────────────────────
 
 function classifyError(error: unknown): AiSortError {
-  if (error instanceof AiSortError) return error;
+  if (error instanceof AiSortError) {
+    return error;
+  }
 
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
@@ -159,16 +169,22 @@ async function fetchWithRetry(
         payload = await response.json();
       } catch {
         if (!response.ok) {
-          throw new AiSortError('AI_SERVER_ERROR', 'Unable to sort items right now.');
+          throw new AiSortError(
+            'AI_SERVER_ERROR',
+            'Unable to sort items right now.',
+          );
         }
-        throw new AiSortError('AI_INVALID_RESPONSE', 'Invalid AI sort response payload.');
+        throw new AiSortError(
+          'AI_INVALID_RESPONSE',
+          'Invalid AI sort response payload.',
+        );
       }
 
       if (!response.ok) {
         const serverMsg =
           payload &&
-            typeof payload === 'object' &&
-            typeof (payload as { error?: unknown }).error === 'string'
+          typeof payload === 'object' &&
+          typeof (payload as { error?: unknown }).error === 'string'
             ? (payload as { error: string }).error
             : 'Unable to sort items right now.';
         throw new AiSortError('AI_SERVER_ERROR', serverMsg);
@@ -180,10 +196,7 @@ async function fetchWithRetry(
       lastError = classifyError(err);
 
       // Do not retry network or timeout errors — they're systemic
-      if (
-        lastError.code === 'AI_NETWORK' ||
-        lastError.code === 'AI_TIMEOUT'
-      ) {
+      if (lastError.code === 'AI_NETWORK' || lastError.code === 'AI_TIMEOUT') {
         break;
       }
 
@@ -194,7 +207,10 @@ async function fetchWithRetry(
     }
   }
 
-  throw lastError ?? new AiSortError('AI_UNKNOWN', 'Unable to sort items right now.');
+  throw (
+    lastError ??
+    new AiSortError('AI_UNKNOWN', 'Unable to sort items right now.')
+  );
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -206,11 +222,15 @@ const AISortService = {
       .filter(Boolean)
       .slice(0, 100);
 
-    if (cleanedItems.length === 0) return [];
+    if (cleanedItems.length === 0) {
+      return [];
+    }
 
     const key = cacheKey(cleanedItems, timezone);
     const cached = getCached(key);
-    if (cached) return cached;
+    if (cached) {
+      return cached;
+    }
 
     const result = await fetchWithRetry(
       cleanedItems,

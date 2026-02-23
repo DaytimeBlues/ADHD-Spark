@@ -6,7 +6,10 @@
  */
 
 import CaptureService from '../src/services/CaptureService';
-import type { CaptureItem, NewCaptureInput } from '../src/services/CaptureService';
+import type {
+  CaptureItem,
+  NewCaptureInput,
+} from '../src/services/CaptureService';
 
 // ============================================================================
 // MOCKS
@@ -176,7 +179,10 @@ describe('CaptureService', () => {
       mockGetJSON.mockResolvedValueOnce([]);
       mockSetJSON.mockRejectedValueOnce(new Error('disk full'));
 
-      const input: NewCaptureInput = { source: 'paste', raw: 'clipboard content' };
+      const input: NewCaptureInput = {
+        source: 'paste',
+        raw: 'clipboard content',
+      };
       const item = await CaptureService.save(input);
 
       expect(item.raw).toBe('clipboard content');
@@ -286,7 +292,10 @@ describe('CaptureService', () => {
 
   describe('subscribe', () => {
     it('calls subscriber immediately with current unreviewed count', async () => {
-      const items = [makeItem({ status: 'unreviewed' }), makeItem({ id: 'b', status: 'unreviewed' })];
+      const items = [
+        makeItem({ status: 'unreviewed' }),
+        makeItem({ id: 'b', status: 'unreviewed' }),
+      ];
       mockGetJSON.mockResolvedValueOnce(items); // getAll for getUnreviewedCount
 
       const callback = jest.fn();

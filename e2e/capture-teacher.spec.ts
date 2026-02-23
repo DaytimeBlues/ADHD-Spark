@@ -18,10 +18,7 @@ import { enableCosmicTheme } from './helpers/seed';
 // HELPERS
 // ============================================================================
 
-async function seedCaptureInbox(
-  page: Page,
-  items: object[],
-): Promise<void> {
+async function seedCaptureInbox(page: Page, items: object[]): Promise<void> {
   await page.addInitScript((inbox) => {
     (window as unknown as Record<string, unknown>).localStorage;
     window.localStorage.setItem('captureInbox', JSON.stringify(inbox));
@@ -31,9 +28,13 @@ async function seedCaptureInbox(
 async function openCaptureBubble(page: Page): Promise<void> {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await expect(page.getByTestId('capture-bubble')).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByTestId('capture-bubble')).toBeVisible({
+    timeout: 10_000,
+  });
   await page.getByTestId('capture-bubble').click();
-  await expect(page.getByTestId('capture-drawer')).toBeVisible({ timeout: 5_000 });
+  await expect(page.getByTestId('capture-drawer')).toBeVisible({
+    timeout: 5_000,
+  });
 }
 
 // ============================================================================
@@ -41,7 +42,6 @@ async function openCaptureBubble(page: Page): Promise<void> {
 // ============================================================================
 
 test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
-
   // --------------------------------------------------------------------------
   // Bubble visibility
   // --------------------------------------------------------------------------
@@ -51,10 +51,14 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByTestId('capture-bubble')).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId('capture-bubble')).toBeVisible({
+      timeout: 10_000,
+    });
   });
 
-  test('bubble shows badge count when unreviewed items exist', async ({ page }) => {
+  test('bubble shows badge count when unreviewed items exist', async ({
+    page,
+  }) => {
     await enableCosmicTheme(page);
     await seedCaptureInbox(page, [
       {
@@ -75,7 +79,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
 
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByTestId('capture-bubble-badge')).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId('capture-bubble-badge')).toBeVisible({
+      timeout: 10_000,
+    });
     await expect(page.getByTestId('capture-bubble-badge')).toHaveText('2');
   });
 
@@ -83,7 +89,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
   // Drawer opens with all capture modes
   // --------------------------------------------------------------------------
 
-  test('tapping bubble opens drawer with all 5 capture modes', async ({ page }) => {
+  test('tapping bubble opens drawer with all 5 capture modes', async ({
+    page,
+  }) => {
     await enableCosmicTheme(page);
     await openCaptureBubble(page);
 
@@ -105,7 +113,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
 
     // Interaction 1: open bubble
     await page.getByTestId('capture-bubble').click();
-    await expect(page.getByTestId('capture-drawer')).toBeVisible({ timeout: 5_000 });
+    await expect(page.getByTestId('capture-drawer')).toBeVisible({
+      timeout: 5_000,
+    });
 
     // Interaction 2: tap text mode (may already be active by default)
     await page.getByTestId('capture-mode-text').click();
@@ -113,20 +123,24 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     // Type the note
     const textInput = page.getByTestId('capture-text-input');
     await expect(textInput).toBeVisible({ timeout: 3_000 });
-    await textInput.fill('Email Maria's parents re: missing homework x3');
+    await textInput.fill("Email Maria's parents re: missing homework x3");
 
     // Interaction 3: submit
     await page.getByTestId('capture-submit').click();
 
     // Drawer should close after submit
-    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({ timeout: 5_000 });
+    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({
+      timeout: 5_000,
+    });
   });
 
   // --------------------------------------------------------------------------
   // Meeting notes capture
   // --------------------------------------------------------------------------
 
-  test('meeting mode accepts multi-line notes and submits', async ({ page }) => {
+  test('meeting mode accepts multi-line notes and submits', async ({
+    page,
+  }) => {
     await enableCosmicTheme(page);
     await openCaptureBubble(page);
 
@@ -135,12 +149,15 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     const input = page.getByTestId('capture-meeting-input');
     await expect(input).toBeVisible({ timeout: 3_000 });
 
-    const meetingNote = 'Staff meeting:\n- New tardy policy from admin\n- PD day moved to March 5';
+    const meetingNote =
+      'Staff meeting:\n- New tardy policy from admin\n- PD day moved to March 5';
     await input.fill(meetingNote);
 
     await page.getByTestId('capture-submit').click();
 
-    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({ timeout: 5_000 });
+    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({
+      timeout: 5_000,
+    });
   });
 
   // --------------------------------------------------------------------------
@@ -153,21 +170,25 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
 
     await page.getByTestId('capture-cancel').click();
 
-    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({ timeout: 5_000 });
+    await expect(page.getByTestId('capture-drawer')).not.toBeVisible({
+      timeout: 5_000,
+    });
   });
 
   // --------------------------------------------------------------------------
   // Inbox triage (after school — Ms. Torres reviews her captures)
   // --------------------------------------------------------------------------
 
-  test('inbox shows unreviewed captures and allows promote to task', async ({ page }) => {
+  test('inbox shows unreviewed captures and allows promote to task', async ({
+    page,
+  }) => {
     await enableCosmicTheme(page);
     await seedCaptureInbox(page, [
       {
         id: 'cap_teach_1',
         source: 'text',
         status: 'unreviewed',
-        raw: 'Email Maria's parents re: missing homework x3',
+        raw: "Email Maria's parents re: missing homework x3",
         createdAt: Date.now() - 3_600_000,
       },
       {
@@ -183,7 +204,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     await page.waitForLoadState('networkidle');
 
     // Open inbox via bubble long-press or badge tap — or navigate directly
-    await expect(page.getByTestId('capture-bubble')).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId('capture-bubble')).toBeVisible({
+      timeout: 10_000,
+    });
     await page.getByTestId('capture-bubble').press('Enter'); // keyboard nav opens inbox
 
     // Fallback: navigate via badge click if visible
@@ -193,7 +216,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     }
 
     // Inbox should be visible
-    await expect(page.getByTestId('inbox-screen')).toBeVisible({ timeout: 8_000 });
+    await expect(page.getByTestId('inbox-screen')).toBeVisible({
+      timeout: 8_000,
+    });
 
     // Both items listed
     await expect(page.getByTestId('inbox-list')).toBeVisible();
@@ -207,7 +232,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     await expect(page.getByTestId('capture-row-cap_teach_1')).toBeVisible();
   });
 
-  test('inbox discard removes item from unreviewed filter', async ({ page }) => {
+  test('inbox discard removes item from unreviewed filter', async ({
+    page,
+  }) => {
     await enableCosmicTheme(page);
     await seedCaptureInbox(page, [
       {
@@ -221,7 +248,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
 
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByTestId('capture-bubble')).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByTestId('capture-bubble')).toBeVisible({
+      timeout: 10_000,
+    });
 
     const badge = page.getByTestId('capture-bubble-badge');
     if (await badge.isVisible()) {
@@ -230,14 +259,18 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
       await page.getByTestId('capture-bubble').press('Enter');
     }
 
-    await expect(page.getByTestId('inbox-screen')).toBeVisible({ timeout: 8_000 });
+    await expect(page.getByTestId('inbox-screen')).toBeVisible({
+      timeout: 8_000,
+    });
 
     // Discard the noisy item
     await page.getByTestId('discard-cap_noise_1').click();
 
     // Switch to Unreviewed tab — list should be empty
     await page.getByTestId('inbox-tab-unreviewed').click();
-    await expect(page.getByTestId('inbox-empty')).toBeVisible({ timeout: 3_000 });
+    await expect(page.getByTestId('inbox-empty')).toBeVisible({
+      timeout: 3_000,
+    });
   });
 
   test('inbox filter tabs change displayed items', async ({ page }) => {
@@ -265,14 +298,18 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     await page.waitForLoadState('networkidle');
 
     const badge = page.getByTestId('capture-bubble-badge');
-    const isVisible = await badge.isVisible({ timeout: 5_000 }).catch(() => false);
+    const isVisible = await badge
+      .isVisible({ timeout: 5_000 })
+      .catch(() => false);
     if (isVisible) {
       await badge.click();
     } else {
       await page.getByTestId('capture-bubble').press('Enter');
     }
 
-    await expect(page.getByTestId('inbox-screen')).toBeVisible({ timeout: 8_000 });
+    await expect(page.getByTestId('inbox-screen')).toBeVisible({
+      timeout: 8_000,
+    });
 
     // Unreviewed tab — only 1 item
     await page.getByTestId('inbox-tab-unreviewed').click();
@@ -305,7 +342,9 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
       await pomodoroCard.click();
       await page.waitForTimeout(1_000);
       // Bubble should NOT be visible since we're on a fullscreen modal stack screen
-      await expect(page.getByTestId('capture-bubble')).not.toBeVisible({ timeout: 3_000 });
+      await expect(page.getByTestId('capture-bubble')).not.toBeVisible({
+        timeout: 3_000,
+      });
     } else {
       test.skip();
     }

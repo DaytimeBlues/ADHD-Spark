@@ -21,13 +21,15 @@ const AnimatedView = React.forwardRef((props, ref) =>
   React.createElement(View, { ...props, ref }),
 );
 
-const createAnimatedComponent = Component =>
+const createAnimatedComponent = (Component) =>
   React.forwardRef((props, ref) =>
     React.createElement(Component, { ...props, ref }),
   );
 
 const Animated = Object.assign(
-  React.forwardRef((props, ref) => React.createElement(View, { ...props, ref })),
+  React.forwardRef((props, ref) =>
+    React.createElement(View, { ...props, ref }),
+  ),
   {
     View: AnimatedView,
     Text: React.forwardRef((props, ref) =>
@@ -50,7 +52,7 @@ const Animated = Object.assign(
 // Hooks – all no-ops; animations simply won't run on web
 // ---------------------------------------------------------------------------
 
-const useSharedValue = initial => ({ value: initial });
+const useSharedValue = (initial) => ({ value: initial });
 
 const useAnimatedStyle = () => ({});
 
@@ -68,8 +70,7 @@ const withRepeat = (animation /*, numberOfReps, reverse */) => animation;
 
 const withDelay = (_delay, animation) => animation;
 
-const withSequence = (...animations) =>
-  animations[animations.length - 1] ?? 0;
+const withSequence = (...animations) => animations[animations.length - 1] ?? 0;
 
 // ---------------------------------------------------------------------------
 // interpolate
@@ -95,31 +96,31 @@ const ReduceMotion = {
 };
 
 const Easing = {
-  linear: t => t,
-  ease: t => t,
-  quad: t => t * t,
-  cubic: t => t * t * t,
-  inOut: fn => fn,
-  out: fn => fn,
-  in: fn => fn,
-  bezier: () => t => t,
-  circle: t => 1 - Math.sqrt(1 - t * t),
-  sin: t => Math.sin((t * Math.PI) / 2),
-  exp: t => Math.pow(2, 10 * (t - 1)),
-  elastic: () => t => t,
-  back: () => t => t,
-  bounce: t => t,
-  poly: () => t => t,
-  step0: () => t => (t !== 0 ? 1 : 0),
-  step1: () => t => (t === 1 ? 1 : 0),
+  linear: (t) => t,
+  ease: (t) => t,
+  quad: (t) => t * t,
+  cubic: (t) => t * t * t,
+  inOut: (fn) => fn,
+  out: (fn) => fn,
+  in: (fn) => fn,
+  bezier: () => (t) => t,
+  circle: (t) => 1 - Math.sqrt(1 - t * t),
+  sin: (t) => Math.sin((t * Math.PI) / 2),
+  exp: (t) => Math.pow(2, 10 * (t - 1)),
+  elastic: () => (t) => t,
+  back: () => (t) => t,
+  bounce: (t) => t,
+  poly: () => (t) => t,
+  step0: () => (t) => (t !== 0 ? 1 : 0),
+  step1: () => (t) => (t === 1 ? 1 : 0),
 };
 
 // ---------------------------------------------------------------------------
 // Worklet utilities
 // ---------------------------------------------------------------------------
 
-const runOnJS = fn => fn;
-const runOnUI = fn => fn;
+const runOnJS = (fn) => fn;
+const runOnUI = (fn) => fn;
 
 // ---------------------------------------------------------------------------
 // Exports

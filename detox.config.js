@@ -1,5 +1,4 @@
 import { defineConfig } from 'detox';
-import { android } from 'detox/src/devices';
 
 export default defineConfig({
   testRunner: 'jest',

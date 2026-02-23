@@ -69,7 +69,7 @@ const HomeStack = () => (
 );
 
 const TabNavigator = () => {
-  const { isCosmic, t } = useTheme();
+  const { isCosmic } = useTheme();
 
   return (
     <Tab.Navigator
@@ -79,10 +79,12 @@ const TabNavigator = () => {
       sceneContainerStyle={
         Platform.OS === 'web'
           ? {
-            paddingTop: 64,
-            backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darkest,
-            height: '100%',
-          }
+              paddingTop: 64,
+              backgroundColor: isCosmic
+                ? '#070712'
+                : Tokens.colors.neutral.darkest,
+              height: '100%',
+            }
           : undefined
       }
       screenOptions={({ route }) => ({
@@ -100,19 +102,29 @@ const TabNavigator = () => {
               size={24}
               color={
                 focused
-                  ? (isCosmic ? '#8B5CF6' : Tokens.colors.indigo.primary)
-                  : (isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary)
+                  ? isCosmic
+                    ? '#8B5CF6'
+                    : Tokens.colors.indigo.primary
+                  : isCosmic
+                    ? '#B9C2D9'
+                    : Tokens.colors.text.tertiary
               }
             />
           );
         },
-        tabBarActiveTintColor: isCosmic ? '#8B5CF6' : Tokens.colors.indigo.primary,
-        tabBarInactiveTintColor: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+        tabBarActiveTintColor: isCosmic
+          ? '#8B5CF6'
+          : Tokens.colors.indigo.primary,
+        tabBarInactiveTintColor: isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.tertiary,
         headerShown: false,
         tabBarStyle: {
           backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
           borderTopWidth: 1,
-          borderTopColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+          borderTopColor: isCosmic
+            ? 'rgba(42, 53, 82, 0.3)'
+            : Tokens.colors.neutral.borderSubtle,
           height: 60,
           paddingBottom: 8,
           elevation: 0,

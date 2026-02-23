@@ -139,8 +139,12 @@ const CalendarScreen = () => {
     isConnecting;
 
   return (
-    <SafeAreaView style={[styles.container, isCosmic && styles.containerCosmic]}>
-      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>{null}</CosmicBackground>
+    <SafeAreaView
+      style={[styles.container, isCosmic && styles.containerCosmic]}
+    >
+      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>
+        {null}
+      </CosmicBackground>
       <View style={styles.webContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -148,12 +152,30 @@ const CalendarScreen = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.content}>
-            <Text style={[styles.title, isCosmic && styles.titleCosmic]}>CALENDAR</Text>
+            <Text style={[styles.title, isCosmic && styles.titleCosmic]}>
+              CALENDAR
+            </Text>
 
             <GlowCard glow="none" style={styles.rationaleCard}>
-              <Text style={[styles.rationaleTitle, isCosmic && styles.rationaleTitleCosmic]}>WHY THIS WORKS</Text>
-              <Text style={[styles.rationaleText, isCosmic && styles.rationaleTextCosmic]}>
-                Externalizing time through visual calendars reduces ADHD time-blindness and improves prospective memory. Seeing commitments spatially helps with planning, transitions, and preventing double-booking. CBT emphasizes external structure as cognitive support.
+              <Text
+                style={[
+                  styles.rationaleTitle,
+                  isCosmic && styles.rationaleTitleCosmic,
+                ]}
+              >
+                WHY THIS WORKS
+              </Text>
+              <Text
+                style={[
+                  styles.rationaleText,
+                  isCosmic && styles.rationaleTextCosmic,
+                ]}
+              >
+                Externalizing time through visual calendars reduces ADHD
+                time-blindness and improves prospective memory. Seeing
+                commitments spatially helps with planning, transitions, and
+                preventing double-booking. CBT emphasizes external structure as
+                cognitive support.
               </Text>
             </GlowCard>
 
@@ -176,9 +198,18 @@ const CalendarScreen = () => {
                     pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
                 >
-                  <Text style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}>‹</Text>
+                  <Text
+                    style={[
+                      styles.navButtonText,
+                      isCosmic && styles.navButtonTextCosmic,
+                    ]}
+                  >
+                    ‹
+                  </Text>
                 </Pressable>
-                <Text style={[styles.monthText, isCosmic && styles.monthTextCosmic]}>
+                <Text
+                  style={[styles.monthText, isCosmic && styles.monthTextCosmic]}
+                >
                   {months[currentDate.getMonth()].toUpperCase()}{' '}
                   {currentDate.getFullYear()}
                 </Text>
@@ -199,13 +230,26 @@ const CalendarScreen = () => {
                     pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
                 >
-                  <Text style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}>›</Text>
+                  <Text
+                    style={[
+                      styles.navButtonText,
+                      isCosmic && styles.navButtonTextCosmic,
+                    ]}
+                  >
+                    ›
+                  </Text>
                 </Pressable>
               </View>
 
               <View style={styles.weekdays}>
                 {days.map((day) => (
-                  <Text key={day} style={[styles.weekdayText, isCosmic && styles.weekdayTextCosmic]}>
+                  <Text
+                    key={day}
+                    style={[
+                      styles.weekdayText,
+                      isCosmic && styles.weekdayTextCosmic,
+                    ]}
+                  >
                     {day}
                   </Text>
                 ))}
@@ -215,7 +259,10 @@ const CalendarScreen = () => {
                 {Array(firstDay)
                   .fill(0)
                   .map((_, i) => (
-                    <View key={`empty-${i}`} style={[styles.dayCell, isCosmic && styles.dayCellCosmic]} />
+                    <View
+                      key={`empty-${i}`}
+                      style={[styles.dayCell, isCosmic && styles.dayCellCosmic]}
+                    />
                   ))}
                 {daysArray.map((day) => {
                   const isToday =
@@ -237,9 +284,15 @@ const CalendarScreen = () => {
                         isToday && styles.todayCell,
                         isToday && isCosmic && styles.todayCellCosmic,
                         hovered && !isToday && styles.dayCellHovered,
-                        hovered && !isToday && isCosmic && styles.dayCellHoveredCosmic,
+                        hovered &&
+                          !isToday &&
+                          isCosmic &&
+                          styles.dayCellHoveredCosmic,
                         pressed && !isToday && styles.dayCellPressed,
-                        pressed && !isToday && isCosmic && styles.dayCellPressedCosmic,
+                        pressed &&
+                          !isToday &&
+                          isCosmic &&
+                          styles.dayCellPressedCosmic,
                       ]}
                     >
                       <Text
@@ -260,18 +313,39 @@ const CalendarScreen = () => {
 
             <View style={styles.legend}>
               <View style={styles.legendItem}>
-                <View style={[
-                  styles.legendDot,
-                  styles.todayDot,
-                  isCosmic && styles.todayDotCosmic,
-                ]} />
-                <Text style={[styles.legendText, isCosmic && styles.legendTextCosmic]}>TODAY</Text>
+                <View
+                  style={[
+                    styles.legendDot,
+                    styles.todayDot,
+                    isCosmic && styles.todayDotCosmic,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.legendText,
+                    isCosmic && styles.legendTextCosmic,
+                  ]}
+                >
+                  TODAY
+                </Text>
               </View>
             </View>
 
             <GlowCard glow="none" style={styles.googleCalendarCard}>
-              <Text style={[styles.googleCalendarTitle, isCosmic && styles.googleCalendarTitleCosmic]}>GOOGLE CALENDAR</Text>
-              <Text style={[styles.googleCalendarStatus, isCosmic && styles.googleCalendarStatusCosmic]}>
+              <Text
+                style={[
+                  styles.googleCalendarTitle,
+                  isCosmic && styles.googleCalendarTitleCosmic,
+                ]}
+              >
+                GOOGLE CALENDAR
+              </Text>
+              <Text
+                style={[
+                  styles.googleCalendarStatus,
+                  isCosmic && styles.googleCalendarStatusCosmic,
+                ]}
+              >
                 {statusTextByConnectionStatus[connectionStatus]}
               </Text>
               <Pressable
@@ -307,7 +381,12 @@ const CalendarScreen = () => {
                     styles.googleCalendarButtonDisabledCosmic,
                 ]}
               >
-                <Text style={[styles.googleCalendarButtonText, isCosmic && styles.googleCalendarButtonTextCosmic]}>
+                <Text
+                  style={[
+                    styles.googleCalendarButtonText,
+                    isCosmic && styles.googleCalendarButtonTextCosmic,
+                  ]}
+                >
                   {buttonTextByConnectionStatus[connectionStatus]}
                 </Text>
               </Pressable>

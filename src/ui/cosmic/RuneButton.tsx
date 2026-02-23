@@ -1,6 +1,6 @@
 /**
  * RuneButton
- * 
+ *
  * Themed button component with focus ring, glow effects, and haptic feedback.
  * The primary action component for the cosmic theme.
  */
@@ -60,16 +60,16 @@ export interface RuneButtonProps {
 
 /**
  * Rune Button Component
- * 
+ *
  * Primary button component for the cosmic theme with:
  * - Configurable variants (primary, secondary, ghost, danger)
  * - Glow effects
  * - Web focus ring support
  * - Haptic feedback
- * 
+ *
  * @example
- * <RuneButton 
- *   variant="primary" 
+ * <RuneButton
+ *   variant="primary"
  *   size="lg"
  *   glow="medium"
  *   onPress={handleStart}
@@ -95,7 +95,7 @@ export const RuneButton = memo(function RuneButton({
 }: RuneButtonProps) {
   const { isCosmic, t } = useTheme();
   const [isPressed, setIsPressed] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  const [_isFocused, setIsFocused] = useState(false);
   const [isKeyboardFocused, setIsKeyboardFocused] = useState(false);
 
   // Handle press with haptic feedback
@@ -122,30 +122,42 @@ export const RuneButton = memo(function RuneButton({
   // Get height based on size
   const getHeight = useMemo(() => {
     switch (size) {
-      case 'sm': return 36;
-      case 'md': return 44;
-      case 'lg': return 56;
-      default: return 44;
+      case 'sm':
+        return 36;
+      case 'md':
+        return 44;
+      case 'lg':
+        return 56;
+      default:
+        return 44;
     }
   }, [size]);
 
   // Get padding based on size
   const getPadding = useMemo(() => {
     switch (size) {
-      case 'sm': return { paddingHorizontal: 12 };
-      case 'md': return { paddingHorizontal: 16 };
-      case 'lg': return { paddingHorizontal: 24 };
-      default: return { paddingHorizontal: 16 };
+      case 'sm':
+        return { paddingHorizontal: 12 };
+      case 'md':
+        return { paddingHorizontal: 16 };
+      case 'lg':
+        return { paddingHorizontal: 24 };
+      default:
+        return { paddingHorizontal: 16 };
     }
   }, [size]);
 
   // Get variant styles
-  const getVariantStyles = useMemo((): { container: ViewStyle; text: TextStyle } => {
+  const getVariantStyles = useMemo((): {
+    container: ViewStyle;
+    text: TextStyle;
+  } => {
     if (!isCosmic) {
       // Linear theme fallback
       return {
         container: {
-          backgroundColor: variant === 'primary' ? t.colors.brand[500] : 'transparent',
+          backgroundColor:
+            variant === 'primary' ? t.colors.brand[500] : 'transparent',
           borderWidth: variant === 'secondary' ? 1 : 0,
           borderColor: t.colors.brand[500],
         },
@@ -214,10 +226,14 @@ export const RuneButton = memo(function RuneButton({
 
   // Get glow style
   const getGlowStyle = useMemo((): ViewStyle => {
-    if (!isCosmic) return {};
+    if (!isCosmic) {
+      return {};
+    }
 
     const glowLevel = glow || (variant === 'primary' ? 'medium' : 'none');
-    if (glowLevel === 'none') return {};
+    if (glowLevel === 'none') {
+      return {};
+    }
 
     const glowColor = variant === 'danger' ? '#FB7185' : '#8B5CF6';
 
@@ -236,7 +252,9 @@ export const RuneButton = memo(function RuneButton({
 
       case 'medium':
         return Platform.select({
-          web: { boxShadow: `0 0 24px ${glowColor}80, 0 0 48px ${glowColor}40` },
+          web: {
+            boxShadow: `0 0 24px ${glowColor}80, 0 0 48px ${glowColor}40`,
+          },
           default: {
             shadowColor: glowColor,
             shadowOffset: { width: 0, height: 0 },
@@ -271,13 +289,15 @@ export const RuneButton = memo(function RuneButton({
 
     return {
       outline: 'none',
-      boxShadow: `0 0 0 2px #2DD4BF, 0 0 0 4px #070712`, // auroraTeal focus ring
+      boxShadow: '0 0 0 2px #2DD4BF, 0 0 0 4px #070712', // auroraTeal focus ring
     } as ViewStyle;
   }, [isKeyboardFocused]);
 
   // Get disabled style
   const getDisabledStyle = useMemo((): ViewStyle => {
-    if (!disabled && !loading) return {};
+    if (!disabled && !loading) {
+      return {};
+    }
 
     return {
       opacity: 0.4,
@@ -286,7 +306,9 @@ export const RuneButton = memo(function RuneButton({
 
   // Get pressed scale style
   const getPressedStyle = useMemo((): ViewStyle => {
-    if (!isPressed) return {};
+    if (!isPressed) {
+      return {};
+    }
 
     return {
       transform: [{ scale: 0.98 }],
@@ -294,35 +316,53 @@ export const RuneButton = memo(function RuneButton({
   }, [isPressed]);
 
   // Container style
-  const containerStyle = useMemo((): StyleProp<ViewStyle> => [
-    {
-      height: getHeight,
-      borderRadius: isCosmic ? 24 : 8, // Soft squircural feel per ADHD guidelines
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 8,
-      borderWidth: 1,
-      borderColor: 'rgba(185, 194, 217, 0.12)',
-      ...getPadding,
-      ...getVariantStyles.container,
-      ...(variant === 'primary' && isCosmic && {
-        borderTopColor: 'rgba(255, 255, 255, 0.25)',
-        borderTopWidth: 1.5,
-      }),
-      ...getGlowStyle,
-      ...getFocusStyle,
-      ...getDisabledStyle,
-      ...getPressedStyle,
-    },
-    style,
-  ], [getHeight, getPadding, getVariantStyles, getGlowStyle, getFocusStyle, getDisabledStyle, getPressedStyle, style, isCosmic, variant]);
+  const containerStyle = useMemo(
+    (): StyleProp<ViewStyle> => [
+      {
+        height: getHeight,
+        borderRadius: isCosmic ? 24 : 8, // Soft squircural feel per ADHD guidelines
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+        borderWidth: 1,
+        borderColor: 'rgba(185, 194, 217, 0.12)',
+        ...getPadding,
+        ...getVariantStyles.container,
+        ...(variant === 'primary' &&
+          isCosmic && {
+            borderTopColor: 'rgba(255, 255, 255, 0.25)',
+            borderTopWidth: 1.5,
+          }),
+        ...getGlowStyle,
+        ...getFocusStyle,
+        ...getDisabledStyle,
+        ...getPressedStyle,
+      },
+      style,
+    ],
+    [
+      getHeight,
+      getPadding,
+      getVariantStyles,
+      getGlowStyle,
+      getFocusStyle,
+      getDisabledStyle,
+      getPressedStyle,
+      style,
+      isCosmic,
+      variant,
+    ],
+  );
 
   // Text style
-  const textStyle = useMemo((): TextStyle => ({
-    fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : 16,
-    ...getVariantStyles.text,
-  }), [size, getVariantStyles.text]);
+  const textStyle = useMemo(
+    (): TextStyle => ({
+      fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : 16,
+      ...getVariantStyles.text,
+    }),
+    [size, getVariantStyles.text],
+  );
 
   return (
     <Pressable
@@ -335,7 +375,10 @@ export const RuneButton = memo(function RuneButton({
       onBlur={handleBlur}
       disabled={disabled || loading}
       style={containerStyle}
-      accessibilityLabel={accessibilityLabel || (typeof children === 'string' ? children : undefined)}
+      accessibilityLabel={
+        accessibilityLabel ||
+        (typeof children === 'string' ? children : undefined)
+      }
       accessibilityRole="button"
       accessibilityHint={accessibilityHint}
       accessibilityState={{

@@ -1,11 +1,11 @@
 /**
  * CosmicBackground
- * 
+ *
  * Screen atmosphere wrapper providing background variants:
  * - ridge: Mountainous, grounded gradient with ridge silhouettes
  * - nebula: Luminous center for time-based flows
  * - moon: Calm radial halo for focus activities
- * 
+ *
  * Based on deep-research-report (2).md specification
  */
 
@@ -44,7 +44,9 @@ function ridgeSvgDataUri(fill = 'rgba(10, 12, 24, 0.92)'): string {
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
     <path fill="${fill}" d="M0,192L120,202.7C240,213,480,235,720,224C960,213,1200,171,1320,149.3L1440,128L1440,320L0,320Z"/>
   </svg>`;
-  const encoded = encodeURIComponent(svg).replace(/'/g, "%27").replace(/"/g, "%22");
+  const encoded = encodeURIComponent(svg)
+    .replace(/'/g, '%27')
+    .replace(/"/g, '%22');
   return `url("data:image/svg+xml,${encoded}")`;
 }
 
@@ -54,17 +56,17 @@ function ridgeSvgDataUri(fill = 'rgba(10, 12, 24, 0.92)'): string {
 
 /**
  * Cosmic Background Component
- * 
+ *
  * Provides themed background atmospheres for screens.
  * On web, uses CSS gradients with multi-layer composition.
  * On native, degrades to solid colors.
- * 
+ *
  * @example
  * // Home screen
  * <CosmicBackground variant="ridge">
  *   <HomeScreenContent />
  * </CosmicBackground>
- * 
+ *
  * @example
  * // Ignite screen with dimmer
  * <CosmicBackground variant="nebula" dimmer>
@@ -82,7 +84,9 @@ export const CosmicBackground = memo(function CosmicBackground({
 
   // Generate web background image per research spec
   const webBackgroundImage = useMemo(() => {
-    if (!isCosmic) return null;
+    if (!isCosmic) {
+      return null;
+    }
 
     // Per spec: colors.bg.obsidian, midnight, deepSpace
     const c = {
@@ -94,8 +98,8 @@ export const CosmicBackground = memo(function CosmicBackground({
     if (variant === 'nebula') {
       // Per spec: luminous center with multiple radial gradients
       return [
-        `radial-gradient(900px 600px at 55% 30%, rgba(139,92,246,0.18) 0%, transparent 60%)`,
-        `radial-gradient(700px 500px at 20% 70%, rgba(36,59,255,0.12) 0%, transparent 55%)`,
+        'radial-gradient(900px 600px at 55% 30%, rgba(139,92,246,0.18) 0%, transparent 60%)',
+        'radial-gradient(700px 500px at 20% 70%, rgba(36,59,255,0.12) 0%, transparent 55%)',
         `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 52%, #1A0F38 100%)`,
       ].join(',');
     }
@@ -103,14 +107,14 @@ export const CosmicBackground = memo(function CosmicBackground({
     if (variant === 'moon') {
       // Per spec: calm radial halo with gold accent
       return [
-        `radial-gradient(520px 520px at 70% 18%, rgba(246,193,119,0.10) 0%, transparent 62%)`,
+        'radial-gradient(520px 520px at 70% 18%, rgba(246,193,119,0.10) 0%, transparent 62%)',
         `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 60%, ${c.deepSpace} 100%)`,
       ].join(',');
     }
 
     // Ridge: grounded with silhouettes
     return [
-      `radial-gradient(700px 520px at 50% 18%, rgba(139,92,246,0.10) 0%, transparent 58%)`,
+      'radial-gradient(700px 520px at 50% 18%, rgba(139,92,246,0.10) 0%, transparent 58%)',
       `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 55%, ${c.deepSpace} 100%)`,
       ridgeSvgDataUri(),
     ].join(',');
@@ -128,28 +132,23 @@ export const CosmicBackground = memo(function CosmicBackground({
   // Web-specific styles with multi-layer backgrounds
   const webStyle: ViewStyle | null = useMemo(() => {
     return Platform.OS === 'web' && isCosmic && webBackgroundImage
-      ? {
-        backgroundImage: webBackgroundImage,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: variant === 'ridge'
-          ? 'center center, center center, center bottom'
-          : 'center',
-        backgroundSize: variant === 'ridge'
-          ? 'cover, cover, 100% 34%'
-          : 'cover',
-      } as any
+      ? ({
+          backgroundImage: webBackgroundImage,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition:
+            variant === 'ridge'
+              ? 'center center, center center, center bottom'
+              : 'center',
+          backgroundSize:
+            variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
+        } as any)
       : null;
   }, [isCosmic, webBackgroundImage, variant]);
 
   return (
     <View
       testID={testID}
-      style={[
-        styles.root,
-        backgroundStyle,
-        webStyle,
-        style,
-      ]}
+      style={[styles.root, backgroundStyle, webStyle, style]}
     >
       {children}
 
@@ -160,7 +159,8 @@ export const CosmicBackground = memo(function CosmicBackground({
             StyleSheet.absoluteFillObject,
             {
               opacity: 0.03,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
             } as any,
           ]}
           pointerEvents="none"

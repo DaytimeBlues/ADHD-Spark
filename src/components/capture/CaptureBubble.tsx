@@ -8,7 +8,14 @@
  * States: idle | recording | processing | needs-review | failed | offline
  */
 
-import React, { memo, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, {
+  memo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   View,
   Pressable,
@@ -44,19 +51,18 @@ const FAB_SIZE = 60;
 const BADGE_SIZE = 22;
 const PULSE_DURATION = 900;
 const SPIN_DURATION = 1200;
-const SHAKE_DURATION = 400;
 
 // Cosmic colors (no hex outside tokens in app code — these mirror cosmicTokens)
 const COLORS = {
-  idle: '#8B5CF6',       // nebulaViolet
-  recording: '#2DD4BF',  // auroraTeal
+  idle: '#8B5CF6', // nebulaViolet
+  recording: '#2DD4BF', // auroraTeal
   processing: '#8B5CF6', // nebulaViolet
-  failed: '#FB7185',     // cometRose
-  offline: '#6B7A9C',    // neutral.medium (muted)
+  failed: '#FB7185', // cometRose
+  offline: '#6B7A9C', // neutral.medium (muted)
   needsCheckin: '#F6C177', // gold
-  badge: '#FB7185',      // cometRose
-  badgeText: '#EEF2FF',  // starlight
-  fabText: '#EEF2FF',    // starlight
+  badge: '#FB7185', // cometRose
+  badgeText: '#EEF2FF', // starlight
+  fabText: '#EEF2FF', // starlight
 } as const;
 
 // ============================================================================
@@ -91,7 +97,11 @@ export const CaptureBubble = memo(function CaptureBubble() {
   // Subscribe to check-in interval
   useEffect(() => {
     const unsub = CheckInService.subscribe((isPending) => {
-      if (isPending && bubbleState !== 'recording' && bubbleState !== 'processing') {
+      if (
+        isPending &&
+        bubbleState !== 'recording' &&
+        bubbleState !== 'processing'
+      ) {
         setBubbleState('needs-checkin');
       } else if (!isPending && bubbleState === 'needs-checkin') {
         setBubbleState(badgeCount > 0 ? 'needs-review' : 'idle');
@@ -154,15 +164,42 @@ export const CaptureBubble = memo(function CaptureBubble() {
   const runShake = useCallback(() => {
     shakeAnim.setValue(0);
     Animated.sequence([
-      Animated.timing(shakeAnim, { toValue: 8, duration: 60, useNativeDriver: true, easing: Easing.linear }),
-      Animated.timing(shakeAnim, { toValue: -8, duration: 60, useNativeDriver: true, easing: Easing.linear }),
-      Animated.timing(shakeAnim, { toValue: 6, duration: 60, useNativeDriver: true, easing: Easing.linear }),
-      Animated.timing(shakeAnim, { toValue: -6, duration: 60, useNativeDriver: true, easing: Easing.linear }),
-      Animated.timing(shakeAnim, { toValue: 0, duration: 60, useNativeDriver: true, easing: Easing.linear }),
+      Animated.timing(shakeAnim, {
+        toValue: 8,
+        duration: 60,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: -8,
+        duration: 60,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 6,
+        duration: 60,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: -6,
+        duration: 60,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 0,
+        duration: 60,
+        useNativeDriver: true,
+        easing: Easing.linear,
+      }),
     ]).start(() => {
       // Reset to idle after showing error for 3s
       setTimeout(() => {
-        setBubbleState((prev) => (prev === 'failed' ? (badgeCount > 0 ? 'needs-review' : 'idle') : prev));
+        setBubbleState((prev) =>
+          prev === 'failed' ? (badgeCount > 0 ? 'needs-review' : 'idle') : prev,
+        );
       }, 3000);
     });
   }, [shakeAnim, badgeCount]);
@@ -183,12 +220,18 @@ export const CaptureBubble = memo(function CaptureBubble() {
   // Derive FAB color from state
   const fabColor = useMemo((): string => {
     switch (bubbleState) {
-      case 'recording': return COLORS.recording;
-      case 'processing': return COLORS.processing;
-      case 'failed': return COLORS.failed;
-      case 'offline': return COLORS.offline;
-      case 'needs-checkin': return COLORS.needsCheckin;
-      default: return COLORS.idle;
+      case 'recording':
+        return COLORS.recording;
+      case 'processing':
+        return COLORS.processing;
+      case 'failed':
+        return COLORS.failed;
+      case 'offline':
+        return COLORS.offline;
+      case 'needs-checkin':
+        return COLORS.needsCheckin;
+      default:
+        return COLORS.idle;
     }
   }, [bubbleState]);
 
@@ -199,27 +242,45 @@ export const CaptureBubble = memo(function CaptureBubble() {
     }
     switch (bubbleState) {
       case 'recording':
-        return { boxShadow: `0 0 0 3px rgba(45, 212, 191, 0.35), 0 0 28px rgba(45, 212, 191, 0.4), 0 8px 24px rgba(7,7,18,0.6)` } as ViewStyle;
+        return {
+          boxShadow:
+            '0 0 0 3px rgba(45, 212, 191, 0.35), 0 0 28px rgba(45, 212, 191, 0.4), 0 8px 24px rgba(7,7,18,0.6)',
+        } as ViewStyle;
       case 'failed':
-        return { boxShadow: `0 0 0 2px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.3)` } as ViewStyle;
+        return {
+          boxShadow:
+            '0 0 0 2px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.3)',
+        } as ViewStyle;
       case 'offline':
-        return { boxShadow: `0 4px 16px rgba(7,7,18,0.5)` } as ViewStyle;
+        return { boxShadow: '0 4px 16px rgba(7,7,18,0.5)' } as ViewStyle;
       case 'needs-checkin':
-        return { boxShadow: `0 0 0 3px rgba(246, 193, 119, 0.35), 0 0 28px rgba(246, 193, 119, 0.4), 0 8px 24px rgba(7,7,18,0.6)` } as ViewStyle;
+        return {
+          boxShadow:
+            '0 0 0 3px rgba(246, 193, 119, 0.35), 0 0 28px rgba(246, 193, 119, 0.4), 0 8px 24px rgba(7,7,18,0.6)',
+        } as ViewStyle;
       default:
-        return { boxShadow: `0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 24px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(7,7,18,0.6)` } as ViewStyle;
+        return {
+          boxShadow:
+            '0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 24px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(7,7,18,0.6)',
+        } as ViewStyle;
     }
   }, [bubbleState]);
 
   // Derive FAB icon/label
   const fabIcon = useMemo((): string => {
     switch (bubbleState) {
-      case 'recording': return '⏹';
-      case 'processing': return '⟳';
-      case 'failed': return '✕';
-      case 'offline': return '⊗';
-      case 'needs-checkin': return '🎯';
-      default: return '+';
+      case 'recording':
+        return '⏹';
+      case 'processing':
+        return '⟳';
+      case 'failed':
+        return '✕';
+      case 'offline':
+        return '⊗';
+      case 'needs-checkin':
+        return '🎯';
+      default:
+        return '+';
     }
   }, [bubbleState]);
 
@@ -252,7 +313,9 @@ export const CaptureBubble = memo(function CaptureBubble() {
             transform: [
               { scale: pulseAnim },
               { translateX: shakeAnim },
-              ...(bubbleState === 'processing' ? [{ rotate: spinRotation }] : []),
+              ...(bubbleState === 'processing'
+                ? [{ rotate: spinRotation }]
+                : []),
             ],
           },
         ]}
@@ -270,23 +333,21 @@ export const CaptureBubble = memo(function CaptureBubble() {
                 : 'Open capture'
           }
           accessibilityRole="button"
-          style={[
-            styles.fab,
-            { backgroundColor: fabColor },
-            fabGlow,
-          ]}
+          style={[styles.fab, { backgroundColor: fabColor }, fabGlow]}
         >
           <Text style={styles.fabIcon}>{fabIcon}</Text>
         </Pressable>
 
         {/* Badge */}
-        {badgeCount > 0 && bubbleState !== 'recording' && bubbleState !== 'processing' && (
-          <View style={styles.badge} testID="capture-bubble-badge">
-            <Text style={styles.badgeText}>
-              {badgeCount > 99 ? '99+' : badgeCount}
-            </Text>
-          </View>
-        )}
+        {badgeCount > 0 &&
+          bubbleState !== 'recording' &&
+          bubbleState !== 'processing' && (
+            <View style={styles.badge} testID="capture-bubble-badge">
+              <Text style={styles.badgeText}>
+                {badgeCount > 99 ? '99+' : badgeCount}
+              </Text>
+            </View>
+          )}
       </Animated.View>
 
       {/* Capture Drawer */}

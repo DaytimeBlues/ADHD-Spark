@@ -24,7 +24,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
   });
 
   test.describe('Suite A: Morning Chaos', () => {
-    test('A.1 Quick Capture: manual text input in Brain Dump', async ({ page }) => {
+    test('A.1 Quick Capture: manual text input in Brain Dump', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-fogcutter').click({ force: true });
       await page
         .getByPlaceholder('> INPUT_OVERWHELMING_TASK')
@@ -36,7 +38,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByText('Grade 30 essays by Friday')).toBeVisible();
     });
 
-    test('A.2 Voice Input Simulation: UI flow of recording', async ({ page }) => {
+    test('A.2 Voice Input Simulation: UI flow of recording', async ({
+      page,
+    }) => {
       await goToTab(page, 'tasks');
 
       await page.getByTestId('brain-dump-record-toggle').click();
@@ -48,7 +52,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       ).toBeVisible();
     });
 
-    test('A.3 AI Categorization: interaction and UI update', async ({ page }) => {
+    test('A.3 AI Categorization: interaction and UI update', async ({
+      page,
+    }) => {
       await goToTab(page, 'tasks');
       await page.getByPlaceholder('> INPUT_DATA...').fill('Buy milk');
       await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
@@ -60,7 +66,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByText(/AI_SORT|SORTING.../)).toBeVisible();
     });
 
-    test('A.4 Data Persistence: items remain after navigation', async ({ page }) => {
+    test('A.4 Data Persistence: items remain after navigation', async ({
+      page,
+    }) => {
       await goToTab(page, 'tasks');
       await page.getByPlaceholder('> INPUT_DATA...').fill('Persistent Task');
       await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
@@ -72,13 +80,17 @@ test.describe('Alex Persona - E2E Scenarios', () => {
   });
 
   test.describe('Suite B: Prep Period Black Hole', () => {
-    test('B.1 Micro-Step Decomposition: breaking large tasks', async ({ page }) => {
+    test('B.1 Micro-Step Decomposition: breaking large tasks', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-fogcutter').click({ force: true });
       await page
         .getByPlaceholder('> INPUT_OVERWHELMING_TASK')
         .fill('Parent-Teacher Night');
 
-      await page.getByPlaceholder('> ADD_MICRO_STEP').fill('Print sign-in sheet');
+      await page
+        .getByPlaceholder('> ADD_MICRO_STEP')
+        .fill('Print sign-in sheet');
       await page.getByPlaceholder('> ADD_MICRO_STEP').press('Enter');
       await page.getByPlaceholder('> ADD_MICRO_STEP').fill('Prepare desk');
       await page.getByPlaceholder('> ADD_MICRO_STEP').press('Enter');
@@ -87,14 +99,18 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByTestId('microstep-number-2')).toHaveText('02');
     });
 
-    test('B.2 Deep Focus Launch: Pomodoro from Fog Cutter', async ({ page }) => {
+    test('B.2 Deep Focus Launch: Pomodoro from Fog Cutter', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
       await expect(page.getByTestId('timer-display')).toBeVisible();
       await page.getByText('START TIMER').click();
       await expect(page.getByText('PAUSE')).toBeVisible();
     });
 
-    test('B.3 Timer Accuracy: decrements and remains active', async ({ page }) => {
+    test('B.3 Timer Accuracy: decrements and remains active', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
 
       const timer = page.getByTestId('timer-display');
@@ -174,7 +190,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByTestId('home-title')).toBeVisible();
     });
 
-    test('D.2 State Restoration: Restores Fog Cutter focus', async ({ page }) => {
+    test('D.2 State Restoration: Restores Fog Cutter focus', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-fogcutter').click({ force: true });
       await page
         .getByPlaceholder('> INPUT_OVERWHELMING_TASK')
@@ -191,7 +209,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByText('ACTIVE_OPERATIONS')).toBeVisible();
     });
 
-    test('D.3 Persistent Timers: Remains active on return', async ({ page }) => {
+    test('D.3 Persistent Timers: Remains active on return', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
       await page.getByText('START TIMER').click();
       await page.goto('/');
@@ -200,7 +220,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(page.getByTestId('timer-display')).toBeVisible();
     });
 
-    test('D.4 Progress Summary: Status update in Fog Cutter', async ({ page }) => {
+    test('D.4 Progress Summary: Status update in Fog Cutter', async ({
+      page,
+    }) => {
       await page.getByTestId('mode-fogcutter').click({ force: true });
       await expect(page.getByText('ACTIVE_OPERATIONS')).toBeVisible();
     });
@@ -250,7 +272,9 @@ test.describe('Alex Persona - E2E Scenarios', () => {
         .getByPlaceholder('> INPUT_DATA...')
         .fill('Meeting Recap: Alex is doing great');
       await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
-      await expect(page.getByText('Meeting Recap: Alex is doing great')).toBeVisible();
+      await expect(
+        page.getByText('Meeting Recap: Alex is doing great'),
+      ).toBeVisible();
     });
   });
 });

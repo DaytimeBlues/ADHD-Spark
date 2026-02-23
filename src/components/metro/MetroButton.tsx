@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
-  View,
 } from 'react-native';
 import {
   MetroPalette,

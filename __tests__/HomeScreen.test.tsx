@@ -200,7 +200,8 @@ describe('HomeScreen', () => {
       get: () => 'android',
     });
 
-    const overlayService = require('../src/services/OverlayService').default as {
+    const overlayService = require('../src/services/OverlayService')
+      .default as {
       isRunning: jest.Mock;
     };
     overlayService.isRunning.mockResolvedValueOnce(true);

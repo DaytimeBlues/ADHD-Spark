@@ -120,7 +120,12 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
               </View>
             </View>
 
-            <GlowCard glow="soft" tone="raised" padding="md" style={styles.compactCard}>
+            <GlowCard
+              glow="soft"
+              tone="raised"
+              padding="md"
+              style={styles.compactCard}
+            >
               <View style={styles.compactHeaderRow}>
                 <Text style={styles.compactTitle}>{CADDI_OVERVIEW.title}</Text>
                 <EvidenceBadge tier="clinical" label={CADDI_OVERVIEW.badge} />
@@ -166,7 +171,13 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
             </GlowCard>
 
             {categories.map((category) => (
-              <GlowCard key={category.id} glow="none" tone="base" padding="lg" style={styles.categoryCard}>
+              <GlowCard
+                key={category.id}
+                glow="none"
+                tone="base"
+                padding="lg"
+                style={styles.categoryCard}
+              >
                 <View style={styles.categoryHeader}>
                   <Text style={styles.categoryEmoji}>{category.emoji}</Text>
                   <View style={styles.categoryTitleContainer}>
@@ -178,7 +189,7 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                   {category.description}
                 </Text>
                 <View style={styles.featuresRow}>
-                  {category.features.map((feature) => (
+                  {category.features.map((feature) =>
                     isCosmic ? (
                       <RuneButton
                         key={feature.route}
@@ -209,8 +220,8 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                           {feature.name.toUpperCase()}
                         </Text>
                       </Pressable>
-                    )
-                  ))}
+                    ),
+                  )}
                 </View>
               </GlowCard>
             ))}
@@ -261,11 +272,15 @@ const getStyles = (isCosmic: boolean) =>
       width: 40,
       height: 40,
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.darker,
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           transition: Tokens.motion.transitions.base,
@@ -274,12 +289,16 @@ const getStyles = (isCosmic: boolean) =>
       }),
     },
     backButtonHovered: {
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.5)'
+        : Tokens.colors.neutral.dark,
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.text.tertiary,
       transform: [{ scale: Tokens.motion.scales.hover }],
     },
     backButtonPressed: {
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.2)' : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.2)'
+        : Tokens.colors.neutral.darkest,
       transform: [{ scale: Tokens.motion.scales.press }],
     },
     backButtonText: {
@@ -329,11 +348,15 @@ const getStyles = (isCosmic: boolean) =>
       gap: Tokens.spacing[2],
     },
     linkButton: {
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.dark,
       paddingVertical: 4,
       paddingHorizontal: 8,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.borderSubtle,
       flexDirection: 'row',
       alignItems: 'center',
       gap: Tokens.spacing[2],
@@ -347,7 +370,9 @@ const getStyles = (isCosmic: boolean) =>
     },
     linkButtonHovered: {
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.text.secondary,
-      backgroundColor: isCosmic ? 'rgba(42, 53, 82, 0.5)' : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.5)'
+        : Tokens.colors.neutral.darkest,
     },
     linkButtonPressed: {
       opacity: 0.7,
@@ -410,7 +435,9 @@ const getStyles = (isCosmic: boolean) =>
       paddingHorizontal: Tokens.spacing[4],
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       borderWidth: 1,
-      borderColor: isCosmic ? 'rgba(42, 53, 82, 0.3)' : Tokens.colors.neutral.borderSubtle,
+      borderColor: isCosmic
+        ? 'rgba(42, 53, 82, 0.3)'
+        : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           cursor: 'pointer',

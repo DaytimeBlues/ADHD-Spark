@@ -1,6 +1,6 @@
 /**
  * Cosmic Theme Tokens
- * 
+ *
  * Cosmic-Mystic aesthetic with Roerich-adjacent visual language
  * Deep space neutrals + ethereal accent glows
  */
@@ -13,19 +13,19 @@ import { Platform } from 'react-native';
 
 const cosmicColors = {
   // Neutrals - Deep space foundation
-  obsidian: '#070712',      // Deepest background
-  midnight: '#0B1022',      // Secondary background
-  deepSpace: '#111A33',     // Card surfaces
-  slate: '#2A3552',         // Borders, dividers
-  mist: '#B9C2D9',          // Secondary text
-  starlight: '#EEF2FF',     // Primary text
+  obsidian: '#070712', // Deepest background
+  midnight: '#0B1022', // Secondary background
+  deepSpace: '#111A33', // Card surfaces
+  slate: '#2A3552', // Borders, dividers
+  mist: '#B9C2D9', // Secondary text
+  starlight: '#EEF2FF', // Primary text
 
   // Accents - Ethereal glows
-  nebulaViolet: '#8B5CF6',  // Primary accent
-  deepIndigo: '#243BFF',    // Links, secondary actions
-  auroraTeal: '#2DD4BF',    // Success, breathing states, focus
+  nebulaViolet: '#8B5CF6', // Primary accent
+  deepIndigo: '#243BFF', // Links, secondary actions
+  auroraTeal: '#2DD4BF', // Success, breathing states, focus
   starlightGold: '#F6C177', // Warnings, calendar highlights
-  cometRose: '#FB7185',     // Errors, destructive actions
+  cometRose: '#FB7185', // Errors, destructive actions
 } as const;
 
 // ============================================================================
@@ -42,8 +42,10 @@ export type GlowLevel = 'none' | 'soft' | 'medium' | 'strong';
 export const webBoxShadows = {
   none: 'none',
   soft: '0 0 0 1px rgba(139, 92, 246, 0.18), 0 10px 24px rgba(7, 7, 18, 0.55)',
-  medium: '0 0 0 1px rgba(139, 92, 246, 0.28), 0 0 26px rgba(139, 92, 246, 0.22), 0 14px 30px rgba(7, 7, 18, 0.55)',
-  strong: '0 0 0 1px rgba(45, 212, 191, 0.34), 0 0 34px rgba(45, 212, 191, 0.26), 0 0 70px rgba(139, 92, 246, 0.18), 0 18px 44px rgba(7, 7, 18, 0.62)',
+  medium:
+    '0 0 0 1px rgba(139, 92, 246, 0.28), 0 0 26px rgba(139, 92, 246, 0.22), 0 14px 30px rgba(7, 7, 18, 0.55)',
+  strong:
+    '0 0 0 1px rgba(45, 212, 191, 0.34), 0 0 34px rgba(45, 212, 191, 0.26), 0 0 70px rgba(139, 92, 246, 0.18), 0 18px 44px rgba(7, 7, 18, 0.62)',
 } as const;
 
 /**
@@ -91,13 +93,15 @@ export const textGlowStyles = {
   }),
   medium: Platform.select({
     web: {
-      textShadow: '0 0 24px rgba(139, 92, 246, 0.40), 0 0 48px rgba(139, 92, 246, 0.20)',
+      textShadow:
+        '0 0 24px rgba(139, 92, 246, 0.40), 0 0 48px rgba(139, 92, 246, 0.20)',
     },
     default: undefined,
   }),
   strong: Platform.select({
     web: {
-      textShadow: '0 0 32px rgba(45, 212, 191, 0.50), 0 0 64px rgba(139, 92, 246, 0.30)',
+      textShadow:
+        '0 0 32px rgba(45, 212, 191, 0.50), 0 0 64px rgba(139, 92, 246, 0.30)',
     },
     default: undefined,
   }),

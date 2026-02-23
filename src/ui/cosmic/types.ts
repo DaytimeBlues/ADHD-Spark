@@ -1,6 +1,6 @@
 /**
  * Cosmic UI Component Types
- * 
+ *
  * Shared type definitions for cosmic-themed UI primitives
  */
 
@@ -9,7 +9,7 @@
 // ============================================================================
 
 /**
- * Glow intensity levels for interactive states
+ * Glow intensity levels
  */
 export type GlowLevel = 'none' | 'soft' | 'medium' | 'strong';
 
@@ -63,7 +63,7 @@ export type TimerColor = 'default' | 'success' | 'warning' | 'neutral';
 /**
  * Timer digit size variants
  */
-export type TimerSize = 'md' | 'lg' | 'xl';
+export type TimerSize = 'sm' | 'md' | 'lg' | 'xl' | 'hero';
 
 // ============================================================================
 // CARD SYSTEM
@@ -78,7 +78,12 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 // COMPONENT PROP TYPES
 // ============================================================================
 
-import { ViewStyle, TextStyle, StyleProp, PressableProps, AccessibilityRole } from 'react-native';
+import {
+  ViewStyle,
+  TextStyle,
+  StyleProp,
+  AccessibilityRole,
+} from 'react-native';
 
 /**
  * Base cosmic component props

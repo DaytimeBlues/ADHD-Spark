@@ -22,7 +22,9 @@ describe('fogCutter utils', () => {
       { id: 'c', text: 'C', status: 'new' },
     ]);
 
-    const nextCount = normalized.filter((step) => step.status === 'next').length;
+    const nextCount = normalized.filter(
+      (step) => step.status === 'next',
+    ).length;
     expect(nextCount).toBe(1);
     expect(normalized[1].status).toBe('new');
   });

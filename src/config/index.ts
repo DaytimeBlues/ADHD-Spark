@@ -85,7 +85,8 @@ const getConfig = (): Config => {
     }
 
     if (process.env.REACT_APP_AI_MAX_RETRIES) {
-      config.aiMaxRetries = parseInt(process.env.REACT_APP_AI_MAX_RETRIES, 10) || 3;
+      config.aiMaxRetries =
+        parseInt(process.env.REACT_APP_AI_MAX_RETRIES, 10) || 3;
     }
 
     if (

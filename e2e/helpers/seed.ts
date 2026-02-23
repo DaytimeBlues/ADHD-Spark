@@ -55,24 +55,27 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
     },
   ];
 
-  await page.addInitScript((seed) => {
-    window.localStorage.clear();
-    window.localStorage.setItem('streakCount', '3');
-    window.localStorage.setItem(
-      'lastUseDate',
-      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-    );
-    window.localStorage.setItem(
-      'activationSessions',
-      JSON.stringify(seed.activationSessions),
-    );
-    window.localStorage.setItem('brainDump', JSON.stringify(seed.brainDump));
-    window.localStorage.setItem('tasks', JSON.stringify(seed.tasks));
-  }, {
-    activationSessions,
-    brainDump,
-    tasks,
-  });
+  await page.addInitScript(
+    (seed) => {
+      window.localStorage.clear();
+      window.localStorage.setItem('streakCount', '3');
+      window.localStorage.setItem(
+        'lastUseDate',
+        new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+      );
+      window.localStorage.setItem(
+        'activationSessions',
+        JSON.stringify(seed.activationSessions),
+      );
+      window.localStorage.setItem('brainDump', JSON.stringify(seed.brainDump));
+      window.localStorage.setItem('tasks', JSON.stringify(seed.tasks));
+    },
+    {
+      activationSessions,
+      brainDump,
+      tasks,
+    },
+  );
 };
 
 export const enableE2ETestMode = async (page: Page): Promise<void> => {

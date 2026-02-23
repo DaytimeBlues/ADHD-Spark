@@ -1,4 +1,4 @@
-import { device, element, by, expect } from 'detox';
+import { device, element, by } from 'detox';
 
 describe('Screenshots', () => {
   it('should capture Home screen', async () => {

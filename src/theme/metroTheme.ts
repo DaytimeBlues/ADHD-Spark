@@ -1,5 +1,3 @@
-import { TextStyle, ViewStyle } from 'react-native';
-
 // Metro Design Language (MDL) Theme Tokens
 // Principles: Typography-first, Content over Chrome, Authentic Digitally
 

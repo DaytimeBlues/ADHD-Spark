@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { agentEventBus, AgentEventName, AgentEventPayloads } from '../services/AgentEventBus';
+import {
+  agentEventBus,
+  AgentEventName,
+  AgentEventPayloads,
+} from '../services/AgentEventBus';
 
 /**
  * useAgentEvents
@@ -13,12 +17,12 @@ import { agentEventBus, AgentEventName, AgentEventPayloads } from '../services/A
  * });
  */
 export function useAgentEvents<E extends AgentEventName>(
-    event: E,
-    listener: (payload: AgentEventPayloads[E]) => void,
+  event: E,
+  listener: (payload: AgentEventPayloads[E]) => void,
 ): void {
-    useEffect(() => {
-        const unsubscribe = agentEventBus.on(event, listener);
-        return unsubscribe;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [event]);
+  useEffect(() => {
+    const unsubscribe = agentEventBus.on(event, listener);
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event]);
 }

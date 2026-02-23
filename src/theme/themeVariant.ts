@@ -1,6 +1,6 @@
 /**
  * Theme Variant Types and Utilities
- * 
+ *
  * Type definitions and migration helpers for theme variants
  */
 
@@ -48,22 +48,22 @@ export const DEFAULT_THEME_VARIANT: ThemeVariant = 'cosmic';
  */
 const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   // Direct mappings
-  'linear': 'linear',
-  'cosmic': 'cosmic',
+  linear: 'linear',
+  cosmic: 'cosmic',
 
   // Legacy/deprecated values (if any existed)
-  'default': 'linear',
-  'dark': 'linear',
-  'light': 'linear',
-  'metro': 'linear',
+  default: 'linear',
+  dark: 'linear',
+  light: 'linear',
+  metro: 'linear',
 };
 
 /**
  * Migrates a stored theme value to the current ThemeVariant type
- * 
+ *
  * @param value - The stored theme value (could be legacy)
  * @returns Valid ThemeVariant
- * 
+ *
  * @example
  * const storedValue = await AsyncStorage.getItem('theme');
  * const variant = migrateThemeVariant(storedValue);
@@ -84,7 +84,9 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
   }
 
   // Unknown value, default to linear for safety
-  console.warn(`[Theme] Unknown theme value "${value}", defaulting to "${DEFAULT_THEME_VARIANT}"`);
+  console.warn(
+    `[Theme] Unknown theme value "${value}", defaulting to "${DEFAULT_THEME_VARIANT}"`,
+  );
   return DEFAULT_THEME_VARIANT;
 }
 
@@ -92,15 +94,21 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
  * Validates if a value is a valid ThemeVariant
  */
 export function isValidThemeVariant(value: unknown): value is ThemeVariant {
-  return typeof value === 'string' && (value === 'linear' || value === 'cosmic');
+  return (
+    typeof value === 'string' && (value === 'linear' || value === 'cosmic')
+  );
 }
 
 /**
  * Type guard for ThemeVariant
  */
-export function assertThemeVariant(value: unknown): asserts value is ThemeVariant {
+export function assertThemeVariant(
+  value: unknown,
+): asserts value is ThemeVariant {
   if (!isValidThemeVariant(value)) {
-    throw new Error(`Invalid theme variant: ${value}. Expected 'linear' or 'cosmic'.`);
+    throw new Error(
+      `Invalid theme variant: ${value}. Expected 'linear' or 'cosmic'.`,
+    );
   }
 }
 
@@ -112,15 +120,18 @@ export function assertThemeVariant(value: unknown): asserts value is ThemeVarian
  * Human-readable metadata for each theme variant
  * Useful for UI toggle displays
  */
-export const THEME_METADATA: Record<ThemeVariant, {
-  label: string;
-  description: string;
-  preview: {
-    background: string;
-    accent: string;
-    text: string;
-  };
-}> = {
+export const THEME_METADATA: Record<
+  ThemeVariant,
+  {
+    label: string;
+    description: string;
+    preview: {
+      background: string;
+      accent: string;
+      text: string;
+    };
+  }
+> = {
   linear: {
     label: 'Linear',
     description: 'Clean monochrome aesthetic with sharp edges',

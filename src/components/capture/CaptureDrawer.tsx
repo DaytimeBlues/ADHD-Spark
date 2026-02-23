@@ -53,9 +53,15 @@ const MODES: Array<{ id: DrawerMode; icon: string; label: string }> = [
 
 const MEETING_TEMPLATE = (now: Date): string => {
   const date = now.toLocaleDateString('en-AU', {
-    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   });
-  const time = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+  const time = now.toLocaleTimeString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
   return `Meeting: ${date} at ${time}\n\nAttendees:\n\nNotes:\n\nAction items:\n`;
 };
 
@@ -82,8 +88,13 @@ interface VoiceModeProps {
   onStateChange: (state: BubbleState) => void;
 }
 
-const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceModeProps) {
-  const [phase, setPhase] = useState<'idle' | 'recording' | 'processing' | 'done' | 'error'>('idle');
+const VoiceMode = memo(function VoiceMode({
+  onCapture,
+  onStateChange,
+}: VoiceModeProps) {
+  const [phase, setPhase] = useState<
+    'idle' | 'recording' | 'processing' | 'done' | 'error'
+  >('idle');
   const [elapsedMs, setElapsedMs] = useState(0);
   const [transcript, setTranscript] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -171,9 +182,15 @@ const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceMod
 
       {phase === 'recording' && (
         <View style={styles.recordingActive}>
-          <View style={[styles.recordingIndicator, { backgroundColor: C.teal }]} />
-          <Text style={[styles.recordingTime, { color: C.teal }]}>{elapsed}</Text>
-          <Text style={[styles.recordingHint, { color: C.mutedText }]}>Recording…</Text>
+          <View
+            style={[styles.recordingIndicator, { backgroundColor: C.teal }]}
+          />
+          <Text style={[styles.recordingTime, { color: C.teal }]}>
+            {elapsed}
+          </Text>
+          <Text style={[styles.recordingHint, { color: C.mutedText }]}>
+            Recording…
+          </Text>
           <Pressable
             testID="capture-stop-recording"
             style={[styles.stopBtn, { borderColor: C.teal }]}
@@ -181,7 +198,7 @@ const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceMod
             accessibilityLabel="Stop recording"
             accessibilityRole="button"
           >
-            <Text style={[styles.stopBtnText, { color: C.teal }]}>■  STOP</Text>
+            <Text style={[styles.stopBtnText, { color: C.teal }]}>■ STOP</Text>
           </Pressable>
         </View>
       )}
@@ -189,14 +206,20 @@ const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceMod
       {phase === 'processing' && (
         <View style={styles.processingState}>
           <ActivityIndicator size="large" color={C.violet} />
-          <Text style={[styles.processingText, { color: C.mutedText }]}>Processing…</Text>
+          <Text style={[styles.processingText, { color: C.mutedText }]}>
+            Processing…
+          </Text>
         </View>
       )}
 
       {phase === 'done' && (
         <View style={styles.transcriptContainer}>
-          <Text style={[styles.transcriptLabel, { color: C.mutedText }]}>CAPTURED</Text>
-          <Text style={[styles.transcriptText, { color: C.starlight }]}>{transcript}</Text>
+          <Text style={[styles.transcriptLabel, { color: C.mutedText }]}>
+            CAPTURED
+          </Text>
+          <Text style={[styles.transcriptText, { color: C.starlight }]}>
+            {transcript}
+          </Text>
           <View style={styles.confirmRow}>
             <Pressable
               style={[styles.confirmBtn, { backgroundColor: C.violet }]}
@@ -213,7 +236,9 @@ const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceMod
               accessibilityLabel="Discard recording"
               accessibilityRole="button"
             >
-              <Text style={[styles.discardBtnText, { color: C.rose }]}>DISCARD</Text>
+              <Text style={[styles.discardBtnText, { color: C.rose }]}>
+                DISCARD
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -224,11 +249,16 @@ const VoiceMode = memo(function VoiceMode({ onCapture, onStateChange }: VoiceMod
           <Text style={[styles.errorText, { color: C.rose }]}>{errorMsg}</Text>
           <Pressable
             style={[styles.retryBtn, { borderColor: C.violet }]}
-            onPress={() => { setPhase('idle'); setErrorMsg(''); }}
+            onPress={() => {
+              setPhase('idle');
+              setErrorMsg('');
+            }}
             accessibilityLabel="Try again"
             accessibilityRole="button"
           >
-            <Text style={[styles.retryBtnText, { color: C.violet }]}>TRY AGAIN</Text>
+            <Text style={[styles.retryBtnText, { color: C.violet }]}>
+              TRY AGAIN
+            </Text>
           </Pressable>
         </View>
       )}
@@ -249,7 +279,9 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
 
   const handleConfirm = useCallback(() => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      return;
+    }
     onCapture(trimmed);
     setText('');
   }, [text, onCapture]);
@@ -258,7 +290,10 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
     <View style={styles.modeContent}>
       <TextInput
         testID="capture-text-input"
-        style={[styles.textInput, { color: C.starlight, borderColor: C.border }]}
+        style={[
+          styles.textInput,
+          { color: C.starlight, borderColor: C.border },
+        ]}
         value={text}
         onChangeText={setText}
         placeholder="Type anything — tasks, thoughts, ideas…"
@@ -272,7 +307,10 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
       />
       <Pressable
         testID="capture-confirm"
-        style={[styles.confirmBtn, { backgroundColor: text.trim() ? C.violet : C.border, marginTop: 12 }]}
+        style={[
+          styles.confirmBtn,
+          { backgroundColor: text.trim() ? C.violet : C.border, marginTop: 12 },
+        ]}
         onPress={handleConfirm}
         disabled={!text.trim()}
         accessibilityLabel="Save to inbox"
@@ -326,7 +364,9 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
 
   const handleConfirm = useCallback(() => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      return;
+    }
     onCapture(trimmed);
     setText('');
   }, [text, onCapture]);
@@ -342,7 +382,10 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
           </Text>
           <TextInput
             testID="capture-text-input"
-            style={[styles.textInput, { color: C.starlight, borderColor: C.border }]}
+            style={[
+              styles.textInput,
+              { color: C.starlight, borderColor: C.border },
+            ]}
             value={text}
             onChangeText={setText}
             placeholder="Paste text here…"
@@ -354,7 +397,13 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
           />
           <Pressable
             testID="capture-confirm"
-            style={[styles.confirmBtn, { backgroundColor: text.trim() ? C.violet : C.border, marginTop: 12 }]}
+            style={[
+              styles.confirmBtn,
+              {
+                backgroundColor: text.trim() ? C.violet : C.border,
+                marginTop: 12,
+              },
+            ]}
             onPress={handleConfirm}
             disabled={!text.trim()}
             accessibilityLabel="Save to inbox"
@@ -381,17 +430,24 @@ const MeetingMode = memo(function MeetingMode({ onCapture }: MeetingModeProps) {
 
   const handleConfirm = useCallback(() => {
     const trimmed = notes.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      return;
+    }
     onCapture(trimmed);
     setNotes(MEETING_TEMPLATE(new Date()));
   }, [notes, onCapture]);
 
   return (
     <View style={styles.modeContent}>
-      <Text style={[styles.meetingLabel, { color: C.mutedText }]}>MEETING NOTES</Text>
+      <Text style={[styles.meetingLabel, { color: C.mutedText }]}>
+        MEETING NOTES
+      </Text>
       <TextInput
         testID="capture-text-input"
-        style={[styles.textInputMeeting, { color: C.starlight, borderColor: C.border }]}
+        style={[
+          styles.textInputMeeting,
+          { color: C.starlight, borderColor: C.border },
+        ]}
         value={notes}
         onChangeText={setNotes}
         multiline
@@ -400,7 +456,10 @@ const MeetingMode = memo(function MeetingMode({ onCapture }: MeetingModeProps) {
       />
       <Pressable
         testID="capture-confirm"
-        style={[styles.confirmBtn, { backgroundColor: C.violet, marginTop: 12 }]}
+        style={[
+          styles.confirmBtn,
+          { backgroundColor: C.violet, marginTop: 12 },
+        ]}
         onPress={handleConfirm}
         accessibilityLabel="Save meeting to inbox"
         accessibilityRole="button"
@@ -426,22 +485,31 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
   const handlePickFile = useCallback(() => {
     if (Platform.OS === 'web') {
       // document and HTMLInputElement are web-only APIs; use globalThis cast
-      const doc = (globalThis as typeof globalThis & {
-        document?: {
-          createElement: (tag: 'input') => {
-            type: string;
-            accept: string;
-            onchange: ((e: { target: { files?: { 0?: { name: string } } } }) => void) | null;
-            click: () => void;
+      const doc = (
+        globalThis as typeof globalThis & {
+          document?: {
+            createElement: (tag: 'input') => {
+              type: string;
+              accept: string;
+              onchange:
+                | ((e: {
+                    target: { files?: { 0?: { name: string } } };
+                  }) => void)
+                | null;
+              click: () => void;
+            };
           };
-        };
-      }).document;
-      if (!doc) return;
+        }
+      ).document;
+      if (!doc) {
+        return;
+      }
       const input = doc.createElement('input');
       input.type = 'file';
       input.accept = 'image/*';
       input.onchange = (e) => {
-        const files = (e.target as { files?: { 0?: unknown; length: number } }).files;
+        const files = (e.target as { files?: { 0?: unknown; length: number } })
+          .files;
         const file = files?.[0];
         if (file) {
           const uri = URL.createObjectURL(file as unknown as Blob);
@@ -469,7 +537,10 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           </Text>
           <TextInput
             testID="capture-text-input"
-            style={[styles.textInput, { color: C.starlight, borderColor: C.border }]}
+            style={[
+              styles.textInput,
+              { color: C.starlight, borderColor: C.border },
+            ]}
             value={caption}
             onChangeText={setCaption}
             placeholder="Add a caption (optional)…"
@@ -478,7 +549,10 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           />
           <Pressable
             testID="capture-confirm"
-            style={[styles.confirmBtn, { backgroundColor: C.violet, marginTop: 12 }]}
+            style={[
+              styles.confirmBtn,
+              { backgroundColor: C.violet, marginTop: 12 },
+            ]}
             onPress={handleConfirm}
             accessibilityLabel="Save photo to inbox"
             accessibilityRole="button"
@@ -494,7 +568,9 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           accessibilityRole="button"
         >
           <Text style={styles.photoPickIcon}>📷</Text>
-          <Text style={[styles.photoPickLabel, { color: C.violet }]}>SELECT PHOTO</Text>
+          <Text style={[styles.photoPickLabel, { color: C.violet }]}>
+            SELECT PHOTO
+          </Text>
           {Platform.OS !== 'web' && (
             <Text style={[styles.photoPickHint, { color: C.mutedText }]}>
               Camera/gallery coming in v2
@@ -519,19 +595,29 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
 
   const handleConfirm = useCallback(() => {
     const trimmed = text.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      return;
+    }
     onCapture(`[Check-In]\n${trimmed}`);
     setText('');
   }, [text, onCapture]);
 
   return (
     <View style={styles.modeContent}>
-      <Text style={[styles.meetingLabel, { color: C.starlight, marginBottom: 8, fontSize: 16, lineHeight: 22 }]}>
-        What are you doing?{"\n"}What should you be doing?
+      <Text
+        style={[
+          styles.meetingLabel,
+          { color: C.starlight, marginBottom: 8, fontSize: 16, lineHeight: 22 },
+        ]}
+      >
+        What are you doing?{'\n'}What should you be doing?
       </Text>
       <TextInput
         testID="capture-checkin-input"
-        style={[styles.textInput, { color: C.starlight, borderColor: C.border }]}
+        style={[
+          styles.textInput,
+          { color: C.starlight, borderColor: C.border },
+        ]}
         value={text}
         onChangeText={setText}
         placeholder="Log your progress here..."
@@ -544,13 +630,23 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
       />
       <Pressable
         testID="capture-checkin-confirm"
-        style={[styles.confirmBtn, { backgroundColor: text.trim() ? C.gold : C.border, marginTop: 12 }]}
+        style={[
+          styles.confirmBtn,
+          { backgroundColor: text.trim() ? C.gold : C.border, marginTop: 12 },
+        ]}
         onPress={handleConfirm}
         disabled={!text.trim()}
         accessibilityLabel="Save check-in"
         accessibilityRole="button"
       >
-        <Text style={[styles.confirmBtnText, { color: text.trim() ? '#070712' : '#888' }]}>LOG PROGRESS</Text>
+        <Text
+          style={[
+            styles.confirmBtnText,
+            { color: text.trim() ? '#070712' : '#888' },
+          ]}
+        >
+          LOG PROGRESS
+        </Text>
       </Pressable>
     </View>
   );
@@ -575,16 +671,23 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     }
   }, [visible, currentBubbleState]);
 
-  const showSuccess = useCallback((msg: string) => {
-    setSuccessMsg(msg);
-    setTimeout(() => {
-      setSuccessMsg('');
-      onClose();
-    }, 1200);
-  }, [onClose]);
+  const showSuccess = useCallback(
+    (msg: string) => {
+      setSuccessMsg(msg);
+      setTimeout(() => {
+        setSuccessMsg('');
+        onClose();
+      }, 1200);
+    },
+    [onClose],
+  );
 
   const handleCapture = useCallback(
-    async (source: CaptureSource, raw: string, extra?: { transcript?: string; attachmentUri?: string }) => {
+    async (
+      source: CaptureSource,
+      raw: string,
+      extra?: { transcript?: string; attachmentUri?: string },
+    ) => {
       try {
         await CaptureService.save({
           source,
@@ -601,7 +704,8 @@ export const CaptureDrawer = memo(function CaptureDrawer({
   );
 
   const handleVoiceCapture = useCallback(
-    (raw: string, transcript?: string) => handleCapture('voice', raw, { transcript }),
+    (raw: string, transcript?: string) =>
+      handleCapture('voice', raw, { transcript }),
     [handleCapture],
   );
   const handleTextCapture = useCallback(
@@ -621,7 +725,8 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     [handleCapture],
   );
   const handlePhotoCapture = useCallback(
-    (raw: string, attachmentUri?: string) => handleCapture('photo', raw, { attachmentUri }),
+    (raw: string, attachmentUri?: string) =>
+      handleCapture('photo', raw, { attachmentUri }),
     [handleCapture],
   );
 
@@ -636,8 +741,15 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     >
       {/* Success flash */}
       {successMsg !== '' && (
-        <View style={[styles.successBanner, { backgroundColor: 'rgba(45, 212, 191, 0.15)' }]}>
-          <Text style={[styles.successText, { color: C.teal }]}>{successMsg}</Text>
+        <View
+          style={[
+            styles.successBanner,
+            { backgroundColor: 'rgba(45, 212, 191, 0.15)' },
+          ]}
+        >
+          <Text style={[styles.successText, { color: C.teal }]}>
+            {successMsg}
+          </Text>
         </View>
       )}
 
@@ -654,7 +766,10 @@ export const CaptureDrawer = memo(function CaptureDrawer({
             testID={`capture-mode-${mode.id}`}
             style={[
               styles.modeTab,
-              activeMode === mode.id && { backgroundColor: C.activeModeTab, borderColor: C.violet },
+              activeMode === mode.id && {
+                backgroundColor: C.activeModeTab,
+                borderColor: C.violet,
+              },
             ]}
             onPress={() => setActiveMode(mode.id)}
             accessibilityLabel={`${mode.label} capture mode`}
@@ -682,26 +797,25 @@ export const CaptureDrawer = memo(function CaptureDrawer({
             onStateChange={onStateChange}
           />
         )}
-        {activeMode === 'text' && (
-          <TextMode onCapture={handleTextCapture} />
-        )}
-        {activeMode === 'paste' && (
-          <PasteMode onCapture={handlePasteCapture} />
-        )}
+        {activeMode === 'text' && <TextMode onCapture={handleTextCapture} />}
+        {activeMode === 'paste' && <PasteMode onCapture={handlePasteCapture} />}
         {activeMode === 'meeting' && (
           <MeetingMode onCapture={handleMeetingCapture} />
         )}
         {activeMode === 'checkin' && (
           <CheckInMode onCapture={handleCheckInCapture} />
         )}
-        {activeMode === 'photo' && (
-          <PhotoMode onCapture={handlePhotoCapture} />
-        )}
+        {activeMode === 'photo' && <PhotoMode onCapture={handlePhotoCapture} />}
       </View>
 
       {/* Offline banner */}
       {currentBubbleState === 'offline' && (
-        <View style={[styles.offlineBanner, { backgroundColor: 'rgba(246, 193, 119, 0.12)' }]}>
+        <View
+          style={[
+            styles.offlineBanner,
+            { backgroundColor: 'rgba(246, 193, 119, 0.12)' },
+          ]}
+        >
           <Text style={[styles.offlineText, { color: C.gold }]}>
             ⊗ Offline — captures will sync when reconnected
           </Text>

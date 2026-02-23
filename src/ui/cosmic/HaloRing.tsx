@@ -1,10 +1,10 @@
 /**
  * HaloRing
- * 
+ *
  * Timer progress ring and breathing animation component.
  * Uses Reanimated for smooth, performant animations.
  * Respects reduced motion preferences.
- * 
+ *
  * Per research spec:
  * - Web: CSS conic-gradient for progress mode (better performance)
  * - Native: lightweight border-ring fallback
@@ -52,28 +52,28 @@ export interface HaloRingProps {
 
 /**
  * Halo Ring Component
- * 
+ *
  * Animated ring for:
  * - Progress indication (timers)
  * - Breathing exercises (Anchor mode)
- * 
+ *
  * Web progress mode uses CSS conic-gradient per research spec.
  * Respects reduced motion preferences.
- * 
+ *
  * @example
  * // Progress ring for timer
- * <HaloRing 
- *   mode="progress" 
- *   progress={0.75} 
- *   size={280} 
+ * <HaloRing
+ *   mode="progress"
+ *   progress={0.75}
+ *   size={280}
  *   glow="strong"
  * />
- * 
+ *
  * @example
  * // Breathing ring
- * <HaloRing 
- *   mode="breath" 
- *   size={200} 
+ * <HaloRing
+ *   mode="breath"
+ *   size={200}
  *   glow="medium"
  * />
  */
@@ -115,16 +115,18 @@ export const HaloRing = memo(function HaloRing({
 
   // Breathing animation per spec: 4200ms cycle
   useEffect(() => {
-    if (mode !== 'breath') return;
-    
+    if (mode !== 'breath') {
+      return;
+    }
+
     if (reduceMotion) {
       breathingProgress.value = 1;
       return;
     }
-    
+
     // Per research spec: breathCycle 4200ms
     const breathDuration = (t as any).motion?.durations?.breathCycle ?? 4200;
-    
+
     breathingProgress.value = withRepeat(
       withTiming(1.06, {
         duration: breathDuration,
@@ -132,20 +134,22 @@ export const HaloRing = memo(function HaloRing({
         reduceMotion: ReduceMotion.System,
       }),
       -1, // Infinite
-      true // Reverse (yoyo)
+      true, // Reverse (yoyo)
     );
   }, [mode, reduceMotion, breathingProgress, t]);
 
   // Breathing animated styles
   const breathingAnimatedStyle = useAnimatedStyle(() => {
-    if (mode !== 'breath') return {};
-    
+    if (mode !== 'breath') {
+      return {};
+    }
+
     const scale = breathingProgress.value;
     const opacity = interpolate(
       breathingProgress.value,
       [1, 1.06],
       [0.5, 1],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
 
     return {
@@ -156,20 +160,22 @@ export const HaloRing = memo(function HaloRing({
 
   // Inner ring breathing (inverse phase)
   const innerAnimatedStyle = useAnimatedStyle(() => {
-    if (mode !== 'breath') return {};
-    
+    if (mode !== 'breath') {
+      return {};
+    }
+
     const scale = interpolate(
       breathingProgress.value,
       [1, 1.06],
       [1.03, 0.97],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
-    
+
     const opacity = interpolate(
       breathingProgress.value,
       [1, 1.06],
       [0.3, 0.6],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
 
     return {
@@ -180,7 +186,9 @@ export const HaloRing = memo(function HaloRing({
 
   // Glow shadow style
   const glowStyle = useMemo((): ViewStyle => {
-    if (!isCosmic || glow === 'none') return {};
+    if (!isCosmic || glow === 'none') {
+      return {};
+    }
 
     const glowColor = colors.glow;
     const glowOpacity = {
@@ -188,7 +196,7 @@ export const HaloRing = memo(function HaloRing({
       medium: 0.22,
       strong: 0.28,
     }[glow];
-    
+
     const glowRadius = {
       soft: 10,
       medium: 16,
@@ -197,7 +205,11 @@ export const HaloRing = memo(function HaloRing({
 
     return Platform.select({
       web: {
-        filter: `drop-shadow(0 0 ${glowRadius}px ${glowColor}${Math.round(glowOpacity * 255).toString(16).padStart(2, '0')})`,
+        filter: `drop-shadow(0 0 ${glowRadius}px ${glowColor}${Math.round(
+          glowOpacity * 255,
+        )
+          .toString(16)
+          .padStart(2, '0')})`,
       },
       default: {
         shadowColor: glowColor,
@@ -210,9 +222,12 @@ export const HaloRing = memo(function HaloRing({
 
   // Web progress mode: conic-gradient per research spec
   if (mode === 'progress' && isWeb) {
-    const nebulaViolet = (t as any).colors?.cosmic?.nebulaViolet ?? (t as any).colors?.brand?.[500] ?? "#8B5CF6";
+    const nebulaViolet =
+      (t as any).colors?.cosmic?.nebulaViolet ??
+      (t as any).colors?.brand?.[500] ??
+      '#8B5CF6';
     const trackColor = colors.track;
-    
+
     const webProgressStyle: ViewStyle = {
       backgroundImage: `conic-gradient(${nebulaViolet} 0deg ${deg}deg, ${trackColor} ${deg}deg 360deg)`,
     } as any;
@@ -220,16 +235,16 @@ export const HaloRing = memo(function HaloRing({
     const innerSize = size - strokeWidth * 2;
 
     return (
-      <View 
+      <View
         testID={testID}
         style={[styles.container, { width: size, height: size }, glowStyle]}
       >
         <View
           style={[
             styles.ring,
-            { 
-              width: size, 
-              height: size, 
+            {
+              width: size,
+              height: size,
               borderRadius: size / 2,
               padding: strokeWidth,
             },
@@ -257,7 +272,7 @@ export const HaloRing = memo(function HaloRing({
   if (mode === 'progress') {
     // Native: Use simple border ring
     return (
-      <View 
+      <View
         testID={testID}
         style={[styles.container, { width: size, height: size }, glowStyle]}
       >
@@ -293,7 +308,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Breathing mode
   return (
-    <View 
+    <View
       testID={testID}
       style={[styles.container, { width: size, height: size }]}
     >
@@ -312,7 +327,7 @@ export const HaloRing = memo(function HaloRing({
           glowStyle,
         ]}
       />
-      
+
       {/* Inner breathing ring */}
       <Animated.View
         style={[

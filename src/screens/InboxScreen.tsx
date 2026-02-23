@@ -21,7 +21,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Tokens } from '@/theme/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
 import { LinearTokens } from '@/theme/linearTokens';
-import CaptureService, { CaptureItem, CaptureStatus } from '@/services/CaptureService';
+import CaptureService, {
+  CaptureItem,
+  CaptureStatus,
+} from '@/services/CaptureService';
 
 // ============================================================================
 // TYPES
@@ -76,14 +79,21 @@ function CaptureRow({
     >
       {/* Source badge + timestamp */}
       <View style={styles.rowMeta}>
-        <Text style={[styles.sourceBadge, isCosmic && styles.sourceBadgeCosmic]}>
+        <Text
+          style={[styles.sourceBadge, isCosmic && styles.sourceBadgeCosmic]}
+        >
           {SOURCE_LABELS[item.source] ?? item.source}
         </Text>
         <Text style={[styles.timestamp, isCosmic && styles.timestampCosmic]}>
           {formatRelativeTime(item.createdAt)}
         </Text>
         {item.status !== 'unreviewed' && (
-          <Text style={[styles.statusBadge, getStatusBadgeStyle(item.status, isCosmic)]}>
+          <Text
+            style={[
+              styles.statusBadge,
+              getStatusBadgeStyle(item.status, isCosmic),
+            ]}
+          >
             {item.status.toUpperCase()}
           </Text>
         )}
@@ -105,12 +115,19 @@ function CaptureRow({
             onPress={() => onPromoteTask(item.id)}
             style={({ pressed }) => [
               styles.actionBtn,
-              isCosmic ? styles.actionBtnTaskCosmic : styles.actionBtnTaskLinear,
+              isCosmic
+                ? styles.actionBtnTaskCosmic
+                : styles.actionBtnTaskLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Promote to task"
           >
-            <Text style={[styles.actionBtnText, isCosmic && styles.actionBtnTextCosmic]}>
+            <Text
+              style={[
+                styles.actionBtnText,
+                isCosmic && styles.actionBtnTextCosmic,
+              ]}
+            >
               → Task
             </Text>
           </Pressable>
@@ -120,12 +137,19 @@ function CaptureRow({
             onPress={() => onPromoteNote(item.id)}
             style={({ pressed }) => [
               styles.actionBtn,
-              isCosmic ? styles.actionBtnNoteCosmic : styles.actionBtnNoteLinear,
+              isCosmic
+                ? styles.actionBtnNoteCosmic
+                : styles.actionBtnNoteLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Promote to note"
           >
-            <Text style={[styles.actionBtnText, isCosmic && styles.actionBtnTextCosmic]}>
+            <Text
+              style={[
+                styles.actionBtnText,
+                isCosmic && styles.actionBtnTextCosmic,
+              ]}
+            >
               → Note
             </Text>
           </Pressable>
@@ -135,7 +159,9 @@ function CaptureRow({
             onPress={() => onDiscard(item.id)}
             style={({ pressed }) => [
               styles.actionBtn,
-              isCosmic ? styles.actionBtnDiscardCosmic : styles.actionBtnDiscardLinear,
+              isCosmic
+                ? styles.actionBtnDiscardCosmic
+                : styles.actionBtnDiscardLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Discard"
@@ -157,21 +183,28 @@ function CaptureRow({
 function formatRelativeTime(ts: number): string {
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) {
+    return 'just now';
+  }
+  if (mins < 60) {
+    return `${mins}m ago`;
+  }
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
+  if (hrs < 24) {
+    return `${hrs}h ago`;
+  }
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-function getStatusBadgeStyle(
-  status: CaptureStatus,
-  isCosmic: boolean,
-): object {
+function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean): object {
   if (status === 'promoted') {
-    return isCosmic ? styles.statusBadgePromotedCosmic : styles.statusBadgePromotedLinear;
+    return isCosmic
+      ? styles.statusBadgePromotedCosmic
+      : styles.statusBadgePromotedLinear;
   }
-  return isCosmic ? styles.statusBadgeDiscardedCosmic : styles.statusBadgeDiscardedLinear;
+  return isCosmic
+    ? styles.statusBadgeDiscardedCosmic
+    : styles.statusBadgeDiscardedLinear;
 }
 
 // ============================================================================
@@ -189,7 +222,10 @@ const InboxScreen = (): JSX.Element => {
 
   const loadItems = useCallback(async (): Promise<void> => {
     try {
-      const filter = activeFilter === 'all' ? undefined : { status: activeFilter as CaptureStatus };
+      const filter =
+        activeFilter === 'all'
+          ? undefined
+          : { status: activeFilter as CaptureStatus };
       const result = await CaptureService.getAll(filter);
       setItems(result);
     } catch (error) {
@@ -203,7 +239,9 @@ const InboxScreen = (): JSX.Element => {
     let isMounted = true;
     setIsLoading(true);
     CaptureService.getAll(
-      activeFilter === 'all' ? undefined : { status: activeFilter as CaptureStatus }
+      activeFilter === 'all'
+        ? undefined
+        : { status: activeFilter as CaptureStatus },
     )
       .then((result) => {
         if (isMounted) {
@@ -213,7 +251,9 @@ const InboxScreen = (): JSX.Element => {
       })
       .catch((error) => {
         console.error('[InboxScreen] load error:', error);
-        if (isMounted) setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       });
     return () => {
       isMounted = false;
@@ -262,7 +302,7 @@ const InboxScreen = (): JSX.Element => {
         isCosmic={isCosmic}
       />
     ),
-    [handlePromoteTask, handlePromoteNote, handleDiscard, isCosmic]
+    [handlePromoteTask, handlePromoteNote, handleDiscard, isCosmic],
   );
 
   return (
@@ -281,9 +321,15 @@ const InboxScreen = (): JSX.Element => {
           testID="inbox-close"
           accessibilityLabel="Close inbox"
         >
-          <Text style={[styles.closeBtnText, isCosmic && styles.closeBtnTextCosmic]}>✕</Text>
+          <Text
+            style={[styles.closeBtnText, isCosmic && styles.closeBtnTextCosmic]}
+          >
+            ✕
+          </Text>
         </Pressable>
-        <Text style={[styles.title, isCosmic && styles.titleCosmic]}>CAPTURE INBOX</Text>
+        <Text style={[styles.title, isCosmic && styles.titleCosmic]}>
+          CAPTURE INBOX
+        </Text>
         <View style={styles.closeBtnPlaceholder} />
       </View>
 
@@ -298,7 +344,8 @@ const InboxScreen = (): JSX.Element => {
             onPress={() => setActiveFilter(tab.key)}
             style={[
               styles.tab,
-              activeFilter === tab.key && (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
+              activeFilter === tab.key &&
+                (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
             ]}
             testID={`inbox-tab-${tab.key}`}
             accessibilityRole="tab"
@@ -308,7 +355,10 @@ const InboxScreen = (): JSX.Element => {
               style={[
                 styles.tabText,
                 isCosmic && styles.tabTextCosmic,
-                activeFilter === tab.key && (isCosmic ? styles.tabTextActiveCosmic : styles.tabTextActiveLinear),
+                activeFilter === tab.key &&
+                  (isCosmic
+                    ? styles.tabTextActiveCosmic
+                    : styles.tabTextActiveLinear),
               ]}
             >
               {tab.label}
@@ -479,7 +529,8 @@ const styles = StyleSheet.create({
     ...Platform.select({
       web: {
         backdropFilter: 'blur(12px)',
-        boxShadow: '0 0 0 1px rgba(139, 92, 246, 0.06), 0 4px 16px rgba(7, 7, 18, 0.3)',
+        boxShadow:
+          '0 0 0 1px rgba(139, 92, 246, 0.06), 0 4px 16px rgba(7, 7, 18, 0.3)',
       } as object,
     }),
   },
