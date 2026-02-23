@@ -17,7 +17,6 @@ import React, {
   useMemo,
 } from 'react';
 import {
-  View,
   Pressable,
   Text,
   StyleSheet,
@@ -28,6 +27,8 @@ import {
 } from 'react-native';
 import CaptureService from '../../services/CaptureService';
 import { CheckInService } from '../../services/CheckInService';
+import { navigationRef } from '../../navigation/navigationRef';
+import { ROUTES } from '../../navigation/routes';
 import { CaptureDrawer } from './CaptureDrawer';
 
 // ============================================================================
@@ -285,6 +286,13 @@ export const CaptureBubble = memo(function CaptureBubble() {
   }, [bubbleState]);
 
   const handlePress = useCallback(() => {
+    if (bubbleState === 'needs-review' && badgeCount > 0) {
+      if (navigationRef.isReady()) {
+        navigationRef.navigate(ROUTES.INBOX);
+      }
+      return;
+    }
+
     if (bubbleState === 'processing') {
       return; // non-interactive
     }
@@ -292,7 +300,13 @@ export const CaptureBubble = memo(function CaptureBubble() {
     if (bubbleState === 'needs-checkin') {
       CheckInService.setPending(false);
     }
-  }, [bubbleState]);
+  }, [bubbleState, badgeCount]);
+
+  const handleBadgePress = useCallback(() => {
+    if (navigationRef.isReady()) {
+      navigationRef.navigate(ROUTES.INBOX);
+    }
+  }, []);
 
   const handleDrawerClose = useCallback(() => {
     setDrawerOpen(false);
@@ -342,11 +356,17 @@ export const CaptureBubble = memo(function CaptureBubble() {
         {badgeCount > 0 &&
           bubbleState !== 'recording' &&
           bubbleState !== 'processing' && (
-            <View style={styles.badge} testID="capture-bubble-badge">
+            <Pressable
+              style={styles.badge}
+              testID="capture-bubble-badge"
+              onPress={handleBadgePress}
+              accessibilityLabel="Open capture inbox"
+              accessibilityRole="button"
+            >
               <Text style={styles.badgeText}>
                 {badgeCount > 99 ? '99+' : badgeCount}
               </Text>
-            </View>
+            </Pressable>
           )}
       </Animated.View>
 

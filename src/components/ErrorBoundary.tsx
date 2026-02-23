@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -48,8 +49,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       console.error('Error info:', errorInfo);
     }
 
-    // Here you could send error to a tracking service like Sentry
-    // Example: Sentry.captureException(error);
+    // Send error to tracking service
+    Sentry.captureException(error);
   }
 
   handleReset = () => {

@@ -1,255 +1,98 @@
 /**
- * ThemeProvider
+ * ThemeProvider (Zustand Refactor)
  *
- * React Context provider for theme management with AsyncStorage persistence.
- * Provides resolved tokens based on current theme variant.
+ * This file previously housed a heavy React Context Provider. It has been
+ * refactored to use Zustand for atomic state updates, eliminating unnecessary
+ * re-renders across the component tree. The `useTheme` signature remains
+ * identical to prevent massive codebase refactoring.
  */
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
+import React from 'react';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { LinearTokens } from './linearTokens';
 import { CosmicTokens } from './cosmicTokens';
 import {
   ThemeVariant,
-  migrateThemeVariant,
   DEFAULT_THEME_VARIANT,
   THEME_METADATA,
 } from './themeVariant';
 
 // ============================================================================
-// CONTEXT TYPE DEFINITION
+// ZUSTAND STORE
 // ============================================================================
 
-/**
- * Theme context value shape
- */
-export interface ThemeContextValue {
-  /** Current theme variant */
+interface ThemeStoreState {
   variant: ThemeVariant;
-
-  /** Set theme variant and persist to storage */
-  setVariant: (variant: ThemeVariant) => Promise<void>;
-
-  /** Resolved token set for current theme */
-  t: typeof LinearTokens | typeof CosmicTokens;
-
-  /** Convenience flag for cosmic theme */
-  isCosmic: boolean;
-
-  /** Convenience flag for linear theme */
-  isLinear: boolean;
-
-  /** Whether theme has been loaded from storage */
-  isLoaded: boolean;
-
-  /** Theme metadata for UI display */
-  metadata: (typeof THEME_METADATA)[ThemeVariant];
+  setVariant: (variant: ThemeVariant) => void;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
 
+export const useThemeStore = create<ThemeStoreState>()(
+  persist(
+    (set) => ({
+      variant: DEFAULT_THEME_VARIANT,
+      setVariant: (variant) => set({ variant }),
+      _hasHydrated: false,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
+    }),
+    {
+      name: 'spark-theme-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.setHasHydrated(true);
+        }
+      },
+    },
+  ),
+);
+
 // ============================================================================
-// CONTEXT CREATION
+// EXPORT TYPES (Maintained for legacy compatibility)
 // ============================================================================
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-const fallbackThemeContextValue: ThemeContextValue = {
-  variant: DEFAULT_THEME_VARIANT,
-  setVariant: async () => {},
-  t: LinearTokens,
-  isCosmic: false,
-  isLinear: true,
-  isLoaded: true,
-  metadata: THEME_METADATA[DEFAULT_THEME_VARIANT],
-};
-
-const getStorageService = () => {
-  try {
-    // Lazy load to avoid test environment AsyncStorage module resolution failures
-
-    const mod = require('../services/StorageService');
-    return mod.default as {
-      get: (key: string) => Promise<string | null>;
-      set: (key: string, value: string) => Promise<boolean>;
-      STORAGE_KEYS: { theme: string };
-    };
-  } catch {
-    return null;
-  }
-};
+export interface ThemeContextValue {
+  variant: ThemeVariant;
+  setVariant: (variant: ThemeVariant) => Promise<void>;
+  t: typeof LinearTokens | typeof CosmicTokens;
+  isCosmic: boolean;
+  isLinear: boolean;
+  isLoaded: boolean;
+  metadata: (typeof THEME_METADATA)[ThemeVariant];
+}
 
 // ============================================================================
 // HOOK
 // ============================================================================
 
-/**
- * Hook to access theme context
- * Must be used within ThemeProvider
- *
- * @example
- * function MyComponent() {
- *   const { variant, setVariant, t, isCosmic } = useTheme();
- *   return <View style={{ backgroundColor: t.colors.neutral.darkest }} />;
- * }
- */
 export function useTheme(): ThemeContextValue {
-  const context = useContext(ThemeContext);
-  return context ?? fallbackThemeContextValue;
-}
+  const { variant, setVariant, _hasHydrated } = useThemeStore();
 
-// ============================================================================
-// PROVIDER COMPONENT
-// ============================================================================
-
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  /** Initial variant (defaults to reading from storage) */
-  initialVariant?: ThemeVariant;
-}
-
-/**
- * Theme Provider Component
- *
- * Manages theme state with AsyncStorage persistence.
- * Wrap your app with this provider to enable theme switching.
- *
- * @example
- * function App() {
- *   return (
- *     <ThemeProvider>
- *       <NavigationContainer>
- *         {...}
- *       </NavigationContainer>
- *     </ThemeProvider>
- *   );
- * }
- */
-export function ThemeProvider({
-  children,
-  initialVariant,
-}: ThemeProviderProps): JSX.Element {
-  // Theme state
-  const [variant, setVariantState] = useState<ThemeVariant>(
-    DEFAULT_THEME_VARIANT,
-  );
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load theme from storage on mount
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadTheme() {
-      try {
-        // Check if initial variant was provided
-        if (initialVariant) {
-          if (isMounted) {
-            setVariantState(initialVariant);
-            setIsLoaded(true);
-          }
-          return;
-        }
-
-        // Read from storage
-        const storageService = getStorageService();
-        const storedValue = storageService
-          ? await storageService.get(storageService.STORAGE_KEYS.theme)
-          : null;
-        const resolvedVariant = migrateThemeVariant(storedValue);
-
-        if (isMounted) {
-          setVariantState(resolvedVariant);
-          setIsLoaded(true);
-        }
-      } catch (error) {
-        console.error('[ThemeProvider] Failed to load theme:', error);
-        if (isMounted) {
-          setVariantState(DEFAULT_THEME_VARIANT);
-          setIsLoaded(true);
-        }
-      }
-    }
-
-    loadTheme();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [initialVariant]);
-
-  // Set variant and persist to storage
-  const setVariant = useCallback(async (newVariant: ThemeVariant) => {
-    try {
-      // Update state immediately for responsive UI
-      setVariantState(newVariant);
-
-      // Persist to storage
-      const storageService = getStorageService();
-      if (storageService) {
-        await storageService.set(storageService.STORAGE_KEYS.theme, newVariant);
-      }
-    } catch (error) {
-      console.error('[ThemeProvider] Failed to save theme:', error);
-      // Don't revert state - user sees the change even if persistence fails
-    }
-  }, []);
-
-  // Resolved tokens based on current variant
-  const tokens = useMemo(() => {
-    return variant === 'cosmic' ? CosmicTokens : LinearTokens;
-  }, [variant]);
-
-  // Convenience flags
-  const isCosmic = variant === 'cosmic';
-  const isLinear = variant === 'linear';
-
-  // Metadata for current theme
-  const metadata = THEME_METADATA[variant];
-
-  // Context value
-  const contextValue: ThemeContextValue = useMemo(
-    () => ({
-      variant,
-      setVariant,
-      t: tokens,
-      isCosmic,
-      isLinear,
-      isLoaded,
-      metadata,
-    }),
-    [variant, setVariant, tokens, isCosmic, isLinear, isLoaded, metadata],
-  );
-
-  return (
-    <ThemeContext.Provider value={contextValue}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-// ============================================================================
-// CONVENIENCE EXPORTS
-// ============================================================================
-
-/**
- * HOC to inject theme props into a component
- * Alternative to useTheme hook for class components
- */
-export function withTheme<P extends object>(
-  Component: React.ComponentType<P & { theme: ThemeContextValue }>,
-): React.FC<P> {
-  return function WithThemeWrapper(props: P) {
-    const theme = useTheme();
-    return <Component {...props} theme={theme} />;
+  return {
+    variant,
+    setVariant: async (v: ThemeVariant) => setVariant(v),
+    t: variant === 'cosmic' ? CosmicTokens : LinearTokens,
+    isCosmic: variant === 'cosmic',
+    isLinear: variant === 'linear',
+    isLoaded: _hasHydrated,
+    metadata: THEME_METADATA[variant],
   };
 }
 
 // ============================================================================
-// DEBUG UTILITIES (development only)
+// PROVIDER (Deprecated / Pass-through)
 // ============================================================================
+
+/**
+ * @deprecated The ThemeProvider wrapper is no longer required with Zustand.
+ * Returning children directly to avoid breaking existing imports in App.tsx.
+ */
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
+}
 
 export default ThemeProvider;

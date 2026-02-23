@@ -126,7 +126,7 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
     await textInput.fill("Email Maria's parents re: missing homework x3");
 
     // Interaction 3: submit
-    await page.getByTestId('capture-submit').click();
+    await page.getByTestId('capture-confirm').click();
 
     // Drawer should close after submit
     await expect(page.getByTestId('capture-drawer')).not.toBeVisible({
@@ -153,7 +153,7 @@ test.describe('Capture Bubble — Teacher Persona (Ms. Torres)', () => {
       'Staff meeting:\n- New tardy policy from admin\n- PD day moved to March 5';
     await input.fill(meetingNote);
 
-    await page.getByTestId('capture-submit').click();
+    await page.getByTestId('capture-confirm').click();
 
     await expect(page.getByTestId('capture-drawer')).not.toBeVisible({
       timeout: 5_000,

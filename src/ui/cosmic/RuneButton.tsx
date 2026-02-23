@@ -15,6 +15,8 @@ import {
   StyleProp,
   View,
   Platform,
+  NativeSyntheticEvent,
+  TargetedEvent,
 } from 'react-native';
 import { useTheme } from '../../theme/ThemeProvider';
 import { ButtonVariant, ButtonSize, GlowLevel } from './types';
@@ -53,6 +55,8 @@ export interface RuneButtonProps {
   /** Additional container style override */
   style?: StyleProp<ViewStyle>;
 }
+
+type WebFocusEvent = NativeSyntheticEvent<TargetedEvent & { detail?: number }>;
 
 // ============================================================================
 // COMPONENT
@@ -106,7 +110,7 @@ export const RuneButton = memo(function RuneButton({
   }, [disabled, loading, onPress]);
 
   // Focus handling (web only)
-  const handleFocus = useCallback((e: any) => {
+  const handleFocus = useCallback((e: WebFocusEvent) => {
     setIsFocused(true);
     // Check if focus came from keyboard (detail === 0)
     if (Platform.OS === 'web' && e?.nativeEvent?.detail === 0) {
@@ -230,7 +234,22 @@ export const RuneButton = memo(function RuneButton({
       return {};
     }
 
-    const glowLevel = glow || (variant === 'primary' ? 'medium' : 'none');
+    let glowLevel = glow || (variant === 'primary' ? 'medium' : 'none');
+    if (glowLevel === 'none') {
+      return {};
+    }
+
+    // Reduce glow level when pressed to simulate physical depression
+    if (isPressed) {
+      if (glowLevel === 'strong') {
+        glowLevel = 'medium';
+      } else if (glowLevel === 'medium') {
+        glowLevel = 'soft';
+      } else if (glowLevel === 'soft') {
+        glowLevel = 'none';
+      }
+    }
+
     if (glowLevel === 'none') {
       return {};
     }
@@ -279,7 +298,7 @@ export const RuneButton = memo(function RuneButton({
       default:
         return {};
     }
-  }, [isCosmic, glow, variant]);
+  }, [isCosmic, glow, variant, isPressed]);
 
   // Get focus ring style (web only)
   const getFocusStyle = useMemo((): ViewStyle => {

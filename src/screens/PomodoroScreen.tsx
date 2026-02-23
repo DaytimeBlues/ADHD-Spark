@@ -156,6 +156,7 @@ const PomodoroScreen = () => {
                 />
                 <View style={styles.timerOverlay}>
                   <ChronoDigits
+                    testID="timer-display"
                     value={formattedTime}
                     size="hero"
                     glow={isRunning ? 'strong' : 'none'}

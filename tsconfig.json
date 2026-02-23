@@ -12,11 +12,7 @@
       "@/*": [
         "src/*"
       ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable"
-    ]
-  }
+    }
+  },
+  "exclude": ["e2e"]
 }

@@ -679,16 +679,18 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
               </View>
             )}
 
-            <View style={[styles.modesGrid, { marginTop: -24 }]}>
+            <View style={[styles.modesGrid, styles.negativeMarginTop24]}>
               {modes.map((mode, index) => (
                 <Animated.View
                   key={mode.id}
-                  style={{
-                    width: cardWidth,
-                    opacity: fadeAnims[index],
-                    transform: [{ translateY: slideAnims[index] }],
-                    zIndex: 10,
-                  }}
+                  style={[
+                    {
+                      width: cardWidth,
+                      opacity: fadeAnims[index],
+                      transform: [{ translateY: slideAnims[index] }],
+                    },
+                    styles.zIndex10,
+                  ]}
                 >
                   <ModeCard
                     mode={mode}
@@ -945,6 +947,12 @@ const getStyles = (isCosmic: boolean) =>
       fontSize: 10,
       fontWeight: '700',
       color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+    },
+    negativeMarginTop24: {
+      marginTop: -24,
+    },
+    zIndex10: {
+      zIndex: 10,
     },
   });
 

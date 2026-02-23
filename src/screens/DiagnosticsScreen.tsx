@@ -693,7 +693,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 </View>
               </GlowCard>
 
-              <View style={{ height: 8 }} />
+              <View style={styles.spacer8} />
 
               <GlowCard
                 glow={variant === 'cosmic' ? 'soft' : 'none'}
@@ -973,8 +973,12 @@ const styles = StyleSheet.create({
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
   },
+  spacer8: {
+    height: 8,
+  },
   checkmark: {
     fontSize: 20,
+
     color: Tokens.colors.success.main,
     marginLeft: Tokens.spacing[2],
   },

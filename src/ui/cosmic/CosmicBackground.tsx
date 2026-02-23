@@ -31,6 +31,14 @@ export interface CosmicBackgroundProps {
   testID?: string;
 }
 
+type WebViewStyle = ViewStyle & {
+  background?: string;
+  backgroundImage?: string;
+  backgroundRepeat?: string;
+  backgroundPosition?: string;
+  backgroundSize?: string;
+};
+
 // ============================================================================
 // RIDGE SILHOUETTE SVG
 // ============================================================================
@@ -130,7 +138,7 @@ export const CosmicBackground = memo(function CosmicBackground({
   }, [isCosmic, t.colors.neutral.darkest]);
 
   // Web-specific styles with multi-layer backgrounds
-  const webStyle: ViewStyle | null = useMemo(() => {
+  const webStyle: WebViewStyle | null = useMemo(() => {
     return Platform.OS === 'web' && isCosmic && webBackgroundImage
       ? ({
           backgroundImage: webBackgroundImage,
@@ -141,7 +149,7 @@ export const CosmicBackground = memo(function CosmicBackground({
               : 'center',
           backgroundSize:
             variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
-        } as any)
+        } as WebViewStyle)
       : null;
   }, [isCosmic, webBackgroundImage, variant]);
 
@@ -161,7 +169,7 @@ export const CosmicBackground = memo(function CosmicBackground({
               opacity: 0.03,
               backgroundImage:
                 "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
-            } as any,
+            } as WebViewStyle,
           ]}
           pointerEvents="none"
         />

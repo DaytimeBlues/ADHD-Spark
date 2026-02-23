@@ -254,7 +254,7 @@ const FogCutterScreen = ({
                   style={[
                     styles.input,
                     focusedInput === 'main' && styles.inputFocused,
-                    { marginBottom: 8 },
+                    styles.marginBottom8,
                   ]}
                   placeholder="> INPUT_OVERWHELMING_TASK"
                   placeholderTextColor={Tokens.colors.text.placeholder}
@@ -545,6 +545,9 @@ const getStyles = (isCosmic: boolean) =>
       ...Platform.select({
         web: { outlineStyle: 'none', transition: 'border-color 0.2s ease' },
       }),
+    },
+    marginBottom8: {
+      marginBottom: 8,
     },
     inputFocused: {
       borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],

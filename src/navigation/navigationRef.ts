@@ -1,18 +1,21 @@
 import { createNavigationContainerRef } from '@react-navigation/native';
 import { ROUTES } from './routes';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   [ROUTES.MAIN]: undefined;
   [ROUTES.HOME]: undefined;
   [ROUTES.FOCUS]: undefined;
   [ROUTES.TASKS]: { autoRecord?: boolean } | undefined;
   [ROUTES.CALENDAR]: undefined;
+  [ROUTES.CHAT]: undefined;
   [ROUTES.HOME_MAIN]: undefined;
   [ROUTES.CHECK_IN]: undefined;
   [ROUTES.CBT_GUIDE]: undefined;
+  [ROUTES.DIAGNOSTICS]: undefined;
   [ROUTES.FOG_CUTTER]: undefined;
   [ROUTES.POMODORO]: undefined;
   [ROUTES.ANCHOR]: undefined;
+  [ROUTES.INBOX]: undefined;
 };
 
 export type OverlayIntentPayload = {

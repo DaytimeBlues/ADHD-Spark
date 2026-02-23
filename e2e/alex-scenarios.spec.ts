@@ -104,8 +104,8 @@ test.describe('Alex Persona - E2E Scenarios', () => {
     }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
       await expect(page.getByTestId('timer-display')).toBeVisible();
-      await page.getByText('START TIMER').click();
-      await expect(page.getByText('PAUSE')).toBeVisible();
+      await page.getByText(/START TIMER/i).click();
+      await expect(page.getByText(/PAUSE/i)).toBeVisible();
     });
 
     test('B.3 Timer Accuracy: decrements and remains active', async ({
@@ -117,7 +117,7 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       await expect(timer).toBeVisible();
       const initialTime = await timer.textContent();
 
-      await page.getByText('START TIMER').click();
+      await page.getByText(/START TIMER/i).click();
       await page.waitForTimeout(450);
 
       const newTime = await timer.textContent();
@@ -126,7 +126,7 @@ test.describe('Alex Persona - E2E Scenarios', () => {
 
     test('B.4 Phase Transition: Break phase trigger', async ({ page }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
-      await page.getByText('START TIMER').click();
+      await page.getByText(/START TIMER/i).click();
 
       await page.evaluate(() => {
         const globalRecord = window as unknown as Record<string, unknown>;
@@ -184,7 +184,7 @@ test.describe('Alex Persona - E2E Scenarios', () => {
   test.describe('Suite D: Interrupted Flow', () => {
     test('D.1 Mid-Task Break: Pause and navigate', async ({ page }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
-      await page.getByText('START TIMER').click();
+      await page.getByText(/START TIMER/i).click();
 
       await page.goto('/');
       await expect(page.getByTestId('home-title')).toBeVisible();
@@ -213,10 +213,10 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       page,
     }) => {
       await page.getByTestId('mode-pomodoro').click({ force: true });
-      await page.getByText('START TIMER').click();
+      await page.getByText(/START TIMER/i).click();
       await page.goto('/');
       await page.getByTestId('mode-pomodoro').click({ force: true });
-      await expect(page.getByText('START TIMER')).toBeVisible();
+      await expect(page.getByText(/START TIMER/i)).toBeVisible();
       await expect(page.getByTestId('timer-display')).toBeVisible();
     });
 

@@ -1,7 +1,8 @@
 import React, { Suspense, lazy } from 'react';
-import { View, ActivityIndicator, Platform } from 'react-native';
+import { View, ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Tokens } from '../theme/tokens';
 import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
@@ -25,25 +26,47 @@ const DiagnosticsScreen = lazy(() => import('../screens/DiagnosticsScreen'));
 const ChatScreen = lazy(() => import('../screens/ChatScreen'));
 const InboxScreen = lazy(() => import('../screens/InboxScreen'));
 
-// Lazy loading wrapper
-const withSuspense = (Component: React.ComponentType<any>) => (props: any) => (
-  <Suspense
-    fallback={
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Tokens.colors.neutral.darkest,
-        }}
-      >
-        <ActivityIndicator size="large" color={Tokens.colors.indigo.primary} />
-      </View>
-    }
-  >
-    <Component {...props} />
-  </Suspense>
+type TabBarIconProps = {
+  color: string;
+  size: number;
+  focused: boolean;
+};
+
+const renderWebTabBar = (props: BottomTabBarProps) => <WebNavBar {...props} />;
+
+const HomeTabIcon = ({ color }: TabBarIconProps) => (
+  <Icon name="home" size={24} color={color} />
 );
+
+const FocusTabIcon = ({ color }: TabBarIconProps) => (
+  <Icon name="fire" size={24} color={color} />
+);
+
+const TasksTabIcon = ({ color }: TabBarIconProps) => (
+  <Icon name="text-box-outline" size={24} color={color} />
+);
+
+const CalendarTabIcon = ({ color }: TabBarIconProps) => (
+  <Icon name="calendar" size={24} color={color} />
+);
+
+const ChatTabIcon = ({ color }: TabBarIconProps) => (
+  <Icon name="message-text-outline" size={24} color={color} />
+);
+
+const SuspenseFallback = () => (
+  <View style={styles.suspenseFallback}>
+    <ActivityIndicator size="large" color={Tokens.colors.indigo.primary} />
+  </View>
+);
+
+const withSuspense = <P extends object>(Component: React.ComponentType<P>) => {
+  return (props: P) => (
+    <Suspense fallback={<SuspenseFallback />}>
+      <Component {...props} />
+    </Suspense>
+  );
+};
 
 const LazyFogCutter = withSuspense(FogCutterScreen);
 const LazyPomodoro = withSuspense(PomodoroScreen);
@@ -70,48 +93,17 @@ const HomeStack = () => (
 
 const TabNavigator = () => {
   const { isCosmic } = useTheme();
+  const webSceneContainerStyle = isCosmic
+    ? styles.webSceneContainerCosmic
+    : styles.webSceneContainerLinear;
 
   return (
     <Tab.Navigator
-      tabBar={
-        Platform.OS === 'web' ? (props) => <WebNavBar {...props} /> : undefined
-      }
+      tabBar={Platform.OS === 'web' ? renderWebTabBar : undefined}
       sceneContainerStyle={
-        Platform.OS === 'web'
-          ? {
-              paddingTop: 64,
-              backgroundColor: isCosmic
-                ? '#070712'
-                : Tokens.colors.neutral.darkest,
-              height: '100%',
-            }
-          : undefined
+        Platform.OS === 'web' ? webSceneContainerStyle : undefined
       }
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
-          const icons: Record<string, string> = {
-            Home: 'home',
-            Focus: 'fire',
-            Tasks: 'text-box-outline',
-            Calendar: 'calendar',
-            Chat: 'message-text-outline',
-          };
-          return (
-            <Icon
-              name={icons[route.name]}
-              size={24}
-              color={
-                focused
-                  ? isCosmic
-                    ? '#8B5CF6'
-                    : Tokens.colors.indigo.primary
-                  : isCosmic
-                    ? '#B9C2D9'
-                    : Tokens.colors.text.tertiary
-              }
-            />
-          );
-        },
+      screenOptions={{
         tabBarActiveTintColor: isCosmic
           ? '#8B5CF6'
           : Tokens.colors.indigo.primary,
@@ -137,13 +129,33 @@ const TabNavigator = () => {
           letterSpacing: 1,
           textTransform: 'uppercase',
         },
-      })}
+      }}
     >
-      <Tab.Screen name={ROUTES.HOME} component={HomeStack} />
-      <Tab.Screen name={ROUTES.FOCUS} component={IgniteScreen} />
-      <Tab.Screen name={ROUTES.TASKS} component={LazyBrainDump} />
-      <Tab.Screen name={ROUTES.CALENDAR} component={LazyCalendar} />
-      <Tab.Screen name={ROUTES.CHAT} component={LazyChat} />
+      <Tab.Screen
+        name={ROUTES.HOME}
+        component={HomeStack}
+        options={{ tabBarIcon: HomeTabIcon }}
+      />
+      <Tab.Screen
+        name={ROUTES.FOCUS}
+        component={IgniteScreen}
+        options={{ tabBarIcon: FocusTabIcon }}
+      />
+      <Tab.Screen
+        name={ROUTES.TASKS}
+        component={LazyBrainDump}
+        options={{ tabBarIcon: TasksTabIcon }}
+      />
+      <Tab.Screen
+        name={ROUTES.CALENDAR}
+        component={LazyCalendar}
+        options={{ tabBarIcon: CalendarTabIcon }}
+      />
+      <Tab.Screen
+        name={ROUTES.CHAT}
+        component={LazyChat}
+        options={{ tabBarIcon: ChatTabIcon }}
+      />
     </Tab.Navigator>
   );
 };
@@ -157,11 +169,33 @@ const TabNavigator = () => {
  * this component, so the bubble is naturally hidden there.
  */
 const TabNavigatorWithBubble = () => (
-  <View style={{ flex: 1 }}>
+  <View style={styles.container}>
     <TabNavigator />
     <CaptureBubble />
   </View>
 );
+
+const styles = StyleSheet.create({
+  suspenseFallback: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Tokens.colors.neutral.darkest,
+  },
+  webSceneContainerCosmic: {
+    paddingTop: 64,
+    backgroundColor: '#070712',
+    height: '100%',
+  },
+  webSceneContainerLinear: {
+    paddingTop: 64,
+    backgroundColor: Tokens.colors.neutral.darkest,
+    height: '100%',
+  },
+  container: {
+    flex: 1,
+  },
+});
 
 const AppNavigatorContent = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -42,7 +42,14 @@ const IgniteScreen = () => {
         UXMetricsService.track('ignite_timer_completed');
         const sessionId = sessionIdRef.current;
         if (sessionId) {
-          void ActivationService.updateSessionStatus(sessionId, 'completed');
+          ActivationService.updateSessionStatus(sessionId, 'completed').catch(
+            (error) => {
+              console.error(
+                '[Ignite] Failed to mark session completed:',
+                error,
+              );
+            },
+          );
           sessionIdRef.current = null;
         }
       },
@@ -78,10 +85,15 @@ const IgniteScreen = () => {
               storedState.timeLeft > 0 &&
               storedState.timeLeft < IGNITE_DURATION_SECONDS
             ) {
-              void ActivationService.updateSessionStatus(
+              ActivationService.updateSessionStatus(
                 storedState.activeSessionId,
                 'resumed',
-              );
+              ).catch((error) => {
+                console.error(
+                  '[Ignite] Failed to mark session resumed:',
+                  error,
+                );
+              });
             }
           }
         }
@@ -97,10 +109,12 @@ const IgniteScreen = () => {
 
           if (lastActive && lastActive.status === 'started') {
             sessionIdRef.current = lastActive.id;
-            void ActivationService.updateSessionStatus(
+            ActivationService.updateSessionStatus(
               lastActive.id,
               'resumed',
-            );
+            ).catch((error) => {
+              console.error('[Ignite] Failed to resume last session:', error);
+            });
           }
         }
 
@@ -149,9 +163,13 @@ const IgniteScreen = () => {
 
   const startTimer = () => {
     if (!sessionIdRef.current) {
-      void ActivationService.startSession('ignite').then((sessionId) => {
-        sessionIdRef.current = sessionId;
-      });
+      ActivationService.startSession('ignite')
+        .then((sessionId) => {
+          sessionIdRef.current = sessionId;
+        })
+        .catch((error) => {
+          console.error('[Ignite] Failed to start session:', error);
+        });
     }
     start();
     UXMetricsService.track('ignite_timer_started');
@@ -161,7 +179,11 @@ const IgniteScreen = () => {
     pause();
     const sessionId = sessionIdRef.current;
     if (sessionId) {
-      void ActivationService.updateSessionStatus(sessionId, 'abandoned');
+      ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
+        (error) => {
+          console.error('[Ignite] Failed to mark session abandoned:', error);
+        },
+      );
       sessionIdRef.current = null;
     }
   };
@@ -172,7 +194,11 @@ const IgniteScreen = () => {
     SoundService.pauseBrownNoise();
     const sessionId = sessionIdRef.current;
     if (sessionId) {
-      void ActivationService.updateSessionStatus(sessionId, 'abandoned');
+      ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
+        (error) => {
+          console.error('[Ignite] Failed to mark session abandoned:', error);
+        },
+      );
       sessionIdRef.current = null;
     }
   };

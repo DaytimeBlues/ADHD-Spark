@@ -9,7 +9,9 @@ import {
   DeviceEventEmitter,
   AppState,
   AppStateStatus,
+  StyleSheet,
 } from 'react-native';
+
 import AppNavigator from './src/navigation/AppNavigator';
 import StorageService from './src/services/StorageService';
 import { GoogleTasksSyncService } from './src/services/PlaudService';
@@ -20,6 +22,7 @@ import { config } from './src/config';
 import {
   handleOverlayIntent,
   navigationRef,
+  type RootStackParamList,
 } from './src/navigation/navigationRef';
 import { agentEventBus } from './src/services/AgentEventBus';
 import { CheckInService } from './src/services/CheckInService';
@@ -107,8 +110,7 @@ const App = () => {
   useEffect(() => {
     const unsub = agentEventBus.on('navigate:screen', ({ screen }) => {
       if (navigationRef.isReady()) {
-        // @ts-ignore - navigationRef type mismatch in older react-navigation
-        navigationRef.navigate(screen);
+        navigationRef.navigate(screen as keyof RootStackParamList);
       }
     });
 
@@ -117,14 +119,7 @@ const App = () => {
 
   if (!isReady) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Tokens.colors.neutral.darkest,
-        }}
-      >
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Tokens.colors.indigo.primary} />
       </View>
     );
@@ -142,14 +137,26 @@ const App = () => {
 
   // GestureHandlerRootView can cause issues on web, wrap conditionally
   if (Platform.OS === 'web') {
-    return <View style={{ flex: 1 }}>{content}</View>;
+    return <View style={styles.flex}>{content}</View>;
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={styles.flex}>
       {content}
     </GestureHandlerRootView>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Tokens.colors.neutral.darkest,
+  },
+  flex: {
+    flex: 1,
+  },
+});
 
 export default App;

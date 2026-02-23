@@ -40,6 +40,11 @@ export interface GlowCardProps extends CosmicPressableProps {
   isActive?: boolean;
 }
 
+type WebInteractiveStyle = ViewStyle & {
+  cursor?: 'pointer';
+  transition?: string;
+};
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -128,21 +133,36 @@ export const GlowCard = memo(function GlowCard({
   }, [disabled, onPress, scaleAnim, opacityAnim]);
 
   // Derived styles based on tone and padding
+  const resolvedPadding = useMemo(() => {
+    if (typeof padding === 'number') {
+      return padding;
+    }
+
+    const paddingScale: Record<CardPadding, number> = {
+      none: 0,
+      sm: t.spacing[3] ?? 12,
+      md: t.spacing[4] ?? 16,
+      lg: t.spacing[6] ?? 24,
+    };
+
+    return paddingScale[padding];
+  }, [padding, t.spacing]);
+
   const containerStyle = useMemo(
     (): ViewStyle => ({
       backgroundColor,
       borderRadius: isCosmic ? 24 : 8,
-      padding:
-        typeof padding === 'number'
-          ? padding
-          : (t as any).spacing?.[padding] || 16,
+      padding: resolvedPadding,
       borderWidth: 1,
       borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : 'transparent',
       ...(onPress && Platform.OS === 'web'
-        ? ({ cursor: 'pointer', transition: 'all 0.2s ease-in-out' } as any)
+        ? ({
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out',
+          } as WebInteractiveStyle)
         : {}),
     }),
-    [backgroundColor, padding, t, isCosmic, onPress],
+    [backgroundColor, resolvedPadding, isCosmic, onPress],
   );
 
   // Glow shadow styles for cosmic theme
@@ -223,17 +243,25 @@ export const GlowCard = memo(function GlowCard({
       <Animated.View
         style={[
           StyleSheet.absoluteFill,
+          isCosmic ? styles.bgCosmic : styles.bgLinear,
           {
             opacity: opacityAnim,
-            backgroundColor: isCosmic
-              ? 'rgba(139, 92, 246, 0.1)'
-              : 'rgba(0, 0, 0, 0.05)',
           },
         ]}
       />
+
       {children}
     </Pressable>
   );
+});
+
+const styles = StyleSheet.create({
+  bgCosmic: {
+    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+  },
+  bgLinear: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  },
 });
 
 export default GlowCard;

@@ -29,6 +29,7 @@ export type ModeCardProps = {
 };
 
 type WebInteractiveStyle = {
+  boxShadow?: string;
   borderColor?: string;
   outlineColor?: string;
   outlineStyle?: 'solid' | 'dotted' | 'dashed';
@@ -57,7 +58,7 @@ function ModeCardComponent({
       ? ({
           borderColor: mode.accent,
           boxShadow: `0 8px 24px rgba(7,7,18,0.4), 0 0 16px ${mode.accent}20`,
-        } as any)
+        } as WebInteractiveStyle)
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
@@ -67,7 +68,7 @@ function ModeCardComponent({
           outlineStyle: 'solid',
           outlineWidth: 2,
           outlineOffset: 2,
-        } as any)
+        } as WebInteractiveStyle)
       : undefined;
 
   const handlePress = useCallback(() => {
@@ -95,7 +96,7 @@ function ModeCardComponent({
               cursor: 'pointer',
               transition:
                 'border-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
-            } as any),
+            } as WebInteractiveStyle),
           pressed && { opacity: 0.9, transform: [{ scale: 0.97 }] },
           hoverStyle,
           focusStyle,

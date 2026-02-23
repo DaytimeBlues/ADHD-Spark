@@ -5,6 +5,7 @@ import {
   Pressable,
   Platform,
   useWindowDimensions,
+  StyleSheet,
 } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Tokens } from '../theme/tokens';
@@ -18,45 +19,29 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
 
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        height: 64,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: isSmallScreen
-          ? Tokens.spacing[3]
-          : Tokens.spacing[6],
-        backgroundColor: Tokens.colors.neutral.darkest,
-        borderBottomWidth: 1,
-        borderBottomColor: Tokens.colors.neutral.borderSubtle,
-        position: Platform.OS === 'web' ? 'absolute' : 'relative',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000, // Ensure it stays on top
-      }}
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: isSmallScreen
+            ? Tokens.spacing[3]
+            : Tokens.spacing[6],
+        },
+        Platform.OS === 'web' ? styles.absolute : styles.relative,
+      ]}
     >
       {/* Logo Area */}
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text
-          style={{
-            color: Tokens.colors.text.primary,
-            fontFamily: Tokens.type.fontFamily.sans,
-            fontSize: Tokens.type.h3,
-            fontWeight: '700',
-            letterSpacing: 1,
-          }}
-        >
-          SPARK
-        </Text>
+      <View style={styles.logoContainer}>
+        <Text style={styles.logoText}>SPARK</Text>
       </View>
 
       {/* Navigation Links */}
       <View
-        style={{
-          flexDirection: 'row',
-          gap: isSmallScreen ? Tokens.spacing[1] : Tokens.spacing[4], // Wider gap for desktop
-        }}
+        style={[
+          styles.navLinksContainer,
+          {
+            gap: isSmallScreen ? Tokens.spacing[1] : Tokens.spacing[4], // Wider gap for desktop
+          },
+        ]}
       >
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
@@ -81,37 +66,29 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
               accessibilityRole="button"
               accessibilityLabel={`${route.name} tab`}
               onPress={onPress}
-              style={({ pressed }) => ({
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingVertical: Tokens.spacing[3],
-                paddingHorizontal: Tokens.spacing[2],
-                backgroundColor: 'transparent', // No background pill
-                borderBottomWidth: 2,
-                borderBottomColor: isFocused
-                  ? Tokens.colors.indigo.primary
-                  : 'transparent',
-                opacity: pressed ? 0.7 : 1,
-                ...Platform.select({
-                  web: {
-                    cursor: 'pointer',
-                    transition: Tokens.motion.transitions.fast,
-                  },
-                }),
-              })}
+              style={({ pressed }) => [
+                styles.navLink,
+                {
+                  borderBottomColor: isFocused
+                    ? Tokens.colors.indigo.primary
+                    : 'transparent',
+                  opacity: pressed ? 0.7 : 1,
+                  ...Platform.select({
+                    web: {
+                      cursor: 'pointer',
+                      transition: Tokens.motion.transitions.fast,
+                    },
+                  }),
+                },
+              ]}
             >
               <Text
                 testID={`nav-label-${route.name.toLowerCase()}`}
-                style={{
-                  color: isFocused
-                    ? Tokens.colors.text.primary
-                    : Tokens.colors.text.secondary,
-                  fontFamily: Tokens.type.fontFamily.sans,
-                  fontSize: Tokens.type.sm,
-                  fontWeight: isFocused ? '700' : '500',
-                  letterSpacing: 1, // Uppercase
-                }}
+                style={[
+                  styles.navText,
+                  isFocused ? styles.textPrimary : styles.textSecondary,
+                  isFocused ? styles.textBold : styles.textMedium,
+                ]}
               >
                 {route.name.toUpperCase()}
               </Text>
@@ -122,3 +99,65 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: Tokens.colors.neutral.darkest,
+    borderBottomWidth: 1,
+    borderBottomColor: Tokens.colors.neutral.borderSubtle,
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+  },
+  absolute: {
+    position: 'absolute',
+  },
+  relative: {
+    position: 'relative',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoText: {
+    color: Tokens.colors.text.primary,
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: Tokens.type.h3,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  navLinksContainer: {
+    flexDirection: 'row',
+  },
+  navLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Tokens.spacing[3],
+    paddingHorizontal: Tokens.spacing[2],
+    backgroundColor: 'transparent',
+    borderBottomWidth: 2,
+  },
+  navText: {
+    fontFamily: Tokens.type.fontFamily.sans,
+    fontSize: Tokens.type.sm,
+    letterSpacing: 1,
+  },
+  textBold: {
+    fontWeight: '700',
+  },
+  textMedium: {
+    fontWeight: '500',
+  },
+  textPrimary: {
+    color: Tokens.colors.text.primary,
+  },
+  textSecondary: {
+    color: Tokens.colors.text.secondary,
+  },
+});

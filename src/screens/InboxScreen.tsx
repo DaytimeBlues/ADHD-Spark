@@ -16,11 +16,12 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Platform,
+  Animated,
+  Easing,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Tokens } from '@/theme/tokens';
 import { useTheme } from '@/theme/ThemeProvider';
-import { LinearTokens } from '@/theme/linearTokens';
 import CaptureService, {
   CaptureItem,
   CaptureStatus,
@@ -50,6 +51,64 @@ const SOURCE_LABELS: Record<string, string> = {
 // ============================================================================
 // SUB-COMPONENTS
 // ============================================================================
+
+function CaptureSkeleton({ isCosmic }: { isCosmic: boolean }) {
+  const opacity = React.useRef(new Animated.Value(0.3)).current;
+
+  React.useEffect(() => {
+    const anim = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, {
+          toValue: 0.7,
+          duration: 800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0.3,
+          duration: 800,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    anim.start();
+    return () => anim.stop();
+  }, [opacity]);
+
+  const bgStyle = isCosmic ? styles.skeletonBgCosmic : styles.skeletonBgLinear;
+  const blockStyle = isCosmic
+    ? styles.skeletonBlockCosmic
+    : styles.skeletonBlockLinear;
+
+  return (
+    <View style={[styles.row, bgStyle]}>
+      {/* Meta */}
+      <View style={styles.rowMeta}>
+        <Animated.View
+          style={[styles.skeletonBadge, blockStyle, { opacity }]}
+        />
+        <Animated.View style={[styles.skeletonTime, blockStyle, { opacity }]} />
+      </View>
+
+      {/* Content */}
+      <View style={styles.skeletonContent}>
+        <Animated.View
+          style={[styles.skeletonText, blockStyle, styles.w90, { opacity }]}
+        />
+        <Animated.View
+          style={[styles.skeletonText, blockStyle, styles.w60, { opacity }]}
+        />
+      </View>
+
+      {/* Actions */}
+      <View style={styles.actions}>
+        <Animated.View style={[styles.skeletonBtn, blockStyle, { opacity }]} />
+        <Animated.View style={[styles.skeletonBtn, blockStyle, { opacity }]} />
+      </View>
+    </View>
+  );
+}
 
 interface CaptureRowProps {
   item: CaptureItem;
@@ -214,10 +273,9 @@ function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean): object {
 const InboxScreen = (): JSX.Element => {
   const navigation = useNavigation();
   const { isCosmic, t } = useTheme();
-  const lt = t as typeof LinearTokens;
 
   const [items, setItems] = useState<CaptureItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<FilterTab>('unreviewed');
+  const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
   const [isLoading, setIsLoading] = useState(true);
 
   const loadItems = useCallback(async (): Promise<void> => {
@@ -307,10 +365,7 @@ const InboxScreen = (): JSX.Element => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: isCosmic ? '#070712' : lt.colors.neutral.darkest },
-      ]}
+      style={[styles.container, isCosmic ? styles.bgCosmic : styles.bgLinear]}
       testID="inbox-screen"
     >
       {/* Header */}
@@ -369,11 +424,10 @@ const InboxScreen = (): JSX.Element => {
 
       {/* Content */}
       {isLoading ? (
-        <View style={styles.centered}>
-          <ActivityIndicator
-            size="large"
-            color={isCosmic ? '#8B5CF6' : lt.colors.indigo.primary}
-          />
+        <View style={styles.listContent}>
+          {[1, 2, 3].map((key) => (
+            <CaptureSkeleton key={key} isCosmic={isCosmic} />
+          ))}
         </View>
       ) : items.length === 0 ? (
         <View style={styles.centered} testID="inbox-empty">
@@ -404,6 +458,50 @@ const InboxScreen = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  // Skeleton styles
+  skeletonBgLinear: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderColor: Tokens.colors.neutral.borderSubtle,
+  },
+  skeletonBgCosmic: {
+    backgroundColor: 'rgba(17, 26, 51, 0.4)',
+    borderColor: 'rgba(185, 194, 217, 0.08)',
+  },
+  skeletonBlockLinear: {
+    backgroundColor: Tokens.colors.neutral.medium,
+  },
+  skeletonBlockCosmic: {
+    backgroundColor: 'rgba(185, 194, 217, 0.2)',
+  },
+  skeletonBadge: {
+    width: 60,
+    height: 16,
+    borderRadius: 4,
+  },
+  skeletonTime: {
+    width: 40,
+    height: 12,
+    borderRadius: 4,
+  },
+  skeletonContent: {
+    marginVertical: 4,
+  },
+  skeletonText: {
+    height: 12,
+    borderRadius: 4,
+  },
+  w90: {
+    width: '90%',
+    marginBottom: 8,
+  },
+  w60: {
+    width: '60%',
+  },
+  skeletonBtn: {
+    width: 70,
+    height: 28,
+    borderRadius: 6,
   },
   header: {
     flexDirection: 'row',
@@ -652,6 +750,12 @@ const styles = StyleSheet.create({
   },
   actionBtnTextDiscard: {
     color: Tokens.colors.error.main,
+  },
+  bgCosmic: {
+    backgroundColor: '#070712',
+  },
+  bgLinear: {
+    backgroundColor: Tokens.colors.neutral.darkest,
   },
 });
 

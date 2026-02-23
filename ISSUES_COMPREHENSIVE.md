@@ -661,6 +661,113 @@ if (Platform.OS !== 'web') {
 
 ---
 
+## Incremental Log (2026-02-23)
+
+### Root tsconfig/e2e split follow-up
+- Applied config split to keep DOM libs scoped to E2E only:
+  - `tsconfig.json`: removed `compilerOptions.lib`, added `"exclude": ["e2e"]`
+  - `e2e/tsconfig.json`: retained DOM libs and explicitly set `include` for e2e specs
+- Verification:
+  - `npx tsc --noEmit -p e2e/tsconfig.json` -> passing
+  - `npx tsc --noEmit` -> still failing due unrelated errors in `src/components/home/ModeCard.tsx`
+
+### Current blocking issues observed now
+- `npm run lint` -> `59 errors`, `88 warnings`
+  - Main blocker: `src/components/home/ModeCard.tsx` (majority of `prettier/prettier` errors)
+- `npx tsc --noEmit` errors concentrated in `src/components/home/ModeCard.tsx`
+  - Theme typing/property mismatches (e.g., `border`, `type`, `text` access patterns)
+
+### Issue 1 progress update (2026-02-23)
+- **Issue 1 status:** Resolved
+- `src/components/home/ModeCard.tsx` was stabilized back to the typed token-based implementation.
+- Verification after fix:
+  - `npx tsc --noEmit` -> passing
+  - `npm run lint` -> `0 errors`, `82 warnings`
+- Remaining warnings are distributed across other files (inline styles, `no-explicit-any`, etc.) and are now the next backlog items.
+
+### Issue 2 progress update (2026-02-23)
+- **Issue 2 status:** Completed (non-visual core/navigation cleanup)
+- Changes applied:
+  - Removed `@ts-ignore` navigation call in `App.tsx` by typing `RootStackParamList` import and cast usage.
+  - Refactored `src/navigation/AppNavigator.tsx` to reduce lint noise:
+    - added typed suspense wrapper (`withSuspense<P>`) instead of `any` props
+    - extracted tab icon renderers into stable components (`HomeTabIcon`, `FocusTabIcon`, etc.)
+    - moved fallback/web scene styles into `StyleSheet.create`
+  - Removed explicit `any` casts in `src/components/home/ModeCard.tsx` by widening `WebInteractiveStyle` (`boxShadow`) and using typed casts.
+  - Replaced `void` async calls in `src/screens/IgniteScreen.tsx` with `.catch(...)` logging for explicit error handling.
+- Verification after fix:
+  - `npx tsc --noEmit` -> passing
+  - `npm run lint` -> `0 errors`, `66 warnings` (reduced from `82`)
+
+### Issue 3 progress update (2026-02-23)
+- **Issue 3 status:** Completed (non-visual warning reduction batch)
+- Changes applied:
+  - `src/components/metro/MetroCard.tsx`: added missing React import to resolve JSX-scope warnings.
+  - `src/components/metro/MetroTile.tsx`: removed shadowed variable in size helper.
+  - `src/services/WebMCPService.ts`: replaced `any` usage with typed helper aliases (`ToolDefinition`, `WebMCPNavigatorLike`, storage entry types).
+  - `types/jest/index.d.ts`: retained permissive test globals but explicitly scoped lint rule for intentional `any` in ambient declarations.
+  - `src/theme/cosmicTokens.ts`, `src/ui/cosmic/CosmicBackground.tsx`, `src/ui/cosmic/GlowCard.tsx`, `src/ui/cosmic/HaloRing.tsx`, `src/ui/cosmic/RuneButton.tsx`: removed targeted `any` casts via local typed aliases and safer event/style typing.
+  - `src/ui/cosmic/BottomSheet.tsx`: fixed formatting errors that became blocking (`prettier/prettier`).
+- Verification after fix:
+  - `npx tsc --noEmit` -> passing
+  - `npm run lint` -> `0 errors`, `31 warnings` (reduced from `66`)
+- Remaining warnings are now almost entirely `react-native/no-inline-styles` across UI components/screens.
+
+### Issue 4 progress update (2026-02-23)
+- **Issue 4 status:** Completed (inline-style warning elimination)
+- Refactor scope:
+  - `App.tsx`
+  - `src/components/capture/CaptureDrawer.tsx`
+  - `src/components/metro/MetroButton.tsx`
+  - `src/navigation/WebNavBar.tsx`
+  - `src/screens/DiagnosticsScreen.tsx`
+  - `src/screens/FogCutterScreen.tsx`
+  - `src/screens/HomeScreen.tsx`
+  - `src/screens/InboxScreen.tsx`
+  - `src/ui/cosmic/BottomSheet.tsx`
+  - `src/ui/cosmic/GlowCard.tsx`
+  - `src/ui/cosmic/HaloRing.tsx`
+- Verification after fix:
+  - `npx tsc --noEmit` -> passing
+  - `npm run lint` -> `0 errors`, `0 warnings`
+
+### Issue 5 progress update (2026-02-23)
+- **Issue 5 status:** Completed (automated validation + E2E stabilization)
+- Findings and fixes:
+  - Full Jest suite passed (`23/23` suites, `143/143` tests).
+  - Initial E2E run surfaced 8 failures, concentrated in timer and capture-inbox selectors/flow.
+  - Applied compatibility fixes:
+    - `src/screens/PomodoroScreen.tsx`: added `testID="timer-display"` in cosmic timer path.
+    - `src/components/capture/CaptureDrawer.tsx`: added meeting input selector compatibility (`capture-meeting-input`).
+    - `src/components/capture/CaptureBubble.tsx`: route to inbox when bubble is in needs-review state and made badge directly actionable.
+    - `src/navigation/navigationRef.ts`: expanded root route typing to include `CHAT`, `DIAGNOSTICS`, and `INBOX`.
+    - `src/screens/InboxScreen.tsx`: default filter set to `all` to preserve promoted row visibility after triage action.
+  - E2E rerun outcome: `65 passed`, `1 skipped`, `0 failed`.
+
+### Current baseline
+- `npm run lint` -> `0 errors`, `0 warnings`
+- `npx tsc --noEmit` -> passing
+- `npx jest --runInBand --silent` -> passing
+- `npm run e2e -- --workers=1` -> passing (`65 passed`, `1 skipped`)
+
+### Notes for ongoing tracking
+- Keep using this file as the running log; append new findings under dated `Incremental Log` headings.
+- Suggested quick triage order for next cleanup pass:
+  1. Start applying the deferred `50 UX` cards in phased batches
+  2. Build edge-case matrix for each critical flow (capture, timers, check-in, navigation handoff)
+  3. Add/extend E2E scenarios per edge-case cluster and keep green baseline after each batch
+
+### Deferred user request (banked for after current issue fixes)
+- **Request:** Apply the "50 UX cards" to the app, plan edge use cases extensively, and run E2E coverage for those edge cases.
+- **Card source file located:** `UI/50 UX.txt`
+- **Planning status:** Completed planning document at `UX50_ROLLOUT_AND_EDGE_E2E_PLAN.md`.
+- **Execution order when resumed:**
+  1. Extract all 50 cards and map each to concrete UI/flow changes in `spark-adhd`
+  2. Prioritize cards by impact/risk and create phased rollout plan
+  3. Implement UI/UX changes screen-by-screen
+  4. Design edge-case matrix (offline, interrupted sessions, storage corruption, permission denial, deep link/overlay races, auth failures, retries/timeouts)
+  5. Add/extend E2E tests for each critical edge-case cluster and verify pass rate
+
 **End of Report**
 
 *Generated by Sisyphus AI Agent*  

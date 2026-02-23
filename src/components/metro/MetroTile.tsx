@@ -27,10 +27,10 @@ export const MetroTile: React.FC<MetroTileProps> = ({
   onPress,
   style,
 }) => {
-  const getSizeStyles = (size: TileSize): ViewStyle => {
+  const getSizeStyles = (tileSize: TileSize): ViewStyle => {
     // Assuming a base unit width for the grid column
     // This is approximate; in a real grid this would be controlled by parent
-    switch (size) {
+    switch (tileSize) {
       case 'small':
         return { width: 100, height: 100 };
       case 'medium':

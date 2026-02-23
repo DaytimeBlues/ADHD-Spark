@@ -189,11 +189,7 @@ export const BottomSheet = memo(function BottomSheet({
             <View
               style={[
                 styles.handle,
-                {
-                  backgroundColor: isCosmic
-                    ? 'rgba(185, 194, 217, 0.3)'
-                    : 'rgba(255,255,255,0.2)',
-                },
+                isCosmic ? styles.handleCosmic : styles.handleLinear,
               ]}
             />
           </View>
@@ -206,11 +202,7 @@ export const BottomSheet = memo(function BottomSheet({
                   <Text
                     style={[
                       styles.headerTitle,
-                      {
-                        color: isCosmic
-                          ? textColors.secondary
-                          : 'rgba(255,255,255,0.6)',
-                      },
+                      isCosmic ? styles.titleCosmic : styles.titleLinear,
                     ]}
                   >
                     {title}
@@ -220,6 +212,7 @@ export const BottomSheet = memo(function BottomSheet({
               <View style={styles.headerRight}>
                 {headerRight}
                 <Pressable
+                  testID="capture-cancel"
                   onPress={onClose}
                   style={styles.closeButton}
                   accessibilityLabel="Close"
@@ -229,11 +222,9 @@ export const BottomSheet = memo(function BottomSheet({
                   <Text
                     style={[
                       styles.closeIcon,
-                      {
-                        color: isCosmic
-                          ? textColors.muted
-                          : 'rgba(255,255,255,0.4)',
-                      },
+                      isCosmic
+                        ? styles.closeIconCosmic
+                        : styles.closeIconLinear,
                     ]}
                   >
                     ✕
@@ -323,6 +314,24 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+  },
+  handleCosmic: {
+    backgroundColor: 'rgba(185, 194, 217, 0.3)',
+  },
+  handleLinear: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  titleCosmic: {
+    color: textColors.secondary,
+  },
+  titleLinear: {
+    color: 'rgba(255, 255, 255, 0.6)',
+  },
+  closeIconCosmic: {
+    color: textColors.muted,
+  },
+  closeIconLinear: {
+    color: 'rgba(255, 255, 255, 0.4)',
   },
 });
 

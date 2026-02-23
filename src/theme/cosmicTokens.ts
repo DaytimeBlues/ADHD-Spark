@@ -358,7 +358,15 @@ export const cosmicMotion = {
 
 export type BackgroundVariant = 'ridge' | 'nebula' | 'moon';
 
-export const backgroundStyles: Record<BackgroundVariant, any> = {
+type BackgroundStyle = {
+  background?: string;
+  backgroundColor?: string;
+};
+
+export const backgroundStyles: Record<
+  BackgroundVariant,
+  BackgroundStyle | undefined
+> = {
   ridge: Platform.select({
     web: {
       background: `

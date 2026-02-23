@@ -309,7 +309,8 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
         testID="capture-confirm"
         style={[
           styles.confirmBtn,
-          { backgroundColor: text.trim() ? C.violet : C.border, marginTop: 12 },
+          { backgroundColor: text.trim() ? C.violet : C.border },
+          styles.marginTop12,
         ]}
         onPress={handleConfirm}
         disabled={!text.trim()}
@@ -401,8 +402,8 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
               styles.confirmBtn,
               {
                 backgroundColor: text.trim() ? C.violet : C.border,
-                marginTop: 12,
               },
+              styles.marginTop12,
             ]}
             onPress={handleConfirm}
             disabled={!text.trim()}
@@ -443,7 +444,7 @@ const MeetingMode = memo(function MeetingMode({ onCapture }: MeetingModeProps) {
         MEETING NOTES
       </Text>
       <TextInput
-        testID="capture-text-input"
+        testID="capture-meeting-input"
         style={[
           styles.textInputMeeting,
           { color: C.starlight, borderColor: C.border },
@@ -458,7 +459,8 @@ const MeetingMode = memo(function MeetingMode({ onCapture }: MeetingModeProps) {
         testID="capture-confirm"
         style={[
           styles.confirmBtn,
-          { backgroundColor: C.violet, marginTop: 12 },
+          { backgroundColor: C.violet },
+          styles.marginTop12,
         ]}
         onPress={handleConfirm}
         accessibilityLabel="Save meeting to inbox"
@@ -551,7 +553,8 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
             testID="capture-confirm"
             style={[
               styles.confirmBtn,
-              { backgroundColor: C.violet, marginTop: 12 },
+              { backgroundColor: C.violet },
+              styles.marginTop12,
             ]}
             onPress={handleConfirm}
             accessibilityLabel="Save photo to inbox"
@@ -604,14 +607,10 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
 
   return (
     <View style={styles.modeContent}>
-      <Text
-        style={[
-          styles.meetingLabel,
-          { color: C.starlight, marginBottom: 8, fontSize: 16, lineHeight: 22 },
-        ]}
-      >
+      <Text style={[styles.meetingLabel, styles.checkInPrompt]}>
         What are you doing?{'\n'}What should you be doing?
       </Text>
+
       <TextInput
         testID="capture-checkin-input"
         style={[
@@ -632,7 +631,8 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
         testID="capture-checkin-confirm"
         style={[
           styles.confirmBtn,
-          { backgroundColor: text.trim() ? C.gold : C.border, marginTop: 12 },
+          { backgroundColor: text.trim() ? C.gold : C.border },
+          styles.marginTop12,
         ]}
         onPress={handleConfirm}
         disabled={!text.trim()}
@@ -642,7 +642,9 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
         <Text
           style={[
             styles.confirmBtnText,
-            { color: text.trim() ? '#070712' : '#888' },
+            text.trim()
+              ? styles.checkInBtnTextActive
+              : styles.checkInBtnTextDisabled,
           ]}
         >
           LOG PROGRESS
@@ -664,6 +666,8 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 }: CaptureDrawerProps) {
   const [activeMode, setActiveMode] = useState<DrawerMode>('text');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   React.useEffect(() => {
     if (visible && currentBubbleState === 'needs-checkin') {
@@ -688,6 +692,8 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       raw: string,
       extra?: { transcript?: string; attachmentUri?: string },
     ) => {
+      setIsSaving(true);
+      setSaveError(null);
       try {
         await CaptureService.save({
           source,
@@ -698,6 +704,9 @@ export const CaptureDrawer = memo(function CaptureDrawer({
         showSuccess('Saved to inbox ✓');
       } catch (err) {
         console.error('[CaptureDrawer] save error:', err);
+        setSaveError('Failed to save. Please try again.');
+      } finally {
+        setIsSaving(false);
       }
     },
     [showSuccess],
@@ -741,12 +750,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     >
       {/* Success flash */}
       {successMsg !== '' && (
-        <View
-          style={[
-            styles.successBanner,
-            { backgroundColor: 'rgba(45, 212, 191, 0.15)' },
-          ]}
-        >
+        <View style={styles.successBanner}>
           <Text style={[styles.successText, { color: C.teal }]}>
             {successMsg}
           </Text>
@@ -810,12 +814,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
       {/* Offline banner */}
       {currentBubbleState === 'offline' && (
-        <View
-          style={[
-            styles.offlineBanner,
-            { backgroundColor: 'rgba(246, 193, 119, 0.12)' },
-          ]}
-        >
+        <View style={styles.offlineBanner}>
           <Text style={[styles.offlineText, { color: C.gold }]}>
             ⊗ Offline — captures will sync when reconnected
           </Text>
@@ -830,6 +829,11 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 // ============================================================================
 
 const styles = StyleSheet.create({
+  // Common spacers
+  marginTop12: {
+    marginTop: 12,
+  },
+
   // Mode tabs
   modeTabsScroll: {
     maxHeight: 64,
@@ -1065,6 +1069,20 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
+  // Check-in specific
+  checkInPrompt: {
+    color: C.starlight,
+    marginBottom: 8,
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  checkInBtnTextActive: {
+    color: '#070712',
+  },
+  checkInBtnTextDisabled: {
+    color: '#888',
+  },
+
   // Success banner
   successBanner: {
     marginHorizontal: 20,
@@ -1073,7 +1091,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
+    backgroundColor: 'rgba(45, 212, 191, 0.15)',
   },
+
   successText: {
     fontSize: 13,
     fontWeight: '600',
@@ -1087,7 +1107,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
+    backgroundColor: 'rgba(246, 193, 119, 0.12)',
   },
+
   offlineText: {
     fontSize: 12,
     letterSpacing: 0.5,

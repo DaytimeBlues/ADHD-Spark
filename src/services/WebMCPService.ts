@@ -2,6 +2,35 @@ import { Platform } from 'react-native';
 import StorageService from './StorageService';
 import { agentEventBus } from './AgentEventBus';
 
+type ToolDefinition = {
+  name: string;
+  description: string;
+  parameters: {
+    type: string;
+    properties?: Record<string, unknown>;
+    required?: string[];
+  };
+  execute: unknown;
+};
+
+type ModelContextLike = {
+  registerTool?: (tool: ToolDefinition) => void;
+};
+
+type WebMCPNavigatorLike = {
+  modelContext?: ModelContextLike;
+};
+
+type BrainDumpEntry = {
+  id: string;
+  text: string;
+  timestamp: number;
+  type: string;
+  [key: string]: unknown;
+};
+
+type CheckInEntry = Record<string, unknown>;
+
 /**
  * WebMCPService
  *
@@ -20,7 +49,8 @@ class WebMCPService {
     }
 
     const registerTools = () => {
-      const modelContext = (globalThis as any).navigator?.modelContext;
+      const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
+        .navigator?.modelContext;
       if (!modelContext?.registerTool) {
         console.log('WebMCP: API not found, retrying...');
         return;
@@ -103,7 +133,7 @@ class WebMCPService {
         execute: async ({ text }: { text: string }) => {
           try {
             const items =
-              (await StorageService.getJSON<any[]>(
+              (await StorageService.getJSON<BrainDumpEntry[]>(
                 StorageService.STORAGE_KEYS.brainDump,
               )) || [];
             const newItem = {
@@ -163,7 +193,7 @@ class WebMCPService {
         execute: async ({ limit = 7 }: { limit?: number }) => {
           try {
             const entries =
-              (await StorageService.getJSON<any[]>('checkIns')) || [];
+              (await StorageService.getJSON<CheckInEntry[]>('checkIns')) || [];
             return {
               success: true,
               entries: entries.slice(0, Math.min(limit, 7)),
@@ -187,7 +217,7 @@ class WebMCPService {
 
           try {
             const checkIns =
-              (await StorageService.getJSON<any[]>('checkIns')) || [];
+              (await StorageService.getJSON<CheckInEntry[]>('checkIns')) || [];
             const lastCheckIn = checkIns[0] ?? null;
             return { success: true, timeOfDay, lastCheckIn };
           } catch {

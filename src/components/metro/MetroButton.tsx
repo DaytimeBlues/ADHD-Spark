@@ -40,11 +40,13 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
         disabled && styles.disabled,
         variant === 'filled' && {
           backgroundColor: disabled ? MetroPalette.darkGray : accentColor,
+          ...(!disabled && styles.shadow),
         },
         variant === 'outline' && {
           borderColor: disabled ? MetroPalette.gray : accentColor,
           borderWidth: 2,
           backgroundColor: 'transparent',
+          ...(!disabled && styles.shadow),
         },
         variant === 'link' && { backgroundColor: 'transparent' },
         pressed && !disabled && styles.pressed,
@@ -61,9 +63,9 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
             },
             variant === 'link' && {
               color: disabled ? MetroPalette.gray : accentColor,
-              textDecorationLine: 'underline',
             },
-            pressed && variant === 'link' && { opacity: 0.7 },
+            variant === 'link' && styles.textUnderline,
+            pressed && variant === 'link' && styles.textOpacity07,
             textStyle,
           ]}
         >
@@ -83,9 +85,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 0, // Explicitly sharp
   },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  textUnderline: {
+    textDecorationLine: 'underline',
+  },
+  textOpacity07: {
+    opacity: 0.7,
+  },
+
   pressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.99 }], // Subtle press effect
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }, { translateY: 2 }], // Physically depress button
+    shadowOpacity: 0,
+    elevation: 0,
   },
   disabled: {
     opacity: 0.6,

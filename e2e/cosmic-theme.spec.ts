@@ -196,8 +196,8 @@ test.describe('Cosmic Theme — Timer Interactions', () => {
     await expect(timer).toBeVisible();
     const initialTime = await timer.textContent();
 
-    await page.getByText('START TIMER').click();
-    await expect(page.getByText('PAUSE')).toBeVisible();
+    await page.getByText(/START TIMER/i).click();
+    await expect(page.getByText(/PAUSE/i)).toBeVisible();
 
     await page.waitForTimeout(450);
     const newTime = await timer.textContent();
@@ -206,7 +206,7 @@ test.describe('Cosmic Theme — Timer Interactions', () => {
 
   test('Pomodoro phase transition to REST', async ({ page }) => {
     await navigateToScreen(page, 'pomodoro');
-    await page.getByText('START TIMER').click();
+    await page.getByText(/START TIMER/i).click();
 
     await page.evaluate(() => {
       const globalRecord = window as unknown as Record<string, unknown>;

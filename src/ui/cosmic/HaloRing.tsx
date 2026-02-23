@@ -46,6 +46,11 @@ export interface HaloRingProps {
   testID?: string;
 }
 
+type WebRingStyle = ViewStyle & {
+  backgroundImage?: string;
+  filter?: string;
+};
+
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -85,7 +90,7 @@ export const HaloRing = memo(function HaloRing({
   glow = 'medium',
   testID,
 }: HaloRingProps) {
-  const { isCosmic, t } = useTheme();
+  const { isCosmic } = useTheme();
   const reduceMotion = useReducedMotion();
   const isWeb = Platform.OS === 'web';
 
@@ -125,7 +130,7 @@ export const HaloRing = memo(function HaloRing({
     }
 
     // Per research spec: breathCycle 4200ms
-    const breathDuration = (t as any).motion?.durations?.breathCycle ?? 4200;
+    const breathDuration = 4200;
 
     breathingProgress.value = withRepeat(
       withTiming(1.06, {
@@ -136,7 +141,7 @@ export const HaloRing = memo(function HaloRing({
       -1, // Infinite
       true, // Reverse (yoyo)
     );
-  }, [mode, reduceMotion, breathingProgress, t]);
+  }, [mode, reduceMotion, breathingProgress]);
 
   // Breathing animated styles
   const breathingAnimatedStyle = useAnimatedStyle(() => {
@@ -222,15 +227,12 @@ export const HaloRing = memo(function HaloRing({
 
   // Web progress mode: conic-gradient per research spec
   if (mode === 'progress' && isWeb) {
-    const nebulaViolet =
-      (t as any).colors?.cosmic?.nebulaViolet ??
-      (t as any).colors?.brand?.[500] ??
-      '#8B5CF6';
+    const nebulaViolet = colors.progress;
     const trackColor = colors.track;
 
-    const webProgressStyle: ViewStyle = {
+    const webProgressStyle: WebRingStyle = {
       backgroundImage: `conic-gradient(${nebulaViolet} 0deg ${deg}deg, ${trackColor} ${deg}deg 360deg)`,
-    } as any;
+    };
 
     const innerSize = size - strokeWidth * 2;
 
@@ -255,11 +257,11 @@ export const HaloRing = memo(function HaloRing({
           <View
             style={[
               styles.inner,
+              styles.innerCutout,
               {
                 width: innerSize,
                 height: innerSize,
                 borderRadius: innerSize / 2,
-                backgroundColor: 'rgba(7, 7, 18, 0.62)',
               },
             ]}
           />
@@ -291,12 +293,11 @@ export const HaloRing = memo(function HaloRing({
           <View
             style={[
               StyleSheet.absoluteFillObject,
+              styles.transparentBorders,
               {
                 borderRadius: size / 2,
                 borderWidth: strokeWidth,
                 borderColor: colors.progress,
-                borderTopColor: 'transparent',
-                borderRightColor: 'transparent',
                 transform: [{ rotate: `${-90 + deg}deg` }],
               },
             ]}
@@ -338,10 +339,10 @@ export const HaloRing = memo(function HaloRing({
             borderRadius: (size * 0.7) / 2,
             borderWidth: strokeWidth * 0.5,
             borderColor: colors.progress,
-            position: 'absolute',
             top: size * 0.15,
             left: size * 0.15,
           },
+          styles.absolutePosition,
           innerAnimatedStyle,
         ]}
       />
@@ -365,6 +366,16 @@ const styles = StyleSheet.create({
   },
   inner: {
     borderStyle: 'solid',
+  },
+  innerCutout: {
+    backgroundColor: 'rgba(7, 7, 18, 0.62)',
+  },
+  transparentBorders: {
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
+  absolutePosition: {
+    position: 'absolute',
   },
 });
 
