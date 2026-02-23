@@ -57,7 +57,7 @@ export const useCaptureStore = create<CaptureState>()(
         })),
     }),
     {
-      name: 'spark-capture-storage',
+      name: 'captureInbox',
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {

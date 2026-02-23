@@ -13,6 +13,7 @@ import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import ActivationService from '../services/ActivationService';
 import useTimer from '../hooks/useTimer';
+import { useTimerStore } from '../store/useTimerStore';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
 import { LinearButton } from '../components/ui/LinearButton';
@@ -25,17 +26,16 @@ import {
 } from '../ui/cosmic';
 
 const IGNITE_DURATION_SECONDS = 5 * 60;
-const PERSIST_INTERVAL_MS = 5000;
 
 const IgniteScreen = () => {
   const { isCosmic } = useTheme();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
-  const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sessionIdRef = useRef<string | null>(null);
 
   const { timeLeft, isRunning, formattedTime, start, pause, reset, setTime } =
     useTimer({
+      id: 'ignite',
       initialTime: IGNITE_DURATION_SECONDS,
       onComplete: () => {
         SoundService.playCompletionSound();
@@ -63,16 +63,12 @@ const IgniteScreen = () => {
         const pendingStart = await ActivationService.consumePendingStart();
 
         const storedState = await StorageService.getJSON<{
-          timeLeft: number;
           isPlaying: boolean;
           activeSessionId?: string;
         }>(StorageService.STORAGE_KEYS.igniteState);
 
         if (storedState) {
           UXMetricsService.track('ignite_session_restored');
-          if (typeof storedState.timeLeft === 'number') {
-            setTime(storedState.timeLeft);
-          }
 
           if (storedState.isPlaying) {
             setIsPlaying(true);
@@ -81,10 +77,8 @@ const IgniteScreen = () => {
 
           if (storedState.activeSessionId) {
             sessionIdRef.current = storedState.activeSessionId;
-            if (
-              storedState.timeLeft > 0 &&
-              storedState.timeLeft < IGNITE_DURATION_SECONDS
-            ) {
+
+            if (!useTimerStore.getState().isRunning) {
               ActivationService.updateSessionStatus(
                 storedState.activeSessionId,
                 'resumed',
@@ -142,24 +136,12 @@ const IgniteScreen = () => {
   }, [setTime, start]);
 
   useEffect(() => {
-    if (persistTimerRef.current) {
-      clearTimeout(persistTimerRef.current);
-    }
-
-    persistTimerRef.current = setTimeout(() => {
-      StorageService.setJSON(StorageService.STORAGE_KEYS.igniteState, {
-        timeLeft,
-        isPlaying,
-        activeSessionId: sessionIdRef.current,
-      });
-    }, PERSIST_INTERVAL_MS);
-
-    return () => {
-      if (persistTimerRef.current) {
-        clearTimeout(persistTimerRef.current);
-      }
-    };
-  }, [timeLeft, isPlaying]);
+    // Save only essential flags for ignite since time is in the global useTimerStore
+    StorageService.setJSON(StorageService.STORAGE_KEYS.igniteState, {
+      isPlaying,
+      activeSessionId: sessionIdRef.current,
+    });
+  }, [isPlaying]);
 
   const startTimer = () => {
     if (!sessionIdRef.current) {

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform } from 'react-native';
 import SoundService from '../services/SoundService';
-import StorageService from '../services/StorageService';
 import useTimer from '../hooks/useTimer';
+import { useTimerStore } from '../store/useTimerStore';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
@@ -13,95 +13,42 @@ import {
   HaloRing,
 } from '../ui/cosmic';
 
-type PomodoroState = {
-  isWorking: boolean;
-  timeLeft: number;
-  sessions: number;
-};
-
 const SESSION_BADGE_SIZE = 28;
 const TIMER_CARD_SIZE = 280;
 const FOCUS_DURATION_SECONDS = 25 * 60;
 const BREAK_DURATION_SECONDS = 5 * 60;
-const PERSIST_INTERVAL_MS = 5000;
 
 const PomodoroScreen = () => {
   const { isCosmic } = useTheme();
-  const [isWorking, setIsWorking] = useState(true);
-  const [sessions, setSessions] = useState(0);
+  // We sync isWorking and sessions to the store, but keep local state for the UI if needed
+  // Alternatively, just pull them directly from useTimerStore
+  const store = useTimerStore();
+  const isWorking = store.activeMode === 'pomodoro' ? store.isWorking : true;
+  const sessions = store.activeMode === 'pomodoro' ? store.sessions : 0;
   const isWorkingRef = useRef(isWorking);
-  const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { timeLeft, isRunning, formattedTime, start, pause, reset, setTime } =
-    useTimer({
-      initialTime: FOCUS_DURATION_SECONDS,
-      onComplete: () => {
-        if (isWorkingRef.current) {
-          setSessions((s) => s + 1);
-          setIsWorking(false);
-          isWorkingRef.current = false;
-          SoundService.playCompletionSound();
-          setTime(BREAK_DURATION_SECONDS);
-        } else {
-          setIsWorking(true);
-          isWorkingRef.current = true;
-          SoundService.playNotificationSound();
-          setTime(FOCUS_DURATION_SECONDS);
-        }
-        // Re-start for the next phase
-        setTimeout(() => start(), 0);
-      },
-    });
+  const { timeLeft, isRunning, formattedTime, start, pause, reset } = useTimer({
+    id: 'pomodoro',
+    initialTime: FOCUS_DURATION_SECONDS,
+    onComplete: () => {
+      if (isWorkingRef.current) {
+        useTimerStore.getState().incrementSession();
+        useTimerStore.getState().completePhase(BREAK_DURATION_SECONDS, false);
+        isWorkingRef.current = false;
+        SoundService.playCompletionSound();
+      } else {
+        useTimerStore.getState().completePhase(FOCUS_DURATION_SECONDS, true);
+        isWorkingRef.current = true;
+        SoundService.playNotificationSound();
+      }
+      // Re-start for the next phase
+      setTimeout(() => start(), 0);
+    },
+  });
 
   useEffect(() => {
     isWorkingRef.current = isWorking;
   }, [isWorking]);
-
-  useEffect(() => {
-    const loadState = async () => {
-      const storedState = await StorageService.getJSON<PomodoroState>(
-        StorageService.STORAGE_KEYS.pomodoroState,
-      );
-
-      if (!storedState) {
-        return;
-      }
-
-      if (typeof storedState.isWorking === 'boolean') {
-        setIsWorking(storedState.isWorking);
-      }
-
-      if (typeof storedState.timeLeft === 'number') {
-        setTime(storedState.timeLeft);
-      }
-
-      if (typeof storedState.sessions === 'number') {
-        setSessions(storedState.sessions);
-      }
-    };
-
-    loadState();
-  }, [setTime]);
-
-  useEffect(() => {
-    if (persistTimerRef.current) {
-      clearTimeout(persistTimerRef.current);
-    }
-
-    persistTimerRef.current = setTimeout(() => {
-      StorageService.setJSON(StorageService.STORAGE_KEYS.pomodoroState, {
-        isWorking,
-        timeLeft,
-        sessions,
-      });
-    }, PERSIST_INTERVAL_MS);
-
-    return () => {
-      if (persistTimerRef.current) {
-        clearTimeout(persistTimerRef.current);
-      }
-    };
-  }, [isWorking, timeLeft, sessions]);
 
   const startTimer = () => {
     start();
@@ -113,9 +60,8 @@ const PomodoroScreen = () => {
 
   const resetTimer = () => {
     reset();
-    setIsWorking(true);
+    useTimerStore.getState().completePhase(FOCUS_DURATION_SECONDS, true);
     isWorkingRef.current = true;
-    setTime(FOCUS_DURATION_SECONDS);
   };
 
   const getTotalDuration = () => {
@@ -298,8 +244,8 @@ const getStyles = (isCosmic: boolean) =>
       textAlign: 'center',
       ...(isCosmic && Platform.OS === 'web'
         ? {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-          }
+          textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+        }
         : {}),
     },
     subtitle: {
@@ -325,10 +271,10 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 12 : 0,
       ...(isCosmic && Platform.OS === 'web'
         ? {
-            backdropFilter: 'blur(12px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-          }
+          backdropFilter: 'blur(12px)',
+          boxShadow:
+            '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+        }
         : {}),
     },
     rationaleTitle: {
@@ -364,10 +310,10 @@ const getStyles = (isCosmic: boolean) =>
       gap: Tokens.spacing[3],
       ...(isCosmic && Platform.OS === 'web'
         ? {
-            backdropFilter: 'blur(8px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-          }
+          backdropFilter: 'blur(8px)',
+          boxShadow:
+            '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+        }
         : {}),
     },
     sessionBadge: {

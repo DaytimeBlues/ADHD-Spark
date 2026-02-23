@@ -55,6 +55,24 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
     },
   ];
 
+  // Capture inbox items for Zustand store (wrapped in store state format)
+  const captureInboxItems = [
+    {
+      id: 'cap_a',
+      source: 'text',
+      status: 'unreviewed',
+      raw: 'Call substitute coordinator',
+      createdAt: Date.now(),
+    },
+    {
+      id: 'cap_b',
+      source: 'paste',
+      status: 'unreviewed',
+      raw: 'Period 3 room change note',
+      createdAt: Date.now() - 60_000,
+    },
+  ];
+
   await page.addInitScript(
     (seed) => {
       window.localStorage.clear();
@@ -69,11 +87,23 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
       );
       window.localStorage.setItem('brainDump', JSON.stringify(seed.brainDump));
       window.localStorage.setItem('tasks', JSON.stringify(seed.tasks));
+      // Zustand store format for capture inbox
+      window.localStorage.setItem(
+        'captureInbox',
+        JSON.stringify({
+          state: {
+            items: seed.captureInboxItems,
+            _hasHydrated: true,
+          },
+          version: 0,
+        }),
+      );
     },
     {
       activationSessions,
       brainDump,
       tasks,
+      captureInboxItems,
     },
   );
 };

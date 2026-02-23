@@ -27,9 +27,15 @@ import {
 import { agentEventBus } from './src/services/AgentEventBus';
 import { CheckInService } from './src/services/CheckInService';
 
+import { DriftCheckOverlay } from './src/components/DriftCheckOverlay';
+import { useDriftStore } from './src/store/useDriftStore';
+import { DriftService } from './src/services/DriftService';
+
 const App = () => {
   const [isReady, setIsReady] = useState(false);
   const pollingStartedRef = useRef(false);
+  const isDriftVisible = useDriftStore((state) => state.isVisible);
+  const hideDrift = useDriftStore((state) => state.hideOverlay);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -52,6 +58,7 @@ const App = () => {
         await GoogleTasksSyncService.syncToBrainDump();
         WebMCPService.init();
         CheckInService.start();
+        DriftService.init();
       } catch (error) {
         console.error('App initialization error:', error);
       } finally {
@@ -132,6 +139,7 @@ const App = () => {
         backgroundColor={Tokens.colors.neutral.darkest}
       />
       <AppNavigator />
+      <DriftCheckOverlay visible={isDriftVisible} onClose={hideDrift} />
     </NavigationContainer>
   );
 

@@ -50,6 +50,7 @@ const AnchorScreen = () => {
     reset,
     setTime,
   } = useTimer({
+    id: 'anchor',
     initialTime: 4,
     onComplete: () => {
       if (!patternRef.current) {
