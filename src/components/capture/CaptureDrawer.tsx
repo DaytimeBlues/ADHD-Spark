@@ -757,6 +757,25 @@ export const CaptureDrawer = memo(function CaptureDrawer({
         </View>
       )}
 
+      {/* Error banner */}
+      {saveError !== null && (
+        <View style={[styles.successBanner, { backgroundColor: 'rgba(251, 113, 133, 0.15)' }]}>
+          <Text style={[styles.successText, { color: C.rose }]}>
+            {saveError}
+          </Text>
+        </View>
+      )}
+
+      {/* Loading overlay */}
+      {isSaving && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="small" color={C.violet} />
+          <Text style={[styles.loadingText, { color: C.mutedText }]}>
+            Saving...
+          </Text>
+        </View>
+      )}
+
       {/* Mode tabs */}
       <ScrollView
         horizontal
@@ -775,7 +794,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
                 borderColor: C.violet,
               },
             ]}
-            onPress={() => setActiveMode(mode.id)}
+            onPress={() => !isSaving && setActiveMode(mode.id)}
             accessibilityLabel={`${mode.label} capture mode`}
             accessibilityRole="tab"
             accessibilityState={{ selected: activeMode === mode.id }}
