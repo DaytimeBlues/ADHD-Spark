@@ -29,14 +29,19 @@ describe('FogCutterScreen', () => {
   });
 
   it('loads tasks from storage and renders them', async () => {
-    mockGetJSON.mockResolvedValue([
-      {
-        id: 'task-1',
-        text: 'Draft outline',
-        completed: false,
-        microSteps: ['Step 1', 'Step 2'],
-      },
-    ]);
+    mockGetJSON.mockImplementation((key: string) => {
+      if (key === 'tasks') {
+        return Promise.resolve([
+          {
+            id: 'task-1',
+            text: 'Draft outline',
+            completed: false,
+            microSteps: ['Step 1', 'Step 2'],
+          },
+        ]);
+      }
+      return Promise.resolve(null);
+    });
 
     render(<FogCutterScreen />);
 
