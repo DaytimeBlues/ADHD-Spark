@@ -1,4 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { open } from '@op-engineering/op-sqlite';
+
+const db = open({
+  name: 'spark_db',
+});
 
 const STORAGE_VERSION = 1;
 const STORAGE_VERSION_KEY = 'storageVersion';
@@ -24,37 +29,24 @@ const STORAGE_KEYS = {
   googleTasksExportedFingerprints: 'googleTasksExportedFingerprints',
   backupLastExportAt: 'backupLastExportAt',
   captureInbox: 'captureInbox',
+  isBiometricSecured: 'isBiometricSecured',
 };
 
-/**
- * Storage migration logic
- * Add migration functions here as schema evolves
- */
-const migrations: Record<number, () => Promise<void>> = {
-  // Example: Version 2 migration
-  // 2: async () => {
-  //   const oldKey = await AsyncStorage.getItem('oldKey');
-  //   if (oldKey) {
-  //     await AsyncStorage.setItem('newKey', transformData(oldKey));
-  //     await AsyncStorage.removeItem('oldKey');
-  //   }
-  // },
-};
+const migrations: Record<number, () => Promise<void>> = {};
 
 const runMigrations = async (): Promise<void> => {
   try {
-    const storedVersion = await AsyncStorage.getItem(STORAGE_VERSION_KEY);
+    const storedVersion = await StorageService.get(STORAGE_VERSION_KEY);
     const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
 
     if (currentVersion < STORAGE_VERSION) {
-      // Run all migrations between current and target version
       for (let v = currentVersion + 1; v <= STORAGE_VERSION; v++) {
         if (migrations[v]) {
           await migrations[v]();
         }
       }
 
-      await AsyncStorage.setItem(
+      await StorageService.set(
         STORAGE_VERSION_KEY,
         STORAGE_VERSION.toString(),
       );
@@ -65,17 +57,41 @@ const runMigrations = async (): Promise<void> => {
 };
 
 const StorageService = {
-  /**
-   * Initialize storage and run migrations
-   * Call this once at app startup
-   */
   async init(): Promise<void> {
+    await db.execute('CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)');
+
+    // Auto-migrate from AsyncStorage to op-sqlite
+    const isMigrated = await AsyncStorage.getItem('SQLITE_MIGRATED');
+    if (!isMigrated) {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+        if (keys.length > 0) {
+          const pairs = await AsyncStorage.multiGet(keys);
+
+          await db.transaction(async (tx) => {
+            for (const [key, value] of pairs) {
+              if (value) {
+                await tx.execute('INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)', [key, value]);
+              }
+            }
+          });
+        }
+        await AsyncStorage.setItem('SQLITE_MIGRATED', 'true');
+      } catch (e) {
+        console.error('Migration to SQLite failed:', e);
+      }
+    }
+
     await runMigrations();
   },
 
   async get(key: string): Promise<string | null> {
     try {
-      return await AsyncStorage.getItem(key);
+      const res = await db.execute('SELECT value FROM kv_store WHERE key = ?', [key]);
+      if (res.rows?.length) {
+        return res.rows[0].value as string;
+      }
+      return null;
     } catch (error) {
       console.error('Storage get error:', error);
       return null;
@@ -84,7 +100,7 @@ const StorageService = {
 
   async set(key: string, value: string): Promise<boolean> {
     try {
-      await AsyncStorage.setItem(key, value);
+      await db.execute('INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)', [key, value]);
       return true;
     } catch (error) {
       console.error('Storage set error:', error);
@@ -94,7 +110,7 @@ const StorageService = {
 
   async remove(key: string): Promise<boolean> {
     try {
-      await AsyncStorage.removeItem(key);
+      await db.execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return true;
     } catch (error) {
       console.error('Storage remove error:', error);
@@ -122,6 +138,18 @@ const StorageService = {
   },
 
   STORAGE_KEYS,
+};
+
+export const zustandStorage = {
+  getItem: (name: string): Promise<string | null> => {
+    return StorageService.get(name);
+  },
+  setItem: (name: string, value: string): Promise<void> => {
+    return StorageService.set(name, value).then(() => { });
+  },
+  removeItem: (name: string): Promise<void> => {
+    return StorageService.remove(name).then(() => { });
+  },
 };
 
 export default StorageService;

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { zustandStorage } from '../services/StorageService';
 import type { CaptureItem, CaptureStatus } from '../services/CaptureService';
 
 interface CaptureState {
@@ -17,6 +17,7 @@ interface CaptureState {
   deleteItem: (id: string) => void;
   clearDiscarded: () => void;
   setHasHydrated: (state: boolean) => void;
+  checkBankruptcy: () => void;
 }
 
 export const useCaptureStore = create<CaptureState>()(
@@ -55,13 +56,31 @@ export const useCaptureStore = create<CaptureState>()(
         set((state) => ({
           items: state.items.filter((item) => item.status !== 'discarded'),
         })),
+
+      checkBankruptcy: () =>
+        set((state) => {
+          const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
+          let changed = false;
+          const updated = state.items.map((item) => {
+            if (item.status === 'unreviewed' && item.createdAt < fourteenDaysAgo) {
+              changed = true;
+              return { ...item, status: 'discarded' as const };
+            }
+            return item;
+          });
+          if (changed) {
+            return { items: updated };
+          }
+          return state;
+        }),
     }),
     {
       name: 'captureInbox',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.setHasHydrated(true);
+          state.checkBankruptcy();
         }
       },
     },

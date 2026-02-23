@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { zustandStorage } from '../services/StorageService';
+import { NotificationService } from '../services/NotificationService';
 
 export type TimerMode = 'pomodoro' | 'ignite' | 'fog_cutter' | null;
 
@@ -38,14 +39,21 @@ export const useTimerStore = create<TimerState>()(
       sessions: 0,
 
       start: (mode, durationSeconds, isWorking = true) => {
+        const targetEndTime = Date.now() + durationSeconds * 1000;
         set({
           activeMode: mode,
           isRunning: true,
           durationSeconds,
           remainingSeconds: durationSeconds,
-          targetEndTime: Date.now() + durationSeconds * 1000,
+          targetEndTime,
           isWorking,
         });
+
+        const title = isWorking ? 'Focus Session Complete' : 'Break Finished';
+        const body = mode === 'pomodoro'
+          ? 'Time to switch gears!'
+          : 'Your timer has finished.';
+        NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },
 
       pause: () => {
@@ -53,6 +61,7 @@ export const useTimerStore = create<TimerState>()(
         if (!state.isRunning) {
           return;
         }
+        NotificationService.cancelTimerNotification();
         set({
           isRunning: false,
           targetEndTime: null,
@@ -65,14 +74,21 @@ export const useTimerStore = create<TimerState>()(
         if (state.isRunning || state.remainingSeconds <= 0) {
           return;
         }
+
+        const targetEndTime = Date.now() + state.remainingSeconds * 1000;
         set({
           isRunning: true,
-          targetEndTime: Date.now() + state.remainingSeconds * 1000,
+          targetEndTime,
         });
+
+        const title = state.isWorking ? 'Focus Session Complete' : 'Break Finished';
+        const body = 'Your resumed timer has finished.';
+        NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },
 
       reset: () => {
         const state = get();
+        NotificationService.cancelTimerNotification();
         set({
           isRunning: false,
           remainingSeconds: state.durationSeconds,
@@ -102,6 +118,7 @@ export const useTimerStore = create<TimerState>()(
       },
 
       completePhase: (nextDurationSeconds, nextIsWorking) => {
+        NotificationService.cancelTimerNotification();
         set({
           isRunning: false,
           targetEndTime: null,
@@ -117,7 +134,7 @@ export const useTimerStore = create<TimerState>()(
     }),
     {
       name: 'timer-storage',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
       // Only persist essential state, not necessarily the exact second boundary
       partialize: (state) => ({
         activeMode: state.activeMode,

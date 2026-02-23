@@ -30,17 +30,26 @@ import { CheckInService } from './src/services/CheckInService';
 import { DriftCheckOverlay } from './src/components/DriftCheckOverlay';
 import { useDriftStore } from './src/store/useDriftStore';
 import { DriftService } from './src/services/DriftService';
+import { BiometricService } from './src/services/BiometricService';
+import { LockScreen } from './src/components/LockScreen';
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);
   const pollingStartedRef = useRef(false);
   const isDriftVisible = useDriftStore((state) => state.isVisible);
   const hideDrift = useDriftStore((state) => state.hideOverlay);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  useEffect(() => {
+    const unsub = BiometricService.subscribe((auth) => setIsAuthenticated(auth));
+    return () => { unsub(); };
+  }, []);
 
   useEffect(() => {
     const initializeApp = async () => {
       try {
         await StorageService.init();
+        await BiometricService.init();
 
         // Validate Google configuration before attempting sync
         const hasGoogleConfig =
@@ -51,7 +60,7 @@ const App = () => {
         if (!hasGoogleConfig && Platform.OS !== 'web') {
           console.warn(
             '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
-              'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+            'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
           );
         }
 
@@ -132,7 +141,11 @@ const App = () => {
     );
   }
 
-  const content = (
+  const handleUnlock = () => {
+    BiometricService.authenticate();
+  };
+
+  const content = isAuthenticated ? (
     <NavigationContainer ref={navigationRef}>
       <StatusBar
         barStyle="light-content"
@@ -141,6 +154,8 @@ const App = () => {
       <AppNavigator />
       <DriftCheckOverlay visible={isDriftVisible} onClose={hideDrift} />
     </NavigationContainer>
+  ) : (
+    <LockScreen onUnlock={handleUnlock} />
   );
 
   // GestureHandlerRootView can cause issues on web, wrap conditionally
