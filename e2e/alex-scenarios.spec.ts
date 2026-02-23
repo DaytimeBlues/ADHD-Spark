@@ -16,6 +16,9 @@ const goToTab = async (
 
 test.describe('Alex Persona - E2E Scenarios', () => {
   test.beforeEach(async ({ page }) => {
+    page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
+    page.on('pageerror', error => console.log('BROWSER PAGE ERROR:', error.message));
+
     await enableE2ETestMode(page);
     await enableRecordingMock(page);
     await seedAlexPersona(page);

@@ -1,9 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { open } from '@op-engineering/op-sqlite';
+import { Platform } from 'react-native';
 
-const db = open({
-  name: 'spark_db',
-});
+let db: any;
+
+if (Platform.OS !== 'web') {
+  const { open } = require('@op-engineering/op-sqlite');
+  db = open({
+    name: 'spark_db',
+  });
+}
 
 const STORAGE_VERSION = 1;
 const STORAGE_VERSION_KEY = 'storageVersion';
@@ -55,6 +60,10 @@ const runMigrations = async (): Promise<void> => {
 
 const StorageService = {
   async init(): Promise<void> {
+    if (Platform.OS === 'web') {
+      return runMigrations();
+    }
+
     await db.execute(
       'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
     );
@@ -67,7 +76,7 @@ const StorageService = {
         if (keys.length > 0) {
           const pairs = await AsyncStorage.multiGet(keys);
 
-          await db.transaction(async (tx) => {
+          await db.transaction(async (tx: any) => {
             for (const [key, value] of pairs) {
               if (value) {
                 await tx.execute(
@@ -88,6 +97,10 @@ const StorageService = {
   },
 
   async get(key: string): Promise<string | null> {
+    if (Platform.OS === 'web') {
+      return await AsyncStorage.getItem(key);
+    }
+
     try {
       const res = await db.execute('SELECT value FROM kv_store WHERE key = ?', [
         key,
@@ -103,6 +116,15 @@ const StorageService = {
   },
 
   async set(key: string, value: string): Promise<boolean> {
+    if (Platform.OS === 'web') {
+      try {
+        await AsyncStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
     try {
       await db.execute(
         'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
@@ -116,6 +138,15 @@ const StorageService = {
   },
 
   async remove(key: string): Promise<boolean> {
+    if (Platform.OS === 'web') {
+      try {
+        await AsyncStorage.removeItem(key);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
     try {
       await db.execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return true;
@@ -152,10 +183,10 @@ export const zustandStorage = {
     return StorageService.get(name);
   },
   setItem: (name: string, value: string): Promise<void> => {
-    return StorageService.set(name, value).then(() => {});
+    return StorageService.set(name, value).then(() => { });
   },
   removeItem: (name: string): Promise<void> => {
-    return StorageService.remove(name).then(() => {});
+    return StorageService.remove(name).then(() => { });
   },
 };
 
