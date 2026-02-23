@@ -759,7 +759,12 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
       {/* Error banner */}
       {saveError !== null && (
-        <View style={[styles.successBanner, { backgroundColor: 'rgba(251, 113, 133, 0.15)' }]}>
+        <View
+          style={[
+            styles.successBanner,
+            { backgroundColor: 'rgba(251, 113, 133, 0.15)' },
+          ]}
+        >
           <Text style={[styles.successText, { color: C.rose }]}>
             {saveError}
           </Text>
@@ -1131,6 +1136,26 @@ const styles = StyleSheet.create({
 
   offlineText: {
     fontSize: 12,
+    letterSpacing: 0.5,
+  },
+
+  // Loading overlay
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(7, 7, 18, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+    gap: 8,
+  },
+
+  loadingText: {
+    fontSize: 13,
+    fontWeight: '500',
     letterSpacing: 0.5,
   },
 });

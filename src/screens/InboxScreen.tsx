@@ -14,7 +14,6 @@ import {
   FlatList,
   Pressable,
   SafeAreaView,
-  ActivityIndicator,
   Platform,
   Animated,
   Easing,
@@ -272,7 +271,7 @@ function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean): object {
 
 const InboxScreen = (): JSX.Element => {
   const navigation = useNavigation();
-  const { isCosmic, t } = useTheme();
+  const { isCosmic } = useTheme();
 
   const [items, setItems] = useState<CaptureItem[]>([]);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
@@ -469,7 +468,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(185, 194, 217, 0.08)',
   },
   skeletonBlockLinear: {
-    backgroundColor: Tokens.colors.neutral.medium,
+    backgroundColor: Tokens.colors.neutral[500],
   },
   skeletonBlockCosmic: {
     backgroundColor: 'rgba(185, 194, 217, 0.2)',

@@ -48,6 +48,8 @@ The application logic breaks down into robust local-first state patterns that go
 
 ### Milestone 2: Advanced Features & Contextual Integrations
 
+* **Drift Check (Cognitive Interruption):** An hourly recurring popup (utilizing the floating overlay) that interrupts the user to ask "What are you doing?" and "What should you be doing?". This combats screen-lock/doom-scrolling and logs distractions as diagnostic data for later review.
+* **Third-Party Hardware Ingestion (Plaud Pro):** A cloud-sync webhook bridge allowing Zapier to catch transcripts from external AI hardware (like the Plaud Pro) and push them directly into the Appwrite database, where the mobile app synchronizes them down as "Unreviewed" meeting notes.
 * **Advanced Sensory Theming:** Dynamic switching between distinct interface profiles, such as a traditional "Linear" mode and an immersive "Cosmic" mode featuring glassmorphism, glowing halos (`<HaloRing>`), and animated celestial backgrounds.
 * **Cognitive Intervention Modes:** Dedicated workflow screens like "Fog Cutter" (for breaking down overwhelming tasks) and "Brain Dump" (for rapid anxiety clearing).
 * **Check-In System:** Mood and energy logging featuring literary vignettes to help baseline the user's executive function capacity.
