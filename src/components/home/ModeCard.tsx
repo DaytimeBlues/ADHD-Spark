@@ -39,9 +39,9 @@ type WebInteractiveStyle = {
   transition?: string;
 };
 
-const CARD_MIN_HEIGHT = 140;
+const CARD_MIN_HEIGHT = 100;
 const DOT_SIZE = 4; // Smaller, sharper dots
-const ICON_SIZE = 28;
+const ICON_SIZE = 24;
 
 function ModeCardComponent({
   mode,
@@ -137,8 +137,8 @@ function ModeCardComponent({
 
 const styles = StyleSheet.create({
   card: {
-    padding: Tokens.spacing[5] || 20,
-    borderRadius: Tokens.radii.xl || 22,
+    padding: Tokens.spacing[4] || 16,
+    borderRadius: Tokens.radii.lg || 16,
     borderWidth: 1,
     borderTopWidth: 2,
     borderColor: 'rgba(185, 194, 217, 0.15)', // Emulate top-down light source on other borders

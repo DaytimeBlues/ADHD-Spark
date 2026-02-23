@@ -1,11 +1,12 @@
 /**
  * CaptureService unit tests
  *
- * Tests CRUD operations, badge count reactivity, and subscriber notifications.
- * StorageService is mocked — no real AsyncStorage.
+ * Tests the CaptureService Zustand Facade.
+ * Mocking the Zustand store to ensure it correctly delegates actions.
  */
 
 import CaptureService from '../src/services/CaptureService';
+import { useCaptureStore } from '../src/store/useCaptureStore';
 import type {
   CaptureItem,
   NewCaptureInput,
@@ -15,17 +16,10 @@ import type {
 // MOCKS
 // ============================================================================
 
-const mockGetJSON = jest.fn();
-const mockSetJSON = jest.fn();
-
-jest.mock('../src/services/StorageService', () => ({
-  __esModule: true,
-  default: {
-    getJSON: (...args: unknown[]) => mockGetJSON(...args),
-    setJSON: (...args: unknown[]) => mockSetJSON(...args),
-    STORAGE_KEYS: {
-      captureInbox: 'captureInbox',
-    },
+jest.mock('../src/store/useCaptureStore', () => ({
+  useCaptureStore: {
+    getState: jest.fn(),
+    subscribe: jest.fn(),
   },
 }));
 
@@ -49,10 +43,23 @@ function makeItem(overrides: Partial<CaptureItem> = {}): CaptureItem {
 // ============================================================================
 
 describe('CaptureService', () => {
+  let mockState: any;
+
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset the private subscribers between tests by re-importing isn't needed;
-    // CaptureService is a singleton so subscribers persist — we just clear mocks.
+
+    mockState = {
+      _hasHydrated: true,
+      items: [],
+      getUnreviewedCount: jest.fn(() => 0),
+      getItemsByStatus: jest.fn((_status: string) => []),
+      addItem: jest.fn(),
+      updateItem: jest.fn(),
+      deleteItem: jest.fn(),
+      clearDiscarded: jest.fn(),
+    };
+
+    (useCaptureStore.getState as jest.Mock).mockReturnValue(mockState);
   });
 
   // --------------------------------------------------------------------------
@@ -60,47 +67,21 @@ describe('CaptureService', () => {
   // --------------------------------------------------------------------------
 
   describe('getAll', () => {
-    it('returns empty array when storage is null', async () => {
-      mockGetJSON.mockResolvedValueOnce(null);
-
-      const result = await CaptureService.getAll();
-
-      expect(result).toEqual([]);
-    });
-
     it('returns all items when no filter is provided', async () => {
-      const items = [
-        makeItem({ id: 'a', status: 'unreviewed' }),
-        makeItem({ id: 'b', status: 'promoted' }),
-        makeItem({ id: 'c', status: 'discarded' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items);
+      const items = [makeItem({ id: 'a' })];
+      mockState.items = items;
 
       const result = await CaptureService.getAll();
-
-      expect(result).toHaveLength(3);
+      expect(result).toEqual(items);
     });
 
     it('filters by status when filter is provided', async () => {
-      const items = [
-        makeItem({ id: 'a', status: 'unreviewed' }),
-        makeItem({ id: 'b', status: 'promoted' }),
-        makeItem({ id: 'c', status: 'unreviewed' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items);
+      const items = [makeItem({ id: 'a', status: 'unreviewed' })];
+      mockState.getItemsByStatus.mockReturnValueOnce(items);
 
       const result = await CaptureService.getAll({ status: 'unreviewed' });
-
-      expect(result).toHaveLength(2);
-      expect(result.every((item) => item.status === 'unreviewed')).toBe(true);
-    });
-
-    it('returns empty array on storage error', async () => {
-      mockGetJSON.mockRejectedValueOnce(new Error('storage failure'));
-
-      const result = await CaptureService.getAll();
-
-      expect(result).toEqual([]);
+      expect(mockState.getItemsByStatus).toHaveBeenCalledWith('unreviewed');
+      expect(result).toEqual(items);
     });
   });
 
@@ -110,24 +91,10 @@ describe('CaptureService', () => {
 
   describe('getUnreviewedCount', () => {
     it('returns count of unreviewed items', async () => {
-      const items = [
-        makeItem({ id: 'a', status: 'unreviewed' }),
-        makeItem({ id: 'b', status: 'unreviewed' }),
-        makeItem({ id: 'c', status: 'promoted' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items);
-
+      mockState.getUnreviewedCount.mockReturnValueOnce(5);
       const count = await CaptureService.getUnreviewedCount();
-
-      expect(count).toBe(2);
-    });
-
-    it('returns 0 when inbox is empty', async () => {
-      mockGetJSON.mockResolvedValueOnce([]);
-
-      const count = await CaptureService.getUnreviewedCount();
-
-      expect(count).toBe(0);
+      expect(count).toBe(5);
+      expect(mockState.getUnreviewedCount).toHaveBeenCalled();
     });
   });
 
@@ -136,220 +103,94 @@ describe('CaptureService', () => {
   // --------------------------------------------------------------------------
 
   describe('save', () => {
-    it('saves a new item with auto-assigned id, createdAt, and status=unreviewed', async () => {
-      mockGetJSON.mockResolvedValueOnce([]); // existing items
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      // getUnreviewedCount call inside notifySubscribers
-      mockGetJSON.mockResolvedValueOnce([]);
-
+    it('creates a new item and calls addItem on store', async () => {
       const input: NewCaptureInput = {
         source: 'voice',
-        raw: 'pick up the whiteboard markers',
+        raw: 'test voice note',
       };
 
       const item = await CaptureService.save(input);
 
       expect(item.id).toMatch(/^cap_/);
-      expect(item.source).toBe('voice');
-      expect(item.raw).toBe('pick up the whiteboard markers');
       expect(item.status).toBe('unreviewed');
-      expect(typeof item.createdAt).toBe('number');
-      expect(item.syncError).toBeUndefined();
-    });
+      expect(item.raw).toBe('test voice note');
 
-    it('prepends new item to inbox (newest first)', async () => {
-      const existing = [makeItem({ id: 'old', createdAt: 1000 })];
-      mockGetJSON.mockResolvedValueOnce(existing);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]); // notifySubscribers
-
-      const input: NewCaptureInput = {
-        source: 'text',
-        raw: 'new capture',
-      };
-
-      await CaptureService.save(input);
-
-      const savedList = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(savedList[0].raw).toBe('new capture');
-      expect(savedList[1].id).toBe('old');
-    });
-
-    it('marks syncError on storage failure but still returns item', async () => {
-      mockGetJSON.mockResolvedValueOnce([]);
-      mockSetJSON.mockRejectedValueOnce(new Error('disk full'));
-
-      const input: NewCaptureInput = {
-        source: 'paste',
-        raw: 'clipboard content',
-      };
-      const item = await CaptureService.save(input);
-
-      expect(item.raw).toBe('clipboard content');
-      expect(item.syncError).toBeTruthy();
+      expect(mockState.addItem).toHaveBeenCalledWith(item);
     });
   });
 
   // --------------------------------------------------------------------------
-  // promote
+  // update / promote / discard / delete
   // --------------------------------------------------------------------------
 
-  describe('promote', () => {
-    it('promotes item to task and sets status=promoted', async () => {
-      const items = [makeItem({ id: 'cap_1', status: 'unreviewed' })];
-      // getAll called twice: once inside update's getAll, once for notifySubscribers
-      mockGetJSON.mockResolvedValueOnce(items); // update -> getAll
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]); // notifySubscribers -> getUnreviewedCount -> getAll
+  describe('mutations', () => {
+    it('update calls updateItem', async () => {
+      await CaptureService.update('123', { transcript: 'hello' });
+      expect(mockState.updateItem).toHaveBeenCalledWith('123', {
+        transcript: 'hello',
+      });
+    });
 
+    it('promote calls updateItem with promoted status and timestamp', async () => {
       await CaptureService.promote('cap_1', 'task');
-
-      const saved = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(saved[0].status).toBe('promoted');
-      expect(saved[0].promotedTo).toBe('task');
-      expect(typeof saved[0].promotedAt).toBe('number');
+      expect(mockState.updateItem).toHaveBeenCalledWith(
+        'cap_1',
+        expect.objectContaining({
+          status: 'promoted',
+          promotedTo: 'task',
+          promotedAt: expect.any(Number),
+        }),
+      );
     });
 
-    it('promotes item to note', async () => {
-      const items = [makeItem({ id: 'cap_2', status: 'unreviewed' })];
-      mockGetJSON.mockResolvedValueOnce(items);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]);
-
-      await CaptureService.promote('cap_2', 'note');
-
-      const saved = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(saved[0].promotedTo).toBe('note');
-    });
-  });
-
-  // --------------------------------------------------------------------------
-  // discard
-  // --------------------------------------------------------------------------
-
-  describe('discard', () => {
-    it('sets status=discarded on the target item', async () => {
-      const items = [makeItem({ id: 'cap_3', status: 'unreviewed' })];
-      mockGetJSON.mockResolvedValueOnce(items);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]);
-
+    it('discard calls updateItem with discarded status', async () => {
       await CaptureService.discard('cap_3');
-
-      const saved = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(saved[0].status).toBe('discarded');
+      expect(mockState.updateItem).toHaveBeenCalledWith('cap_3', {
+        status: 'discarded',
+      });
     });
-  });
 
-  // --------------------------------------------------------------------------
-  // delete
-  // --------------------------------------------------------------------------
-
-  describe('delete', () => {
-    it('removes the item from storage permanently', async () => {
-      const items = [
-        makeItem({ id: 'keep_me' }),
-        makeItem({ id: 'delete_me' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]); // notifySubscribers
-
+    it('delete calls deleteItem', async () => {
       await CaptureService.delete('delete_me');
-
-      const saved = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(saved).toHaveLength(1);
-      expect(saved[0].id).toBe('keep_me');
+      expect(mockState.deleteItem).toHaveBeenCalledWith('delete_me');
     });
-  });
 
-  // --------------------------------------------------------------------------
-  // clearDiscarded
-  // --------------------------------------------------------------------------
-
-  describe('clearDiscarded', () => {
-    it('removes all discarded items and keeps others', async () => {
-      const items = [
-        makeItem({ id: 'a', status: 'unreviewed' }),
-        makeItem({ id: 'b', status: 'discarded' }),
-        makeItem({ id: 'c', status: 'promoted' }),
-        makeItem({ id: 'd', status: 'discarded' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-
+    it('clearDiscarded calls clearDiscarded on store', async () => {
       await CaptureService.clearDiscarded();
-
-      const saved = mockSetJSON.mock.calls[0][1] as CaptureItem[];
-      expect(saved).toHaveLength(2);
-      expect(saved.every((item) => item.status !== 'discarded')).toBe(true);
+      expect(mockState.clearDiscarded).toHaveBeenCalled();
     });
   });
 
   // --------------------------------------------------------------------------
-  // subscribe / notifySubscribers
+  // subscribe
   // --------------------------------------------------------------------------
 
   describe('subscribe', () => {
-    it('calls subscriber immediately with current unreviewed count', async () => {
-      const items = [
-        makeItem({ status: 'unreviewed' }),
-        makeItem({ id: 'b', status: 'unreviewed' }),
-      ];
-      mockGetJSON.mockResolvedValueOnce(items); // getAll for getUnreviewedCount
+    it('subscribes to useCaptureStore and passes count', () => {
+      const mockUnsub = jest.fn();
+      (useCaptureStore.subscribe as jest.Mock).mockReturnValue(mockUnsub);
+      mockState.getUnreviewedCount.mockReturnValue(3);
 
       const callback = jest.fn();
       const unsub = CaptureService.subscribe(callback);
 
-      // Wait for the async initial emit
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      // It should immediately invoke callback with current count
+      expect(callback).toHaveBeenCalledWith(3);
 
-      expect(callback).toHaveBeenCalledWith(2);
+      // It should subscribe to changes
+      expect(useCaptureStore.subscribe).toHaveBeenCalled();
 
+      // The callback passed to useCaptureStore.subscribe should trigger our callback when store answers
+      const storeListener = (useCaptureStore.subscribe as jest.Mock).mock
+        .calls[0][0];
+
+      // simulate state change
+      storeListener(mockState);
+      expect(callback).toHaveBeenCalledTimes(2); // 1 for init, 1 for update
+
+      // Ensure unsub works
       unsub();
-    });
-
-    it('unsubscribe stops future notifications', async () => {
-      mockGetJSON.mockResolvedValue([]);
-
-      const callback = jest.fn();
-      const unsub = CaptureService.subscribe(callback);
-
-      // Wait for initial emit
-      await new Promise((resolve) => setTimeout(resolve, 10));
-      callback.mockClear();
-
-      unsub();
-
-      // Trigger a save — should NOT call the unsubscribed callback
-      mockGetJSON.mockResolvedValueOnce([]);
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([]);
-
-      await CaptureService.save({ source: 'text', raw: 'after unsub' });
-
-      expect(callback).not.toHaveBeenCalled();
-    });
-
-    it('notifies subscribers after save with updated count', async () => {
-      // subscribe initial emit
-      mockGetJSON.mockResolvedValueOnce([]);
-      const callback = jest.fn();
-      const unsub = CaptureService.subscribe(callback);
-      await new Promise((resolve) => setTimeout(resolve, 10));
-      callback.mockClear();
-
-      // save → notifySubscribers → getUnreviewedCount
-      mockGetJSON.mockResolvedValueOnce([]); // save existing
-      mockSetJSON.mockResolvedValueOnce(undefined);
-      mockGetJSON.mockResolvedValueOnce([makeItem({ status: 'unreviewed' })]); // notifySubscribers
-
-      await CaptureService.save({ source: 'voice', raw: 'meeting note' });
-      await new Promise((resolve) => setTimeout(resolve, 10));
-
-      expect(callback).toHaveBeenCalledWith(1);
-
-      unsub();
+      expect(mockUnsub).toHaveBeenCalled();
     });
   });
 });

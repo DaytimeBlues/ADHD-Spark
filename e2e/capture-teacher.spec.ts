@@ -19,9 +19,15 @@ import { enableCosmicTheme } from './helpers/seed';
 // ============================================================================
 
 async function seedCaptureInbox(page: Page, items: object[]): Promise<void> {
-  await page.addInitScript((inbox) => {
-    (window as unknown as Record<string, unknown>).localStorage;
-    window.localStorage.setItem('captureInbox', JSON.stringify(inbox));
+  await page.addInitScript((itemsArray) => {
+    const zustandPayload = {
+      state: {
+        items: itemsArray,
+        _hasHydrated: true,
+      },
+      version: 0,
+    };
+    window.localStorage.setItem('captureInbox', JSON.stringify(zustandPayload));
   }, items);
 }
 
