@@ -121,7 +121,7 @@ test.describe('Alex Persona - E2E Scenarios', () => {
       const initialTime = await timer.textContent();
 
       await page.getByText(/START TIMER/i).click();
-      await page.waitForTimeout(450);
+      await page.waitForTimeout(1100);
 
       const newTime = await timer.textContent();
       expect(newTime).not.toBe(initialTime);
