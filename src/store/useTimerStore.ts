@@ -50,9 +50,10 @@ export const useTimerStore = create<TimerState>()(
         });
 
         const title = isWorking ? 'Focus Session Complete' : 'Break Finished';
-        const body = mode === 'pomodoro'
-          ? 'Time to switch gears!'
-          : 'Your timer has finished.';
+        const body =
+          mode === 'pomodoro'
+            ? 'Time to switch gears!'
+            : 'Your timer has finished.';
         NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },
 
@@ -81,7 +82,9 @@ export const useTimerStore = create<TimerState>()(
           targetEndTime,
         });
 
-        const title = state.isWorking ? 'Focus Session Complete' : 'Break Finished';
+        const title = state.isWorking
+          ? 'Focus Session Complete'
+          : 'Break Finished';
         const body = 'Your resumed timer has finished.';
         NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },

@@ -10,7 +10,7 @@
 import React from 'react';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { zustandStorage } from '../services/StorageService';
 
 import { LinearTokens } from './linearTokens';
 import { CosmicTokens } from './cosmicTokens';
@@ -41,7 +41,7 @@ export const useThemeStore = create<ThemeStoreState>()(
     }),
     {
       name: 'spark-theme-storage',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {
           state.setHasHydrated(true);

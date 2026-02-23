@@ -41,8 +41,12 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
-    const unsub = BiometricService.subscribe((auth) => setIsAuthenticated(auth));
-    return () => { unsub(); };
+    const unsub = BiometricService.subscribe((auth) =>
+      setIsAuthenticated(auth),
+    );
+    return () => {
+      unsub();
+    };
   }, []);
 
   useEffect(() => {
@@ -60,7 +64,7 @@ const App = () => {
         if (!hasGoogleConfig && Platform.OS !== 'web') {
           console.warn(
             '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
-            'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+              'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
           );
         }
 

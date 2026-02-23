@@ -244,8 +244,8 @@ const getStyles = (isCosmic: boolean) =>
       textAlign: 'center',
       ...(isCosmic && Platform.OS === 'web'
         ? {
-          textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-        }
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+          }
         : {}),
     },
     subtitle: {
@@ -271,10 +271,10 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 12 : 0,
       ...(isCosmic && Platform.OS === 'web'
         ? {
-          backdropFilter: 'blur(12px)',
-          boxShadow:
-            '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-        }
+            backdropFilter: 'blur(12px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+          }
         : {}),
     },
     rationaleTitle: {
@@ -310,10 +310,10 @@ const getStyles = (isCosmic: boolean) =>
       gap: Tokens.spacing[3],
       ...(isCosmic && Platform.OS === 'web'
         ? {
-          backdropFilter: 'blur(8px)',
-          boxShadow:
-            '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-        }
+            backdropFilter: 'blur(8px)',
+            boxShadow:
+              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+          }
         : {}),
     },
     sessionBadge: {

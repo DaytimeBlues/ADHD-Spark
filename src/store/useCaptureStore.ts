@@ -62,7 +62,10 @@ export const useCaptureStore = create<CaptureState>()(
           const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
           let changed = false;
           const updated = state.items.map((item) => {
-            if (item.status === 'unreviewed' && item.createdAt < fourteenDaysAgo) {
+            if (
+              item.status === 'unreviewed' &&
+              item.createdAt < fourteenDaysAgo
+            ) {
               changed = true;
               return { ...item, status: 'discarded' as const };
             }

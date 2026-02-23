@@ -312,7 +312,7 @@ const BrainDumpScreen = () => {
       if (exportResult.authRequired) {
         setSortingError(
           exportResult.errorMessage ||
-          'Google sign-in required to sync Tasks and Calendar exports.',
+            'Google sign-in required to sync Tasks and Calendar exports.',
         );
       } else if (exportResult.errorMessage) {
         setSortingError(exportResult.errorMessage);
@@ -399,12 +399,14 @@ const BrainDumpScreen = () => {
           }
         }
       } else {
-        setRecordingError(transcription.error || 'Transcription failed. Audio saved locally.');
+        setRecordingError(
+          transcription.error || 'Transcription failed. Audio saved locally.',
+        );
 
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         const newItem: DumpItem = {
           id: generateId(),
-          text: `[Voice Note: Transcription Failed]`,
+          text: '[Voice Note: Transcription Failed]',
           createdAt: new Date().toISOString(),
           source: 'audio',
           audioPath: result.uri,
@@ -516,10 +518,10 @@ const BrainDumpScreen = () => {
           pressed: boolean;
           hovered?: boolean;
         }) => [
-            styles.deleteButton,
-            hovered && styles.deleteButtonHovered,
-            pressed && styles.deleteButtonPressed,
-          ]}
+          styles.deleteButton,
+          hovered && styles.deleteButtonHovered,
+          pressed && styles.deleteButtonPressed,
+        ]}
         hitSlop={HIT_SLOP}
       >
         <Text style={styles.deleteText}>×</Text>
@@ -632,13 +634,13 @@ const BrainDumpScreen = () => {
                 pressed: boolean;
                 hovered?: boolean;
               }) => [
-                  styles.recordButton,
-                  hovered && styles.recordButtonHovered,
-                  recordingState === 'recording' && styles.recordButtonActive,
-                  recordingState === 'processing' &&
+                styles.recordButton,
+                hovered && styles.recordButtonHovered,
+                recordingState === 'recording' && styles.recordButtonActive,
+                recordingState === 'processing' &&
                   styles.recordButtonProcessing,
-                  pressed && styles.recordButtonPressed,
-                ]}
+                pressed && styles.recordButtonPressed,
+              ]}
             >
               {recordingState === 'processing' ? (
                 <ActivityIndicator
@@ -687,11 +689,11 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                      styles.actionButton,
-                      hovered && styles.clearHovered,
-                      pressed && styles.clearPressed,
-                      isSorting && styles.actionButtonDisabled,
-                    ]}
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                    isSorting && styles.actionButtonDisabled,
+                  ]}
                 >
                   <Text style={styles.aiSortText}>
                     {isSorting ? 'SORTING...' : 'AI_SORT'}
@@ -709,10 +711,10 @@ const BrainDumpScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                      styles.actionButton,
-                      hovered && styles.clearHovered,
-                      pressed && styles.clearPressed,
-                    ]}
+                    styles.actionButton,
+                    hovered && styles.clearHovered,
+                    pressed && styles.clearPressed,
+                  ]}
                 >
                   <Text style={styles.clearText}>CLEAR</Text>
                 </Pressable>
@@ -874,10 +876,10 @@ const getStyles = (isCosmic: boolean) =>
       textTransform: 'uppercase',
       ...(isCosmic
         ? Platform.select({
-          web: {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-          },
-        })
+            web: {
+              textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+            },
+          })
         : {}),
     },
     headerLine: {
@@ -901,16 +903,16 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 12 : Tokens.radii.none,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(20px) saturate(180%)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(20px) saturate(180%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.15),
               0 4px 24px rgba(7, 7, 18, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.05)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
         : {}),
     },
     rationaleTitle: {
@@ -950,19 +952,19 @@ const getStyles = (isCosmic: boolean) =>
       justifyContent: 'center',
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(12px)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(12px)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.03),
               0 4px 16px rgba(7, 7, 18, 0.3)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
         : Platform.select({
-          web: { transition: 'all 0.2s ease' },
-        })),
+            web: { transition: 'all 0.2s ease' },
+          })),
     },
     inputWrapperFocused: {
       borderColor: isCosmic
@@ -970,14 +972,14 @@ const getStyles = (isCosmic: boolean) =>
         : Tokens.colors.text.primary,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            boxShadow: `
+            web: {
+              boxShadow: `
               0 0 0 2px rgba(139, 92, 246, 0.3),
               0 0 30px rgba(139, 92, 246, 0.25),
               inset 0 1px 0 rgba(255, 255, 255, 0.05)
             `,
-          },
-        })
+            },
+          })
         : {}),
     },
     input: {
@@ -1034,11 +1036,11 @@ const getStyles = (isCosmic: boolean) =>
         : Tokens.colors.neutral.dark,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
-          },
-        })
+            web: {
+              boxShadow:
+                '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15), 0 8px 24px rgba(7, 7, 18, 0.5)',
+            },
+          })
         : {}),
     },
     clearPressed: {
@@ -1081,16 +1083,16 @@ const getStyles = (isCosmic: boolean) =>
         : Tokens.colors.neutral.border,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(24px) saturate(150%)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(24px) saturate(150%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.15),
               0 8px 32px rgba(7, 7, 18, 0.5),
               inset 0 1px 0 rgba(255, 255, 255, 0.06)
             `,
-            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
         : {}),
     },
     sortedTitle: {
@@ -1179,21 +1181,21 @@ const getStyles = (isCosmic: boolean) =>
       minHeight: isCosmic ? 40 : 48,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(12px) saturate(150%)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(12px) saturate(150%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.1),
               0 4px 20px rgba(7, 7, 18, 0.35),
               inset 0 1px 0 rgba(255, 255, 255, 0.04)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
         : Platform.select({
-          web: {
-            transition: 'all 0.2s ease',
-          },
-        })),
+            web: {
+              transition: 'all 0.2s ease',
+            },
+          })),
     },
     itemText: {
       flex: 1,
@@ -1255,23 +1257,23 @@ const getStyles = (isCosmic: boolean) =>
       justifyContent: 'center',
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(16px) saturate(180%)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(16px) saturate(180%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.2),
               0 4px 24px rgba(7, 7, 18, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.08)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            cursor: 'pointer',
-          },
-        })
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              cursor: 'pointer',
+            },
+          })
         : Platform.select({
-          web: {
-            transition: 'all 0.2s ease',
-            cursor: 'pointer',
-          },
-        })),
+            web: {
+              transition: 'all 0.2s ease',
+              cursor: 'pointer',
+            },
+          })),
     },
     recordButtonHovered: {
       borderColor: isCosmic
@@ -1280,16 +1282,16 @@ const getStyles = (isCosmic: boolean) =>
       backgroundColor: isCosmic ? 'rgba(17, 26, 51, 0.7)' : undefined,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            boxShadow: `
+            web: {
+              boxShadow: `
               0 0 0 2px rgba(139, 92, 246, 0.3),
               0 0 30px rgba(139, 92, 246, 0.25),
               0 8px 32px rgba(7, 7, 18, 0.5),
               inset 0 1px 0 rgba(255, 255, 255, 0.1)
             `,
-            transform: 'translateY(-1px)',
-          },
-        })
+              transform: 'translateY(-1px)',
+            },
+          })
         : {}),
     },
     recordButtonActive: {
@@ -1344,16 +1346,16 @@ const getStyles = (isCosmic: boolean) =>
       gap: isCosmic ? 8 : Tokens.spacing[3],
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(20px) saturate(160%)',
-            boxShadow: `
+            web: {
+              backdropFilter: 'blur(20px) saturate(160%)',
+              boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.2),
               0 6px 28px rgba(7, 7, 18, 0.45),
               inset 0 1px 0 rgba(255, 255, 255, 0.06)
             `,
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          },
-        })
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+          })
         : {}),
     },
     guideContent: {
@@ -1386,10 +1388,10 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       ...(isCosmic
         ? Platform.select({
-          web: {
-            backdropFilter: 'blur(8px)',
-          },
-        })
+            web: {
+              backdropFilter: 'blur(8px)',
+            },
+          })
         : {}),
     },
     guideButtonPressed: {

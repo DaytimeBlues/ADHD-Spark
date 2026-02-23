@@ -46,10 +46,7 @@ const runMigrations = async (): Promise<void> => {
         }
       }
 
-      await StorageService.set(
-        STORAGE_VERSION_KEY,
-        STORAGE_VERSION.toString(),
-      );
+      await StorageService.set(STORAGE_VERSION_KEY, STORAGE_VERSION.toString());
     }
   } catch (error) {
     console.error('Storage migration error:', error);
@@ -58,7 +55,9 @@ const runMigrations = async (): Promise<void> => {
 
 const StorageService = {
   async init(): Promise<void> {
-    await db.execute('CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)');
+    await db.execute(
+      'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
+    );
 
     // Auto-migrate from AsyncStorage to op-sqlite
     const isMigrated = await AsyncStorage.getItem('SQLITE_MIGRATED');
@@ -71,7 +70,10 @@ const StorageService = {
           await db.transaction(async (tx) => {
             for (const [key, value] of pairs) {
               if (value) {
-                await tx.execute('INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)', [key, value]);
+                await tx.execute(
+                  'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
+                  [key, value],
+                );
               }
             }
           });
@@ -87,7 +89,9 @@ const StorageService = {
 
   async get(key: string): Promise<string | null> {
     try {
-      const res = await db.execute('SELECT value FROM kv_store WHERE key = ?', [key]);
+      const res = await db.execute('SELECT value FROM kv_store WHERE key = ?', [
+        key,
+      ]);
       if (res.rows?.length) {
         return res.rows[0].value as string;
       }
@@ -100,7 +104,10 @@ const StorageService = {
 
   async set(key: string, value: string): Promise<boolean> {
     try {
-      await db.execute('INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)', [key, value]);
+      await db.execute(
+        'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
+        [key, value],
+      );
       return true;
     } catch (error) {
       console.error('Storage set error:', error);
@@ -145,10 +152,10 @@ export const zustandStorage = {
     return StorageService.get(name);
   },
   setItem: (name: string, value: string): Promise<void> => {
-    return StorageService.set(name, value).then(() => { });
+    return StorageService.set(name, value).then(() => {});
   },
   removeItem: (name: string): Promise<void> => {
-    return StorageService.remove(name).then(() => { });
+    return StorageService.remove(name).then(() => {});
   },
 };
 
