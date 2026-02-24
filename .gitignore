@@ -33,6 +33,11 @@ Thumbs.db
 test-results/
 playwright-report/
 coverage/
+pw-log*.txt
+lint-output*.txt
+jest-results.json
+test-results.json
+android/build_*.log
 
 # Local scratch / restore files
 temp_tokens.ts
