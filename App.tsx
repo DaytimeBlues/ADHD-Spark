@@ -21,6 +21,7 @@ import { Tokens } from './src/theme/tokens';
 import { config } from './src/config';
 import {
   handleOverlayIntent,
+  flushOverlayIntentQueue,
   navigationRef,
   type RootStackParamList,
 } from './src/navigation/navigationRef';
@@ -150,7 +151,13 @@ const App = () => {
   };
 
   const content = isAuthenticated ? (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // Flush any overlay intents that were queued before navigation was ready
+        flushOverlayIntentQueue();
+      }}
+    >
       <StatusBar
         barStyle="light-content"
         backgroundColor={Tokens.colors.neutral.darkest}
