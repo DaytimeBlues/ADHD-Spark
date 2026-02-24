@@ -11,10 +11,20 @@ class BiometricServiceClass {
   private backgroundedAt: number | null = null;
   // Threshold in ms to require re-auth (e.g. 10 minutes)
   private readonly REAUTH_THRESHOLD_MS = 10 * 60 * 1000;
+  private appStateSubscription: { remove(): void } | null = null;
 
   constructor() {
-    AppState.addEventListener('change', this.handleAppStateChange);
+    this.appStateSubscription = AppState.addEventListener(
+      'change',
+      this.handleAppStateChange,
+    );
   }
+
+  public destroy() {
+    this.appStateSubscription?.remove();
+    this.appStateSubscription = null;
+  }
+
 
   public async init() {
     const isSecured =

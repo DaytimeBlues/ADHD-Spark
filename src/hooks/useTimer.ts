@@ -72,9 +72,10 @@ const useTimer = ({
 
     globalRecord.__SPARK_E2E_TIMER_CONTROLS__ = {
       complete: () => {
-        // Zero out the remaining seconds and erase the future target time
-        // This will allow the component's useEffect `store.remainingSeconds === 0` to organically fire
-        useTimerStore.setState({ remainingSeconds: 0, targetEndTime: null });
+        // Set isRunning: false so the completion useEffect does NOT double-fire onComplete
+        useTimerStore.setState({ remainingSeconds: 0, isRunning: false, targetEndTime: null });
+        // Fire onComplete synchronously so the phase transition happens immediately
+        onComplete?.();
       },
       fastForward: (seconds: number) => {
         if (!Number.isFinite(seconds) || seconds <= 0) {
