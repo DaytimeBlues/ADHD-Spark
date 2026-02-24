@@ -37,10 +37,17 @@ export type OverlayEventPayload = {
   granted?: boolean;
 };
 
+const overlayEventEmitterModule = OverlayModule
+  ? {
+      addListener: OverlayModule.addListener ?? (() => {}),
+      removeListeners: OverlayModule.removeListeners ?? (() => {}),
+    }
+  : null;
+
 // Create NativeEventEmitter only on native platforms with a valid module
 const overlayEventEmitter =
-  Platform.OS !== 'web' && OverlayModule
-    ? new NativeEventEmitter(OverlayModule)
+  Platform.OS !== 'web' && overlayEventEmitterModule
+    ? new NativeEventEmitter(overlayEventEmitterModule)
     : null;
 
 let pendingOverlayCount = 0;

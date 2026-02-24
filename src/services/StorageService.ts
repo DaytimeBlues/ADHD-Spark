@@ -2,8 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
 let db: any;
+const isJestRuntime =
+  typeof process !== 'undefined' && !!process.env.JEST_WORKER_ID;
 
-if (Platform.OS !== 'web') {
+if (Platform.OS !== 'web' && !isJestRuntime) {
   const { open } = require('@op-engineering/op-sqlite');
   db = open({
     name: 'spark_db',
@@ -60,7 +62,7 @@ const runMigrations = async (): Promise<void> => {
 
 const StorageService = {
   async init(): Promise<void> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === 'web' || isJestRuntime) {
       return runMigrations();
     }
 
@@ -97,8 +99,13 @@ const StorageService = {
   },
 
   async get(key: string): Promise<string | null> {
-    if (Platform.OS === 'web') {
-      return await AsyncStorage.getItem(key);
+    if (Platform.OS === 'web' || isJestRuntime) {
+      try {
+        return await AsyncStorage.getItem(key);
+      } catch (error) {
+        console.error('Storage get error:', error);
+        return null;
+      }
     }
 
     try {
@@ -116,7 +123,7 @@ const StorageService = {
   },
 
   async set(key: string, value: string): Promise<boolean> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === 'web' || isJestRuntime) {
       try {
         await AsyncStorage.setItem(key, value);
         return true;
@@ -138,7 +145,7 @@ const StorageService = {
   },
 
   async remove(key: string): Promise<boolean> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === 'web' || isJestRuntime) {
       try {
         await AsyncStorage.removeItem(key);
         return true;
