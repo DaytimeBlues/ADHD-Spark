@@ -30,15 +30,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run unit tests
-        run: npm test -- --runInBand --coverage
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 7
+        run: npm test -- --runInBand
 
   e2e-smoke:
     name: E2E Smoke Tests

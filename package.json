@@ -2,7 +2,7 @@
   "name": "spark-adhd-rn",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://DaytimeBlues.github.io/spark-adhd-backup",
+  "homepage": "https://daytimeblues.github.io/ADHD-Spark/",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
