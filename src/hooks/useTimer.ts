@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { formatTime } from '../utils/helpers';
 import { useTimerStore, TimerMode } from '../store/useTimerStore';
 
@@ -29,6 +29,7 @@ const useTimer = ({
 }: UseTimerOptions) => {
   const store = useTimerStore();
   const tickMs = isE2ETestMode() ? 100 : 1000;
+  const hasAutoStartedRef = useRef(false);
 
   // We are "active" if the global store's activeMode matches this instance's id
   const isActive = store.activeMode === id;
@@ -52,12 +53,14 @@ const useTimer = ({
     };
   }, [isRunning, tickMs]);
 
-  // Handle completion when time hits 0
+  // Handle completion from store's completion signal (single source of truth)
   useEffect(() => {
-    if (isActive && isRunning && store.remainingSeconds === 0) {
+    if (isActive && store.completedAt !== null) {
       onComplete?.();
+      // Reset completion signal to prevent duplicate triggers
+      useTimerStore.setState({ completedAt: null });
     }
-  }, [isActive, isRunning, store.remainingSeconds, onComplete]);
+  }, [isActive, store.completedAt, onComplete]);
 
   // Handle E2E controls
   useEffect(() => {
@@ -72,10 +75,17 @@ const useTimer = ({
 
     globalRecord.__SPARK_E2E_TIMER_CONTROLS__ = {
       complete: () => {
-        // Set isRunning: false so the completion useEffect does NOT double-fire onComplete
-        useTimerStore.setState({ remainingSeconds: 0, isRunning: false, targetEndTime: null });
-        // Fire onComplete synchronously so the phase transition happens immediately
-        onComplete?.();
+        // Use the same store path as normal completion - tick() handles the transition
+        const state = useTimerStore.getState();
+        if (state.isRunning) {
+          // Force remainingSeconds to 0 and let tick() handle the completion transition
+          useTimerStore.setState({
+            remainingSeconds: 0,
+            targetEndTime: Date.now(), // Force immediate expiration
+          });
+          // Trigger tick to process completion
+          state.tick();
+        }
       },
       fastForward: (seconds: number) => {
         if (!Number.isFinite(seconds) || seconds <= 0) {
@@ -93,15 +103,20 @@ const useTimer = ({
         delete globalRecord.__SPARK_E2E_TIMER_CONTROLS__;
       }
     };
-  }, [isActive, onComplete]);
+  }, [isActive]);
 
-  // Auto-start logic
+  // Auto-start logic - runs once when component mounts and conditions are met
   useEffect(() => {
-    if (autoStart && !isRunning && store.activeMode === null) {
+    if (
+      autoStart &&
+      !hasAutoStartedRef.current &&
+      !store.isRunning &&
+      store.activeMode === null
+    ) {
+      hasAutoStartedRef.current = true;
       store.start(id as TimerMode, initialTime);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [autoStart, id, initialTime, store.isRunning, store.activeMode, store]);
 
   const start = useCallback(() => {
     const currentState = useTimerStore.getState();
