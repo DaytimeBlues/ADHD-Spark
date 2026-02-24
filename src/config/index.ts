@@ -81,7 +81,8 @@ const getConfig = (): Config => {
     }
 
     if (process.env.EXPO_PUBLIC_AI_TIMEOUT) {
-      config.aiTimeout = parseInt(process.env.EXPO_PUBLIC_AI_TIMEOUT, 10) || 8000;
+      config.aiTimeout =
+        parseInt(process.env.EXPO_PUBLIC_AI_TIMEOUT, 10) || 8000;
     }
 
     if (process.env.EXPO_PUBLIC_AI_MAX_RETRIES) {

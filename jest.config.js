@@ -11,8 +11,7 @@ module.exports = {
   moduleNameMapper: {
     '^react-native-reanimated$':
       '<rootDir>/__tests__/__mocks__/react-native-reanimated.js',
-    '^@op-engineering/op-sqlite$':
-      '<rootDir>/__tests__/__mocks__/op-sqlite.ts',
+    '^@op-engineering/op-sqlite$': '<rootDir>/__tests__/__mocks__/op-sqlite.ts',
     '^expo-notifications$':
       '<rootDir>/__tests__/__mocks__/expo-notifications.ts',
   },

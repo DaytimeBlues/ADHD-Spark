@@ -9,17 +9,11 @@
 
 import React from 'react';
 
-
 import { LinearTokens } from './linearTokens';
 import { CosmicTokens } from './cosmicTokens';
-import {
-  ThemeVariant,
-  THEME_METADATA,
-} from './themeVariant';
-
+import { ThemeVariant, THEME_METADATA } from './themeVariant';
 
 import { useThemeStore } from '../store/useThemeStore';
-
 
 // ============================================================================
 // EXPORT TYPES (Maintained for legacy compatibility)

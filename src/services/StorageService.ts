@@ -183,10 +183,10 @@ export const zustandStorage = {
     return StorageService.get(name);
   },
   setItem: (name: string, value: string): Promise<void> => {
-    return StorageService.set(name, value).then(() => { });
+    return StorageService.set(name, value).then(() => {});
   },
   removeItem: (name: string): Promise<void> => {
-    return StorageService.remove(name).then(() => { });
+    return StorageService.remove(name).then(() => {});
   },
 };
 

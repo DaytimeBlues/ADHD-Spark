@@ -13,7 +13,10 @@ class MockTransaction {
     this.data = data;
   }
 
-  async execute(sql: string, params?: (string | number | null)[]): Promise<{ rows: MockRow[] }> {
+  async execute(
+    sql: string,
+    params?: (string | number | null)[],
+  ): Promise<{ rows: MockRow[] }> {
     // Simple SQL parsing for INSERT/REPLACE
     if (sql.includes('INSERT OR REPLACE')) {
       const key = params?.[0] as string;
@@ -54,18 +57,23 @@ class MockTransaction {
 class MockDatabase {
   private data: Map<string, string> = new Map();
 
-  async execute(sql: string, params?: (string | number | null)[]): Promise<{ rows: MockRow[] }> {
+  async execute(
+    sql: string,
+    params?: (string | number | null)[],
+  ): Promise<{ rows: MockRow[] }> {
     const tx = new MockTransaction(this.data);
     return tx.execute(sql, params);
   }
 
-  async transaction(callback: (tx: MockTransaction) => Promise<void>): Promise<void> {
+  async transaction(
+    callback: (tx: MockTransaction) => Promise<void>,
+  ): Promise<void> {
     const tx = new MockTransaction(this.data);
     await callback(tx);
   }
 }
 
-export function open(options: { name: string }): MockDatabase {
+export function open(_options: { name: string }): MockDatabase {
   return new MockDatabase();
 }
 

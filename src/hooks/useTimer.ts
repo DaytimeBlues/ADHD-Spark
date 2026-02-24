@@ -122,17 +122,29 @@ const useTimer = ({
     const currentState = useTimerStore.getState();
     const isThisActive = currentState.activeMode === id;
 
-    if (isThisActive && currentState.remainingSeconds > 0 && !currentState.isRunning) {
+    if (
+      isThisActive &&
+      currentState.remainingSeconds > 0 &&
+      !currentState.isRunning
+    ) {
       if (currentState.remainingSeconds === currentState.durationSeconds) {
         // It's a fresh start of a phase (e.g. from completePhase setting nextDurationSeconds)
-        currentState.start(id as TimerMode, currentState.durationSeconds, currentState.isWorking);
+        currentState.start(
+          id as TimerMode,
+          currentState.durationSeconds,
+          currentState.isWorking,
+        );
       } else {
         // It's a resume from a paused state
         currentState.resume();
       }
     } else {
       // It's a first time initialization, restart from 0, or overriding
-      currentState.start(id as TimerMode, initialTime, id === 'pomodoro' ? true : undefined);
+      currentState.start(
+        id as TimerMode,
+        initialTime,
+        id === 'pomodoro' ? true : undefined,
+      );
     }
   }, [id, initialTime]);
 

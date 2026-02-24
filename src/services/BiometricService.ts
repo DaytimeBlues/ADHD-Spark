@@ -25,7 +25,6 @@ class BiometricServiceClass {
     this.appStateSubscription = null;
   }
 
-
   public async init() {
     const isSecured =
       await StorageService.getJSON<boolean>('isBiometricSecured');
