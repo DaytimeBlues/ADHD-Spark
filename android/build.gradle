@@ -16,6 +16,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.4.1")
+        classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
@@ -40,3 +41,5 @@ if (isWindows && localAppData != null && !localAppData.isEmpty()) {
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
+
+apply plugin: "com.facebook.react.rootproject"

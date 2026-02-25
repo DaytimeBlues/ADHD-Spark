@@ -37,14 +37,26 @@ export type OverlayEventPayload = {
   granted?: boolean;
 };
 
-const overlayEventEmitter = OverlayModule ? new NativeEventEmitter() : null;
+const overlayEventEmitterModule = OverlayModule
+  ? {
+      addListener: OverlayModule.addListener ?? (() => {}),
+      removeListeners: OverlayModule.removeListeners ?? (() => {}),
+    }
+  : null;
+
+// Create NativeEventEmitter only on native platforms with a valid module
+const overlayEventEmitter =
+  Platform.OS !== 'web' && overlayEventEmitterModule
+    ? new NativeEventEmitter(overlayEventEmitterModule)
+    : null;
 
 let pendingOverlayCount = 0;
 let overlayCountUpdateTimer: ReturnType<typeof setTimeout> | null = null;
 const OVERLAY_COUNT_DEBOUNCE_MS = 180;
 let overlayPermissionRequestInProgress = false;
 
-const flushOverlayCount = () => {
+// Internal helper to flush pending count to native module
+const flushPendingOverlayCountToNative = () => {
   if (!OverlayModule?.updateCount) {
     return;
   }
@@ -126,7 +138,7 @@ const OverlayService = {
         clearTimeout(overlayCountUpdateTimer);
         overlayCountUpdateTimer = null;
       }
-      flushOverlayCount();
+      flushPendingOverlayCountToNative();
       OverlayModule?.startOverlay?.();
     } catch (error) {
       console.warn('OverlayService.startOverlay failed:', error);
@@ -162,7 +174,7 @@ const OverlayService = {
 
     overlayCountUpdateTimer = setTimeout(() => {
       overlayCountUpdateTimer = null;
-      flushOverlayCount();
+      flushPendingOverlayCountToNative();
     }, OVERLAY_COUNT_DEBOUNCE_MS);
   },
 
@@ -174,7 +186,7 @@ const OverlayService = {
       clearTimeout(overlayCountUpdateTimer);
       overlayCountUpdateTimer = null;
     }
-    flushOverlayCount();
+    flushPendingOverlayCountToNative();
   },
 
   isPermissionRequestInProgress() {

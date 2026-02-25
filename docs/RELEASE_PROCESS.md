@@ -25,7 +25,7 @@
 
 ### GitHub Pages Deployment
 
-**Automated via GitHub Actions:**
+**Current source of truth: manual deploy from `master`**
 
 1. **Merge to master branch:**
    ```bash
@@ -34,16 +34,13 @@
    git push origin master
    ```
 
-2. **GitHub Actions workflow triggers:**
-   - Runs `npm run build:web`
-   - Deploys to `gh-pages` branch
-   - Available at `https://<username>.github.io/spark-adhd-backup/`
-
-3. **Manual deployment (if Actions disabled):**
+2. **Deploy web build to `gh-pages`:**
    ```bash
    npm run build:web
    npm run deploy  # Pushes dist/ to gh-pages branch
    ```
+
+3. **Confirm `gh-pages` is in sync with latest `master` release commit.**
 
 **Validation:**
 - Open deployed URL in browser
@@ -324,7 +321,7 @@ git push --force origin master
 
 ## Automation Opportunities
 
-**Current State:** Manual builds and deploys
+**Current State:** Manual web deploy (`npm run deploy`) and manual Android builds
 
 **Future Enhancements:**
 - **CI/CD for Android:** GitHub Actions workflow for APK/AAB builds

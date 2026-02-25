@@ -13,6 +13,8 @@ interface TimerState {
   durationSeconds: number;
   isWorking: boolean; // Relevant mostly for Pomodoro
   sessions: number;
+  // Completion signal - incremented each time timer completes (for reactive detection)
+  completedAt: number | null;
 
   start: (
     mode: TimerMode,
@@ -25,6 +27,7 @@ interface TimerState {
   tick: () => void;
   completePhase: (nextDurationSeconds: number, nextIsWorking: boolean) => void;
   incrementSession: () => void;
+  markCompleted: () => void;
 }
 
 export const useTimerStore = create<TimerState>()(
@@ -37,6 +40,7 @@ export const useTimerStore = create<TimerState>()(
       durationSeconds: 0,
       isWorking: true,
       sessions: 0,
+      completedAt: null,
 
       start: (mode, durationSeconds, isWorking = true) => {
         const targetEndTime = Date.now() + durationSeconds * 1000;
@@ -115,9 +119,15 @@ export const useTimerStore = create<TimerState>()(
           set({ remainingSeconds: rawRemaining });
         }
 
-        // We do NOT auto-complete here to allow the UI layer (which has sound/haptics/nav)
-        // to handle the actual completion event via `completePhase`. The UI effectively checks
-        // if `remainingSeconds === 0` and then fires `completePhase`.
+        // Auto-transition to completed state when timer reaches zero
+        if (rawRemaining === 0) {
+          NotificationService.cancelTimerNotification();
+          set({
+            isRunning: false,
+            targetEndTime: null,
+            completedAt: Date.now(),
+          });
+        }
       },
 
       completePhase: (nextDurationSeconds, nextIsWorking) => {
@@ -128,11 +138,16 @@ export const useTimerStore = create<TimerState>()(
           remainingSeconds: nextDurationSeconds,
           durationSeconds: nextDurationSeconds,
           isWorking: nextIsWorking,
+          completedAt: null, // Reset completion signal when starting new phase
         });
       },
 
       incrementSession: () => {
         set((state) => ({ sessions: state.sessions + 1 }));
+      },
+
+      markCompleted: () => {
+        set({ completedAt: Date.now() });
       },
     }),
     {
@@ -147,6 +162,7 @@ export const useTimerStore = create<TimerState>()(
         durationSeconds: state.durationSeconds,
         isWorking: state.isWorking,
         sessions: state.sessions,
+        completedAt: state.completedAt,
       }),
     },
   ),

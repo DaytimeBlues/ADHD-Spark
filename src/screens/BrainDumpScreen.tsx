@@ -131,6 +131,8 @@ const BrainDumpScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortingError, setSortingError] = useState<string | null>(null);
   const [sortedItems, setSortedItems] = useState<SortedItem[]>([]);
+  const [googleAuthRequired, setGoogleAuthRequired] = useState(false);
+  const [isConnectingGoogle, setIsConnectingGoogle] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideDismissed, setGuideDismissed] = useState(true);
   const hasAutoRecorded = useRef(false);
@@ -310,11 +312,19 @@ const BrainDumpScreen = () => {
       ]);
 
       if (exportResult.authRequired) {
-        setSortingError(
-          exportResult.errorMessage ||
-            'Google sign-in required to sync Tasks and Calendar exports.',
-        );
+        setGoogleAuthRequired(true);
+        if (Platform.OS === 'web') {
+          setSortingError(
+            'Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.',
+          );
+        } else {
+          setSortingError(
+            exportResult.errorMessage ||
+              'Google sign-in required to sync Tasks and Calendar exports.',
+          );
+        }
       } else if (exportResult.errorMessage) {
+        setGoogleAuthRequired(false);
         setSortingError(exportResult.errorMessage);
       } else if (
         createdTaskCount > 0 ||
@@ -322,6 +332,7 @@ const BrainDumpScreen = () => {
         exportResult.createdEvents > 0
       ) {
         setSortingError(null);
+        setGoogleAuthRequired(false);
         AccessibilityInfo.announceForAccessibility(
           'Tasks synced and suggestions saved.',
         );
@@ -329,6 +340,56 @@ const BrainDumpScreen = () => {
     },
     [saveSortedItemsToFogCutter],
   );
+
+  const handleConnectGoogle = useCallback(async () => {
+    if (Platform.OS === 'web') {
+      setSortingError(
+        'Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.',
+      );
+      return;
+    }
+
+    setIsConnectingGoogle(true);
+    try {
+      const success = await GoogleTasksSyncService.signInInteractive();
+      if (!success) {
+        setSortingError('Google sign-in failed. Please try again.');
+        return;
+      }
+
+      if (sortedItems.length === 0) {
+        setGoogleAuthRequired(false);
+        setSortingError(null);
+        return;
+      }
+
+      const exportResult =
+        await GoogleTasksSyncService.syncSortedItemsToGoogle(sortedItems);
+
+      if (exportResult.authRequired) {
+        setGoogleAuthRequired(true);
+        setSortingError(
+          exportResult.errorMessage ||
+            'Google sign-in required to sync Tasks and Calendar exports.',
+        );
+        return;
+      }
+
+      if (exportResult.errorMessage) {
+        setGoogleAuthRequired(false);
+        setSortingError(exportResult.errorMessage);
+        return;
+      }
+
+      setGoogleAuthRequired(false);
+      setSortingError(null);
+      AccessibilityInfo.announceForAccessibility(
+        'Tasks synced and suggestions saved.',
+      );
+    } finally {
+      setIsConnectingGoogle(false);
+    }
+  }, [sortedItems]);
 
   // Handle recording toggle
   const handleRecordPress = useCallback(async () => {
@@ -722,7 +783,26 @@ const BrainDumpScreen = () => {
             </View>
           ) : null}
 
-          {sortingError && <Text style={styles.errorText}>{sortingError}</Text>}
+          {sortingError && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{sortingError}</Text>
+              {googleAuthRequired && Platform.OS !== 'web' && (
+                <Pressable
+                  onPress={handleConnectGoogle}
+                  disabled={isConnectingGoogle}
+                  style={({ pressed }: { pressed: boolean }) => [
+                    styles.connectButton,
+                    isConnectingGoogle && styles.connectButtonDisabled,
+                    pressed && styles.connectButtonPressed,
+                  ]}
+                >
+                  <Text style={styles.connectButtonText}>
+                    {isConnectingGoogle ? 'CONNECTING...' : 'CONNECT GOOGLE'}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          )}
 
           {!isLoading &&
             groupedSortedItems.length > 0 &&
@@ -1317,12 +1397,34 @@ const getStyles = (isCosmic: boolean) =>
       color: Tokens.colors.text.primary,
       letterSpacing: 1,
     },
+    errorContainer: {
+      marginTop: Tokens.spacing[2],
+      alignItems: 'center',
+    },
     errorText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       color: Tokens.colors.brand[500],
-      marginTop: Tokens.spacing[2],
       textAlign: 'center',
+    },
+    connectButton: {
+      marginTop: Tokens.spacing[3],
+      backgroundColor: Tokens.colors.indigo.primary,
+      paddingHorizontal: Tokens.spacing[4],
+      paddingVertical: Tokens.spacing[2],
+      borderRadius: Tokens.radii.md,
+    },
+    connectButtonPressed: {
+      opacity: 0.8,
+    },
+    connectButtonDisabled: {
+      opacity: 0.6,
+    },
+    connectButtonText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: Tokens.colors.text.primary,
+      fontWeight: '700',
     },
     loadingContainer: {
       padding: Tokens.spacing[8],
