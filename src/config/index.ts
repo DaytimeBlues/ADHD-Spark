@@ -3,6 +3,11 @@
  *
  * Environment-based configuration for API endpoints, feature flags,
  * and AI provider settings.
+ *
+ * ⚠️ SECURITY NOTE: Variables prefixed with EXPO_PUBLIC_ are bundled into
+ * client-side JavaScript and are extractable by end users. Never store
+ * sensitive API keys with this prefix in production. Route AI calls through
+ * a server-side proxy (e.g. the Vercel backend at /api/chat) instead.
  */
 
 export type AiProvider = 'vercel' | 'gemini-direct' | 'kimi-direct';

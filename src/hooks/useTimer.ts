@@ -28,7 +28,6 @@ const useTimer = ({
   autoStart = false,
 }: UseTimerOptions) => {
   const store = useTimerStore();
-  const tickMs = isE2ETestMode() ? 100 : 1000;
   const hasAutoStartedRef = useRef(false);
 
   // We are "active" if the global store's activeMode matches this instance's id
@@ -38,20 +37,12 @@ const useTimer = ({
   const hasCompleted =
     isActive && store.remainingSeconds <= 0 && !store.isRunning;
 
-  // Global interval tick
+  // No internal interval here - managed by global TimerService
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (isRunning) {
-      interval = setInterval(() => {
-        useTimerStore.getState().tick();
-      }, tickMs);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isRunning, tickMs]);
+    // The service is started in App.tsx, but we can ensure it's running here too if needed
+    // However, we want to avoid every hook instance trying to start/stop the service
+    // if that logic becomes more complex. For now, it's safe to just let App.tsx handle it.
+  }, []);
 
   // Handle completion from store's completion signal (single source of truth)
   useEffect(() => {

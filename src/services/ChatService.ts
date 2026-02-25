@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { generateId } from '../utils/helpers';
 
 export interface ChatMessage {
   id: string;
@@ -9,6 +10,23 @@ export interface ChatMessage {
 
 export type ChatUpdateHandler = (messages: ChatMessage[]) => void;
 
+/** Structured error codes for contextual UI messages. */
+export type ChatErrorCode =
+  | 'CHAT_NETWORK'
+  | 'CHAT_AUTH'
+  | 'CHAT_SERVER_ERROR'
+  | 'CHAT_UNKNOWN';
+
+export class ChatError extends Error {
+  constructor(
+    public readonly code: ChatErrorCode,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ChatError';
+  }
+}
+
 /**
  * ChatService
  *
@@ -18,6 +36,8 @@ export type ChatUpdateHandler = (messages: ChatMessage[]) => void;
  * - System prompt injection (context-aware)
  * - Streaming-simulator (local typing feel)
  */
+const MAX_HISTORY = 200;
+
 class ChatService {
   private messages: ChatMessage[] = [];
   private handlers: ChatUpdateHandler[] = [];
@@ -54,18 +74,19 @@ class ChatService {
 
   async sendMessage(text: string): Promise<void> {
     const userMsg: ChatMessage = {
-      id: Math.random().toString(36).substring(7),
+      id: `msg_${generateId()}`,
       role: 'user',
       content: text,
       timestamp: Date.now(),
     };
 
     this.messages.push(userMsg);
+    this.trimHistory();
     this.notify();
 
     // Prepare AI response object
     const assistantMsg: ChatMessage = {
-      id: Math.random().toString(36).substring(7),
+      id: `msg_${generateId()}`,
       role: 'assistant',
       content: '',
       timestamp: Date.now(),
@@ -80,19 +101,50 @@ class ChatService {
         await this.callVercelBackend(assistantMsg);
       }
     } catch (error) {
-      console.error('Chat failed', error);
-      assistantMsg.content =
-        'Unable to reach AI service. Check your connection.';
+      const chatError = this.classifyError(error);
+      console.error('Chat failed:', chatError);
+      assistantMsg.content = chatError.message;
       this.notify();
     }
+  }
+
+  private classifyError(error: unknown): ChatError {
+    if (error instanceof ChatError) return error;
+
+    const msg = error instanceof Error ? error.message.toLowerCase() : '';
+    if (msg.includes('network') || msg.includes('failed to fetch')) {
+      return new ChatError(
+        'CHAT_NETWORK',
+        'Unable to reach AI service. Check your connection.',
+      );
+    }
+    if (msg.includes('401') || msg.includes('403') || msg.includes('auth')) {
+      return new ChatError(
+        'CHAT_AUTH',
+        'AI authentication failed. Please check configuration.',
+      );
+    }
+    return new ChatError(
+      'CHAT_UNKNOWN',
+      'I am having trouble connecting to my brain. Please try again.',
+    );
   }
 
   private async callKimiDirect(assistantMsg: ChatMessage): Promise<void> {
     if (!config.moonshotApiKey) {
       assistantMsg.content =
-        'Moonshot API key is missing. Please set REACT_APP_MOONSHOT_API_KEY.';
+        'Moonshot API key is missing. Please set EXPO_PUBLIC_MOONSHOT_API_KEY.';
       this.notify();
       return;
+    }
+
+    // WARNING: API key is sent client-side. This should be routed through a
+    // server-side proxy (e.g. /api/chat?provider=kimi) to avoid key exposure.
+    // See implementation_plan.md S1/S2 for the recommended migration path.
+    if (__DEV__) {
+      console.warn(
+        'ChatService: kimi-direct sends API key from client. Use a server proxy in production.',
+      );
     }
 
     const response = await fetch(
@@ -154,6 +206,14 @@ class ChatService {
 
   private notify() {
     this.handlers.forEach((h) => h([...this.messages]));
+  }
+
+  /** Trim history to MAX_HISTORY, always preserving the system prompt. */
+  private trimHistory() {
+    if (this.messages.length > MAX_HISTORY) {
+      const systemMsg = this.messages[0];
+      this.messages = [systemMsg, ...this.messages.slice(-(MAX_HISTORY - 1))];
+    }
   }
 
   clearHistory() {

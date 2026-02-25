@@ -54,11 +54,14 @@ class CaptureServiceClass {
     return state.items;
   }
 
-  async getUnreviewedCount(): Promise<number> {
+  getUnreviewedCount(): number {
     return useCaptureStore.getState().getUnreviewedCount();
   }
 
-  async save(input: NewCaptureInput): Promise<CaptureItem> {
+  /**
+   * Save a single item to the capture inbox
+   */
+  save(input: NewCaptureInput): CaptureItem {
     const item: CaptureItem = {
       ...input,
       id: generateId(),
@@ -69,11 +72,14 @@ class CaptureServiceClass {
     return item;
   }
 
-  async update(id: string, patch: Partial<CaptureItem>): Promise<void> {
+  /**
+   * Update an existing item
+   */
+  update(id: string, patch: Partial<CaptureItem>): void {
     useCaptureStore.getState().updateItem(id, patch);
   }
 
-  async promote(id: string, to: 'task' | 'note'): Promise<void> {
+  promote(id: string, to: 'task' | 'note'): void {
     useCaptureStore.getState().updateItem(id, {
       status: 'promoted',
       promotedTo: to,
@@ -81,15 +87,18 @@ class CaptureServiceClass {
     });
   }
 
-  async discard(id: string): Promise<void> {
+  discard(id: string): void {
     useCaptureStore.getState().updateItem(id, { status: 'discarded' });
   }
 
-  async delete(id: string): Promise<void> {
+  /**
+   * Remove an item from the inbox
+   */
+  delete(id: string): void {
     useCaptureStore.getState().deleteItem(id);
   }
 
-  async clearDiscarded(): Promise<void> {
+  clearDiscarded(): void {
     useCaptureStore.getState().clearDiscarded();
   }
 

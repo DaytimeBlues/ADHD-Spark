@@ -14,7 +14,7 @@ import {
 
 import AppNavigator from './src/navigation/AppNavigator';
 import StorageService from './src/services/StorageService';
-import { GoogleTasksSyncService } from './src/services/PlaudService';
+import { GoogleTasksSyncService } from './src/services/GoogleTasksSyncService';
 import OverlayService from './src/services/OverlayService';
 import WebMCPService from './src/services/WebMCPService';
 import { Tokens } from './src/theme/tokens';
@@ -27,6 +27,7 @@ import {
 } from './src/navigation/navigationRef';
 import { agentEventBus } from './src/services/AgentEventBus';
 import { CheckInService } from './src/services/CheckInService';
+import { TimerService } from './src/services/TimerService';
 
 import { DriftCheckOverlay } from './src/components/DriftCheckOverlay';
 import { useDriftStore } from './src/store/useDriftStore';
@@ -65,7 +66,7 @@ const App = () => {
         if (!hasGoogleConfig && Platform.OS !== 'web') {
           console.warn(
             '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
-              'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+            'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
           );
         }
 
@@ -73,6 +74,7 @@ const App = () => {
         WebMCPService.init();
         CheckInService.start();
         DriftService.init();
+        TimerService.start();
       } catch (error) {
         console.error('App initialization error:', error);
       } finally {

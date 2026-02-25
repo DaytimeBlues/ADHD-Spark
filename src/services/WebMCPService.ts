@@ -42,6 +42,7 @@ type CheckInEntry = Record<string, unknown>;
  */
 class WebMCPService {
   private isInitialized = false;
+  private retryTimeouts: ReturnType<typeof setTimeout>[] = [];
 
   public init() {
     if (this.isInitialized || Platform.OS !== 'web') {
@@ -49,6 +50,7 @@ class WebMCPService {
     }
 
     const registerTools = () => {
+      if (this.isInitialized) return;
       const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
         .navigator?.modelContext;
       if (!modelContext?.registerTool) {
@@ -111,6 +113,20 @@ class WebMCPService {
           required: ['screen'],
         },
         execute: async ({ screen }: { screen: string }) => {
+          const ALLOWED_SCREENS = [
+            'Home',
+            'Ignite',
+            'Pomodoro',
+            'Anchor',
+            'BrainDump',
+            'FogCutter',
+            'CheckIn',
+            'Calendar',
+            'Chat',
+          ];
+          if (!ALLOWED_SCREENS.includes(screen)) {
+            return { success: false, error: `Invalid screen: ${screen}` };
+          }
           agentEventBus.emit('navigate:screen', { screen });
           return { success: true, screen };
         },
@@ -132,13 +148,21 @@ class WebMCPService {
         },
         execute: async ({ text }: { text: string }) => {
           try {
+            const sanitized =
+              typeof text === 'string' ? text.trim().slice(0, 1000) : '';
+            if (!sanitized) {
+              return {
+                success: false,
+                error: 'Text is required and must be non-empty',
+              };
+            }
             const items =
               (await StorageService.getJSON<BrainDumpEntry[]>(
                 StorageService.STORAGE_KEYS.brainDump,
               )) || [];
             const newItem = {
               id: Date.now().toString(),
-              text,
+              text: sanitized,
               timestamp: Date.now(),
               type: 'text',
             };
@@ -146,7 +170,7 @@ class WebMCPService {
               StorageService.STORAGE_KEYS.brainDump,
               [newItem, ...items],
             );
-            agentEventBus.emit('braindump:add', { text });
+            agentEventBus.emit('braindump:add', { text: sanitized });
             return { success: true, item: newItem };
           } catch (error) {
             return { success: false, error: String(error) };
@@ -170,9 +194,14 @@ class WebMCPService {
           required: ['taskTitle'],
         },
         execute: async ({ taskTitle }: { taskTitle: string }) => {
-          agentEventBus.emit('fogcutter:create', { taskTitle });
+          const sanitized =
+            typeof taskTitle === 'string' ? taskTitle.trim().slice(0, 500) : '';
+          if (!sanitized) {
+            return { success: false, error: 'taskTitle is required' };
+          }
+          agentEventBus.emit('fogcutter:create', { taskTitle: sanitized });
           agentEventBus.emit('navigate:screen', { screen: 'FogCutter' });
-          return { success: true, taskTitle };
+          return { success: true, taskTitle: sanitized };
         },
       });
 
@@ -191,12 +220,16 @@ class WebMCPService {
           },
         },
         execute: async ({ limit = 7 }: { limit?: number }) => {
+          const safeLimit = Math.max(
+            1,
+            Math.min(Number.isFinite(limit) ? limit : 7, 7),
+          );
           try {
             const entries =
               (await StorageService.getJSON<CheckInEntry[]>('checkIns')) || [];
             return {
               success: true,
-              entries: entries.slice(0, Math.min(limit, 7)),
+              entries: entries.slice(0, safeLimit),
             };
           } catch {
             return { success: false, entries: [] };
@@ -227,12 +260,14 @@ class WebMCPService {
       });
 
       this.isInitialized = true;
+      this.retryTimeouts.forEach(clearTimeout);
+      this.retryTimeouts = [];
       console.log('WebMCP: Tools registered successfully');
     };
 
     registerTools();
-    setTimeout(registerTools, 1000);
-    setTimeout(registerTools, 3000);
+    this.retryTimeouts.push(setTimeout(registerTools, 1000));
+    this.retryTimeouts.push(setTimeout(registerTools, 3000));
   }
 }
 

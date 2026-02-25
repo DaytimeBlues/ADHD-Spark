@@ -63,7 +63,15 @@ function getCached(key: string): SortedItem[] | null {
   return entry.result;
 }
 
+const MAX_CACHE_SIZE = 50;
+
 function setCache(key: string, result: SortedItem[]): void {
+  if (sortCache.size >= MAX_CACHE_SIZE) {
+    const oldestKey = sortCache.keys().next().value;
+    if (oldestKey !== undefined) {
+      sortCache.delete(oldestKey);
+    }
+  }
   sortCache.set(key, { result, expiresAt: Date.now() + CACHE_TTL_MS });
 }
 
@@ -183,8 +191,8 @@ async function fetchWithRetry(
       if (!response.ok) {
         const serverMsg =
           payload &&
-          typeof payload === 'object' &&
-          typeof (payload as { error?: unknown }).error === 'string'
+            typeof payload === 'object' &&
+            typeof (payload as { error?: unknown }).error === 'string'
             ? (payload as { error: string }).error
             : 'Unable to sort items right now.';
         throw new AiSortError('AI_SERVER_ERROR', serverMsg);
