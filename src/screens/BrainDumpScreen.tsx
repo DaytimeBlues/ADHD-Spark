@@ -161,6 +161,8 @@ const BrainDumpScreen = () => {
   }, []);
 
   useEffect(() => {
+    if (isLoading) return; // Prevent overwriting data on mount
+
     if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
 
     persistTimerRef.current = setTimeout(() => {
@@ -181,7 +183,7 @@ const BrainDumpScreen = () => {
       if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
       if (overlayCountTimerRef.current) clearTimeout(overlayCountTimerRef.current);
     };
-  }, [items]);
+  }, [items, isLoading]);
 
   const dismissGuide = async () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

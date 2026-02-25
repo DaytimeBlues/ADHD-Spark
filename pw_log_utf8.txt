@@ -1,0 +1,68 @@
+﻿
+Running 2 tests using 2 workers
+
+  Γ£ÿ  2 [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:30:7 ΓÇ║ BrainDump Flow ΓÇ║ items persist across reload (8.1s)
+  Γ£ÿ  1 [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:14:7 ΓÇ║ BrainDump Flow ΓÇ║ add item then delete item (8.2s)
+
+
+  1) [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:14:7 ΓÇ║ BrainDump Flow ΓÇ║ add item then delete item ΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('BRAIN_DUMP')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('BRAIN_DUMP')[22m
+
+
+       9 |     await expect(page.getByTestId('home-title')).toBeVisible();
+      10 |     await page.getByTestId('nav-tasks').click({ force: true });
+    > 11 |     await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
+         |                                                ^
+      12 |   });
+      13 |
+      14 |   test('add item then delete item', async ({ page }) => {
+        at C:\Users\Steve\OneDrive\Desktop\Github Repos\spark-adhd\e2e\braindump-flow.spec.ts:11:48
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\braindump-flow-BrainDump-Flow-add-item-then-delete-item-chromium\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\braindump-flow-BrainDump-Flow-add-item-then-delete-item-chromium\error-context.md
+
+  2) [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:30:7 ΓÇ║ BrainDump Flow ΓÇ║ items persist across reload ΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('BRAIN_DUMP')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for getByText('BRAIN_DUMP')[22m
+
+
+       9 |     await expect(page.getByTestId('home-title')).toBeVisible();
+      10 |     await page.getByTestId('nav-tasks').click({ force: true });
+    > 11 |     await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
+         |                                                ^
+      12 |   });
+      13 |
+      14 |   test('add item then delete item', async ({ page }) => {
+        at C:\Users\Steve\OneDrive\Desktop\Github Repos\spark-adhd\e2e\braindump-flow.spec.ts:11:48
+
+    attachment #1: screenshot (image/png) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\braindump-flow-BrainDump-Flow-items-persist-across-reload-chromium\test-failed-1.png
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error Context: test-results\braindump-flow-BrainDump-Flow-items-persist-across-reload-chromium\error-context.md
+
+  2 failed
+    [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:14:7 ΓÇ║ BrainDump Flow ΓÇ║ add item then delete item ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    [chromium] ΓÇ║ e2e\braindump-flow.spec.ts:30:7 ΓÇ║ BrainDump Flow ΓÇ║ items persist across reload ΓöÇΓöÇΓöÇΓöÇ

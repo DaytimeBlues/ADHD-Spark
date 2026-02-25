@@ -1,0 +1,877 @@
+> Task :gradle-plugin:checkKotlinGradlePluginConfigurationErrors
+> Task :gradle-plugin:compileKotlin UP-TO-DATE
+> Task :gradle-plugin:compileJava NO-SOURCE
+> Task :gradle-plugin:pluginDescriptors UP-TO-DATE
+> Task :gradle-plugin:processResources UP-TO-DATE
+> Task :gradle-plugin:classes UP-TO-DATE
+> Task :gradle-plugin:jar UP-TO-DATE
+
+> Configure project :op-engineering_op-sqlite
+[OP-SQLITE] using Vanilla SQLite
+
+> Configure project :react-native-reanimated
+Android gradle plugin: 8.4.1
+Gradle: 8.6
+
+> Task :app:generateCodegenSchemaFromJavaScript SKIPPED
+> Task :react-native-google-signin_google-signin:preBuild UP-TO-DATE
+> Task :sentry_react-native:preBuild UP-TO-DATE
+> Task :react-native-gesture-handler:preBuild UP-TO-DATE
+> Task :react-native-screens:preBuild UP-TO-DATE
+> Task :react-native-safe-area-context:preBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preBuild UP-TO-DATE
+> Task :react-native-vector-icons:preBuild UP-TO-DATE
+> Task :react-native-sound:preBuild UP-TO-DATE
+> Task :react-native-reanimated:assertLatestReactNativeWithNewArchitectureTask SKIPPED
+> Task :react-native-google-signin_google-signin:preDebugBuild UP-TO-DATE
+> Task :app:generateCodegenArtifactsFromSchema SKIPPED
+> Task :react-native-gesture-handler:preDebugBuild UP-TO-DATE
+> Task :react-native-reanimated:assertMinimalReactNativeVersionTask SKIPPED
+> Task :react-native-safe-area-context:preDebugBuild UP-TO-DATE
+> Task :react-native-screens:preDebugBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:preDebugBuild UP-TO-DATE
+> Task :react-native-sound:preDebugBuild UP-TO-DATE
+> Task :react-native-vector-icons:preDebugBuild UP-TO-DATE
+> Task :sentry_react-native:preDebugBuild UP-TO-DATE
+> Task :react-native-async-storage_async-storage:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-gesture-handler:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-screens:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-google-signin_google-signin:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-sound:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-safe-area-context:writeDebugAarMetadata UP-TO-DATE
+> Task :sentry_react-native:writeDebugAarMetadata UP-TO-DATE
+> Task :op-engineering_op-sqlite:prepareHeaders UP-TO-DATE
+> Task :op-engineering_op-sqlite:preBuild UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugResValues UP-TO-DATE
+> Task :app:generatePackageList
+> Task :react-native-google-signin_google-signin:generateDebugResValues UP-TO-DATE
+> Task :op-engineering_op-sqlite:preDebugBuild UP-TO-DATE
+> Task :react-native-vector-icons:writeDebugAarMetadata UP-TO-DATE
+> Task :sentry_react-native:generateDebugResValues UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResValues UP-TO-DATE
+> Task :react-native-sound:generateDebugResValues UP-TO-DATE
+> Task :react-native-screens:generateDebugResValues UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResValues UP-TO-DATE
+> Task :app:preBuild
+> Task :op-engineering_op-sqlite:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugResValues UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateDebugResources UP-TO-DATE
+> Task :app:preDebugBuild
+> Task :react-native-gesture-handler:generateDebugResources UP-TO-DATE
+> Task :react-native-sound:generateDebugResources UP-TO-DATE
+> Task :op-engineering_op-sqlite:generateDebugResValues UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugResources UP-TO-DATE
+> Task :sentry_react-native:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :react-native-screens:generateDebugResources UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugResources UP-TO-DATE
+> Task :react-native-reanimated:prepareHeadersForPrefab UP-TO-DATE
+> Task :op-engineering_op-sqlite:generateDebugResources UP-TO-DATE
+> Task :react-native-reanimated:preBuild UP-TO-DATE
+> Task :react-native-reanimated:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-google-signin_google-signin:packageDebugResources UP-TO-DATE
+> Task :react-native-sound:packageDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:packageDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:packageDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-reanimated:writeDebugAarMetadata UP-TO-DATE
+> Task :react-native-sound:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-gesture-handler:packageDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-vector-icons:packageDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-screens:packageDebugResources UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :react-native-reanimated:generateDebugResValues UP-TO-DATE
+> Task :react-native-gesture-handler:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-vector-icons:extractDeepLinksDebug UP-TO-DATE
+> Task :sentry_react-native:packageDebugResources UP-TO-DATE
+> Task :react-native-screens:extractDeepLinksDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:packageDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:processDebugManifest UP-TO-DATE
+> Task :react-native-reanimated:generateDebugResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:processDebugManifest UP-TO-DATE
+> Task :react-native-sound:processDebugManifest UP-TO-DATE
+> Task :react-native-safe-area-context:processDebugManifest UP-TO-DATE
+> Task :sentry_react-native:extractDeepLinksDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-gesture-handler:processDebugManifest UP-TO-DATE
+> Task :react-native-screens:processDebugManifest UP-TO-DATE
+> Task :react-native-vector-icons:processDebugManifest UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-sound:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-screens:compileDebugLibraryResources UP-TO-DATE
+> Task :op-engineering_op-sqlite:processDebugManifest UP-TO-DATE
+> Task :react-native-vector-icons:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-reanimated:packageDebugResources UP-TO-DATE
+> Task :sentry_react-native:processDebugManifest UP-TO-DATE
+> Task :react-native-google-signin_google-signin:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-sound:parseDebugLocalResources UP-TO-DATE
+> Task :op-engineering_op-sqlite:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-safe-area-context:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-gesture-handler:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugRFile UP-TO-DATE
+> Task :react-native-reanimated:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-screens:parseDebugLocalResources UP-TO-DATE
+> Task :sentry_react-native:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:generateDebugRFile UP-TO-DATE
+> Task :react-native-vector-icons:generateDebugRFile UP-TO-DATE
+> Task :op-engineering_op-sqlite:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-sound:generateDebugRFile UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugRFile UP-TO-DATE
+> Task :react-native-screens:generateDebugRFile UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugBuildConfig UP-TO-DATE
+> Task :sentry_react-native:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-safe-area-context:checkKotlinGradlePluginConfigurationErrors
+> Task :react-native-google-signin_google-signin:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-gesture-handler:generateDebugRFile UP-TO-DATE
+> Task :react-native-screens:checkKotlinGradlePluginConfigurationErrors
+> Task :react-native-vector-icons:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-reanimated:processDebugManifest UP-TO-DATE
+> Task :react-native-gesture-handler:checkKotlinGradlePluginConfigurationErrors
+> Task :react-native-sound:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-safe-area-context:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-async-storage_async-storage:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:javaPreCompileDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:generateDebugRFile UP-TO-DATE
+> Task :react-native-screens:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-reanimated:compileDebugLibraryResources UP-TO-DATE
+> Task :react-native-vector-icons:javaPreCompileDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:checkKotlinGradlePluginConfigurationErrors
+> Task :react-native-gesture-handler:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-sound:javaPreCompileDebug UP-TO-DATE
+> Task :sentry_react-native:generateDebugRFile UP-TO-DATE
+> Task :react-native-reanimated:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-gesture-handler:javaPreCompileDebug UP-TO-DATE
+> Task :sentry_react-native:generateDebugBuildConfig UP-TO-DATE
+> Task :op-engineering_op-sqlite:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugShaders UP-TO-DATE
+> Task :sentry_react-native:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-reanimated:generateDebugRFile UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugShaders NO-SOURCE
+> Task :react-native-gesture-handler:generateDebugAssets UP-TO-DATE
+> Task :react-native-reanimated:generateDebugBuildConfig UP-TO-DATE
+> Task :react-native-gesture-handler:packageDebugAssets UP-TO-DATE
+> Task :react-native-reanimated:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-reanimated:packageNdkLibs NO-SOURCE
+> Task :react-native-gesture-handler:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-async-storage_async-storage:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-gesture-handler:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-sound:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-gesture-handler:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-async-storage_async-storage:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-sound:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugShaders UP-TO-DATE
+> Task :react-native-gesture-handler:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :sentry_react-native:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-async-storage_async-storage:compileDebugShaders NO-SOURCE
+> Task :sentry_react-native:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :react-native-gesture-handler:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:generateDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugShaders UP-TO-DATE
+> Task :react-native-sound:mergeDebugShaders UP-TO-DATE
+> Task :react-native-google-signin_google-signin:compileDebugShaders NO-SOURCE
+> Task :react-native-google-signin_google-signin:generateDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugShaders UP-TO-DATE
+> Task :react-native-sound:compileDebugShaders NO-SOURCE
+> Task :react-native-sound:generateDebugAssets UP-TO-DATE
+> Task :sentry_react-native:mergeDebugShaders UP-TO-DATE
+> Task :react-native-gesture-handler:prepareDebugArtProfile UP-TO-DATE
+> Task :react-native-async-storage_async-storage:packageDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:compileDebugShaders NO-SOURCE
+> Task :sentry_react-native:compileDebugShaders NO-SOURCE
+> Task :react-native-vector-icons:generateDebugAssets UP-TO-DATE
+> Task :react-native-sound:packageDebugAssets UP-TO-DATE
+> Task :sentry_react-native:generateDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:packageDebugAssets UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:prepareLintJarForPublish UP-TO-DATE
+> Task :react-native-vector-icons:packageDebugAssets UP-TO-DATE
+> Task :react-native-sound:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :sentry_react-native:packageDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:processDebugJavaRes NO-SOURCE
+> Task :sentry_react-native:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:processDebugJavaRes NO-SOURCE
+> Task :react-native-sound:processDebugJavaRes NO-SOURCE
+> Task :react-native-reanimated:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-vector-icons:processDebugJavaRes NO-SOURCE
+> Task :sentry_react-native:processDebugJavaRes NO-SOURCE
+> Task :react-native-reanimated:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-vector-icons:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-sound:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-reanimated:mergeDebugShaders UP-TO-DATE
+> Task :sentry_react-native:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-reanimated:compileDebugShaders NO-SOURCE
+> Task :react-native-reanimated:generateDebugAssets UP-TO-DATE
+> Task :react-native-reanimated:packageDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugKotlin UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-safe-area-context:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-reanimated:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-sound:mergeDebugJniLibFolders UP-TO-DATE
+> Task :op-engineering_op-sqlite:compileDebugKotlin UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-sound:mergeDebugNativeLibs NO-SOURCE
+> Task :op-engineering_op-sqlite:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-screens:compileDebugKotlin UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-vector-icons:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-reanimated:processDebugJavaRes NO-SOURCE
+> Task :react-native-vector-icons:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-sound:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-screens:javaPreCompileDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :sentry_react-native:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-sound:stripDebugDebugSymbols NO-SOURCE
+> Task :sentry_react-native:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-google-signin_google-signin:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-async-storage_async-storage:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-reanimated:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :sentry_react-native:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-google-signin_google-signin:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-sound:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-safe-area-context:compileDebugJavaWithJavac UP-TO-DATE
+> Task :op-engineering_op-sqlite:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-google-signin_google-signin:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-async-storage_async-storage:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugShaders UP-TO-DATE
+> Task :react-native-screens:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-sound:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-async-storage_async-storage:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :react-native-vector-icons:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-safe-area-context:compileDebugShaders NO-SOURCE
+> Task :react-native-safe-area-context:generateDebugAssets UP-TO-DATE
+> Task :react-native-sound:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :react-native-screens:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :react-native-google-signin_google-signin:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :op-engineering_op-sqlite:mergeDebugShaders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :op-engineering_op-sqlite:compileDebugShaders NO-SOURCE
+> Task :op-engineering_op-sqlite:generateDebugAssets UP-TO-DATE
+> Task :react-native-sound:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-safe-area-context:packageDebugAssets UP-TO-DATE
+> Task :react-native-vector-icons:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-screens:mergeDebugShaders UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :react-native-sound:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :react-native-screens:compileDebugShaders NO-SOURCE
+> Task :react-native-google-signin_google-signin:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-screens:generateDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:prepareDebugArtProfile UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :op-engineering_op-sqlite:packageDebugAssets UP-TO-DATE
+> Task :react-native-google-signin_google-signin:prepareLintJarForPublish UP-TO-DATE
+> Task :op-engineering_op-sqlite:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-sound:prepareDebugArtProfile UP-TO-DATE
+> Task :react-native-vector-icons:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-screens:packageDebugAssets UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:prepareDebugArtProfile UP-TO-DATE
+> Task :react-native-sound:prepareLintJarForPublish UP-TO-DATE
+> Task :react-native-google-signin_google-signin:mergeDebugJavaResource UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:prepareLintJarForPublish UP-TO-DATE
+> Task :op-engineering_op-sqlite:processDebugJavaRes UP-TO-DATE
+> Task :react-native-safe-area-context:processDebugJavaRes UP-TO-DATE
+> Task :react-native-sound:mergeDebugJavaResource UP-TO-DATE
+> Task :react-native-google-signin_google-signin:syncDebugLibJars UP-TO-DATE
+> Task :react-native-async-storage_async-storage:mergeDebugJavaResource UP-TO-DATE
+> Task :op-engineering_op-sqlite:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :react-native-sound:syncDebugLibJars UP-TO-DATE
+> Task :react-native-screens:processDebugJavaRes UP-TO-DATE
+> Task :react-native-google-signin_google-signin:bundleDebugAar UP-TO-DATE
+> Task :react-native-google-signin_google-signin:assembleDebug UP-TO-DATE
+> Task :react-native-safe-area-context:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :react-native-async-storage_async-storage:syncDebugLibJars UP-TO-DATE
+> Task :react-native-sound:bundleDebugAar UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugJniLibFolders UP-TO-DATE
+> Task :react-native-sound:assembleDebug UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugNativeLibs NO-SOURCE
+> Task :react-native-vector-icons:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :react-native-async-storage_async-storage:bundleDebugAar UP-TO-DATE
+> Task :react-native-async-storage_async-storage:assembleDebug UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :react-native-safe-area-context:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :react-native-screens:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :sentry_react-native:stripDebugDebugSymbols NO-SOURCE
+> Task :react-native-vector-icons:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-safe-area-context:stripDebugDebugSymbols NO-SOURCE
+> Task :sentry_react-native:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-safe-area-context:copyDebugJniLibsProjectAndLocalJars UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :react-native-vector-icons:prepareDebugArtProfile UP-TO-DATE
+> Task :react-native-vector-icons:prepareLintJarForPublish UP-TO-DATE
+> Task :sentry_react-native:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-safe-area-context:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-vector-icons:mergeDebugJavaResource UP-TO-DATE
+> Task :react-native-safe-area-context:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :sentry_react-native:extractDeepLinksForAarDebug UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-vector-icons:syncDebugLibJars UP-TO-DATE
+> Task :sentry_react-native:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-safe-area-context:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :sentry_react-native:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :react-native-vector-icons:bundleDebugAar UP-TO-DATE
+> Task :react-native-vector-icons:assembleDebug UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :react-native-safe-area-context:prepareDebugArtProfile UP-TO-DATE
+> Task :sentry_react-native:prepareDebugArtProfile UP-TO-DATE
+> Task :react-native-safe-area-context:prepareLintJarForPublish UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :sentry_react-native:prepareLintJarForPublish UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :react-native-safe-area-context:mergeDebugJavaResource UP-TO-DATE
+> Task :react-native-safe-area-context:syncDebugLibJars UP-TO-DATE
+> Task :sentry_react-native:mergeDebugJavaResource UP-TO-DATE
+
+> Transform classes.jar (project :react-native-google-signin_google-signin) with DexingNoClasspathTransform
+ERROR: C:\Users\Steve\AppData\Local\Temp\spark-android\react-native-google-signin_google-signin\intermediates\runtime_library_classes_jar\debug\bundleLibRuntimeToJarDebug\classes.jar: D8: Compilation of classes com.reactnativegooglesignin.RNGoogleSigninModule, com.reactnativegooglesignin.RNGoogleSigninModule$TokenClearingTask, com.reactnativegooglesignin.RNGoogleSigninModule$AccessTokenRetrievalTask, com.reactnativegooglesignin.RNGoogleSigninModule$RNGoogleSigninActivityEventListener, com.reactnativegooglesignin.RNGoogleSigninModule$4, com.reactnativegooglesignin.RNGoogleSigninModule$3, com.reactnativegooglesignin.RNGoogleSigninModule$2, com.reactnativegooglesignin.RNGoogleSigninModule$1 requires its nest mates com.reactnativegooglesignin.RNGoogleSigninModule$1$1 (unavailable) to be on program or class path.
+
+> Task :app:copyReactNativeVectorIconFonts UP-TO-DATE
+> Task :react-native-reanimated:configureCMakeDebug[arm64-v8a]
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :react-native-safe-area-context:bundleDebugAar UP-TO-DATE
+> Task :sentry_react-native:syncDebugLibJars UP-TO-DATE
+> Task :react-native-safe-area-context:assembleDebug UP-TO-DATE
+> Task :react-native-gesture-handler:compileDebugKotlin UP-TO-DATE
+> Task :sentry_react-native:bundleDebugAar UP-TO-DATE
+> Task :sentry_react-native:assembleDebug UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :op-engineering_op-sqlite:configureCMakeDebug[arm64-v8a]
+> Task :app:processDebugJavaRes NO-SOURCE
+> Task :react-native-gesture-handler:compileDebugJavaWithJavac UP-TO-DATE
+
+> Transform bundleLibRuntimeToDirDebug (project :react-native-google-signin_google-signin) with DexingNoClasspathTransform
+ERROR: C:\Users\Steve\AppData\Local\Temp\spark-android\react-native-google-signin_google-signin\intermediates\runtime_library_classes_dir\debug\bundleLibRuntimeToDirDebug\com\reactnativegooglesignin\RNGoogleSigninModule.class: D8: Compilation of classes com.reactnativegooglesignin.RNGoogleSigninModule, com.reactnativegooglesignin.RNGoogleSigninModule$TokenClearingTask, com.reactnativegooglesignin.RNGoogleSigninModule$AccessTokenRetrievalTask, com.reactnativegooglesignin.RNGoogleSigninModule$RNGoogleSigninActivityEventListener, com.reactnativegooglesignin.RNGoogleSigninModule$4, com.reactnativegooglesignin.RNGoogleSigninModule$3, com.reactnativegooglesignin.RNGoogleSigninModule$2, com.reactnativegooglesignin.RNGoogleSigninModule$1 requires its nest mates com.reactnativegooglesignin.RNGoogleSigninModule$1$1 (unavailable) to be on program or class path.
+
+> Task :react-native-gesture-handler:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :react-native-screens:configureCMakeDebug[arm64-v8a]
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :react-native-gesture-handler:processDebugJavaRes UP-TO-DATE
+> Task :react-native-gesture-handler:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac UP-TO-DATE
+> Task :react-native-gesture-handler:extractDebugAnnotations UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugGeneratedProguardFiles UP-TO-DATE
+> Task :react-native-gesture-handler:mergeDebugConsumerProguardFiles UP-TO-DATE
+> Task :op-engineering_op-sqlite:buildCMakeDebug[arm64-v8a]
+> Task :react-native-gesture-handler:mergeDebugJavaResource UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :react-native-reanimated:buildCMakeDebug[arm64-v8a]
+> Task :react-native-screens:buildCMakeDebug[arm64-v8a]
+> Task :react-native-gesture-handler:syncDebugLibJars UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics FAILED
+> Task :react-native-gesture-handler:bundleDebugAar UP-TO-DATE
+> Task :react-native-gesture-handler:assembleDebug UP-TO-DATE
+> Task :react-native-reanimated:configureCMakeDebug[armeabi-v7a]
+> Task :react-native-screens:configureCMakeDebug[armeabi-v7a]
+
+> Task :op-engineering_op-sqlite:configureCMakeDebug[armeabi-v7a]
+C/C++: CMake Warning:
+C/C++:   Manually-specified variables were not used by the project:
+C/C++:     ANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES
+C/C++:     USER_DEFINED_TOKENIZERS_HEADER_PATH
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:mergeDebugGlobalSynthetics'.
+> Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+   > Failed to transform classes.jar (project :react-native-google-signin_google-signin) to match attributes {artifactType=android-global-synthetics, com.android.build.api.attributes.AgpVersionAttr=8.4.1, com.android.build.api.attributes.BuildTypeAttr=debug, com.android.build.gradle.internal.attributes.VariantAttr=debug, dexing-component-attributes=ComponentSpecificParameters(minSdkVersion=26, debuggable=true, enableCoreLibraryDesugaring=false, enableGlobalSynthetics=true, enableApiModeling=false, dependenciesClassesAreInstrumented=false, asmTransformComponent=null, useJacocoTransformInstrumentation=false, enableDesugaring=true, needsClasspath=false, useFullClasspath=false, componentIfUsingFullClasspath=null), org.gradle.libraryelements=jar, org.gradle.usage=java-runtime}.
+      > Execution failed for DexingNoClasspathTransform: C:\Users\Steve\AppData\Local\Temp\spark-android\react-native-google-signin_google-signin\intermediates\runtime_library_classes_jar\debug\bundleLibRuntimeToJarDebug\classes.jar.
+         > Error while dexing.
+
+* Try:
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+* Exception is:
+org.gradle.api.tasks.TaskExecutionException: Execution failed for task ':app:mergeDebugGlobalSynthetics'.
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:38)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration$ArtifactResolveException: Could not resolve all files for configuration ':app:debugRuntimeClasspath'.
+	at org.gradle.api.internal.artifacts.ResolveExceptionContextualizer.mapFailure(ResolveExceptionContextualizer.java:81)
+	at org.gradle.api.internal.artifacts.ResolveExceptionContextualizer.mapFailures(ResolveExceptionContextualizer.java:60)
+	at org.gradle.api.internal.artifacts.configurations.DefaultConfiguration$DefaultResolutionHost.mapFailure(DefaultConfiguration.java:2321)
+	at org.gradle.api.internal.artifacts.configurations.ResolutionHost.rethrowFailure(ResolutionHost.java:30)
+	at org.gradle.api.internal.artifacts.configurations.ResolutionBackedFileCollection.maybeThrowResolutionFailures(ResolutionBackedFileCollection.java:84)
+	at org.gradle.api.internal.artifacts.configurations.ResolutionBackedFileCollection.visitContents(ResolutionBackedFileCollection.java:74)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection$UnresolvedItemsCollector.visitContents(DefaultConfigurableFileCollection.java:425)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.visitChildren(DefaultConfigurableFileCollection.java:300)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.lambda$calculateFinalizedValue$0(DefaultConfigurableFileCollection.java:275)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection$UnresolvedItemsCollector.visitContents(DefaultConfigurableFileCollection.java:425)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.calculateFinalizedValue(DefaultConfigurableFileCollection.java:275)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.finalizeNow(DefaultConfigurableFileCollection.java:105)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.lambda$visitChildren$1(DefaultConfigurableFileCollection.java:299)
+	at org.gradle.api.internal.provider.ValueState.finalizeOnReadIfNeeded(ValueState.java:79)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.visitChildren(DefaultConfigurableFileCollection.java:299)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:92)
+	at org.gradle.api.internal.file.DefaultFileCollectionFactory$ResolvingFileCollection.visitChildren(DefaultFileCollectionFactory.java:285)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.tasks.PropertyFileCollection.visitChildren(PropertyFileCollection.java:48)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.internal.fingerprint.impl.DefaultFileCollectionSnapshotter.snapshot(DefaultFileCollectionSnapshotter.java:47)
+	at org.gradle.internal.execution.impl.DefaultInputFingerprinter$InputCollectingVisitor.visitInputFileProperty(DefaultInputFingerprinter.java:133)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.visitRegularInputs(TaskExecution.java:327)
+	at org.gradle.internal.execution.impl.DefaultInputFingerprinter.fingerprintInputProperties(DefaultInputFingerprinter.java:63)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.captureExecutionStateWithOutputs(AbstractCaptureStateBeforeExecutionStep.java:109)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.lambda$captureExecutionState$0(AbstractCaptureStateBeforeExecutionStep.java:74)
+	at org.gradle.internal.execution.steps.BuildOperationStep$1.call(BuildOperationStep.java:37)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.BuildOperationStep.operation(BuildOperationStep.java:34)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.captureExecutionState(AbstractCaptureStateBeforeExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:62)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:292)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:38)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:36)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:26)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:47)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:34)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:145)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:134)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.gradle.api.internal.artifacts.transform.TransformException: Failed to transform classes.jar (project :react-native-google-signin_google-signin) to match attributes {artifactType=android-global-synthetics, com.android.build.api.attributes.AgpVersionAttr=8.4.1, com.android.build.api.attributes.BuildTypeAttr=debug, com.android.build.gradle.internal.attributes.VariantAttr=debug, dexing-component-attributes=ComponentSpecificParameters(minSdkVersion=26, debuggable=true, enableCoreLibraryDesugaring=false, enableGlobalSynthetics=true, enableApiModeling=false, dependenciesClassesAreInstrumented=false, asmTransformComponent=null, useJacocoTransformInstrumentation=false, enableDesugaring=true, needsClasspath=false, useFullClasspath=false, componentIfUsingFullClasspath=null), org.gradle.libraryelements=jar, org.gradle.usage=java-runtime}.
+	at org.gradle.api.internal.artifacts.transform.TransformedProjectArtifactSet.visit(TransformedProjectArtifactSet.java:87)
+	at org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.ParallelResolveArtifactSet$VisitingSet$StartVisitAction.visitResults(ParallelResolveArtifactSet.java:100)
+	at org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.ParallelResolveArtifactSet$VisitingSet.visit(ParallelResolveArtifactSet.java:69)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration.visitArtifacts(DefaultLenientConfiguration.java:297)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration.access$600(DefaultLenientConfiguration.java:75)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration$3.run(DefaultLenientConfiguration.java:244)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:29)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(DefaultBuildOperationRunner.java:26)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.run(DefaultBuildOperationRunner.java:47)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.run(DefaultBuildOperationExecutor.java:68)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration.visitArtifactsWithBuildOperation(DefaultLenientConfiguration.java:241)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration.access$300(DefaultLenientConfiguration.java:75)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration$2.lambda$visitArtifacts$0(DefaultLenientConfiguration.java:158)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsUnmanagedWorkerThread(DefaultWorkerLeaseService.java:140)
+	at org.gradle.api.internal.artifacts.ivyservice.DefaultLenientConfiguration$2.visitArtifacts(DefaultLenientConfiguration.java:158)
+	at org.gradle.api.internal.artifacts.ivyservice.resolveengine.artifact.SelectedArtifactSet.visitFiles(SelectedArtifactSet.java:34)
+	at org.gradle.api.internal.artifacts.configurations.ResolutionBackedFileCollection.visitContents(ResolutionBackedFileCollection.java:73)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection$UnresolvedItemsCollector.visitContents(DefaultConfigurableFileCollection.java:425)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.visitChildren(DefaultConfigurableFileCollection.java:300)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.lambda$calculateFinalizedValue$0(DefaultConfigurableFileCollection.java:275)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection$UnresolvedItemsCollector.visitContents(DefaultConfigurableFileCollection.java:425)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.calculateFinalizedValue(DefaultConfigurableFileCollection.java:275)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.finalizeNow(DefaultConfigurableFileCollection.java:105)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.lambda$visitChildren$1(DefaultConfigurableFileCollection.java:299)
+	at org.gradle.api.internal.provider.ValueState.finalizeOnReadIfNeeded(ValueState.java:79)
+	at org.gradle.api.internal.file.collections.DefaultConfigurableFileCollection.visitChildren(DefaultConfigurableFileCollection.java:299)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:67)
+	at org.gradle.api.internal.file.collections.UnpackingVisitor.add(UnpackingVisitor.java:92)
+	at org.gradle.api.internal.file.DefaultFileCollectionFactory$ResolvingFileCollection.visitChildren(DefaultFileCollectionFactory.java:285)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.api.internal.file.CompositeFileCollection.lambda$visitContents$0(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.tasks.PropertyFileCollection.visitChildren(PropertyFileCollection.java:48)
+	at org.gradle.api.internal.file.CompositeFileCollection.visitContents(CompositeFileCollection.java:113)
+	at org.gradle.api.internal.file.AbstractFileCollection.visitStructure(AbstractFileCollection.java:361)
+	at org.gradle.internal.fingerprint.impl.DefaultFileCollectionSnapshotter.snapshot(DefaultFileCollectionSnapshotter.java:47)
+	at org.gradle.internal.execution.impl.DefaultInputFingerprinter$InputCollectingVisitor.visitInputFileProperty(DefaultInputFingerprinter.java:133)
+	at org.gradle.api.internal.tasks.execution.TaskExecution.visitRegularInputs(TaskExecution.java:327)
+	at org.gradle.internal.execution.impl.DefaultInputFingerprinter.fingerprintInputProperties(DefaultInputFingerprinter.java:63)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.captureExecutionStateWithOutputs(AbstractCaptureStateBeforeExecutionStep.java:109)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.lambda$captureExecutionState$0(AbstractCaptureStateBeforeExecutionStep.java:74)
+	at org.gradle.internal.execution.steps.BuildOperationStep$1.call(BuildOperationStep.java:37)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.BuildOperationStep.operation(BuildOperationStep.java:34)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.captureExecutionState(AbstractCaptureStateBeforeExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:62)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:292)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:66)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:38)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:36)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:26)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:47)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:34)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:61)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:145)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(ExecuteActionsTaskExecuter.java:134)
+	at org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(FinalizePropertiesTaskExecuter.java:46)
+	at org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(ResolveTaskExecutionModeExecuter.java:51)
+	at org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(SkipTaskWithNoActionsExecuter.java:57)
+	at org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(SkipOnlyIfTaskExecuter.java:74)
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.gradle.api.internal.artifacts.transform.TransformException: Execution failed for DexingNoClasspathTransform: C:\Users\Steve\AppData\Local\Temp\spark-android\react-native-google-signin_google-signin\intermediates\runtime_library_classes_jar\debug\bundleLibRuntimeToJarDebug\classes.jar.
+	at org.gradle.api.internal.artifacts.transform.DefaultTransformInvocationFactory.lambda$createInvocation$1(DefaultTransformInvocationFactory.java:148)
+	at org.gradle.internal.Try$Failure.mapFailure(Try.java:273)
+	at org.gradle.api.internal.artifacts.transform.DefaultTransformInvocationFactory.lambda$createInvocation$2(DefaultTransformInvocationFactory.java:148)
+	at org.gradle.internal.Deferrable$1.applyAndRequireNonNull(Deferrable.java:63)
+	at org.gradle.internal.Deferrable$1.completeAndGet(Deferrable.java:59)
+	at org.gradle.internal.Deferrable$1.completeAndGet(Deferrable.java:59)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$ChainedTransformStepNode$TransformPreviousArtifacts$1.lambda$transform$0(TransformStepNode.java:328)
+	at org.gradle.internal.Try$Success.flatMap(Try.java:159)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$ChainedTransformStepNode$TransformPreviousArtifacts$1.transform(TransformStepNode.java:326)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$TransformStepBuildOperation.call(TransformStepNode.java:390)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$TransformStepBuildOperation.call(TransformStepNode.java:369)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$AbstractTransformArtifacts.calculateValue(TransformStepNode.java:363)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode$AbstractTransformArtifacts.calculateValue(TransformStepNode.java:343)
+	at org.gradle.internal.model.CalculatedValueContainer$CalculationState.lambda$attachValue$0(CalculatedValueContainer.java:229)
+	at org.gradle.internal.Try.ofFailable(Try.java:41)
+	at org.gradle.internal.model.CalculatedValueContainer$CalculationState.attachValue(CalculatedValueContainer.java:224)
+	at org.gradle.internal.model.CalculatedValueContainer.finalizeIfNotAlready(CalculatedValueContainer.java:197)
+	at org.gradle.internal.model.CalculatedValueContainer.run(CalculatedValueContainer.java:183)
+	at org.gradle.api.internal.artifacts.transform.TransformStepNode.execute(TransformStepNode.java:183)
+	at org.gradle.execution.plan.WorkNodeExecutor.execute(WorkNodeExecutor.java:27)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.execution.plan.DefaultPlanExecutor.process(DefaultPlanExecutor.java:116)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.executeWithServices(DefaultTaskExecutionGraph.java:138)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph.execute(DefaultTaskExecutionGraph.java:123)
+	at org.gradle.execution.SelectedTaskExecutionAction.execute(SelectedTaskExecutionAction.java:35)
+	at org.gradle.execution.DryRunBuildExecutionAction.execute(DryRunBuildExecutionAction.java:51)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:54)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor$ExecuteTasks.call(BuildOperationFiringBuildWorkerExecutor.java:43)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.execution.BuildOperationFiringBuildWorkerExecutor.execute(BuildOperationFiringBuildWorkerExecutor.java:40)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.lambda$executeTasks$10(DefaultBuildLifecycleController.java:313)
+	at org.gradle.internal.model.StateTransitionController.doTransition(StateTransitionController.java:266)
+	at org.gradle.internal.model.StateTransitionController.lambda$tryTransition$8(StateTransitionController.java:177)
+	at org.gradle.internal.work.DefaultSynchronizer.withLock(DefaultSynchronizer.java:44)
+	at org.gradle.internal.model.StateTransitionController.tryTransition(StateTransitionController.java:177)
+	at org.gradle.internal.build.DefaultBuildLifecycleController.executeTasks(DefaultBuildLifecycleController.java:304)
+	at org.gradle.internal.build.DefaultBuildWorkGraphController$DefaultBuildWorkGraph.runWork(DefaultBuildWorkGraphController.java:220)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+	at org.gradle.composite.internal.DefaultBuildController.doRun(DefaultBuildController.java:181)
+	at org.gradle.composite.internal.DefaultBuildController.access$000(DefaultBuildController.java:50)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.lambda$run$0(DefaultBuildController.java:198)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.composite.internal.DefaultBuildController$BuildOpRunnable.run(DefaultBuildController.java:198)
+	... 2 more
+Caused by: com.android.builder.dexing.DexArchiveBuilderException: Error while dexing.
+	at com.android.builder.dexing.D8DexArchiveBuilder.getExceptionToRethrow(D8DexArchiveBuilder.java:188)
+	at com.android.builder.dexing.D8DexArchiveBuilder.convert(D8DexArchiveBuilder.java:127)
+	at com.android.build.gradle.internal.dependency.BaseDexingTransform.process(DexingTransform.kt:283)
+	at com.android.build.gradle.internal.dependency.BaseDexingTransform.processNonIncrementally(DexingTransform.kt:229)
+	at com.android.build.gradle.internal.dependency.BaseDexingTransform.transform(DexingTransform.kt:149)
+	at org.gradle.api.internal.artifacts.transform.DefaultTransform.transform(DefaultTransform.java:276)
+	at org.gradle.api.internal.artifacts.transform.AbstractTransformExecution$2.call(AbstractTransformExecution.java:143)
+	at org.gradle.api.internal.artifacts.transform.AbstractTransformExecution$2.call(AbstractTransformExecution.java:137)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.api.internal.artifacts.transform.AbstractTransformExecution.executeWithinTransformerListener(AbstractTransformExecution.java:137)
+	at org.gradle.api.internal.artifacts.transform.AbstractTransformExecution.execute(AbstractTransformExecution.java:130)
+	at org.gradle.internal.execution.steps.ExecuteStep.executeInternal(ExecuteStep.java:105)
+	at org.gradle.internal.execution.steps.ExecuteStep.access$000(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:59)
+	at org.gradle.internal.execution.steps.ExecuteStep$1.call(ExecuteStep.java:56)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:56)
+	at org.gradle.internal.execution.steps.ExecuteStep.execute(ExecuteStep.java:44)
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:41)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:74)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:50)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:28)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(RemovePreviousOutputsStep.java:37)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:61)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:26)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:40)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(ResolveInputChangesStep.java:29)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeAndStoreInCache(BuildCacheStep.java:145)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$executeWithCache$4(BuildCacheStep.java:101)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$executeWithCache$5(BuildCacheStep.java:101)
+	at org.gradle.internal.Try$Success.map(Try.java:164)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithCache(BuildCacheStep.java:85)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$0(BuildCacheStep.java:74)
+	at org.gradle.internal.Either$Left.fold(Either.java:115)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:59)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:73)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:48)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:44)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(StoreExecutionStateStep.java:33)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:76)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:54)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:54)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:36)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:65)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.execute(ResolveChangesStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:76)
+	at org.gradle.internal.execution.steps.ResolveCachingStateStep.execute(ResolveCachingStateStep.java:37)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:106)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:55)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:64)
+	at org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(AbstractCaptureStateBeforeExecutionStep.java:43)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(AbstractSkipEmptyWorkStep.java:125)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:56)
+	at org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(AbstractSkipEmptyWorkStep.java:36)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:75)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(HandleStaleOutputsStep.java:41)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(AssignMutableWorkspaceStep.java:35)
+	at org.gradle.internal.execution.workspace.impl.NonLockingMutableWorkspaceProvider.withWorkspace(NonLockingMutableWorkspaceProvider.java:36)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:31)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(AssignMutableWorkspaceStep.java:22)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$0(ExecuteWorkBuildOperationFiringStep.java:52)
+	at org.gradle.internal.execution.steps.BuildOperationStep$1.call(BuildOperationStep.java:37)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:73)
+	at org.gradle.internal.execution.steps.BuildOperationStep.operation(BuildOperationStep.java:34)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$1(ExecuteWorkBuildOperationFiringStep.java:50)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:50)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:38)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:36)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.lambda$executeDeferred$0(IdentityCacheStep.java:48)
+	at org.gradle.cache.Cache.lambda$get$0(Cache.java:31)
+	at org.gradle.cache.ManualEvictionInMemoryCache.get(ManualEvictionInMemoryCache.java:30)
+	at org.gradle.cache.Cache.get(Cache.java:31)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.lambda$executeDeferred$1(IdentityCacheStep.java:46)
+	at org.gradle.internal.Deferrable$3.completeAndGet(Deferrable.java:117)
+	... 64 more
+Caused by: com.android.tools.r8.CompilationFailedException: Compilation failed to complete, origin: C:\Users\Steve\AppData\Local\Temp\spark-android\react-native-google-signin_google-signin\intermediates\runtime_library_classes_jar\debug\bundleLibRuntimeToJarDebug\classes.jar:com/reactnativegooglesignin/RNGoogleSigninModule.class
+	at Version.fakeStackEntry(Version_8.4.26.java:0)
+	at com.android.tools.r8.Q.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:5)
+	at com.android.tools.r8.internal.qo.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:82)
+	at com.android.tools.r8.internal.qo.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:32)
+	at com.android.tools.r8.internal.qo.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:31)
+	at com.android.tools.r8.internal.qo.b(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:2)
+	at com.android.tools.r8.D8.run(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:11)
+	at com.android.builder.dexing.D8DexArchiveBuilder.convert(D8DexArchiveBuilder.java:125)
+	... 169 more
+Caused by: com.android.tools.r8.internal.g: Compilation of classes com.reactnativegooglesignin.RNGoogleSigninModule, com.reactnativegooglesignin.RNGoogleSigninModule$TokenClearingTask, com.reactnativegooglesignin.RNGoogleSigninModule$AccessTokenRetrievalTask, com.reactnativegooglesignin.RNGoogleSigninModule$RNGoogleSigninActivityEventListener, com.reactnativegooglesignin.RNGoogleSigninModule$4, com.reactnativegooglesignin.RNGoogleSigninModule$3, com.reactnativegooglesignin.RNGoogleSigninModule$2, com.reactnativegooglesignin.RNGoogleSigninModule$1 requires its nest mates com.reactnativegooglesignin.RNGoogleSigninModule$1$1 (unavailable) to be on program or class path.
+	at com.android.tools.r8.internal.R40.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:21)
+	at com.android.tools.r8.internal.xh.b(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:22)
+	at com.android.tools.r8.internal.ZP.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:9)
+	at com.android.tools.r8.internal.xh.c(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:1)
+	at com.android.tools.r8.internal.nR.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:281)
+	at com.android.tools.r8.internal.AX.b(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:23)
+	at com.android.tools.r8.internal.AX.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:17)
+	at com.android.tools.r8.D8.d(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:60)
+	at com.android.tools.r8.D8.b(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:1)
+	at com.android.tools.r8.internal.qo.a(R8_8.4.26_77dfd09faba626680cedf50ad7c68fca6a451f7fcded90f98512e36c79c34d81:28)
+	... 172 more
+
+
+BUILD FAILED in 1m
+307 actionable tasks: 16 executed, 291 up-to-date
