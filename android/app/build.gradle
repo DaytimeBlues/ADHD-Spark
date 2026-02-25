@@ -13,6 +13,11 @@ android {
     namespace "com.sparkadhd"
     compileSdkVersion 34
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         applicationId "com.sparkadhd"
         minSdkVersion 26
@@ -36,6 +41,8 @@ android {
         debug {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
+            minifyEnabled false
+            shrinkResources false
         }
         preview {
             initWith release

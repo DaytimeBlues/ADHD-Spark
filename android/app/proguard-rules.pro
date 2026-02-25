@@ -7,6 +7,11 @@
 # Google Play Services
 -keep class com.google.android.gms.** { *; }
 
+# Google Sign-In - prevent R8 from stripping nested classes (nest-mates fix)
+-keep class com.reactnativegooglesignin.** { *; }
+-dontwarn com.reactnativegooglesignin.**
+-keepattributes NestHost, NestMembers
+
 # Spark ADHD native modules
 -keep class com.sparkadhd.** { *; }
 
