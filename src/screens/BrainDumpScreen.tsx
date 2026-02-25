@@ -143,7 +143,9 @@ const BrainDumpScreen = () => {
         const normalized = storedItems.filter((item) => {
           return Boolean(item?.id && item?.text && item?.createdAt);
         });
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        if (Platform.OS !== 'web') {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        }
         setItems(normalized);
       }
     } catch (error) {
@@ -200,7 +202,9 @@ const BrainDumpScreen = () => {
   };
 
   const addItem = (text: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (Platform.OS !== 'web') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
     const newItem: DumpItem = {
       id: generateId(),
       text,
@@ -355,7 +359,9 @@ const BrainDumpScreen = () => {
           UXMetricsService.track('brain_dump_recovery_after_error');
           previousErrorRef.current = false;
         }
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        if (Platform.OS !== 'web') {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        }
 
         const newItem: DumpItem = {
           id: generateId(),
@@ -385,7 +391,9 @@ const BrainDumpScreen = () => {
         }
       } else {
         setRecordingError(transcription.error || 'Transcription failed. Audio saved locally.');
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        if (Platform.OS !== 'web') {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        }
         setItems((prevItems) => [
           {
             id: generateId(),
@@ -409,7 +417,9 @@ const BrainDumpScreen = () => {
   }, [handleRecordPress, route.params?.autoRecord]);
 
   const deleteItem = (id: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (Platform.OS !== 'web') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     setSortedItems([]);
     setSortingError(null);
@@ -425,7 +435,9 @@ const BrainDumpScreen = () => {
           text: 'CONFIRM',
           style: 'destructive',
           onPress: () => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            if (Platform.OS !== 'web') {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            }
             setItems([]);
             setSortedItems([]);
             setSortingError(null);
@@ -575,7 +587,11 @@ const BrainDumpScreen = () => {
           />
         </View>
       </View>
-      {isCosmic && <CosmicBackground showGrid={true} intensity="low" />}
+      {isCosmic && (
+        <CosmicBackground variant="nebula">
+          <View style={StyleSheet.absoluteFill} />
+        </CosmicBackground>
+      )}
     </SafeAreaView>
   );
 };
@@ -594,7 +610,7 @@ const getStyles = (isCosmic: boolean) =>
     contentWrapper: {
       flex: 1,
       width: '100%',
-      maxWidth: Tokens.layout.maxWidth,
+      maxWidth: Tokens.layout.maxWidth.content,
       padding: Tokens.spacing[4],
     },
     header: {

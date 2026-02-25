@@ -13,6 +13,7 @@ export interface SortedItem {
   text: string;
   category: SortCategory;
   priority: SortPriority;
+  duration?: string;
   dueDate?: string;
   start?: string;
   end?: string;
@@ -191,8 +192,8 @@ async function fetchWithRetry(
       if (!response.ok) {
         const serverMsg =
           payload &&
-          typeof payload === 'object' &&
-          typeof (payload as { error?: unknown }).error === 'string'
+            typeof payload === 'object' &&
+            typeof (payload as { error?: unknown }).error === 'string'
             ? (payload as { error: string }).error
             : 'Unable to sort items right now.';
         throw new AiSortError('AI_SERVER_ERROR', serverMsg);

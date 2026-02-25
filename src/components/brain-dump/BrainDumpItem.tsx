@@ -28,10 +28,11 @@ export const BrainDumpItem: React.FC<BrainDumpItemProps> = ({ item, onDelete }) 
     const styles = getStyles(isCosmic);
 
     return (
-        <View style={styles.item}>
+        <View style={styles.item} testID="brain-dump-item">
             <Text style={styles.itemText}>{item.text}</Text>
             <Pressable
                 onPress={() => onDelete(item.id)}
+                testID="delete-item-button"
                 accessibilityRole="button"
                 accessibilityLabel="Delete brain dump item"
                 accessibilityHint="Removes this item from the list"
