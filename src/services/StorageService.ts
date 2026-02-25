@@ -1,17 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import type {
+  DB,
+  QueryResult,
+  Scalar,
+  Transaction,
+} from '@op-engineering/op-sqlite';
 
-interface OPSQLiteDB {
-  execute: (
-    query: string,
-    params?: unknown[],
-  ) => Promise<{
-    rows?: { length: number;[index: number]: Record<string, unknown> };
-  }>;
-  transaction: (fn: (tx: OPSQLiteDB) => Promise<void>) => Promise<void>;
-}
+type KVDatabase = Pick<DB, 'execute' | 'transaction'>;
+type KVQueryResult = QueryResult & { rows: Array<Record<string, Scalar>> };
 
-let db: OPSQLiteDB | undefined;
+let db: KVDatabase | undefined;
 const isJestRuntime =
   typeof process !== 'undefined' && !!process.env.JEST_WORKER_ID;
 
@@ -19,7 +18,7 @@ if (Platform.OS !== 'web' && !isJestRuntime) {
   const { open } = require('@op-engineering/op-sqlite');
   db = open({
     name: 'spark_db',
-  }) as OPSQLiteDB;
+  });
 }
 
 const STORAGE_VERSION = 1;
@@ -49,7 +48,11 @@ const STORAGE_KEYS = {
   isBiometricSecured: 'isBiometricSecured',
 };
 
-const migrations: Record<number, () => Promise<void>> = {};
+const migrations: Record<number, () => Promise<void>> = {
+  1: async () => {
+    return;
+  },
+};
 
 const runMigrations = async (): Promise<void> => {
   try {
@@ -58,9 +61,7 @@ const runMigrations = async (): Promise<void> => {
 
     if (currentVersion < STORAGE_VERSION) {
       for (let v = currentVersion + 1; v <= STORAGE_VERSION; v++) {
-        if (migrations[v]) {
-          await migrations[v]();
-        }
+        await migrations[v]?.();
       }
 
       await StorageService.set(STORAGE_VERSION_KEY, STORAGE_VERSION.toString());
@@ -70,13 +71,37 @@ const runMigrations = async (): Promise<void> => {
   }
 };
 
+/**
+ * Safely parse JSON with error handling for corrupted data.
+ * Returns null if parsing fails or data is invalid.
+ */
+const safeJSONParse = <T>(value: string | null): T | null => {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value) as T;
+  } catch (error) {
+    console.warn('Storage: Failed to parse JSON, returning null:', error);
+    return null;
+  }
+};
+
+const getDb = (): KVDatabase => {
+  if (!db) {
+    throw new Error('SQLite database is not initialized');
+  }
+  return db;
+};
+
 const StorageService = {
   async init(): Promise<void> {
     if (Platform.OS === 'web' || isJestRuntime) {
       return runMigrations();
     }
 
-    await db!.execute(
+    await getDb().execute(
       'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
     );
 
@@ -88,7 +113,7 @@ const StorageService = {
         if (keys.length > 0) {
           const pairs = await AsyncStorage.multiGet(keys);
 
-          await db!.transaction(async (tx) => {
+          await getDb().transaction(async (tx: Transaction) => {
             for (const [key, value] of pairs) {
               if (value) {
                 await tx.execute(
@@ -119,12 +144,13 @@ const StorageService = {
     }
 
     try {
-      const res = await db!.execute(
+      const res = (await getDb().execute(
         'SELECT value FROM kv_store WHERE key = ?',
         [key],
-      );
+      )) as KVQueryResult;
       if (res.rows?.length) {
-        return res.rows[0].value as string;
+        const rowValue = res.rows[0]?.value;
+        return typeof rowValue === 'string' ? rowValue : null;
       }
       return null;
     } catch (error) {
@@ -144,7 +170,7 @@ const StorageService = {
     }
 
     try {
-      await db!.execute(
+      await getDb().execute(
         'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
         [key, value],
       );
@@ -166,7 +192,7 @@ const StorageService = {
     }
 
     try {
-      await db!.execute('DELETE FROM kv_store WHERE key = ?', [key]);
+      await getDb().execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return true;
     } catch (error) {
       console.error('Storage remove error:', error);
@@ -174,10 +200,14 @@ const StorageService = {
     }
   },
 
+  /**
+   * Safely retrieve and parse JSON from storage.
+   * Returns null if the key doesn't exist or if parsing fails.
+   */
   async getJSON<T>(key: string): Promise<T | null> {
     try {
       const value = await this.get(key);
-      return value ? JSON.parse(value) : null;
+      return safeJSONParse<T>(value);
     } catch (error) {
       console.error('Storage getJSON error:', error);
       return null;
@@ -201,10 +231,10 @@ export const zustandStorage = {
     return StorageService.get(name);
   },
   setItem: (name: string, value: string): Promise<void> => {
-    return StorageService.set(name, value).then(() => { });
+    return StorageService.set(name, value).then(() => {});
   },
   removeItem: (name: string): Promise<void> => {
-    return StorageService.remove(name).then(() => { });
+    return StorageService.remove(name).then(() => {});
   },
 };
 

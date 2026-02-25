@@ -9,6 +9,7 @@ import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
 import { WebNavBar } from './WebNavBar';
 import { ROUTES } from './routes';
 import { CaptureBubble } from '../components/capture';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Critical screens - loaded normally
 import HomeScreen from '../screens/HomeScreen';
@@ -68,6 +69,16 @@ const withSuspense = <P extends object>(Component: React.ComponentType<P>) => {
   );
 };
 
+const withErrorBoundary = <P extends object>(
+  Component: React.ComponentType<P>,
+) => {
+  return (props: P) => (
+    <ErrorBoundary>
+      <Component {...props} />
+    </ErrorBoundary>
+  );
+};
+
 const LazyFogCutter = withSuspense(FogCutterScreen);
 const LazyPomodoro = withSuspense(PomodoroScreen);
 const LazyBrainDump = withSuspense(BrainDumpScreen);
@@ -79,15 +90,28 @@ const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 const LazyChat = withSuspense(ChatScreen);
 const LazyInbox = withSuspense(InboxScreen);
 
+const SafeHomeScreen = withErrorBoundary(HomeScreen);
+const SafeIgniteScreen = withErrorBoundary(IgniteScreen);
+const SafeLazyFogCutter = withErrorBoundary(LazyFogCutter);
+const SafeLazyPomodoro = withErrorBoundary(LazyPomodoro);
+const SafeLazyBrainDump = withErrorBoundary(LazyBrainDump);
+const SafeLazyCalendar = withErrorBoundary(LazyCalendar);
+const SafeLazyAnchor = withErrorBoundary(LazyAnchor);
+const SafeLazyCheckIn = withErrorBoundary(LazyCheckIn);
+const SafeLazyCBTGuide = withErrorBoundary(LazyCBTGuide);
+const SafeLazyDiagnostics = withErrorBoundary(LazyDiagnostics);
+const SafeLazyChat = withErrorBoundary(LazyChat);
+const SafeLazyInbox = withErrorBoundary(LazyInbox);
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name={ROUTES.HOME_MAIN} component={HomeScreen} />
-    <Stack.Screen name={ROUTES.CHECK_IN} component={LazyCheckIn} />
-    <Stack.Screen name={ROUTES.CBT_GUIDE} component={LazyCBTGuide} />
-    <Stack.Screen name={ROUTES.DIAGNOSTICS} component={LazyDiagnostics} />
+    <Stack.Screen name={ROUTES.HOME_MAIN} component={SafeHomeScreen} />
+    <Stack.Screen name={ROUTES.CHECK_IN} component={SafeLazyCheckIn} />
+    <Stack.Screen name={ROUTES.CBT_GUIDE} component={SafeLazyCBTGuide} />
+    <Stack.Screen name={ROUTES.DIAGNOSTICS} component={SafeLazyDiagnostics} />
   </Stack.Navigator>
 );
 
@@ -138,22 +162,22 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name={ROUTES.FOCUS}
-        component={IgniteScreen}
+        component={SafeIgniteScreen}
         options={{ tabBarIcon: FocusTabIcon }}
       />
       <Tab.Screen
         name={ROUTES.TASKS}
-        component={LazyBrainDump}
+        component={SafeLazyBrainDump}
         options={{ tabBarIcon: TasksTabIcon }}
       />
       <Tab.Screen
         name={ROUTES.CALENDAR}
-        component={LazyCalendar}
+        component={SafeLazyCalendar}
         options={{ tabBarIcon: CalendarTabIcon }}
       />
       <Tab.Screen
         name={ROUTES.CHAT}
-        component={LazyChat}
+        component={SafeLazyChat}
         options={{ tabBarIcon: ChatTabIcon }}
       />
     </Tab.Navigator>
@@ -200,12 +224,12 @@ const styles = StyleSheet.create({
 const AppNavigatorContent = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name={ROUTES.MAIN} component={TabNavigatorWithBubble} />
-    <Stack.Screen name={ROUTES.FOG_CUTTER} component={LazyFogCutter} />
-    <Stack.Screen name={ROUTES.POMODORO} component={LazyPomodoro} />
-    <Stack.Screen name={ROUTES.ANCHOR} component={LazyAnchor} />
+    <Stack.Screen name={ROUTES.FOG_CUTTER} component={SafeLazyFogCutter} />
+    <Stack.Screen name={ROUTES.POMODORO} component={SafeLazyPomodoro} />
+    <Stack.Screen name={ROUTES.ANCHOR} component={SafeLazyAnchor} />
     <Stack.Screen
       name={ROUTES.INBOX}
-      component={LazyInbox}
+      component={SafeLazyInbox}
       options={{ presentation: 'modal' }}
     />
   </Stack.Navigator>

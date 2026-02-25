@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import RetentionService, {
-    ReentryPromptLevel,
+  ReentryPromptLevel,
 } from '../services/RetentionService';
 
 /**
@@ -11,23 +11,22 @@ import RetentionService, {
  * and potential re-entry prompt level.
  */
 export function useRetention() {
-    const [streak, setStreak] = useState(0);
-    const [reentryLevel, setReentryLevel] =
-        useState<ReentryPromptLevel>('none');
+  const [streak, setStreak] = useState(0);
+  const [reentryLevel, setReentryLevel] = useState<ReentryPromptLevel>('none');
 
-    useEffect(() => {
-        const checkState = async () => {
-            const currentStreak = await RetentionService.markAppUse();
-            const level = await RetentionService.getReentryPromptLevel();
-            setStreak(currentStreak);
-            setReentryLevel(level);
-        };
-
-        checkState();
-    }, []);
-
-    return {
-        streak,
-        reentryLevel,
+  useEffect(() => {
+    const checkState = async () => {
+      const currentStreak = await RetentionService.markAppUse();
+      const level = await RetentionService.getReentryPromptLevel();
+      setStreak(currentStreak);
+      setReentryLevel(level);
     };
+
+    checkState();
+  }, []);
+
+  return {
+    streak,
+    reentryLevel,
+  };
 }

@@ -19,6 +19,14 @@ jest.mock('../src/services/ActivationService', () => ({
   },
 }));
 
+// Mock CheckInInsightService to prevent async fetch calls
+jest.mock('../src/services/CheckInInsightService', () => ({
+  __esModule: true,
+  default: {
+    getPersonalizedInsight: jest.fn().mockResolvedValue(null),
+  },
+}));
+
 jest.mock('../src/components/ui/LinearButton', () => ({
   LinearButton: ({
     title,
@@ -38,8 +46,12 @@ jest.mock('../src/components/ui/LinearButton', () => ({
 
 describe('CheckInScreen', () => {
   beforeEach(() => {
-    mockRequestPendingStart.mockReset();
+    jest.clearAllMocks();
     mockRequestPendingStart.mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('maps high readiness to focus ignite action', () => {

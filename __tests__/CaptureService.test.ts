@@ -43,7 +43,16 @@ function makeItem(overrides: Partial<CaptureItem> = {}): CaptureItem {
 // ============================================================================
 
 describe('CaptureService', () => {
-  let mockState: any;
+  let mockState: {
+    _hasHydrated: boolean;
+    items: CaptureItem[];
+    getUnreviewedCount: jest.Mock;
+    getItemsByStatus: jest.Mock;
+    addItem: jest.Mock;
+    updateItem: jest.Mock;
+    deleteItem: jest.Mock;
+    clearDiscarded: jest.Mock;
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();

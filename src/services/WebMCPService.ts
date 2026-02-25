@@ -50,7 +50,9 @@ class WebMCPService {
     }
 
     const registerTools = () => {
-      if (this.isInitialized) return;
+      if (this.isInitialized) {
+        return;
+      }
       const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
         .navigator?.modelContext;
       if (!modelContext?.registerTool) {

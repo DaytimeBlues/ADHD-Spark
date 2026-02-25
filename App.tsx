@@ -65,8 +65,8 @@ const App = () => {
 
         if (!hasGoogleConfig && Platform.OS !== 'web') {
           console.warn(
-            '[Google Config] Missing REACT_APP_GOOGLE_WEB_CLIENT_ID or REACT_APP_GOOGLE_IOS_CLIENT_ID. ' +
-            'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+            '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. ' +
+              'Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
           );
         }
 

@@ -1,6 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import useTimer from '../src/hooks/useTimer';
 import { useTimerStore } from '../src/store/useTimerStore';
+import { TimerService } from '../src/services/TimerService';
 
 // Reset timer store state between tests to prevent cross-test leakage
 const resetTimerStore = () => {
@@ -12,6 +13,7 @@ const resetTimerStore = () => {
     durationSeconds: 0,
     isWorking: true,
     sessions: 0,
+    completedAt: null,
   });
 };
 
@@ -19,9 +21,11 @@ describe('useTimer', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     resetTimerStore();
+    TimerService.stop();
   });
 
   afterEach(() => {
+    TimerService.stop();
     jest.useRealTimers();
   });
 
@@ -79,23 +83,31 @@ describe('useTimer', () => {
     expect(result.current.formattedTime).toBe('01:05');
   });
 
-  it('supports autoStart and completion state', () => {
+  it('supports autoStart and completion state', async () => {
     const onComplete = jest.fn();
     const { result } = renderHook(() =>
       useTimer({ initialTime: 1, autoStart: true, onComplete }),
     );
 
-    expect(result.current.isRunning).toBe(true);
-
-    act(() => {
-      jest.advanceTimersByTime(1000);
+    // Wait for auto-start to complete
+    await waitFor(() => {
+      expect(result.current.isRunning).toBe(true);
     });
 
-    // Timer should have ticked down and triggered completion
-    expect(result.current.timeLeft).toBe(0);
-    // hasCompleted is true when timer is active, remainingSeconds is 0, and not running
-    // After completion, the timer may no longer be "active" so hasCompleted may be false
-    // The key behavior is that onComplete was called and timeLeft is 0
+    // Start the TimerService to trigger ticks
+    TimerService.start();
+
+    // Advance timers to trigger completion
+    act(() => {
+      jest.advanceTimersByTime(1100);
+    });
+
+    // Wait for the completion to be processed
+    await waitFor(() => {
+      expect(result.current.timeLeft).toBe(0);
+    });
+
+    // The onComplete callback should have been called via the store's completedAt mechanism
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
@@ -124,12 +136,116 @@ describe('useTimer', () => {
       result.current.start();
     });
 
+    // Start the TimerService to trigger ticks
+    TimerService.start();
+
     act(() => {
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(1100);
     });
 
     await waitFor(() => {
       expect(onComplete).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('resumes when start is called on an active paused timer', () => {
+    const { result } = renderHook(() => useTimer({ initialTime: 5 }));
+
+    act(() => {
+      result.current.start();
+    });
+
+    act(() => {
+      result.current.pause();
+    });
+
+    expect(result.current.isRunning).toBe(false);
+
+    act(() => {
+      result.current.start();
+    });
+
+    expect(result.current.isRunning).toBe(true);
+  });
+
+  it('uses resume path when paused mid-session', () => {
+    const { result } = renderHook(() => useTimer({ initialTime: 5 }));
+
+    act(() => {
+      result.current.start();
+      TimerService.start();
+      jest.advanceTimersByTime(1100);
+    });
+
+    const beforePause = result.current.timeLeft;
+
+    act(() => {
+      result.current.pause();
+    });
+
+    act(() => {
+      result.current.start();
+    });
+
+    expect(result.current.isRunning).toBe(true);
+    expect(result.current.timeLeft).toBe(beforePause);
+  });
+
+  it('registers and cleans up E2E timer controls for active timer', () => {
+    const globalRecord = globalThis as unknown as Record<string, unknown>;
+    globalRecord.__SPARK_E2E_TEST_MODE__ = true;
+
+    const { result, unmount } = renderHook(() =>
+      useTimer({ id: 'pomodoro', initialTime: 10 }),
+    );
+
+    act(() => {
+      result.current.start();
+    });
+
+    const controls = globalRecord.__SPARK_E2E_TIMER_CONTROLS__ as
+      | {
+          complete: () => void;
+          fastForward: (seconds: number) => void;
+        }
+      | undefined;
+
+    expect(controls).toBeTruthy();
+
+    act(() => {
+      controls?.fastForward(3);
+    });
+
+    expect(result.current.timeLeft).toBe(7);
+
+    act(() => {
+      controls?.fastForward(0);
+      controls?.fastForward(-4);
+      controls?.fastForward(Number.NaN);
+    });
+
+    expect(result.current.timeLeft).toBe(7);
+
+    act(() => {
+      controls?.complete();
+    });
+
+    expect(result.current.timeLeft).toBe(0);
+    expect(result.current.isRunning).toBe(false);
+
+    unmount();
+    expect(globalRecord.__SPARK_E2E_TIMER_CONTROLS__).toBeUndefined();
+    delete globalRecord.__SPARK_E2E_TEST_MODE__;
+  });
+
+  it('does not set E2E controls when timer is not active', () => {
+    const globalRecord = globalThis as unknown as Record<string, unknown>;
+    globalRecord.__SPARK_E2E_TEST_MODE__ = true;
+    useTimerStore.setState({ activeMode: 'ignite', isRunning: true });
+
+    renderHook(() => useTimer({ id: 'pomodoro', initialTime: 10 }));
+
+    expect(globalRecord.__SPARK_E2E_TIMER_CONTROLS__).toBeUndefined();
+    delete globalRecord.__SPARK_E2E_TEST_MODE__;
   });
 });

@@ -191,8 +191,8 @@ async function fetchWithRetry(
       if (!response.ok) {
         const serverMsg =
           payload &&
-            typeof payload === 'object' &&
-            typeof (payload as { error?: unknown }).error === 'string'
+          typeof payload === 'object' &&
+          typeof (payload as { error?: unknown }).error === 'string'
             ? (payload as { error: string }).error
             : 'Unable to sort items right now.';
         throw new AiSortError('AI_SERVER_ERROR', serverMsg);

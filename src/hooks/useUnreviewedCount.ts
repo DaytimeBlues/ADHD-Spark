@@ -8,17 +8,18 @@ import CaptureService from '../services/CaptureService';
  * Optimizes UI by centralizing the count update logic.
  */
 export function useUnreviewedCount() {
-    const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    useEffect(() => {
-        // Initial fetch
-        CaptureService.getUnreviewedCount().then(setCount);
+  useEffect(() => {
+    // Initial fetch
+    setCount(CaptureService.getUnreviewedCount());
 
-        // Subscribe to updates
-        return CaptureService.subscribe(() => {
-            CaptureService.getUnreviewedCount().then(setCount);
-        });
-    }, []);
+    // Subscribe to updates
+    const unsubscribe = CaptureService.subscribe((newCount) => {
+      setCount(newCount);
+    });
+    return () => unsubscribe();
+  }, []);
 
-    return count;
+  return count;
 }

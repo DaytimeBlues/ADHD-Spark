@@ -759,12 +759,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
       {/* Error banner */}
       {saveError !== null && (
-        <View
-          style={[
-            styles.successBanner,
-            { backgroundColor: 'rgba(251, 113, 133, 0.15)' },
-          ]}
-        >
+        <View style={[styles.successBanner, styles.errorBanner]}>
           <Text style={[styles.successText, { color: C.rose }]}>
             {saveError}
           </Text>
@@ -1116,6 +1111,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     backgroundColor: 'rgba(45, 212, 191, 0.15)',
+  },
+
+  errorBanner: {
+    backgroundColor: 'rgba(251, 113, 133, 0.15)',
   },
 
   successText: {

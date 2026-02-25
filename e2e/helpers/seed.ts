@@ -110,7 +110,10 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
 
 export const enableE2ETestMode = async (page: Page): Promise<void> => {
   await page.addInitScript(() => {
-    (window as any).process = { env: {} };
+    const windowWithProcess = window as Window & {
+      process?: { env: Record<string, string> };
+    };
+    windowWithProcess.process = { env: {} };
     (window as unknown as Record<string, unknown>).__SPARK_E2E_TEST_MODE__ =
       true;
   });

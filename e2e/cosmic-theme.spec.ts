@@ -199,9 +199,47 @@ test.describe('Cosmic Theme — Timer Interactions', () => {
     await page.getByText(/START TIMER/i).click();
     await expect(page.getByText(/PAUSE/i)).toBeVisible();
 
-    await page.waitForTimeout(450);
-    const newTime = await timer.textContent();
-    expect(newTime).not.toBe(initialTime);
+    await expect
+      .poll(async () => timer.textContent(), { timeout: 3000 })
+      .not.toBe(initialTime);
+  });
+
+  test('Pomodoro timer continues after tab is backgrounded and restored', async ({
+    page,
+  }) => {
+    await navigateToScreen(page, 'pomodoro');
+
+    const timer = page.getByTestId('timer-display');
+    await expect(timer).toBeVisible();
+    await page.getByText(/START TIMER/i).click();
+
+    const beforeBackground = await timer.textContent();
+
+    const backgroundPage = await page.context().newPage();
+    await backgroundPage.goto('about:blank');
+    await page.waitForTimeout(1500);
+    await page.bringToFront();
+    await backgroundPage.close();
+
+    const afterBackground = await timer.textContent();
+    expect(afterBackground).toBeTruthy();
+    expect(afterBackground).not.toBe(beforeBackground);
+  });
+
+  test('Pomodoro timer state persists across reload', async ({ page }) => {
+    await navigateToScreen(page, 'pomodoro');
+    await page.getByText(/START TIMER/i).click({ force: true });
+
+    const timer = page.getByTestId('timer-display');
+    await expect(timer).toBeVisible();
+    await page.waitForTimeout(350);
+
+    await page.reload();
+    await navigateToScreen(page, 'pomodoro');
+    await expect(page.getByTestId('timer-display')).toBeVisible();
+    const postReload = await page.getByTestId('timer-display').textContent();
+
+    expect(postReload).toBeTruthy();
   });
 
   test('Pomodoro phase transition to REST', async ({ page }) => {

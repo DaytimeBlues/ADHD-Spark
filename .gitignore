@@ -35,6 +35,8 @@ playwright-report/
 coverage/
 pw-log*.txt
 lint-output*.txt
+*_err.txt
+webpack-*.log
 jest-results.json
 test-results.json
 android/build_*.log

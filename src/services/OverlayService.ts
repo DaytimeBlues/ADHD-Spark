@@ -39,9 +39,9 @@ export type OverlayEventPayload = {
 
 const overlayEventEmitterModule = OverlayModule
   ? {
-    addListener: OverlayModule.addListener ?? (() => { }),
-    removeListeners: OverlayModule.removeListeners ?? (() => { }),
-  }
+      addListener: OverlayModule.addListener ?? (() => {}),
+      removeListeners: OverlayModule.removeListeners ?? (() => {}),
+    }
   : null;
 
 // Create NativeEventEmitter only on native platforms with a valid module

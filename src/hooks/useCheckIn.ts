@@ -8,18 +8,18 @@ import { CheckInService } from '../services/CheckInService';
  * Provides real-time updates on whether a check-in is pending.
  */
 export function useCheckIn() {
-    const [isPending, setIsPending] = useState(CheckInService.isPending());
+  const [isPending, setIsPending] = useState(CheckInService.isPending());
 
-    useEffect(() => {
-        return CheckInService.subscribe((pending) => {
-            setIsPending(pending);
-        });
-    }, []);
+  useEffect(() => {
+    return CheckInService.subscribe((pending) => {
+      setIsPending(pending);
+    });
+  }, []);
 
-    return {
-        isPending,
-        setPending: (status: boolean) => CheckInService.setPending(status),
-        start: (interval?: number) => CheckInService.start(interval),
-        stop: () => CheckInService.stop(),
-    };
+  return {
+    isPending,
+    setPending: (status: boolean) => CheckInService.setPending(status),
+    start: (interval?: number) => CheckInService.start(interval),
+    stop: () => CheckInService.stop(),
+  };
 }

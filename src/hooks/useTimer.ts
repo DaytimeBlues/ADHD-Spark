@@ -9,10 +9,7 @@ interface UseTimerOptions {
   autoStart?: boolean;
 }
 
-const getGlobalRecord = (): Record<string, unknown> | null => {
-  if (typeof globalThis === 'undefined') {
-    return null;
-  }
+const getGlobalRecord = (): Record<string, unknown> => {
   return globalThis as unknown as Record<string, unknown>;
 };
 
@@ -60,9 +57,6 @@ const useTimer = ({
     }
 
     const globalRecord = getGlobalRecord();
-    if (!globalRecord) {
-      return;
-    }
 
     globalRecord.__SPARK_E2E_TIMER_CONTROLS__ = {
       complete: () => {
