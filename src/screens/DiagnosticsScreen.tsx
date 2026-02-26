@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   AccessibilityInfo,
@@ -12,28 +12,29 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-} from 'react-native';
-import { Tokens, THEME_METADATA } from '../theme/tokens';
-import { useTheme } from '../theme/ThemeProvider';
-import { config } from '../config';
-import StorageService from '../services/StorageService';
-import { CosmicBackground, GlowCard } from '../ui/cosmic';
+} from "react-native";
+import { Tokens, THEME_METADATA } from "../theme/tokens";
+import { useTheme } from "../theme/ThemeProvider";
+import { config } from "../config";
+import StorageService from "../services/StorageService";
+import { GoogleTasksSyncService } from "../services/PlaudService";
+import { CosmicBackground, GlowCard } from "../ui/cosmic";
 
 interface DiagnosticEntry {
   label: string;
   value: string;
-  status: 'ok' | 'warning' | 'error' | 'info';
+  status: "ok" | "warning" | "error" | "info";
 }
 
 type BackupPayload = {
-  schema: 'spark-backup-v1';
+  schema: "spark-backup-v1";
   exportedAt: string;
-  app: 'spark-adhd';
+  app: "spark-adhd";
   data: Record<string, string | null>;
 };
 
-const BACKUP_SCHEMA = 'spark-backup-v1' as const;
-const BACKUP_APP_ID = 'spark-adhd' as const;
+const BACKUP_SCHEMA = "spark-backup-v1" as const;
+const BACKUP_APP_ID = "spark-adhd" as const;
 
 type NavigationNode = {
   goBack: () => void;
@@ -43,11 +44,11 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const { variant, setVariant } = useTheme();
   const [diagnostics, setDiagnostics] = useState<DiagnosticEntry[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [backupJson, setBackupJson] = useState('');
+  const [backupJson, setBackupJson] = useState("");
   const [isBackupBusy, setIsBackupBusy] = useState(false);
-  const [backupStatus, setBackupStatus] = useState('');
-  const [importMode, setImportMode] = useState<'overwrite' | 'merge'>(
-    'overwrite',
+  const [backupStatus, setBackupStatus] = useState("");
+  const [importMode, setImportMode] = useState<"overwrite" | "merge">(
+    "overwrite",
   );
   const [lastBackupExportAt, setLastBackupExportAt] = useState<string | null>(
     null,
@@ -63,42 +64,42 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const parseBackupPayload = (
     value: unknown,
   ): { payload: BackupPayload } | { error: string } => {
-    if (!value || typeof value !== 'object') {
-      return { error: 'Backup JSON must be an object.' };
+    if (!value || typeof value !== "object") {
+      return { error: "Backup JSON must be an object." };
     }
 
     const payload = value as Partial<BackupPayload>;
     if (payload.schema !== BACKUP_SCHEMA) {
-      return { error: 'Unsupported backup schema.' };
+      return { error: "Unsupported backup schema." };
     }
 
     if (payload.app !== BACKUP_APP_ID) {
-      return { error: 'Backup is not from Spark ADHD.' };
+      return { error: "Backup is not from Spark ADHD." };
     }
 
     if (
-      typeof payload.exportedAt !== 'string' ||
+      typeof payload.exportedAt !== "string" ||
       Number.isNaN(Date.parse(payload.exportedAt))
     ) {
-      return { error: 'Backup exportedAt timestamp is invalid.' };
+      return { error: "Backup exportedAt timestamp is invalid." };
     }
 
-    if (!payload.data || typeof payload.data !== 'object') {
-      return { error: 'Backup data payload is missing.' };
+    if (!payload.data || typeof payload.data !== "object") {
+      return { error: "Backup data payload is missing." };
     }
 
     const hasUnknownKeys = Object.keys(payload.data).some(
       (key) => !exportableKeys.includes(key),
     );
     if (hasUnknownKeys) {
-      return { error: 'Backup data includes unsupported keys.' };
+      return { error: "Backup data includes unsupported keys." };
     }
 
     const hasInvalidValue = Object.values(payload.data).some((entry) => {
-      return entry !== null && typeof entry !== 'string';
+      return entry !== null && typeof entry !== "string";
     });
     if (hasInvalidValue) {
-      return { error: 'Backup data values must be string or null.' };
+      return { error: "Backup data values must be string or null." };
     }
 
     return { payload: payload as BackupPayload };
@@ -114,11 +115,11 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const applyImportedBackup = async (payload: BackupPayload) => {
     setIsBackupBusy(true);
     try {
-      if (importMode === 'overwrite') {
+      if (importMode === "overwrite") {
         await Promise.all(
           exportableKeys.map(async (key) => {
             const value = payload.data[key];
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
               await StorageService.set(key, value);
             } else {
               await StorageService.remove(key);
@@ -128,7 +129,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       } else {
         await Promise.all(
           Object.entries(payload.data).map(async ([key, value]) => {
-            if (exportableKeys.includes(key) && typeof value === 'string') {
+            if (exportableKeys.includes(key) && typeof value === "string") {
               await StorageService.set(key, value);
             }
           }),
@@ -141,7 +142,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       await loadDiagnostics();
     } catch (error) {
       announceBackupStatus(
-        error instanceof Error ? error.message : 'Import failed unexpectedly.',
+        error instanceof Error ? error.message : "Import failed unexpectedly.",
       );
     } finally {
       setIsBackupBusy(false);
@@ -179,17 +180,17 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
       if (clipboardModule?.setString) {
         clipboardModule.setString(json);
-        announceBackupStatus('Backup exported and copied to clipboard.');
+        announceBackupStatus("Backup exported and copied to clipboard.");
       } else {
         await Share.share({
-          title: 'Spark backup JSON',
+          title: "Spark backup JSON",
           message: json,
         });
-        announceBackupStatus('Backup exported. Shared via system dialog.');
+        announceBackupStatus("Backup exported. Shared via system dialog.");
       }
     } catch (error) {
       announceBackupStatus(
-        error instanceof Error ? error.message : 'Export failed unexpectedly.',
+        error instanceof Error ? error.message : "Export failed unexpectedly.",
       );
     } finally {
       setIsBackupBusy(false);
@@ -198,7 +199,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const handleImportBackup = async () => {
     if (!backupJson.trim()) {
-      announceBackupStatus('Paste backup JSON before importing.');
+      announceBackupStatus("Paste backup JSON before importing.");
       return;
     }
 
@@ -206,37 +207,37 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     try {
       parsed = JSON.parse(backupJson);
     } catch {
-      announceBackupStatus('Invalid JSON. Import canceled.');
+      announceBackupStatus("Invalid JSON. Import canceled.");
       return;
     }
 
     const parsedPayloadResult = parseBackupPayload(parsed);
-    if ('error' in parsedPayloadResult) {
+    if ("error" in parsedPayloadResult) {
       announceBackupStatus(`${parsedPayloadResult.error} Import canceled.`);
       return;
     }
 
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       await applyImportedBackup(parsedPayloadResult.payload);
       return;
     }
 
     Alert.alert(
-      'Import backup?',
-      importMode === 'overwrite'
-        ? 'This overwrites local app data for tracked keys. Continue?'
-        : 'This merges backup data into local app data. Continue?',
+      "Import backup?",
+      importMode === "overwrite"
+        ? "This overwrites local app data for tracked keys. Continue?"
+        : "This merges backup data into local app data. Continue?",
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: "Cancel", style: "cancel" },
         {
-          text: 'Import',
-          style: 'destructive',
+          text: "Import",
+          style: "destructive",
           onPress: () => {
             applyImportedBackup(parsedPayloadResult.payload).catch((error) => {
               announceBackupStatus(
                 error instanceof Error
                   ? error.message
-                  : 'Import failed unexpectedly.',
+                  : "Import failed unexpectedly.",
               );
             });
           },
@@ -249,7 +250,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const handleImportBackupPress = () => {
     handleImportBackup().catch((error) => {
       announceBackupStatus(
-        error instanceof Error ? error.message : 'Import failed unexpectedly.',
+        error instanceof Error ? error.message : "Import failed unexpectedly.",
       );
     });
   };
@@ -261,9 +262,9 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
     // Platform check
     entries.push({
-      label: 'Platform',
+      label: "Platform",
       value: Platform.OS,
-      status: 'info',
+      status: "info",
     });
 
     // Google config check
@@ -272,98 +273,74 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     const hasAnyConfig = hasWebClientId || hasIosClientId;
 
     entries.push({
-      label: 'Google Web Client ID',
-      value: hasWebClientId ? 'Configured' : 'Missing',
-      status: hasWebClientId ? 'ok' : 'warning',
+      label: "Google Web Client ID",
+      value: hasWebClientId ? "Configured" : "Missing",
+      status: hasWebClientId ? "ok" : "warning",
     });
 
     entries.push({
-      label: 'Google iOS Client ID',
-      value: hasIosClientId ? 'Configured' : 'Missing',
-      status: hasIosClientId ? 'ok' : 'warning',
+      label: "Google iOS Client ID",
+      value: hasIosClientId ? "Configured" : "Missing",
+      status: hasIosClientId ? "ok" : "warning",
     });
 
     // Auth status
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== "web") {
       try {
         const canAttemptAuth = hasAnyConfig;
         entries.push({
-          label: 'Can Attempt Auth',
-          value: canAttemptAuth ? 'Yes' : 'No (missing client IDs)',
-          status: canAttemptAuth ? 'ok' : 'error',
+          label: "Can Attempt Auth",
+          value: canAttemptAuth ? "Yes" : "No (missing client IDs)",
+          status: canAttemptAuth ? "ok" : "error",
         });
 
-        // Try to get scopes (requires native module)
-        try {
-          const googleModule = require('@react-native-google-signin/google-signin');
-          if (googleModule?.GoogleSignin) {
-            try {
-              const user = await googleModule.GoogleSignin.getCurrentUser();
-              if (user?.scopes) {
-                const hasTasksScope = user.scopes.includes(
-                  'https://www.googleapis.com/auth/tasks',
-                );
-                const hasCalendarScope = user.scopes.includes(
-                  'https://www.googleapis.com/auth/calendar.events',
-                );
+        const scopes = await GoogleTasksSyncService.getCurrentUserScopes();
+        if (scopes) {
+          const hasTasksScope = scopes.includes(
+            "https://www.googleapis.com/auth/tasks",
+          );
+          const hasCalendarScope = scopes.includes(
+            "https://www.googleapis.com/auth/calendar.events",
+          );
 
-                entries.push({
-                  label: 'Google Tasks Scope',
-                  value: hasTasksScope ? 'Granted' : 'Not granted',
-                  status: hasTasksScope ? 'ok' : 'warning',
-                });
-
-                entries.push({
-                  label: 'Google Calendar Scope',
-                  value: hasCalendarScope ? 'Granted' : 'Not granted',
-                  status: hasCalendarScope ? 'ok' : 'warning',
-                });
-
-                entries.push({
-                  label: 'Signed In User',
-                  value: user.user?.email || 'Unknown',
-                  status: 'info',
-                });
-              } else {
-                entries.push({
-                  label: 'Google Auth Status',
-                  value: 'Not signed in',
-                  status: 'warning',
-                });
-              }
-            } catch (error) {
-              entries.push({
-                label: 'Google Auth Status',
-                value: 'Not signed in',
-                status: 'warning',
-              });
-            }
-          } else {
-            entries.push({
-              label: 'Google Sign-In Module',
-              value: 'Not available',
-              status: 'error',
-            });
-          }
-        } catch {
           entries.push({
-            label: 'Google Sign-In Module',
-            value: 'Not installed',
-            status: 'error',
+            label: "Google Tasks Scope",
+            value: hasTasksScope ? "Granted" : "Not granted",
+            status: hasTasksScope ? "ok" : "warning",
+          });
+
+          entries.push({
+            label: "Google Calendar Scope",
+            value: hasCalendarScope ? "Granted" : "Not granted",
+            status: hasCalendarScope ? "ok" : "warning",
+          });
+
+          const signedInEmail =
+            await GoogleTasksSyncService.getCurrentUserEmail();
+          entries.push({
+            label: "Signed In User",
+            value: signedInEmail || "Unknown",
+            status: "info",
+          });
+        } else {
+          entries.push({
+            label: "Google Auth Status",
+            value: "Not signed in",
+            status: "warning",
           });
         }
       } catch (error) {
         entries.push({
-          label: 'Auth Check Error',
-          value: error instanceof Error ? error.message : 'Unknown error',
-          status: 'error',
+          label: "Auth Check Error",
+          value: error instanceof Error ? error.message : "Unknown error",
+          status: "error",
         });
       }
     } else {
       entries.push({
-        label: 'Google Sync',
-        value: 'Not available on web',
-        status: 'info',
+        label: "Google Sync",
+        value: "Not available on web",
+        status: "info",
       });
     }
 
@@ -377,22 +354,22 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
         const now = new Date();
         const ageMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
         entries.push({
-          label: 'Last Sync',
+          label: "Last Sync",
           value: `${ageMinutes} minutes ago (${date.toLocaleString()})`,
-          status: ageMinutes < 30 ? 'ok' : 'warning',
+          status: ageMinutes < 30 ? "ok" : "warning",
         });
       } else {
         entries.push({
-          label: 'Last Sync',
-          value: 'Never',
-          status: 'info',
+          label: "Last Sync",
+          value: "Never",
+          status: "info",
         });
       }
     } catch {
       entries.push({
-        label: 'Last Sync',
-        value: 'Error reading timestamp',
-        status: 'error',
+        label: "Last Sync",
+        value: "Error reading timestamp",
+        status: "error",
       });
     }
 
@@ -403,15 +380,15 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       );
       const count = Array.isArray(fingerprints) ? fingerprints.length : 0;
       entries.push({
-        label: 'Exported Items (Dedupe Cache)',
+        label: "Exported Items (Dedupe Cache)",
         value: `${count}`,
-        status: 'info',
+        status: "info",
       });
     } catch {
       entries.push({
-        label: 'Exported Items',
-        value: 'Error reading cache',
-        status: 'error',
+        label: "Exported Items",
+        value: "Error reading cache",
+        status: "error",
       });
     }
 
@@ -427,31 +404,31 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     loadDiagnostics();
   };
 
-  const getStatusColor = (status: DiagnosticEntry['status']) => {
+  const getStatusColor = (status: DiagnosticEntry["status"]) => {
     switch (status) {
-      case 'ok':
+      case "ok":
         return Tokens.colors.success.main;
-      case 'warning':
+      case "warning":
         return Tokens.colors.warning.main;
-      case 'error':
+      case "error":
         return Tokens.colors.error.main;
-      case 'info':
+      case "info":
       default:
         return Tokens.colors.text.secondary;
     }
   };
 
-  const getStatusIndicator = (status: DiagnosticEntry['status']) => {
+  const getStatusIndicator = (status: DiagnosticEntry["status"]) => {
     switch (status) {
-      case 'ok':
-        return '✓';
-      case 'warning':
-        return '⚠';
-      case 'error':
-        return '✗';
-      case 'info':
+      case "ok":
+        return "✓";
+      case "warning":
+        return "⚠";
+      case "error":
+        return "✗";
+      case "info":
       default:
-        return '●';
+        return "●";
     }
   };
 
@@ -483,7 +460,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   isRefreshing && styles.refreshButtonTextDisabled,
                 ]}
               >
-                {isRefreshing ? '...' : '↻'}
+                {isRefreshing ? "..." : "↻"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -551,18 +528,18 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                 device state.
               </Text>
               <Text style={styles.backupMetaText}>
-                LAST EXPORT:{' '}
+                LAST EXPORT:{" "}
                 {lastBackupExportAt
                   ? new Date(lastBackupExportAt).toLocaleString()
-                  : 'NEVER'}
+                  : "NEVER"}
               </Text>
 
               <View style={styles.modeSelectorContainer}>
                 <TouchableOpacity
-                  onPress={() => setImportMode('overwrite')}
+                  onPress={() => setImportMode("overwrite")}
                   style={[
                     styles.modeButton,
-                    importMode === 'overwrite' && styles.modeButtonActive,
+                    importMode === "overwrite" && styles.modeButtonActive,
                   ]}
                   accessibilityRole="button"
                   accessibilityLabel="Set import mode to overwrite"
@@ -571,17 +548,17 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   <Text
                     style={[
                       styles.modeButtonText,
-                      importMode === 'overwrite' && styles.modeButtonTextActive,
+                      importMode === "overwrite" && styles.modeButtonTextActive,
                     ]}
                   >
                     OVERWRITE
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => setImportMode('merge')}
+                  onPress={() => setImportMode("merge")}
                   style={[
                     styles.modeButton,
-                    importMode === 'merge' && styles.modeButtonActive,
+                    importMode === "merge" && styles.modeButtonActive,
                   ]}
                   accessibilityRole="button"
                   accessibilityLabel="Set import mode to merge"
@@ -590,7 +567,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   <Text
                     style={[
                       styles.modeButtonText,
-                      importMode === 'merge' && styles.modeButtonTextActive,
+                      importMode === "merge" && styles.modeButtonTextActive,
                     ]}
                   >
                     MERGE
@@ -650,12 +627,12 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>APPEARANCE</Text>
               <GlowCard
-                glow={variant === 'linear' ? 'soft' : 'none'}
-                onPress={() => setVariant('linear')}
+                glow={variant === "linear" ? "soft" : "none"}
+                onPress={() => setVariant("linear")}
                 style={styles.themeOption}
                 accessibilityLabel="Select Linear theme"
                 accessibilityRole="button"
-                accessibilityState={{ selected: variant === 'linear' }}
+                accessibilityState={{ selected: variant === "linear" }}
               >
                 <View style={styles.themeOptionContent}>
                   <View style={styles.themePreview}>
@@ -687,7 +664,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                       {THEME_METADATA.linear.description}
                     </Text>
                   </View>
-                  {variant === 'linear' && (
+                  {variant === "linear" && (
                     <Text style={styles.checkmark}>✓</Text>
                   )}
                 </View>
@@ -696,12 +673,12 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
               <View style={styles.spacer8} />
 
               <GlowCard
-                glow={variant === 'cosmic' ? 'soft' : 'none'}
-                onPress={() => setVariant('cosmic')}
+                glow={variant === "cosmic" ? "soft" : "none"}
+                onPress={() => setVariant("cosmic")}
                 style={styles.themeOption}
                 accessibilityLabel="Select Cosmic theme"
                 accessibilityRole="button"
-                accessibilityState={{ selected: variant === 'cosmic' }}
+                accessibilityState={{ selected: variant === "cosmic" }}
               >
                 <View style={styles.themeOptionContent}>
                   <View style={styles.themePreview}>
@@ -733,7 +710,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
                       {THEME_METADATA.cosmic.description}
                     </Text>
                   </View>
-                  {variant === 'cosmic' && (
+                  {variant === "cosmic" && (
                     <Text style={styles.checkmark}>✓</Text>
                   )}
                 </View>
@@ -756,9 +733,9 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darkest,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[2],
     borderBottomWidth: 1,
@@ -771,14 +748,14 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Tokens.colors.indigo.primary,
     letterSpacing: 0.5,
   },
   title: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Tokens.colors.text.primary,
     letterSpacing: 1,
   },
@@ -789,7 +766,7 @@ const styles = StyleSheet.create({
   refreshButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Tokens.colors.indigo.primary,
   },
   refreshButtonTextDisabled: {
@@ -807,22 +784,22 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Tokens.colors.text.secondary,
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
   },
   diagRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     paddingVertical: Tokens.spacing[2],
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.borderSubtle,
   },
   diagLabelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   diagIndicator: {
@@ -840,8 +817,8 @@ const styles = StyleSheet.create({
   diagValue: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 11,
-    textAlign: 'right',
-    maxWidth: '50%',
+    textAlign: "right",
+    maxWidth: "50%",
   },
   instructionText: {
     fontFamily: Tokens.type.fontFamily.sans,
@@ -859,7 +836,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   backupActionsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Tokens.spacing[2],
     marginBottom: Tokens.spacing[2],
   },
@@ -869,8 +846,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
     backgroundColor: Tokens.colors.neutral.dark,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: Tokens.spacing[1],
     paddingHorizontal: Tokens.spacing[2],
   },
@@ -881,7 +858,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.primary,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 1,
   },
   backupInput: {
@@ -908,7 +885,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   modeSelectorContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: Tokens.spacing[2],
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
@@ -917,9 +894,9 @@ const styles = StyleSheet.create({
   modeButton: {
     flex: 1,
     paddingVertical: Tokens.spacing[1],
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
   },
   modeButtonActive: {
     backgroundColor: Tokens.colors.neutral.dark,
@@ -928,7 +905,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 10,
     color: Tokens.colors.text.secondary,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: 1,
   },
   modeButtonTextActive: {
@@ -938,8 +915,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   themeOptionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   themePreview: {
     marginRight: Tokens.spacing[4],
@@ -948,10 +925,10 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: "rgba(255, 255, 255, 0.1)",
   },
   themePreviewAccent: {
     width: 16,
@@ -964,7 +941,7 @@ const styles = StyleSheet.create({
   themeTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.base,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Tokens.colors.text.primary,
     marginBottom: 2,
   },
