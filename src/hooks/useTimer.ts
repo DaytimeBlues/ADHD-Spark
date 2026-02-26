@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useRef, useMemo } from "react";
-import { formatTime } from "../utils/helpers";
-import { useTimerStore, TimerMode } from "../store/useTimerStore";
+import { useEffect, useCallback, useRef, useMemo } from 'react';
+import { formatTime } from '../utils/helpers';
+import { useTimerStore, TimerMode } from '../store/useTimerStore';
 
 interface UseTimerOptions {
   id?: TimerMode | string;
@@ -19,7 +19,7 @@ const isE2ETestMode = (): boolean => {
 };
 
 const useTimer = ({
-  id = "pomodoro",
+  id = 'pomodoro',
   initialTime,
   onComplete,
   autoStart = false,
@@ -146,7 +146,7 @@ const useTimer = ({
       currentState.start(
         id as TimerMode,
         initialTime,
-        id === "pomodoro" ? true : undefined,
+        id === 'pomodoro' ? true : undefined,
       );
     }
   }, [id, initialTime]);

@@ -4,6 +4,8 @@
     "strict": true,
     "baseUrl": ".",
     "module": "esnext",
+    "skipLibCheck": true,
+    "incremental": true,
     "typeRoots": [
       "./types",
       "./node_modules/@types"
@@ -14,5 +16,5 @@
       ]
     }
   },
-  "exclude": ["e2e"]
+  "exclude": ["e2e", "node_modules", "dist", "coverage"]
 }

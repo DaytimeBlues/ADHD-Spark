@@ -141,15 +141,15 @@ export const CosmicBackground = memo(function CosmicBackground({
   const webStyle: WebViewStyle | null = useMemo(() => {
     return Platform.OS === 'web' && isCosmic && webBackgroundImage
       ? ({
-        backgroundImage: webBackgroundImage,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition:
-          variant === 'ridge'
-            ? 'center center, center center, center bottom'
-            : 'center',
-        backgroundSize:
-          variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
-      } as WebViewStyle)
+          backgroundImage: webBackgroundImage,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition:
+            variant === 'ridge'
+              ? 'center center, center center, center bottom'
+              : 'center',
+          backgroundSize:
+            variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
+        } as WebViewStyle)
       : null;
   }, [isCosmic, webBackgroundImage, variant]);
 

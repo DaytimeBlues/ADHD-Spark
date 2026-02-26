@@ -21,7 +21,9 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <View style={{ flex: 1, backgroundColor: 'darkred', padding: 20 }}>
-          <Text style={{ color: 'white', fontSize: 24, fontWeight: 'bold' }}>Application Crashed</Text>
+          <Text style={{ color: 'white', fontSize: 24, fontWeight: 'bold' }}>
+            Application Crashed
+          </Text>
           <ScrollView>
             <Text style={{ color: 'white', marginTop: 20 }}>
               {this.state.error?.toString()}

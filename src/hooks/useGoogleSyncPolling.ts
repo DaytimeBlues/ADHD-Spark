@@ -1,17 +1,17 @@
-import { useEffect, useRef } from "react";
-import { AppState, AppStateStatus, Platform } from "react-native";
-import { GoogleTasksSyncService } from "../services/GoogleTasksSyncService";
+import { useEffect, useRef } from 'react';
+import { AppState, AppStateStatus, Platform } from 'react-native';
+import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
 
 export const useGoogleSyncPolling = (): void => {
   const pollingStartedRef = useRef(false);
 
   useEffect(() => {
     const syncPollingForState = (nextState: AppStateStatus) => {
-      if (Platform.OS === "web") {
+      if (Platform.OS === 'web') {
         return;
       }
 
-      if (nextState === "active") {
+      if (nextState === 'active') {
         if (!pollingStartedRef.current) {
           GoogleTasksSyncService.startForegroundPolling();
           pollingStartedRef.current = true;
@@ -27,7 +27,7 @@ export const useGoogleSyncPolling = (): void => {
 
     syncPollingForState(AppState.currentState);
     const appStateSubscription = AppState.addEventListener(
-      "change",
+      'change',
       syncPollingForState,
     );
 

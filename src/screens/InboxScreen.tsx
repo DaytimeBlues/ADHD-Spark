@@ -369,85 +369,90 @@ const InboxScreen = (): JSX.Element => {
         style={[styles.container, isCosmic ? styles.bgCosmic : styles.bgLinear]}
         testID="inbox-screen"
       >
-      {/* Header */}
-      <View style={[styles.header, isCosmic && styles.headerCosmic]}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.closeBtn}
-          testID="inbox-close"
-          accessibilityLabel="Close inbox"
-        >
-          <Text
-            style={[styles.closeBtnText, isCosmic && styles.closeBtnTextCosmic]}
-          >
-            ✕
-          </Text>
-        </Pressable>
-        <Text style={[styles.title, isCosmic && styles.titleCosmic]}>
-          CAPTURE INBOX
-        </Text>
-        <View style={styles.closeBtnPlaceholder} />
-      </View>
-
-      {/* Filter tabs */}
-      <View
-        style={[styles.tabs, isCosmic && styles.tabsCosmic]}
-        testID="inbox-filter-tabs"
-      >
-        {FILTER_TABS.map((tab) => (
+        {/* Header */}
+        <View style={[styles.header, isCosmic && styles.headerCosmic]}>
           <Pressable
-            key={tab.key}
-            onPress={() => setActiveFilter(tab.key)}
-            style={[
-              styles.tab,
-              activeFilter === tab.key &&
-                (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
-            ]}
-            testID={`inbox-tab-${tab.key}`}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: activeFilter === tab.key }}
+            onPress={() => navigation.goBack()}
+            style={styles.closeBtn}
+            testID="inbox-close"
+            accessibilityLabel="Close inbox"
           >
             <Text
               style={[
-                styles.tabText,
-                isCosmic && styles.tabTextCosmic,
-                activeFilter === tab.key &&
-                  (isCosmic
-                    ? styles.tabTextActiveCosmic
-                    : styles.tabTextActiveLinear),
+                styles.closeBtnText,
+                isCosmic && styles.closeBtnTextCosmic,
               ]}
             >
-              {tab.label}
+              ✕
             </Text>
           </Pressable>
-        ))}
-      </View>
+          <Text style={[styles.title, isCosmic && styles.titleCosmic]}>
+            CAPTURE INBOX
+          </Text>
+          <View style={styles.closeBtnPlaceholder} />
+        </View>
 
-      {/* Content */}
-      {isLoading ? (
-        <View style={styles.listContent}>
-          {[1, 2, 3].map((key) => (
-            <CaptureSkeleton key={key} isCosmic={isCosmic} />
+        {/* Filter tabs */}
+        <View
+          style={[styles.tabs, isCosmic && styles.tabsCosmic]}
+          testID="inbox-filter-tabs"
+        >
+          {FILTER_TABS.map((tab) => (
+            <Pressable
+              key={tab.key}
+              onPress={() => setActiveFilter(tab.key)}
+              style={[
+                styles.tab,
+                activeFilter === tab.key &&
+                  (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
+              ]}
+              testID={`inbox-tab-${tab.key}`}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: activeFilter === tab.key }}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  isCosmic && styles.tabTextCosmic,
+                  activeFilter === tab.key &&
+                    (isCosmic
+                      ? styles.tabTextActiveCosmic
+                      : styles.tabTextActiveLinear),
+                ]}
+              >
+                {tab.label}
+              </Text>
+            </Pressable>
           ))}
         </View>
-      ) : items.length === 0 ? (
-        <View style={styles.centered} testID="inbox-empty">
-          <Text style={[styles.emptyText, isCosmic && styles.emptyTextCosmic]}>
-            {activeFilter === 'unreviewed'
-              ? 'Nothing to review.\nCapture something with the bubble!'
-              : 'No items here yet.'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={items}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContent}
-          testID="inbox-list"
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+
+        {/* Content */}
+        {isLoading ? (
+          <View style={styles.listContent}>
+            {[1, 2, 3].map((key) => (
+              <CaptureSkeleton key={key} isCosmic={isCosmic} />
+            ))}
+          </View>
+        ) : items.length === 0 ? (
+          <View style={styles.centered} testID="inbox-empty">
+            <Text
+              style={[styles.emptyText, isCosmic && styles.emptyTextCosmic]}
+            >
+              {activeFilter === 'unreviewed'
+                ? 'Nothing to review.\nCapture something with the bubble!'
+                : 'No items here yet.'}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={items}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContent}
+            testID="inbox-list"
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </SafeAreaView>
     </CosmicBackground>
   );

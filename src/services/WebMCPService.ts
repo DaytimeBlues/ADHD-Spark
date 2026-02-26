@@ -1,6 +1,6 @@
-import { Platform } from "react-native";
-import StorageService from "./StorageService";
-import { agentEventBus } from "./AgentEventBus";
+import { Platform } from 'react-native';
+import StorageService from './StorageService';
+import { agentEventBus } from './AgentEventBus';
 
 type ToolDefinition = {
   name: string;
@@ -51,7 +51,7 @@ class WebMCPService {
   }
 
   public init() {
-    if (this.isInitialized || Platform.OS !== "web") {
+    if (this.isInitialized || Platform.OS !== 'web') {
       return;
     }
 
@@ -62,106 +62,106 @@ class WebMCPService {
       const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
         .navigator?.modelContext;
       if (!modelContext?.registerTool) {
-        console.log("WebMCP: API not found, retrying...");
+        console.log('WebMCP: API not found, retrying...');
         return;
       }
 
-      console.log("WebMCP: Registering tools...");
+      console.log('WebMCP: Registering tools...');
 
       // ── 1. Start Timer ────────────────────────────────────────────────────
       modelContext.registerTool({
-        name: "start_timer",
+        name: 'start_timer',
         description:
-          "Navigates to and starts a specific focus or breathing timer.",
+          'Navigates to and starts a specific focus or breathing timer.',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             timerType: {
-              type: "string",
-              enum: ["pomodoro", "ignite", "anchor"],
-              description: "The type of timer to start",
+              type: 'string',
+              enum: ['pomodoro', 'ignite', 'anchor'],
+              description: 'The type of timer to start',
             },
           },
-          required: ["timerType"],
+          required: ['timerType'],
         },
         execute: async ({
           timerType,
         }: {
-          timerType: "pomodoro" | "ignite" | "anchor";
+          timerType: 'pomodoro' | 'ignite' | 'anchor';
         }) => {
-          agentEventBus.emit("timer:start", { timerType });
-          agentEventBus.emit("navigate:screen", { screen: timerType });
+          agentEventBus.emit('timer:start', { timerType });
+          agentEventBus.emit('navigate:screen', { screen: timerType });
           return { success: true, message: `${timerType} timer requested` };
         },
       });
 
       // ── 2. Navigate to Screen ─────────────────────────────────────────────
       modelContext.registerTool({
-        name: "navigate_to_screen",
-        description: "Navigates the app to the specified screen.",
+        name: 'navigate_to_screen',
+        description: 'Navigates the app to the specified screen.',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             screen: {
-              type: "string",
+              type: 'string',
               enum: [
-                "Home",
-                "Ignite",
-                "Pomodoro",
-                "Anchor",
-                "BrainDump",
-                "FogCutter",
-                "CheckIn",
-                "Calendar",
-                "Chat",
+                'Home',
+                'Ignite',
+                'Pomodoro',
+                'Anchor',
+                'BrainDump',
+                'FogCutter',
+                'CheckIn',
+                'Calendar',
+                'Chat',
               ],
-              description: "The screen to navigate to",
+              description: 'The screen to navigate to',
             },
           },
-          required: ["screen"],
+          required: ['screen'],
         },
         execute: async ({ screen }: { screen: string }) => {
           const ALLOWED_SCREENS = [
-            "Home",
-            "Ignite",
-            "Pomodoro",
-            "Anchor",
-            "BrainDump",
-            "FogCutter",
-            "CheckIn",
-            "Calendar",
-            "Chat",
+            'Home',
+            'Ignite',
+            'Pomodoro',
+            'Anchor',
+            'BrainDump',
+            'FogCutter',
+            'CheckIn',
+            'Calendar',
+            'Chat',
           ];
           if (!ALLOWED_SCREENS.includes(screen)) {
             return { success: false, error: `Invalid screen: ${screen}` };
           }
-          agentEventBus.emit("navigate:screen", { screen });
+          agentEventBus.emit('navigate:screen', { screen });
           return { success: true, screen };
         },
       });
 
       // ── 3. Add Brain Dump Item ────────────────────────────────────────────
       modelContext.registerTool({
-        name: "add_brain_dump",
+        name: 'add_brain_dump',
         description: "Adds a new item to the user's brain dump list.",
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             text: {
-              type: "string",
-              description: "The text content to save",
+              type: 'string',
+              description: 'The text content to save',
             },
           },
-          required: ["text"],
+          required: ['text'],
         },
         execute: async ({ text }: { text: string }) => {
           try {
             const sanitized =
-              typeof text === "string" ? text.trim().slice(0, 1000) : "";
+              typeof text === 'string' ? text.trim().slice(0, 1000) : '';
             if (!sanitized) {
               return {
                 success: false,
-                error: "Text is required and must be non-empty",
+                error: 'Text is required and must be non-empty',
               };
             }
             const items =
@@ -172,13 +172,13 @@ class WebMCPService {
               id: Date.now().toString(),
               text: sanitized,
               timestamp: Date.now(),
-              type: "text",
+              type: 'text',
             };
             await StorageService.setJSON(
               StorageService.STORAGE_KEYS.brainDump,
               [newItem, ...items],
             );
-            agentEventBus.emit("braindump:add", { text: sanitized });
+            agentEventBus.emit('braindump:add', { text: sanitized });
             return { success: true, item: newItem };
           } catch (error) {
             return { success: false, error: String(error) };
@@ -188,42 +188,42 @@ class WebMCPService {
 
       // ── 4. Create Fog Cutter Task ─────────────────────────────────────────
       modelContext.registerTool({
-        name: "create_fog_cutter_task",
+        name: 'create_fog_cutter_task',
         description:
-          "Seeds the Fog Cutter screen with a task title so the user can break it down.",
+          'Seeds the Fog Cutter screen with a task title so the user can break it down.',
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             taskTitle: {
-              type: "string",
-              description: "The task title to break down",
+              type: 'string',
+              description: 'The task title to break down',
             },
           },
-          required: ["taskTitle"],
+          required: ['taskTitle'],
         },
         execute: async ({ taskTitle }: { taskTitle: string }) => {
           const sanitized =
-            typeof taskTitle === "string" ? taskTitle.trim().slice(0, 500) : "";
+            typeof taskTitle === 'string' ? taskTitle.trim().slice(0, 500) : '';
           if (!sanitized) {
-            return { success: false, error: "taskTitle is required" };
+            return { success: false, error: 'taskTitle is required' };
           }
-          agentEventBus.emit("fogcutter:create", { taskTitle: sanitized });
-          agentEventBus.emit("navigate:screen", { screen: "FogCutter" });
+          agentEventBus.emit('fogcutter:create', { taskTitle: sanitized });
+          agentEventBus.emit('navigate:screen', { screen: 'FogCutter' });
           return { success: true, taskTitle: sanitized };
         },
       });
 
       // ── 5. Read Check-Ins ─────────────────────────────────────────────────
       modelContext.registerTool({
-        name: "read_check_ins",
+        name: 'read_check_ins',
         description:
           "Returns the user's last N check-in entries (mood, energy, timestamp).",
         parameters: {
-          type: "object",
+          type: 'object',
           properties: {
             limit: {
-              type: "number",
-              description: "Number of check-ins to return (max 7)",
+              type: 'number',
+              description: 'Number of check-ins to return (max 7)',
             },
           },
         },
@@ -234,7 +234,7 @@ class WebMCPService {
           );
           try {
             const entries =
-              (await StorageService.getJSON<CheckInEntry[]>("checkIns")) || [];
+              (await StorageService.getJSON<CheckInEntry[]>('checkIns')) || [];
             return {
               success: true,
               entries: entries.slice(0, safeLimit),
@@ -247,18 +247,18 @@ class WebMCPService {
 
       // ── 6. Get App State ──────────────────────────────────────────────────
       modelContext.registerTool({
-        name: "get_app_state",
+        name: 'get_app_state',
         description:
           "Returns a lightweight snapshot of the app's current state (time of day, last check-in mood).",
-        parameters: { type: "object", properties: {} },
+        parameters: { type: 'object', properties: {} },
         execute: async () => {
           const hour = new Date().getHours();
           const timeOfDay =
-            hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+            hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
 
           try {
             const checkIns =
-              (await StorageService.getJSON<CheckInEntry[]>("checkIns")) || [];
+              (await StorageService.getJSON<CheckInEntry[]>('checkIns')) || [];
             const lastCheckIn = checkIns[0] ?? null;
             return { success: true, timeOfDay, lastCheckIn };
           } catch {
@@ -270,7 +270,7 @@ class WebMCPService {
       this.isInitialized = true;
       this.retryTimeouts.forEach(clearTimeout);
       this.retryTimeouts = [];
-      console.log("WebMCP: Tools registered successfully");
+      console.log('WebMCP: Tools registered successfully');
     };
 
     registerTools();

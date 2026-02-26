@@ -1,8 +1,8 @@
-import { Platform } from "react-native";
-import { config } from "../config";
-import { SortedItem } from "./AISortService";
-import StorageService from "./StorageService";
-import OverlayService from "./OverlayService";
+import { Platform } from 'react-native';
+import { config } from '../config';
+import { SortedItem } from './AISortService';
+import StorageService from './StorageService';
+import OverlayService from './OverlayService';
 
 /**
  * GoogleTasksSyncService
@@ -16,7 +16,7 @@ interface GoogleTaskItem {
   title?: string;
   notes?: string;
   updated?: string;
-  status?: "needsAction" | "completed";
+  status?: 'needsAction' | 'completed';
   deleted?: boolean;
 }
 
@@ -35,7 +35,7 @@ interface BrainDumpItem {
   id: string;
   text: string;
   createdAt: string;
-  source: "text" | "audio" | "google";
+  source: 'text' | 'audio' | 'google';
   googleTaskId?: string;
 }
 
@@ -52,19 +52,19 @@ export interface GoogleExportResult {
   skippedCount: number;
   authRequired: boolean;
   errorCode?:
-    | "auth_required"
-    | "auth_failed"
-    | "network"
-    | "rate_limited"
-    | "api_error";
+    | 'auth_required'
+    | 'auth_failed'
+    | 'network'
+    | 'rate_limited'
+    | 'api_error';
   errorMessage?: string;
 }
 
-const GOOGLE_TASKS_SCOPE = "https://www.googleapis.com/auth/tasks";
-const GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
-const GOOGLE_TASKS_API_BASE = "https://tasks.googleapis.com/tasks/v1";
-const GOOGLE_CALENDAR_API_BASE = "https://www.googleapis.com/calendar/v3";
-const GOOGLE_TASKS_INBOX_NAME = "Spark Inbox";
+const GOOGLE_TASKS_SCOPE = 'https://www.googleapis.com/auth/tasks';
+const GOOGLE_CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.events';
+const GOOGLE_TASKS_API_BASE = 'https://tasks.googleapis.com/tasks/v1';
+const GOOGLE_CALENDAR_API_BASE = 'https://www.googleapis.com/calendar/v3';
+const GOOGLE_TASKS_INBOX_NAME = 'Spark Inbox';
 const MAX_PROCESSED_IDS = 500;
 const MAX_MARK_CONCURRENCY = 4;
 const MAX_EXPORT_CONCURRENCY = 4;
@@ -78,7 +78,7 @@ class GoogleApiError extends Error {
 
   constructor(message: string, status?: number) {
     super(message);
-    this.name = "GoogleApiError";
+    this.name = 'GoogleApiError';
     this.status = status;
     this.retryable =
       status === undefined ? true : GOOGLE_RETRYABLE_STATUS.has(status);
@@ -108,7 +108,7 @@ interface GoogleSigninLike {
 const getGoogleSignin = (): GoogleSigninLike | null => {
   try {
     const googleModule =
-      require("@react-native-google-signin/google-signin") as {
+      require('@react-native-google-signin/google-signin') as {
         GoogleSignin?: GoogleSigninLike;
       };
     return googleModule.GoogleSignin || null;
@@ -126,21 +126,21 @@ const ensureStringArray = (value: unknown): string[] => {
     return [];
   }
 
-  return value.filter((item): item is string => typeof item === "string");
+  return value.filter((item): item is string => typeof item === 'string');
 };
 
 const normalizeText = (value: string): string => {
-  return value.trim().replace(/\s+/g, " ");
+  return value.trim().replace(/\s+/g, ' ');
 };
 
 const buildExportFingerprint = (item: SortedItem): string => {
   return [
     item.category,
     normalizeText(item.text).toLowerCase(),
-    item.dueDate ?? "",
-    item.start ?? "",
-    item.end ?? "",
-  ].join("|");
+    item.dueDate ?? '',
+    item.start ?? '',
+    item.end ?? '',
+  ].join('|');
 };
 
 const toGoogleTaskDue = (dueDate?: string): string | undefined => {
@@ -183,7 +183,7 @@ class GoogleTasksSyncServiceClass {
   }
 
   async getCurrentUserScopes(): Promise<string[] | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 
@@ -193,7 +193,7 @@ class GoogleTasksSyncServiceClass {
       const user = await googleSignin?.getCurrentUser?.();
       return Array.isArray(user?.scopes)
         ? user.scopes.filter(
-            (scope): scope is string => typeof scope === "string",
+            (scope): scope is string => typeof scope === 'string',
           )
         : null;
     } catch {
@@ -202,7 +202,7 @@ class GoogleTasksSyncServiceClass {
   }
 
   async getCurrentUserEmail(): Promise<string | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 
@@ -210,14 +210,14 @@ class GoogleTasksSyncServiceClass {
     try {
       const googleSignin = getGoogleSignin();
       const user = await googleSignin?.getCurrentUser?.();
-      return typeof user?.user?.email === "string" ? user.user.email : null;
+      return typeof user?.user?.email === 'string' ? user.user.email : null;
     } catch {
       return null;
     }
   }
 
   async signInInteractive(): Promise<boolean> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return false;
     }
 
@@ -234,13 +234,13 @@ class GoogleTasksSyncServiceClass {
       await googleSignin.signIn();
       return true;
     } catch (error) {
-      console.error("Google sign-in failed:", error);
+      console.error('Google sign-in failed:', error);
       return false;
     }
   }
 
   private async getAccessToken(): Promise<string | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 
@@ -264,14 +264,14 @@ class GoogleTasksSyncServiceClass {
       StorageService.STORAGE_KEYS.googleTasksSyncState,
     );
 
-    if (!state || typeof state !== "object") {
+    if (!state || typeof state !== 'object') {
       return {};
     }
 
     return {
-      listId: typeof state.listId === "string" ? state.listId : undefined,
+      listId: typeof state.listId === 'string' ? state.listId : undefined,
       syncToken:
-        typeof state.syncToken === "string" ? state.syncToken : undefined,
+        typeof state.syncToken === 'string' ? state.syncToken : undefined,
     };
   }
 
@@ -310,20 +310,20 @@ class GoogleTasksSyncServiceClass {
           ...init,
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             ...(init?.headers || {}),
           },
         });
       } catch (error) {
         throw new GoogleApiError(
           `Google Tasks network request failed: ${
-            error instanceof Error ? error.message : "Unknown error"
+            error instanceof Error ? error.message : 'Unknown error'
           }`,
         );
       }
 
       if (response.status === 410) {
-        throw new Error("GOOGLE_SYNC_TOKEN_EXPIRED");
+        throw new Error('GOOGLE_SYNC_TOKEN_EXPIRED');
       }
 
       if (!response.ok) {
@@ -346,15 +346,15 @@ class GoogleTasksSyncServiceClass {
   }
 
   private toExportError(error: unknown): {
-    code: GoogleExportResult["errorCode"];
+    code: GoogleExportResult['errorCode'];
     message: string;
     authRequired: boolean;
   } {
     if (this.isAuthError(error)) {
       return {
-        code: "auth_failed",
+        code: 'auth_failed',
         message:
-          "Google authorization expired. Sign in again to continue Task/Calendar sync.",
+          'Google authorization expired. Sign in again to continue Task/Calendar sync.',
         authRequired: true,
       };
     }
@@ -362,25 +362,25 @@ class GoogleTasksSyncServiceClass {
     if (error instanceof GoogleApiError) {
       if (error.status === 429) {
         return {
-          code: "rate_limited",
-          message: "Google API rate limit reached. Try sync again in a moment.",
+          code: 'rate_limited',
+          message: 'Google API rate limit reached. Try sync again in a moment.',
           authRequired: false,
         };
       }
 
       return {
-        code: error.status === undefined ? "network" : "api_error",
+        code: error.status === undefined ? 'network' : 'api_error',
         message:
           error.status === undefined
-            ? "Network issue while syncing with Google. Check your connection and retry."
-            : "Google sync request failed. Try again shortly.",
+            ? 'Network issue while syncing with Google. Check your connection and retry.'
+            : 'Google sync request failed. Try again shortly.',
         authRequired: false,
       };
     }
 
     return {
-      code: "api_error",
-      message: "Google sync failed unexpectedly. Try again shortly.",
+      code: 'api_error',
+      message: 'Google sync failed unexpectedly. Try again shortly.',
       authRequired: false,
     };
   }
@@ -409,7 +409,7 @@ class GoogleTasksSyncServiceClass {
   private async ensureSparkInboxList(accessToken: string): Promise<string> {
     const lists = await this.request<{
       items?: Array<{ id: string; title?: string }>;
-    }>(accessToken, "/users/@me/lists");
+    }>(accessToken, '/users/@me/lists');
 
     const existing = lists.items?.find(
       (list) => list.title === GOOGLE_TASKS_INBOX_NAME,
@@ -420,9 +420,9 @@ class GoogleTasksSyncServiceClass {
 
     const created = await this.request<{ id: string }>(
       accessToken,
-      "/users/@me/lists",
+      '/users/@me/lists',
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({ title: GOOGLE_TASKS_INBOX_NAME }),
       },
     );
@@ -441,17 +441,17 @@ class GoogleTasksSyncServiceClass {
 
     do {
       const params = new URLSearchParams({
-        maxResults: "100",
-        showCompleted: "true",
-        showHidden: "true",
-        showDeleted: "true",
+        maxResults: '100',
+        showCompleted: 'true',
+        showHidden: 'true',
+        showDeleted: 'true',
       });
 
       if (syncToken) {
-        params.set("syncToken", syncToken);
+        params.set('syncToken', syncToken);
       }
       if (pageToken) {
-        params.set("pageToken", pageToken);
+        params.set('pageToken', pageToken);
       }
 
       const page = await this.request<GoogleTasksListResponse>(
@@ -483,13 +483,13 @@ class GoogleTasksSyncServiceClass {
         accessToken,
         `/lists/${encodeURIComponent(listId)}/tasks/${encodeURIComponent(taskId)}`,
         {
-          method: "PATCH",
-          body: JSON.stringify({ status: "completed" }),
+          method: 'PATCH',
+          body: JSON.stringify({ status: 'completed' }),
         },
       );
       return true;
     } catch (error) {
-      console.error("Failed to mark Google task as completed:", error);
+      console.error('Failed to mark Google task as completed:', error);
       return false;
     }
   }
@@ -534,17 +534,17 @@ class GoogleTasksSyncServiceClass {
         accessToken,
         `/lists/${encodeURIComponent(listId)}/tasks`,
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
             title,
-            notes: notes.join("\n"),
+            notes: notes.join('\n'),
             due: toGoogleTaskDue(item.dueDate),
           }),
         },
       );
       return true;
     } catch (error) {
-      console.error("Failed to create Google task:", error);
+      console.error('Failed to create Google task:', error);
       return false;
     }
   }
@@ -568,14 +568,14 @@ class GoogleTasksSyncServiceClass {
           response = await fetch(
             `${GOOGLE_CALENDAR_API_BASE}/calendars/primary/events`,
             {
-              method: "POST",
+              method: 'POST',
               headers: {
                 Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 summary: normalizeText(item.text),
-                description: "Created from Spark AI Sort event suggestion.",
+                description: 'Created from Spark AI Sort event suggestion.',
                 start: { dateTime: item.start },
                 end: { dateTime: end },
               }),
@@ -584,7 +584,7 @@ class GoogleTasksSyncServiceClass {
         } catch (error) {
           throw new GoogleApiError(
             `Google Calendar network request failed: ${
-              error instanceof Error ? error.message : "Unknown error"
+              error instanceof Error ? error.message : 'Unknown error'
             }`,
           );
         }
@@ -599,7 +599,7 @@ class GoogleTasksSyncServiceClass {
       });
       return true;
     } catch (error) {
-      console.error("Failed to create Google Calendar event:", error);
+      console.error('Failed to create Google Calendar event:', error);
       return false;
     }
   }
@@ -614,7 +614,7 @@ class GoogleTasksSyncServiceClass {
       authRequired: false,
     };
 
-    if (items.length === 0 || Platform.OS === "web") {
+    if (items.length === 0 || Platform.OS === 'web') {
       result.skippedCount = items.length;
       return result;
     }
@@ -622,9 +622,9 @@ class GoogleTasksSyncServiceClass {
     const accessToken = await this.getAccessToken();
     if (!accessToken) {
       result.authRequired = true;
-      result.errorCode = "auth_required";
+      result.errorCode = 'auth_required';
       result.errorMessage =
-        "Google sign-in required to sync Tasks and Calendar exports.";
+        'Google sign-in required to sync Tasks and Calendar exports.';
       result.skippedCount = items.length;
       return result;
     }
@@ -664,7 +664,7 @@ class GoogleTasksSyncServiceClass {
             text: normalizedTextValue,
           };
 
-          if (normalizedItem.category === "event") {
+          if (normalizedItem.category === 'event') {
             const eventCreated = await this.createCalendarEvent(
               accessToken,
               normalizedItem,
@@ -691,8 +691,8 @@ class GoogleTasksSyncServiceClass {
           }
 
           if (
-            normalizedItem.category === "task" ||
-            normalizedItem.category === "reminder"
+            normalizedItem.category === 'task' ||
+            normalizedItem.category === 'reminder'
           ) {
             const taskCreated = await this.createTask(
               accessToken,
@@ -750,7 +750,7 @@ class GoogleTasksSyncServiceClass {
       } catch (error) {
         if (
           error instanceof Error &&
-          error.message === "GOOGLE_SYNC_TOKEN_EXPIRED"
+          error.message === 'GOOGLE_SYNC_TOKEN_EXPIRED'
         ) {
           delta = await this.listDeltaTasks(accessToken, listId);
         } else {
@@ -767,7 +767,7 @@ class GoogleTasksSyncServiceClass {
       const existingGoogleTaskIds = new Set(
         existingItems
           .map((item) => item.googleTaskId)
-          .filter((taskId): taskId is string => typeof taskId === "string"),
+          .filter((taskId): taskId is string => typeof taskId === 'string'),
       );
 
       const pendingMarks: string[] = [];
@@ -775,7 +775,7 @@ class GoogleTasksSyncServiceClass {
 
       for (const task of delta.items) {
         const title = task.title?.trim();
-        if (!task.id || !title || task.deleted || task.status === "completed") {
+        if (!task.id || !title || task.deleted || task.status === 'completed') {
           result.skippedCount += 1;
           continue;
         }
@@ -789,7 +789,7 @@ class GoogleTasksSyncServiceClass {
           id: generateSyncItemId(),
           text: task.notes ? `${title}\n\n${task.notes}` : title,
           createdAt: task.updated || new Date().toISOString(),
-          source: "google",
+          source: 'google',
           googleTaskId: task.id,
         });
         pendingMarks.push(task.id);
@@ -850,7 +850,7 @@ class GoogleTasksSyncServiceClass {
   }
 
   startForegroundPolling(intervalMs = 15 * 60 * 1000): void {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return;
     }
 
@@ -860,7 +860,7 @@ class GoogleTasksSyncServiceClass {
 
     this.pollTimer = setInterval(() => {
       this.syncToBrainDump().catch((error) => {
-        console.error("Foreground Google Tasks poll failed:", error);
+        console.error('Foreground Google Tasks poll failed:', error);
       });
     }, intervalMs);
   }

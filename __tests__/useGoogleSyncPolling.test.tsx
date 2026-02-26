@@ -1,40 +1,40 @@
-import { renderHook } from "@testing-library/react-native";
-import { AppState, Platform } from "react-native";
-import { useGoogleSyncPolling } from "../src/hooks/useGoogleSyncPolling";
-import { GoogleTasksSyncService } from "../src/services/GoogleTasksSyncService";
+import { renderHook } from '@testing-library/react-native';
+import { AppState, Platform } from 'react-native';
+import { useGoogleSyncPolling } from '../src/hooks/useGoogleSyncPolling';
+import { GoogleTasksSyncService } from '../src/services/GoogleTasksSyncService';
 
-jest.mock("../src/services/GoogleTasksSyncService", () => ({
+jest.mock('../src/services/GoogleTasksSyncService', () => ({
   GoogleTasksSyncService: {
     startForegroundPolling: jest.fn(),
     stopForegroundPolling: jest.fn(),
   },
 }));
 
-describe("useGoogleSyncPolling", () => {
+describe('useGoogleSyncPolling', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("starts polling when app is active and stops on inactive + cleanup", () => {
-    Object.defineProperty(Platform, "OS", {
+  it('starts polling when app is active and stops on inactive + cleanup', () => {
+    Object.defineProperty(Platform, 'OS', {
       configurable: true,
-      get: () => "android",
+      get: () => 'android',
     });
 
-    Object.defineProperty(AppState, "currentState", {
+    Object.defineProperty(AppState, 'currentState', {
       configurable: true,
-      get: () => "active",
+      get: () => 'active',
     });
 
     const remove = jest.fn();
     const addEventListenerSpy = jest
-      .spyOn(AppState, "addEventListener")
+      .spyOn(AppState, 'addEventListener')
       .mockImplementation(
         (
-          _: "change",
-          listener: (state: "active" | "background" | "inactive") => void,
+          _: 'change',
+          listener: (state: 'active' | 'background' | 'inactive') => void,
         ) => {
-          listener("background");
+          listener('background');
           return { remove } as unknown as ReturnType<
             typeof AppState.addEventListener
           >;
@@ -60,19 +60,19 @@ describe("useGoogleSyncPolling", () => {
     addEventListenerSpy.mockRestore();
   });
 
-  it("is a no-op on web", () => {
-    Object.defineProperty(Platform, "OS", {
+  it('is a no-op on web', () => {
+    Object.defineProperty(Platform, 'OS', {
       configurable: true,
-      get: () => "web",
+      get: () => 'web',
     });
 
     const remove = jest.fn();
     const addEventListenerSpy = jest
-      .spyOn(AppState, "addEventListener")
+      .spyOn(AppState, 'addEventListener')
       .mockImplementation(
         (
-          _: "change",
-          _listener: (state: "active" | "background" | "inactive") => void,
+          _: 'change',
+          _listener: (state: 'active' | 'background' | 'inactive') => void,
         ) => {
           return { remove } as unknown as ReturnType<
             typeof AppState.addEventListener

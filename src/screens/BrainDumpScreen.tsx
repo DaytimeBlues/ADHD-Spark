@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import {
   View,
   Text,
@@ -123,7 +129,9 @@ const BrainDumpScreen = () => {
   const hasAutoRecorded = useRef(false);
   const previousErrorRef = useRef(false);
   const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const overlayCountTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const overlayCountTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const lastOverlayCountRef = useRef<number>(0);
 
   const loadItems = async () => {
@@ -156,24 +164,37 @@ const BrainDumpScreen = () => {
   };
 
   useEffect(() => {
-    if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+    if (
+      Platform.OS === 'android' &&
+      UIManager.setLayoutAnimationEnabledExperimental
+    ) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
     loadItems();
   }, []);
 
   useEffect(() => {
-    if (isLoading) return; // Prevent overwriting data on mount
+    if (isLoading) {
+      return;
+    } // Prevent overwriting data on mount
 
-    if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
+    if (persistTimerRef.current) {
+      clearTimeout(persistTimerRef.current);
+    }
 
     persistTimerRef.current = setTimeout(() => {
-      StorageService.setJSON(StorageService.STORAGE_KEYS.brainDump, items)
-        .catch((error) => console.error('Failed to persist brain dump items:', error));
+      StorageService.setJSON(
+        StorageService.STORAGE_KEYS.brainDump,
+        items,
+      ).catch((error) =>
+        console.error('Failed to persist brain dump items:', error),
+      );
     }, PERSIST_DEBOUNCE_MS);
 
     if (items.length !== lastOverlayCountRef.current) {
-      if (overlayCountTimerRef.current) clearTimeout(overlayCountTimerRef.current);
+      if (overlayCountTimerRef.current) {
+        clearTimeout(overlayCountTimerRef.current);
+      }
 
       overlayCountTimerRef.current = setTimeout(() => {
         OverlayService.updateCount(items.length);
@@ -182,8 +203,12 @@ const BrainDumpScreen = () => {
     }
 
     return () => {
-      if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
-      if (overlayCountTimerRef.current) clearTimeout(overlayCountTimerRef.current);
+      if (persistTimerRef.current) {
+        clearTimeout(persistTimerRef.current);
+      }
+      if (overlayCountTimerRef.current) {
+        clearTimeout(overlayCountTimerRef.current);
+      }
     };
   }, [items, isLoading]);
 
@@ -237,9 +262,13 @@ const BrainDumpScreen = () => {
       const newTasks: StoredFogCutterTask[] = [];
       nextSortedItems.forEach((item) => {
         const task = toFogCutterTask(item);
-        if (!task) return;
+        if (!task) {
+          return;
+        }
         const key = task.text.trim().toLowerCase();
-        if (existingTextSet.has(key)) return;
+        if (existingTextSet.has(key)) {
+          return;
+        }
 
         existingTextSet.add(key);
         newTasks.push(task);
@@ -258,7 +287,9 @@ const BrainDumpScreen = () => {
 
   const runSortAndSyncPipeline = useCallback(
     async (sourceItems: string[]) => {
-      if (sourceItems.length === 0) return;
+      if (sourceItems.length === 0) {
+        return;
+      }
 
       const sorted = await AISortService.sortItems(sourceItems);
       setSortedItems(sorted);
@@ -271,17 +302,28 @@ const BrainDumpScreen = () => {
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
         if (Platform.OS === 'web') {
-          setSortingError('Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.');
+          setSortingError(
+            'Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.',
+          );
         } else {
-          setSortingError(exportResult.errorMessage || 'Google sign-in required to sync Tasks and Calendar exports.');
+          setSortingError(
+            exportResult.errorMessage ||
+              'Google sign-in required to sync Tasks and Calendar exports.',
+          );
         }
       } else if (exportResult.errorMessage) {
         setGoogleAuthRequired(false);
         setSortingError(exportResult.errorMessage);
-      } else if (createdTaskCount > 0 || exportResult.createdTasks > 0 || exportResult.createdEvents > 0) {
+      } else if (
+        createdTaskCount > 0 ||
+        exportResult.createdTasks > 0 ||
+        exportResult.createdEvents > 0
+      ) {
         setSortingError(null);
         setGoogleAuthRequired(false);
-        AccessibilityInfo.announceForAccessibility('Tasks synced and suggestions saved.');
+        AccessibilityInfo.announceForAccessibility(
+          'Tasks synced and suggestions saved.',
+        );
       }
     },
     [saveSortedItemsToFogCutter],
@@ -307,11 +349,14 @@ const BrainDumpScreen = () => {
         return;
       }
 
-      const exportResult = await GoogleTasksSyncService.syncSortedItemsToGoogle(sortedItems);
+      const exportResult =
+        await GoogleTasksSyncService.syncSortedItemsToGoogle(sortedItems);
 
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
-        setSortingError(exportResult.errorMessage || 'Google sign-in required.');
+        setSortingError(
+          exportResult.errorMessage || 'Google sign-in required.',
+        );
         return;
       }
 
@@ -323,7 +368,9 @@ const BrainDumpScreen = () => {
 
       setGoogleAuthRequired(false);
       setSortingError(null);
-      AccessibilityInfo.announceForAccessibility('Tasks synced and suggestions saved.');
+      AccessibilityInfo.announceForAccessibility(
+        'Tasks synced and suggestions saved.',
+      );
     } finally {
       setIsConnectingGoogle(false);
     }
@@ -340,7 +387,9 @@ const BrainDumpScreen = () => {
       if (started) {
         setRecordingState('recording');
       } else {
-        setRecordingError('Could not start recording. Check microphone permissions.');
+        setRecordingError(
+          'Could not start recording. Check microphone permissions.',
+        );
       }
     } else if (recordingState === 'recording') {
       setRecordingState('processing');
@@ -380,17 +429,25 @@ const BrainDumpScreen = () => {
           return next;
         });
 
-        const sourceItems = transcriptionToSortItems(transcription.transcription);
+        const sourceItems = transcriptionToSortItems(
+          transcription.transcription,
+        );
         if (sourceItems.length > 0) {
           try {
             await runSortAndSyncPipeline(sourceItems);
             setSortingError(null);
           } catch (error) {
-            setSortingError(error instanceof Error ? error.message : 'Failed to sync transcription suggestions.');
+            setSortingError(
+              error instanceof Error
+                ? error.message
+                : 'Failed to sync transcription suggestions.',
+            );
           }
         }
       } else {
-        setRecordingError(transcription.error || 'Transcription failed. Audio saved locally.');
+        setRecordingError(
+          transcription.error || 'Transcription failed. Audio saved locally.',
+        );
         if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
@@ -408,10 +465,18 @@ const BrainDumpScreen = () => {
 
       setRecordingState('idle');
     }
-  }, [guideDismissed, recordingError, recordingState, runSortAndSyncPipeline, showGuide]);
+  }, [
+    guideDismissed,
+    recordingError,
+    recordingState,
+    runSortAndSyncPipeline,
+    showGuide,
+  ]);
 
   useEffect(() => {
-    if (!route.params?.autoRecord || hasAutoRecorded.current) return;
+    if (!route.params?.autoRecord || hasAutoRecorded.current) {
+      return;
+    }
     hasAutoRecorded.current = true;
     handleRecordPress();
   }, [handleRecordPress, route.params?.autoRecord]);
@@ -436,13 +501,15 @@ const BrainDumpScreen = () => {
           style: 'destructive',
           onPress: () => {
             if (Platform.OS !== 'web') {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              LayoutAnimation.configureNext(
+                LayoutAnimation.Presets.easeInEaseOut,
+              );
             }
             setItems([]);
             setSortedItems([]);
             setSortingError(null);
             AccessibilityInfo.announceForAccessibility('All items cleared.');
-          }
+          },
         },
       ],
       { cancelable: true },
@@ -457,7 +524,11 @@ const BrainDumpScreen = () => {
       await runSortAndSyncPipeline(items.map((item) => item.text));
       AccessibilityInfo.announceForAccessibility('AI suggestions updated.');
     } catch (error) {
-      setSortingError(error instanceof Error ? error.message : 'AI sort is currently unavailable.');
+      setSortingError(
+        error instanceof Error
+          ? error.message
+          : 'AI sort is currently unavailable.',
+      );
       setSortedItems([]);
     } finally {
       setIsSorting(false);
@@ -479,8 +550,12 @@ const BrainDumpScreen = () => {
   }, [sortedItems]);
 
   const getPriorityStyle = (priority: SortedItem['priority']) => {
-    if (priority === 'high') return styles.priorityHigh;
-    if (priority === 'medium') return styles.priorityMedium;
+    if (priority === 'high') {
+      return styles.priorityHigh;
+    }
+    if (priority === 'medium') {
+      return styles.priorityMedium;
+    }
     return styles.priorityLow;
   };
 
@@ -497,10 +572,7 @@ const BrainDumpScreen = () => {
 
           <BrainDumpInput onAdd={addItem} />
 
-          <BrainDumpGuide
-            showGuide={showGuide}
-            onDismiss={dismissGuide}
-          />
+          <BrainDumpGuide showGuide={showGuide} onDismiss={dismissGuide} />
 
           <BrainDumpVoiceRecord
             recordingState={recordingState}
@@ -510,7 +582,10 @@ const BrainDumpScreen = () => {
 
           {isLoading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color={Tokens.colors.brand[500]} />
+              <ActivityIndicator
+                size="small"
+                color={Tokens.colors.brand[500]}
+              />
               <Text style={styles.loadingText}>LOADING...</Text>
             </View>
           ) : (
@@ -546,7 +621,9 @@ const BrainDumpScreen = () => {
           <FlatList
             data={items}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <BrainDumpItem item={item} onDelete={deleteItem} />}
+            renderItem={({ item }) => (
+              <BrainDumpItem item={item} onDelete={deleteItem} />
+            )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
@@ -575,7 +652,9 @@ const BrainDumpScreen = () => {
                               getPriorityStyle(item.priority),
                             ]}
                           >
-                            <Text style={styles.priorityText}>{item.priority}</Text>
+                            <Text style={styles.priorityText}>
+                              {item.priority}
+                            </Text>
                           </View>
                         </View>
                       ))}

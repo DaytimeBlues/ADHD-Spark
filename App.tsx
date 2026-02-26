@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Sentry from '@sentry/react-native';
 import {
   StatusBar,
   Platform,
@@ -8,7 +9,9 @@ import {
   ActivityIndicator,
   DeviceEventEmitter,
   StyleSheet,
-} from "react-native";
+  AppState,
+  AppStateStatus,
+} from 'react-native';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import StorageService from './src/services/StorageService';
@@ -32,6 +35,24 @@ import { useDriftStore } from './src/store/useDriftStore';
 import { DriftService } from './src/services/DriftService';
 import { BiometricService } from './src/services/BiometricService';
 import { LockScreen } from './src/components/LockScreen';
+import ErrorBoundary from './src/components/ErrorBoundary';
+
+// Initialize Sentry for error tracking
+if (config.environment === 'production') {
+  Sentry.init({
+    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
+    environment: config.environment,
+    release: 'spark-adhd@1.0.0',
+    beforeSend: (event) => {
+      // Don't send errors in development
+      if (__DEV__) {
+        console.log('[Sentry] Would send error:', event);
+        return null;
+      }
+      return event;
+    },
+  });
+}
 
 const CRITICAL_INIT_TIMEOUT_MS = 8000;
 
@@ -148,7 +169,7 @@ const App = () => {
 
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener(
-      "overlayRouteIntent",
+      'overlayRouteIntent',
       (payload) => {
         const handled = handleOverlayIntent(payload ?? {});
         if (handled) {
@@ -163,7 +184,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const unsub = agentEventBus.on("navigate:screen", ({ screen }) => {
+    const unsub = agentEventBus.on('navigate:screen', ({ screen }) => {
       if (navigationRef.isReady()) {
         navigationRef.navigate(screen as keyof RootStackParamList);
       }
@@ -185,26 +206,30 @@ const App = () => {
   };
 
   const content = isAuthenticated ? (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        // Flush any overlay intents that were queued before navigation was ready
-        flushOverlayIntentQueue();
-      }}
-    >
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={Tokens.colors.neutral.darkest}
-      />
-      <AppNavigator />
-      <DriftCheckOverlay visible={isDriftVisible} onClose={hideDrift} />
-    </NavigationContainer>
+    <ErrorBoundary>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          // Flush any overlay intents that were queued before navigation was ready
+          flushOverlayIntentQueue();
+        }}
+      >
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={Tokens.colors.neutral.darkest}
+        />
+        <AppNavigator />
+        <DriftCheckOverlay visible={isDriftVisible} onClose={hideDrift} />
+      </NavigationContainer>
+    </ErrorBoundary>
   ) : (
-    <LockScreen onUnlock={handleUnlock} />
+    <ErrorBoundary>
+      <LockScreen onUnlock={handleUnlock} />
+    </ErrorBoundary>
   );
 
   // GestureHandlerRootView can cause issues on web, wrap conditionally
-  if (Platform.OS === "web") {
+  if (Platform.OS === 'web') {
     return <View style={styles.flex}>{content}</View>;
   }
 
@@ -218,8 +243,8 @@ const App = () => {
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Tokens.colors.neutral.darkest,
   },
   flex: {

@@ -21,7 +21,8 @@ const getLocalAuthentication = (): LocalAuthenticationLike | null => {
   }
 
   try {
-    localAuthenticationModule = require('expo-local-authentication') as LocalAuthenticationLike;
+    localAuthenticationModule =
+      require('expo-local-authentication') as LocalAuthenticationLike;
   } catch (error) {
     console.warn(
       'BiometricService: expo-local-authentication is unavailable; biometric auth is disabled.',

@@ -58,21 +58,21 @@ function ModeCardComponent({
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? ({
-        borderColor: 'rgba(255, 255, 255, 0.25)',
-        backgroundColor: '#232A42',
-        transform: 'translateY(-2px)',
-        boxShadow: `0 12px 40px rgba(0,0,0,0.3), 0 0 24px ${mode.accent}25`,
-      } as WebInteractiveStyle)
+          borderColor: 'rgba(255, 255, 255, 0.25)',
+          backgroundColor: '#232A42',
+          transform: 'translateY(-2px)',
+          boxShadow: `0 12px 40px rgba(0,0,0,0.3), 0 0 24px ${mode.accent}25`,
+        } as WebInteractiveStyle)
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && isFocused
       ? ({
-        outlineColor: mode.accent,
-        outlineStyle: 'solid',
-        outlineWidth: 2,
-        outlineOffset: 2,
-      } as WebInteractiveStyle)
+          outlineColor: mode.accent,
+          outlineStyle: 'solid',
+          outlineWidth: 2,
+          outlineOffset: 2,
+        } as WebInteractiveStyle)
       : undefined;
 
   const handlePress = useCallback(() => {
@@ -96,10 +96,10 @@ function ModeCardComponent({
           styles.card,
           isCosmic ? styles.cardCosmic : styles.cardStandard,
           Platform.OS === 'web' &&
-          ({
-            cursor: 'pointer',
-            transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
-          } as WebInteractiveStyle),
+            ({
+              cursor: 'pointer',
+              transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
+            } as WebInteractiveStyle),
           pressed && { transform: [{ scale: 0.97 }], opacity: 0.9 },
           hoverStyle,
           focusStyle,
@@ -110,12 +110,13 @@ function ModeCardComponent({
           <Icon
             name={mode.icon}
             size={ICON_SIZE}
-            color={
-              isHovered ? mode.accent : Tokens.colors.text.primary
-            }
+            color={isHovered ? mode.accent : Tokens.colors.text.primary}
           />
           <View
-            style={[styles.accentDot, isHovered && { backgroundColor: mode.accent }]}
+            style={[
+              styles.accentDot,
+              isHovered && { backgroundColor: mode.accent },
+            ]}
           />
         </View>
 
@@ -159,7 +160,8 @@ const styles = StyleSheet.create({
       web: {
         backdropFilter: 'blur(24px)', // Soften the background
         WebkitBackdropFilter: 'blur(24px)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+        boxShadow:
+          '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
       } as any,
       default: {
         backgroundColor: '#1E2336', // Reliable, solid but soft color for Native

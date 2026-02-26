@@ -27,10 +27,7 @@ test.describe('BrainDump Flow', () => {
       await page.waitForTimeout(200); // Wait for item layout to stabilize after banner removal
     }
 
-    await page
-      .getByTestId('delete-item-button')
-      .first()
-      .click({ force: true });
+    await page.getByTestId('delete-item-button').first().click({ force: true });
     await expect(
       page.getByText('Playwright brain dump item'),
     ).not.toBeVisible();
