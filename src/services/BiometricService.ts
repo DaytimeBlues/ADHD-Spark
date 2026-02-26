@@ -1,8 +1,37 @@
-import * as LocalAuthentication from 'expo-local-authentication';
 import { AppState, AppStateStatus } from 'react-native';
 import StorageService from './StorageService';
 
 type AuthStateSubscriber = (isAuthenticated: boolean) => void;
+
+type LocalAuthenticationLike = {
+  authenticateAsync: (options: {
+    promptMessage?: string;
+    fallbackLabel?: string;
+    disableDeviceFallback?: boolean;
+  }) => Promise<{ success: boolean }>;
+  hasHardwareAsync: () => Promise<boolean>;
+  isEnrolledAsync: () => Promise<boolean>;
+};
+
+let localAuthenticationModule: LocalAuthenticationLike | null | undefined;
+
+const getLocalAuthentication = (): LocalAuthenticationLike | null => {
+  if (localAuthenticationModule !== undefined) {
+    return localAuthenticationModule;
+  }
+
+  try {
+    localAuthenticationModule = require('expo-local-authentication') as LocalAuthenticationLike;
+  } catch (error) {
+    console.warn(
+      'BiometricService: expo-local-authentication is unavailable; biometric auth is disabled.',
+      error,
+    );
+    localAuthenticationModule = null;
+  }
+
+  return localAuthenticationModule;
+};
 
 class BiometricServiceClass {
   private isAuthenticated = false;
@@ -28,24 +57,30 @@ class BiometricServiceClass {
   public async init() {
     const isSecured =
       await StorageService.getJSON<boolean>('isBiometricSecured');
-    this.isSecured = !!isSecured;
+    this.isSecured = !!isSecured && Boolean(getLocalAuthentication());
     // Assume initialized app is authenticated until otherwise
     this.isAuthenticated = true;
     this.notifySubscribers();
   }
 
   public async toggleSecurity(enabled: boolean): Promise<boolean> {
+    const localAuthentication = getLocalAuthentication();
+
     if (enabled) {
-      const hasHardware = await LocalAuthentication.hasHardwareAsync();
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!localAuthentication) {
+        return false;
+      }
+
+      const hasHardware = await localAuthentication.hasHardwareAsync();
+      const isEnrolled = await localAuthentication.isEnrolledAsync();
 
       if (!hasHardware || !isEnrolled) {
         return false;
       }
     }
 
-    this.isSecured = enabled;
-    await StorageService.setJSON('isBiometricSecured', enabled);
+    this.isSecured = enabled && Boolean(localAuthentication);
+    await StorageService.setJSON('isBiometricSecured', this.isSecured);
     return true;
   }
 
@@ -60,8 +95,15 @@ class BiometricServiceClass {
       return true;
     }
 
+    const localAuthentication = getLocalAuthentication();
+    if (!localAuthentication) {
+      this.isSecured = false;
+      this.notifySubscribers();
+      return true;
+    }
+
     try {
-      const result = await LocalAuthentication.authenticateAsync({
+      const result = await localAuthentication.authenticateAsync({
         promptMessage,
         fallbackLabel: 'Use Passcode',
         disableDeviceFallback: false,
