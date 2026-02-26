@@ -35,6 +35,10 @@
       flex-direction: column;
     }
   </style>
+  <script>
+    // Polyfill process for React Native Web compatibility
+    window.process = window.process || { env: { NODE_ENV: 'development' } };
+  </script>
   <script src="https://unpkg.com/@webmcp/polyfill"></script>
 </head>
 

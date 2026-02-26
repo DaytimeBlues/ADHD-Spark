@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Tokens } from '../../theme/tokens';
 import HapticsService from '../../services/HapticsService';
+import { useTheme } from '../../theme/ThemeProvider';
 
 export type ModeCardMode = {
   name: string;
@@ -52,23 +53,25 @@ function ModeCardComponent({
 }: ModeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const { isCosmic } = useTheme();
 
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? ({
-          borderColor: mode.accent,
-          boxShadow: `0 8px 24px rgba(7,7,18,0.4), 0 0 16px ${mode.accent}20`,
-        } as WebInteractiveStyle)
+        borderColor: mode.accent,
+        boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 20px ${mode.accent}40, inset 0 0 12px ${mode.accent}20`,
+        transform: 'translateY(-2px) scale(1.02)',
+      } as WebInteractiveStyle)
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && isFocused
       ? ({
-          outlineColor: mode.accent,
-          outlineStyle: 'solid',
-          outlineWidth: 2,
-          outlineOffset: 2,
-        } as WebInteractiveStyle)
+        outlineColor: mode.accent,
+        outlineStyle: 'solid',
+        outlineWidth: 2,
+        outlineOffset: 2,
+      } as WebInteractiveStyle)
       : undefined;
 
   const handlePress = useCallback(() => {
@@ -90,18 +93,22 @@ function ModeCardComponent({
         onBlur={() => setIsFocused(false)}
         style={({ pressed }) => [
           styles.card,
+          isCosmic ? styles.cardCosmic : styles.cardStandard,
           { borderTopColor: mode.accent },
           Platform.OS === 'web' &&
-            ({
-              cursor: 'pointer',
-              transition:
-                'border-color 0.2s ease, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease',
-            } as WebInteractiveStyle),
-          pressed && { opacity: 0.9, transform: [{ scale: 0.97 }] },
+          ({
+            cursor: 'pointer',
+            transition:
+              'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
+          } as WebInteractiveStyle),
+          pressed && { opacity: 0.85, transform: [{ scale: 0.95 }] },
           hoverStyle,
           focusStyle,
         ]}
       >
+        {Platform.OS === 'web' && (
+          <View style={styles.webGradientOverlay} />
+        )}
         <View style={styles.cardHeader}>
           <Icon
             name={mode.icon}
@@ -121,12 +128,12 @@ function ModeCardComponent({
           <Text
             style={[
               styles.cardTitle,
-              isHovered && { color: Tokens.colors.brand[500] },
+              isHovered && { color: mode.accent, textShadowColor: `${mode.accent}80`, textShadowRadius: 8, textShadowOffset: { width: 0, height: 0 } },
             ]}
           >
             {mode.name.toUpperCase()}
           </Text>
-          <Text style={styles.cardDesc} numberOfLines={2}>
+          <Text style={[styles.cardDesc, isHovered && styles.cardDescHovered]} numberOfLines={2}>
             {mode.desc}
           </Text>
         </View>
@@ -138,13 +145,37 @@ function ModeCardComponent({
 const styles = StyleSheet.create({
   card: {
     padding: Tokens.spacing[4] || 16,
-    borderRadius: Tokens.radii.lg || 16,
+    borderRadius: 20,
     borderWidth: 1,
     borderTopWidth: 2,
-    borderColor: 'rgba(185, 194, 217, 0.15)', // Emulate top-down light source on other borders
-    backgroundColor: 'rgba(14, 20, 40, 0.65)', // Glassmorphic background letting cosmic theme through
     minHeight: CARD_MIN_HEIGHT,
     justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  cardCosmic: {
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(22, 28, 48, 0.45)', // Lighter, more transparent base
+    ...Platform.select({
+      web: {
+        backdropFilter: 'blur(24px) saturate(180%)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      },
+      default: {
+        backgroundColor: 'rgba(32, 38, 64, 0.95)', // Solid fallback for poor native rendering
+      }
+    }),
+  },
+  cardStandard: {
+    borderColor: Tokens.colors.neutral.border,
+    backgroundColor: Tokens.colors.neutral.dark,
+  },
+  webGradientOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.4,
+    ...(Platform.OS === 'web' && {
+      backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+      pointerEvents: 'none',
+    }),
   },
   cardHeader: {
     flexDirection: 'row',
@@ -167,17 +198,20 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
-    color: Tokens.colors.text.primary,
+    color: '#EEF2FF', // Always use a bright white/starlight color for base
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1,
   },
   cardDesc: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
+    color: 'rgba(238, 242, 255, 0.65)',
     lineHeight: 18,
     letterSpacing: 0.5,
   },
+  cardDescHovered: {
+    color: 'rgba(238, 242, 255, 0.9)',
+  }
 });
 
 // Memoize for performance - prevents unnecessary re-renders
