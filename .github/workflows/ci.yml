@@ -10,6 +10,7 @@ jobs:
   quality:
     name: Quality Gates
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +36,7 @@ jobs:
   e2e-smoke:
     name: E2E Smoke Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Initially non-blocking - remove this line when E2E is stable
     continue-on-error: true
     steps:
