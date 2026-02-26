@@ -1,6 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { View, ActivityIndicator, Platform, StyleSheet } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -106,8 +109,17 @@ const SafeLazyInbox = withErrorBoundary(LazyInbox);
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const crossFadeOptions = {
+  headerShown: false,
+  cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+  transitionSpec: {
+    open: { animation: 'timing', config: { duration: 200 } } as any,
+    close: { animation: 'timing', config: { duration: 200 } } as any,
+  },
+};
+
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={crossFadeOptions}>
     <Stack.Screen name={ROUTES.HOME_MAIN} component={SafeHomeScreen} />
     <Stack.Screen name={ROUTES.CHECK_IN} component={SafeLazyCheckIn} />
     <Stack.Screen name={ROUTES.CBT_GUIDE} component={SafeLazyCBTGuide} />
@@ -136,7 +148,7 @@ const TabNavigator = () => {
           : Tokens.colors.text.tertiary,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+          backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darker,
           borderTopWidth: 1,
           borderTopColor: isCosmic
             ? 'rgba(42, 53, 82, 0.3)'
@@ -222,7 +234,7 @@ const styles = StyleSheet.create({
 });
 
 const AppNavigatorContent = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={crossFadeOptions}>
     <Stack.Screen name={ROUTES.MAIN} component={TabNavigatorWithBubble} />
     <Stack.Screen name={ROUTES.FOG_CUTTER} component={SafeLazyFogCutter} />
     <Stack.Screen name={ROUTES.POMODORO} component={SafeLazyPomodoro} />

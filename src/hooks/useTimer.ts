@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useRef } from 'react';
-import { formatTime } from '../utils/helpers';
-import { useTimerStore, TimerMode } from '../store/useTimerStore';
+import { useEffect, useCallback, useRef, useMemo } from "react";
+import { formatTime } from "../utils/helpers";
+import { useTimerStore, TimerMode } from "../store/useTimerStore";
 
 interface UseTimerOptions {
   id?: TimerMode | string;
@@ -19,20 +19,38 @@ const isE2ETestMode = (): boolean => {
 };
 
 const useTimer = ({
-  id = 'pomodoro',
+  id = "pomodoro",
   initialTime,
   onComplete,
   autoStart = false,
 }: UseTimerOptions) => {
-  const store = useTimerStore();
   const hasAutoStartedRef = useRef(false);
 
-  // We are "active" if the global store's activeMode matches this instance's id
-  const isActive = store.activeMode === id;
-  const isRunning = isActive && store.isRunning;
-  const timeLeft = isActive ? store.remainingSeconds : initialTime;
-  const hasCompleted =
-    isActive && store.remainingSeconds <= 0 && !store.isRunning;
+  // Select individual state slices to prevent unnecessary re-renders
+  const activeMode = useTimerStore((state) => state.activeMode);
+  const isRunningGlobal = useTimerStore((state) => state.isRunning);
+  const remainingSeconds = useTimerStore((state) => state.remainingSeconds);
+  const completedAt = useTimerStore((state) => state.completedAt);
+
+  // Select actions separately (stable references from Zustand)
+  const storeStart = useTimerStore((state) => state.start);
+  const storePause = useTimerStore((state) => state.pause);
+  const storeReset = useTimerStore((state) => state.reset);
+
+  // Memoize derived values to maintain reference stability
+  const isActive = useMemo(() => activeMode === id, [activeMode, id]);
+  const isRunning = useMemo(
+    () => isActive && isRunningGlobal,
+    [isActive, isRunningGlobal],
+  );
+  const timeLeft = useMemo(
+    () => (isActive ? remainingSeconds : initialTime),
+    [isActive, remainingSeconds, initialTime],
+  );
+  const hasCompleted = useMemo(
+    () => isActive && remainingSeconds <= 0 && !isRunningGlobal,
+    [isActive, remainingSeconds, isRunningGlobal],
+  );
 
   // No internal interval here - managed by global TimerService
   useEffect(() => {
@@ -43,12 +61,12 @@ const useTimer = ({
 
   // Handle completion from store's completion signal (single source of truth)
   useEffect(() => {
-    if (isActive && store.completedAt !== null) {
+    if (isActive && completedAt !== null) {
       onComplete?.();
       // Reset completion signal to prevent duplicate triggers
       useTimerStore.setState({ completedAt: null });
     }
-  }, [isActive, store.completedAt, onComplete]);
+  }, [isActive, completedAt, onComplete]);
 
   // Handle E2E controls
   useEffect(() => {
@@ -95,13 +113,13 @@ const useTimer = ({
     if (
       autoStart &&
       !hasAutoStartedRef.current &&
-      !store.isRunning &&
-      store.activeMode === null
+      !isRunningGlobal &&
+      activeMode === null
     ) {
       hasAutoStartedRef.current = true;
-      store.start(id as TimerMode, initialTime);
+      storeStart(id as TimerMode, initialTime);
     }
-  }, [autoStart, id, initialTime, store.isRunning, store.activeMode, store]);
+  }, [autoStart, id, initialTime, isRunningGlobal, activeMode, storeStart]);
 
   const start = useCallback(() => {
     const currentState = useTimerStore.getState();
@@ -128,20 +146,20 @@ const useTimer = ({
       currentState.start(
         id as TimerMode,
         initialTime,
-        id === 'pomodoro' ? true : undefined,
+        id === "pomodoro" ? true : undefined,
       );
     }
   }, [id, initialTime]);
 
   const pause = useCallback(() => {
     if (isActive) {
-      store.pause();
+      storePause();
     }
-  }, [isActive, store]);
+  }, [isActive, storePause]);
 
   const reset = useCallback(() => {
-    store.reset();
-  }, [store]);
+    storeReset();
+  }, [storeReset]);
 
   const setTime = useCallback(
     (time: number) => {

@@ -58,9 +58,10 @@ function ModeCardComponent({
   const hoverStyle: WebInteractiveStyle | undefined =
     Platform.OS === 'web' && (isHovered || isFocused)
       ? ({
-        borderColor: mode.accent,
-        boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 20px ${mode.accent}40, inset 0 0 12px ${mode.accent}20`,
-        transform: 'translateY(-2px) scale(1.02)',
+        borderColor: 'rgba(255, 255, 255, 0.25)',
+        backgroundColor: '#232A42',
+        transform: 'translateY(-2px)',
+        boxShadow: `0 12px 40px rgba(0,0,0,0.3), 0 0 24px ${mode.accent}25`,
       } as WebInteractiveStyle)
       : undefined;
 
@@ -94,33 +95,27 @@ function ModeCardComponent({
         style={({ pressed }) => [
           styles.card,
           isCosmic ? styles.cardCosmic : styles.cardStandard,
-          { borderTopColor: mode.accent },
           Platform.OS === 'web' &&
           ({
             cursor: 'pointer',
-            transition:
-              'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
+            transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
           } as WebInteractiveStyle),
-          pressed && { opacity: 0.85, transform: [{ scale: 0.95 }] },
+          pressed && { transform: [{ scale: 0.97 }], opacity: 0.9 },
           hoverStyle,
           focusStyle,
         ]}
       >
-        {Platform.OS === 'web' && (
-          <View style={styles.webGradientOverlay} />
-        )}
+        {Platform.OS === 'web' && <View style={styles.webGradientOverlay} />}
         <View style={styles.cardHeader}>
           <Icon
             name={mode.icon}
             size={ICON_SIZE}
             color={
-              isHovered ? Tokens.colors.brand[500] : Tokens.colors.text.primary
+              isHovered ? mode.accent : Tokens.colors.text.primary
             }
           />
-
-          {/* Status Dot - Red accent only when active/hovered if needed, or remove to be sparse */}
           <View
-            style={[styles.accentDot, isHovered && styles.accentDotActive]}
+            style={[styles.accentDot, isHovered && { backgroundColor: mode.accent }]}
           />
         </View>
 
@@ -128,12 +123,17 @@ function ModeCardComponent({
           <Text
             style={[
               styles.cardTitle,
-              isHovered && { color: mode.accent, textShadowColor: `${mode.accent}80`, textShadowRadius: 8, textShadowOffset: { width: 0, height: 0 } },
+              isHovered && {
+                color: '#FFFFFF',
+              },
             ]}
           >
             {mode.name.toUpperCase()}
           </Text>
-          <Text style={[styles.cardDesc, isHovered && styles.cardDescHovered]} numberOfLines={2}>
+          <Text
+            style={[styles.cardDesc, isHovered && styles.cardDescHovered]}
+            numberOfLines={2}
+          >
             {mode.desc}
           </Text>
         </View>
@@ -145,24 +145,30 @@ function ModeCardComponent({
 const styles = StyleSheet.create({
   card: {
     padding: Tokens.spacing[4] || 16,
-    borderRadius: 20,
+    borderRadius: 24, // Generous, friendly corner radius
     borderWidth: 1,
-    borderTopWidth: 2,
     minHeight: CARD_MIN_HEIGHT,
     justifyContent: 'space-between',
     overflow: 'hidden',
   },
   cardCosmic: {
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    backgroundColor: 'rgba(22, 28, 48, 0.45)', // Lighter, more transparent base
+    backgroundColor: '#1E2336', // Warm, soft navy matte finish
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: 'rgba(255, 255, 255, 0.15)', // Gentle light catch
     ...Platform.select({
       web: {
-        backdropFilter: 'blur(24px) saturate(180%)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-      },
+        backdropFilter: 'blur(24px)', // Soften the background
+        WebkitBackdropFilter: 'blur(24px)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+      } as any,
       default: {
-        backgroundColor: 'rgba(32, 38, 64, 0.95)', // Solid fallback for poor native rendering
-      }
+        backgroundColor: '#1E2336', // Reliable, solid but soft color for Native
+        elevation: 4, // Gentle drop shadow on Android
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+      },
     }),
   },
   cardStandard: {
@@ -171,9 +177,10 @@ const styles = StyleSheet.create({
   },
   webGradientOverlay: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.4,
+    opacity: 1,
     ...(Platform.OS === 'web' && {
-      backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)',
+      backgroundImage:
+        'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%)',
       pointerEvents: 'none',
     }),
   },
@@ -181,37 +188,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    zIndex: 2,
   },
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2, // Round instead of square
+    borderRadius: DOT_SIZE / 2,
     backgroundColor: 'transparent',
   },
   accentDotActive: {
-    backgroundColor: Tokens.colors.brand[500],
+    // This is overridden dynamically now
   },
   cardContent: {
     marginTop: Tokens.spacing[3],
+    zIndex: 2,
   },
   cardTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
     fontWeight: '700',
-    color: '#EEF2FF', // Always use a bright white/starlight color for base
+    color: '#EEF2FF', // Soft starlight white
     marginBottom: Tokens.spacing[1],
-    letterSpacing: 1,
+    letterSpacing: 1.2,
   },
   cardDesc: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
     color: 'rgba(238, 242, 255, 0.65)',
     lineHeight: 18,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3, // Reduced spacing for easier reading
   },
   cardDescHovered: {
-    color: 'rgba(238, 242, 255, 0.9)',
-  }
+    color: 'rgba(238, 242, 255, 0.95)',
+  },
 });
 
 // Memoize for performance - prevents unnecessary re-renders

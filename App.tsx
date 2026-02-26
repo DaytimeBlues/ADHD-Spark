@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useEffect, useRef, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   StatusBar,
   Platform,
@@ -10,89 +10,46 @@ import {
   AppState,
   AppStateStatus,
   StyleSheet,
-} from 'react-native';
+} from "react-native";
 
-import AppNavigator from './src/navigation/AppNavigator';
-import StorageService from './src/services/StorageService';
-import { GoogleTasksSyncService } from './src/services/GoogleTasksSyncService';
-import OverlayService from './src/services/OverlayService';
-import WebMCPService from './src/services/WebMCPService';
-import { Tokens } from './src/theme/tokens';
-import { config } from './src/config';
+import AppNavigator from "./src/navigation/AppNavigator";
+import { GoogleTasksSyncService } from "./src/services/GoogleTasksSyncService";
+import OverlayService from "./src/services/OverlayService";
+import { Tokens } from "./src/theme/tokens";
 import {
   handleOverlayIntent,
   flushOverlayIntentQueue,
   navigationRef,
   type RootStackParamList,
-} from './src/navigation/navigationRef';
-import { agentEventBus } from './src/services/AgentEventBus';
-import { CheckInService } from './src/services/CheckInService';
-import { TimerService } from './src/services/TimerService';
+} from "./src/navigation/navigationRef";
+import { agentEventBus } from "./src/services/AgentEventBus";
 
-import { DriftCheckOverlay } from './src/components/DriftCheckOverlay';
-import { useDriftStore } from './src/store/useDriftStore';
-import { DriftService } from './src/services/DriftService';
-import { BiometricService } from './src/services/BiometricService';
-import { LockScreen } from './src/components/LockScreen';
+import { DriftCheckOverlay } from "./src/components/DriftCheckOverlay";
+import { useDriftStore } from "./src/store/useDriftStore";
+import { BiometricService } from "./src/services/BiometricService";
+import { LockScreen } from "./src/components/LockScreen";
+import { bootstrapApp } from "./src/init/bootstrap";
 
-const CRITICAL_INIT_TIMEOUT_MS = 8000;
-
-const wait = (ms: number): Promise<void> =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-
+/**
+ * useAppBootstrap
+ *
+ * Manages app initialization lifecycle.
+ * Returns isReady state when critical services are initialized.
+ */
 export const useAppBootstrap = () => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
-    const initializeCriticalServices = async () => {
-      await Promise.all([StorageService.init(), BiometricService.init()]);
-    };
-
-    const initializeNonBlockingServices = () => {
-      void GoogleTasksSyncService.syncToBrainDump().catch((error) => {
-        console.error('Initial Google Tasks sync failed:', error);
-      });
-      WebMCPService.init();
-      CheckInService.start();
-      DriftService.init();
-      TimerService.start();
-    };
-
-    const initializeApp = async () => {
-      try {
-        const hasGoogleConfig =
-          Platform.OS === 'web' ||
-          config.googleWebClientId ||
-          config.googleIosClientId;
-
-        if (!hasGoogleConfig && Platform.OS !== 'web') {
-          console.warn(
-            '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
-          );
-        }
-
-        const initTimeout = wait(CRITICAL_INIT_TIMEOUT_MS).then(() => {
-          console.warn(
-            `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
-          );
-        });
-
-        await Promise.race([initializeCriticalServices(), initTimeout]);
-        initializeNonBlockingServices();
-      } catch (error) {
-        console.error('App initialization error:', error);
-      } finally {
-        if (isMounted) {
-          setIsReady(true);
-        }
+    const initialize = async () => {
+      await bootstrapApp();
+      if (isMounted) {
+        setIsReady(true);
       }
     };
 
-    initializeApp();
+    initialize();
 
     return () => {
       isMounted = false;
@@ -120,11 +77,11 @@ const App = () => {
 
   useEffect(() => {
     const syncPollingForState = (nextState: AppStateStatus) => {
-      if (Platform.OS === 'web') {
+      if (Platform.OS === "web") {
         return;
       }
 
-      if (nextState === 'active') {
+      if (nextState === "active") {
         if (!pollingStartedRef.current) {
           GoogleTasksSyncService.startForegroundPolling();
           pollingStartedRef.current = true;
@@ -138,7 +95,7 @@ const App = () => {
 
     syncPollingForState(AppState.currentState);
     const appStateSubscription = AppState.addEventListener(
-      'change',
+      "change",
       syncPollingForState,
     );
 
@@ -151,7 +108,7 @@ const App = () => {
 
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener(
-      'overlayRouteIntent',
+      "overlayRouteIntent",
       (payload) => {
         const handled = handleOverlayIntent(payload ?? {});
         if (handled) {
@@ -166,7 +123,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const unsub = agentEventBus.on('navigate:screen', ({ screen }) => {
+    const unsub = agentEventBus.on("navigate:screen", ({ screen }) => {
       if (navigationRef.isReady()) {
         navigationRef.navigate(screen as keyof RootStackParamList);
       }
@@ -207,7 +164,7 @@ const App = () => {
   );
 
   // GestureHandlerRootView can cause issues on web, wrap conditionally
-  if (Platform.OS === 'web') {
+  if (Platform.OS === "web") {
     return <View style={styles.flex}>{content}</View>;
   }
 
@@ -221,8 +178,8 @@ const App = () => {
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: Tokens.colors.neutral.darkest,
   },
   flex: {

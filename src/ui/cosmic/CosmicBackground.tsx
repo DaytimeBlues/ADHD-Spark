@@ -133,23 +133,23 @@ export const CosmicBackground = memo(function CosmicBackground({
     if (!isCosmic) {
       return { backgroundColor: t.colors.neutral.darkest };
     }
-    // Per spec: use midnight as base on native
-    return { backgroundColor: '#0B1022' };
+    // Deep rich space background for Native - matching the brutalist theme
+    return { backgroundColor: '#070712' };
   }, [isCosmic, t.colors.neutral.darkest]);
 
   // Web-specific styles with multi-layer backgrounds
   const webStyle: WebViewStyle | null = useMemo(() => {
     return Platform.OS === 'web' && isCosmic && webBackgroundImage
       ? ({
-          backgroundImage: webBackgroundImage,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition:
-            variant === 'ridge'
-              ? 'center center, center center, center bottom'
-              : 'center',
-          backgroundSize:
-            variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
-        } as WebViewStyle)
+        backgroundImage: webBackgroundImage,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition:
+          variant === 'ridge'
+            ? 'center center, center center, center bottom'
+            : 'center',
+        backgroundSize:
+          variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
+      } as WebViewStyle)
       : null;
   }, [isCosmic, webBackgroundImage, variant]);
 
