@@ -23,6 +23,14 @@ export function useAgentEvents<E extends AgentEventName>(
   event: E,
   listener: (payload: AgentEventPayloads[E]) => void,
 ): void {
+  // Store the latest listener in a ref to avoid stale closures
+  const listenerRef = useRef(listener);
+
+  // Update the ref whenever the listener changes
+  useEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
+
   useEffect(() => {
     const unsubscribe = agentEventBus.on(event, (payload) => {
       listenerRef.current(payload);

@@ -25,6 +25,7 @@ import CaptureService, {
   CaptureItem,
   CaptureStatus,
 } from '../services/CaptureService';
+import { CosmicBackground } from '../ui/cosmic';
 
 // ============================================================================
 // TYPES
@@ -363,10 +364,11 @@ const InboxScreen = (): JSX.Element => {
   );
 
   return (
-    <SafeAreaView
-      style={[styles.container, isCosmic ? styles.bgCosmic : styles.bgLinear]}
-      testID="inbox-screen"
-    >
+    <CosmicBackground variant="ridge" style={StyleSheet.absoluteFill}>
+      <SafeAreaView
+        style={[styles.container, isCosmic ? styles.bgCosmic : styles.bgLinear]}
+        testID="inbox-screen"
+      >
       {/* Header */}
       <View style={[styles.header, isCosmic && styles.headerCosmic]}>
         <Pressable
@@ -446,7 +448,8 @@ const InboxScreen = (): JSX.Element => {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </CosmicBackground>
   );
 };
 
