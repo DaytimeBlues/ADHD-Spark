@@ -1,10 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, TextInput, StyleSheet, Platform } from 'react-native';
 import { LinearButton } from '../../components/ui/LinearButton';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/ThemeProvider';

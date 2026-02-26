@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 /**
  * Service Worker for Spark ADHD PWA
  * Provides offline support and caching strategies
@@ -14,18 +15,19 @@ const STATIC_ASSETS = [
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...');
-  
+
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then((cache) => {
         console.log('[Service Worker] Caching static assets');
         return cache.addAll(STATIC_ASSETS);
       })
       .catch((err) => {
         console.error('[Service Worker] Cache failed:', err);
-      })
+      }),
   );
-  
+
   // Activate immediately
   self.skipWaiting();
 });
@@ -33,7 +35,7 @@ self.addEventListener('install', (event) => {
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Activating...');
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -42,11 +44,11 @@ self.addEventListener('activate', (event) => {
           .map((name) => {
             console.log('[Service Worker] Deleting old cache:', name);
             return caches.delete(name);
-          })
+          }),
       );
-    })
+    }),
   );
-  
+
   // Take control immediately
   self.clients.claim();
 });
@@ -54,29 +56,29 @@ self.addEventListener('activate', (event) => {
 // Fetch event - cache strategies
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
-  
+
   // Skip non-http requests (chrome-extension, etc.)
   if (!request.url.startsWith('http')) {
     return;
   }
-  
+
   // API calls - network first, fallback to cache
   if (request.url.includes('/api/')) {
     event.respondWith(networkFirst(request));
     return;
   }
-  
+
   // Static assets - cache first, fallback to network
   if (isStaticAsset(request)) {
     event.respondWith(cacheFirst(request));
     return;
   }
-  
+
   // Default - stale while revalidate
   event.respondWith(staleWhileRevalidate(request));
 });
@@ -87,7 +89,7 @@ async function cacheFirst(request) {
   if (cached) {
     return cached;
   }
-  
+
   try {
     const response = await fetch(request);
     const cache = await caches.open(CACHE_NAME);
@@ -118,7 +120,7 @@ async function networkFirst(request) {
 
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
-  
+
   const fetchPromise = fetch(request)
     .then((networkResponse) => {
       if (networkResponse.ok) {
@@ -131,7 +133,7 @@ async function staleWhileRevalidate(request) {
       console.log('[Service Worker] Background fetch failed:', error);
       return cached;
     });
-  
+
   return cached || fetchPromise;
 }
 
@@ -167,10 +169,8 @@ self.addEventListener('push', (event) => {
     tag: 'focus-reminder',
     requireInteraction: true,
   };
-  
-  event.waitUntil(
-    self.registration.showNotification('Spark ADHD', options)
-  );
+
+  event.waitUntil(self.registration.showNotification('Spark ADHD', options));
 });
 
 console.log('[Service Worker] Loaded');

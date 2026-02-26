@@ -46,10 +46,11 @@ function initializeNonBlockingServices(): undefined {
  * Check if Google configuration is present for sync features.
  */
 function checkGoogleConfig(): boolean {
-  const hasGoogleConfig =
+  const hasGoogleConfig = Boolean(
     Platform.OS === 'web' ||
-    config.googleWebClientId ||
-    config.googleIosClientId;
+      config.googleWebClientId ||
+      config.googleIosClientId,
+  );
 
   if (!hasGoogleConfig && Platform.OS !== 'web') {
     console.warn(

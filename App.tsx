@@ -111,7 +111,7 @@ export const useAppBootstrap = () => {
       }
     };
 
-    initialize();
+    initializeApp();
 
     return () => {
       isMounted = false;
@@ -126,6 +126,7 @@ const App = () => {
   const isDriftVisible = useDriftStore((state) => state.isVisible);
   const hideDrift = useDriftStore((state) => state.hideOverlay);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const pollingStartedRef = useRef(false);
 
   useEffect(() => {
     const unsub = BiometricService.subscribe((auth) =>
