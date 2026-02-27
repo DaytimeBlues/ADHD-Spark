@@ -15,6 +15,7 @@ import {
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import ActivationService from '../services/ActivationService';
+import { LoggerService } from '../services/LoggerService';
 import { generateId } from '../utils/helpers';
 import {
   MicroStep,
