@@ -1,5 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import IgniteScreen from '../src/screens/IgniteScreen';
 
 const mockStart = jest.fn();
@@ -73,12 +78,24 @@ jest.mock('../src/ui/cosmic', () => {
   const React = require('react');
   const { Text, View, Pressable } = require('react-native');
   return {
-    CosmicBackground: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
-    GlowCard: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
+    CosmicBackground: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
+    GlowCard: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
     HaloRing: () => <View />,
     ChronoDigits: ({ value }: { value: string }) => <Text>{value}</Text>,
-    RuneButton: ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => (
-      <Pressable onPress={onPress}><Text>{children}</Text></Pressable>
+    RuneButton: ({
+      children,
+      onPress,
+    }: {
+      children: React.ReactNode;
+      onPress?: () => void;
+    }) => (
+      <Pressable onPress={onPress}>
+        <Text>{children}</Text>
+      </Pressable>
     ),
   };
 });

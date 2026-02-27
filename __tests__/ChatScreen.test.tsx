@@ -20,9 +20,19 @@ jest.mock('../src/ui/cosmic', () => {
   const React = require('react');
   const { Text, View, Pressable } = require('react-native');
   return {
-    CosmicBackground: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
-    GlowCard: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
-    RuneButton: ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => (
+    CosmicBackground: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
+    GlowCard: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
+    RuneButton: ({
+      children,
+      onPress,
+    }: {
+      children: React.ReactNode;
+      onPress?: () => void;
+    }) => (
       <Pressable onPress={onPress}>
         <Text>{children}</Text>
       </Pressable>
@@ -41,7 +51,10 @@ describe('ChatScreen', () => {
     expect(screen.getByText('SPARK_ASSISTANT')).toBeTruthy();
     expect(screen.getByText('HOW CAN I HELP YOU FOCUS TODAY?')).toBeTruthy();
 
-    fireEvent.changeText(screen.getByPlaceholderText('TYPE_YOUR_THOUGHTS...'), 'Hello');
+    fireEvent.changeText(
+      screen.getByPlaceholderText('TYPE_YOUR_THOUGHTS...'),
+      'Hello',
+    );
     fireEvent.press(screen.getByText('SEND'));
 
     expect(mockSendMessage).toHaveBeenCalledWith('Hello');

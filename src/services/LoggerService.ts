@@ -42,7 +42,9 @@ class LoggerServiceClass {
    * Log a debug message (development only)
    */
   public debug(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
-    if (!this.isDev) return;
+    if (!this.isDev) {
+      return;
+    }
     this.log({ ...entry, level: 'debug' });
   }
 
@@ -86,20 +88,21 @@ class LoggerServiceClass {
   }
 
   private logToConsole(entry: LogEntry): void {
-    const { level, service, operation, message, error, context, timestamp } = entry;
-    
+    const { level, service, operation, message, error, context, timestamp } =
+      entry;
+
     const prefix = `[${timestamp}] [${level.toUpperCase()}] [${service}.${operation}]`;
-    
+
     // Choose appropriate console method
     const consoleMethod = this.getConsoleMethod(level);
-    
+
     // Build the log arguments
     const args: unknown[] = [prefix];
-    
+
     if (message) {
       args.push(message);
     }
-    
+
     if (error) {
       if (error instanceof Error) {
         args.push(`Error: ${error.message}`);
@@ -110,18 +113,18 @@ class LoggerServiceClass {
         args.push('Error:', error);
       }
     }
-    
+
     if (context && Object.keys(context).length > 0) {
       args.push('Context:', context);
     }
-    
+
     consoleMethod(...args);
   }
 
   private logToProduction(entry: LogEntry): void {
     // In production, we could send to Sentry, LogRocket, or other services
     // For now, use console.error for errors/fatals so they're captured by crash reporters
-    
+
     if (entry.level === 'error' || entry.level === 'fatal') {
       // Structured logging for production error tracking
       const errorPayload = {
@@ -132,15 +135,20 @@ class LoggerServiceClass {
         message: entry.message,
         context: entry.context,
         // Include error details if present
-        error: entry.error instanceof Error 
-          ? { message: entry.error.message, stack: entry.error.stack, name: entry.error.name }
-          : entry.error,
+        error:
+          entry.error instanceof Error
+            ? {
+                message: entry.error.message,
+                stack: entry.error.stack,
+                name: entry.error.name,
+              }
+            : entry.error,
       };
-      
+
       // Use console.error so Sentry or other crash reporters can capture it
       console.error(JSON.stringify(errorPayload));
     }
-    
+
     // For non-error levels in production, we could send to a logging service
     // or simply suppress them depending on requirements
   }

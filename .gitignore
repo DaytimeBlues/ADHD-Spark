@@ -53,6 +53,14 @@ home_restore.tsx
 home_restore_utf8.ts
 *.log
 
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo
+
 # Binary research docs (store externally)
 docs/*.pdf
 docs/*.docx
+
+# Android build artifacts (local)
+android/build_error*.txt
+android/build_log*.txt
+android/local.properties

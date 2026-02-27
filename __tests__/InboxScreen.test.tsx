@@ -1,5 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import InboxScreen from '../src/screens/InboxScreen';
 
 const mockPromote = jest.fn().mockResolvedValue(undefined);
@@ -40,7 +45,9 @@ jest.mock('../src/ui/cosmic', () => {
   const React = require('react');
   const { View } = require('react-native');
   return {
-    CosmicBackground: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
+    CosmicBackground: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
   };
 });
 

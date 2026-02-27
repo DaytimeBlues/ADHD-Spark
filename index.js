@@ -7,15 +7,6 @@ import App from './App';
 import { name as appName } from './app.json';
 import * as Sentry from '@sentry/react-native';
 
-Sentry.init({
-  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
-  debug: __DEV__, // Print useful debugging info in dev
-  tracesSampleRate: 1.0, // Adjust in production
-  _experiments: {
-    profilesSampleRate: 1.0,
-    replaysSessionSampleRate: 1.0,
-    replaysOnErrorSampleRate: 1.0,
-  },
-});
-
+// Sentry.init is called in App.tsx with production guards.
+// Here we only wrap the root component for error boundary integration.
 AppRegistry.registerComponent(appName, () => Sentry.wrap(App));

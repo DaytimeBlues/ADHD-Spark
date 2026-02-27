@@ -77,7 +77,9 @@ jest.mock('../src/components/brain-dump', () => {
   const { Text, View, Pressable } = require('react-native');
 
   return {
-    BrainDumpItem: ({ item }: { item: { text: string } }) => <Text>{item.text}</Text>,
+    BrainDumpItem: ({ item }: { item: { text: string } }) => (
+      <Text>{item.text}</Text>
+    ),
     BrainDumpInput: ({ onAdd }: { onAdd: (text: string) => void }) => (
       <Pressable onPress={() => onAdd('test input')}>
         <Text>INPUT</Text>

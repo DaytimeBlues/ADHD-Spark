@@ -24,9 +24,10 @@ interface GoogleSigninLike {
 
 const getGoogleSignin = (): GoogleSigninLike | null => {
   try {
-    const googleModule = require('@react-native-google-signin/google-signin') as {
-      GoogleSignin?: GoogleSigninLike;
-    };
+    const googleModule =
+      require('@react-native-google-signin/google-signin') as {
+        GoogleSignin?: GoogleSigninLike;
+      };
     return googleModule.GoogleSignin || null;
   } catch {
     return null;
@@ -59,7 +60,10 @@ export class GoogleAuthService {
       return;
     }
 
-    this.configureGoogleSignIn(config.googleWebClientId, config.googleIosClientId);
+    this.configureGoogleSignIn(
+      config.googleWebClientId,
+      config.googleIosClientId,
+    );
   }
 
   async getCurrentUserScopes(): Promise<string[] | null> {
@@ -72,7 +76,9 @@ export class GoogleAuthService {
       const googleSignin = getGoogleSignin();
       const user = await googleSignin?.getCurrentUser?.();
       return Array.isArray(user?.scopes)
-        ? user.scopes.filter((scope): scope is string => typeof scope === 'string')
+        ? user.scopes.filter(
+            (scope): scope is string => typeof scope === 'string',
+          )
         : null;
     } catch {
       return null;

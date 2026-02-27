@@ -14,7 +14,6 @@ const mockStoreState = {
   completePhase: jest.fn(),
 };
 
-
 jest.mock('../src/hooks/useTimer', () => ({
   __esModule: true,
   default: () => ({
@@ -50,11 +49,21 @@ jest.mock('../src/ui/cosmic', () => {
   const React = require('react');
   const { Text, View, Pressable } = require('react-native');
   return {
-    CosmicBackground: ({ children }: { children: React.ReactNode }) => <View>{children}</View>,
+    CosmicBackground: ({ children }: { children: React.ReactNode }) => (
+      <View>{children}</View>
+    ),
     HaloRing: () => <View />,
     ChronoDigits: ({ value }: { value: string }) => <Text>{value}</Text>,
-    RuneButton: ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => (
-      <Pressable onPress={onPress}><Text>{children}</Text></Pressable>
+    RuneButton: ({
+      children,
+      onPress,
+    }: {
+      children: React.ReactNode;
+      onPress?: () => void;
+    }) => (
+      <Pressable onPress={onPress}>
+        <Text>{children}</Text>
+      </Pressable>
     ),
   };
 });
