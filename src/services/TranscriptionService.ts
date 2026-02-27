@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import { config } from '../config';
+import { LoggerService } from './LoggerService';
 
 /**
  * TranscriptionService
@@ -101,7 +102,13 @@ class TranscriptionServiceClass {
         summary: data.summary,
       };
     } catch (error) {
-      console.error('Transcription error:', error);
+      LoggerService.error({
+        service: 'TranscriptionService',
+        operation: 'transcribe',
+        message: 'Transcription error',
+        error,
+        context: { audioUri },
+      });
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

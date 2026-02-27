@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import ChatService, { ChatMessage, ChatError } from '../services/ChatService';
+import { LoggerService } from '../services/LoggerService';
 
 /**
  * useChat
@@ -29,7 +30,13 @@ export function useChat() {
       const errorMessage =
         err instanceof ChatError ? err.message : 'Failed to send message';
       setError(errorMessage);
-      console.error('Chat error:', err);
+      LoggerService.error({
+        service: 'useChat',
+        operation: 'sendMessage',
+        message: 'Failed to send chat message',
+        error: err,
+        context: { textLength: text.length },
+      });
     } finally {
       setIsLoading(false);
     }

@@ -23,6 +23,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import RecordingService from '../services/RecordingService';
+import { LoggerService } from '../services/LoggerService';
 import PlaudService, { GoogleTasksSyncService } from '../services/PlaudService';
 import OverlayService from '../services/OverlayService';
 import AISortService, { SortedItem } from '../services/AISortService';
@@ -157,7 +158,12 @@ const BrainDumpScreen = () => {
         setItems(normalized);
       }
     } catch (error) {
-      console.error('Failed to load items', error);
+      LoggerService.error({
+        service: 'BrainDumpScreen',
+        operation: 'loadItems',
+        message: 'Failed to load items',
+        error,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -187,7 +193,13 @@ const BrainDumpScreen = () => {
         StorageService.STORAGE_KEYS.brainDump,
         items,
       ).catch((error) =>
-        console.error('Failed to persist brain dump items:', error),
+        LoggerService.error({
+          service: 'BrainDumpScreen',
+          operation: 'persistItems',
+          message: 'Failed to persist brain dump items',
+          error,
+          context: { itemCount: items.length },
+        }),
       );
     }, PERSIST_DEBOUNCE_MS);
 

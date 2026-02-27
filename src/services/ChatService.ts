@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { generateId } from '../utils/helpers';
+import { LoggerService } from './LoggerService';
 
 export interface ChatMessage {
   id: string;
@@ -166,7 +167,13 @@ class ChatService {
       }
     } catch (error) {
       const chatError = this.classifyError(error);
-      console.error('Chat failed:', chatError);
+      LoggerService.error({
+        service: 'ChatService',
+        operation: 'sendMessage',
+        message: 'Chat failed',
+        error: chatError,
+        context: { messageCount: this.messages.length },
+      });
       assistantMsg.content = chatError.message;
       this.notify();
     } finally {
@@ -302,7 +309,13 @@ class ChatService {
 
       if (!response.ok) {
         const errBody = await response.text();
-        console.error('Kimi API Error:', errBody);
+        LoggerService.error({
+          service: 'ChatService',
+          operation: 'callKimiDirect',
+          message: 'Kimi API Error',
+          error: new Error(`Kimi API error: ${response.status} - ${errBody}`),
+          context: { status: response.status },
+        });
         throw new Error(`Kimi API error: ${response.status}`);
       }
 

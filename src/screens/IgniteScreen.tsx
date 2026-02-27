@@ -12,6 +12,7 @@ import SoundService from '../services/SoundService';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import ActivationService from '../services/ActivationService';
+import { LoggerService } from '../services/LoggerService';
 import useTimer from '../hooks/useTimer';
 import { useTimerStore } from '../store/useTimerStore';
 import { Tokens } from '../theme/tokens';
@@ -44,10 +45,13 @@ const IgniteScreen = () => {
         if (sessionId) {
           ActivationService.updateSessionStatus(sessionId, 'completed').catch(
             (error) => {
-              console.error(
-                '[Ignite] Failed to mark session completed:',
+              LoggerService.error({
+                service: 'IgniteScreen',
+                operation: 'onComplete',
+                message: 'Failed to mark session completed',
                 error,
-              );
+                context: { sessionId },
+              });
             },
           );
           sessionIdRef.current = null;
@@ -83,10 +87,13 @@ const IgniteScreen = () => {
                 storedState.activeSessionId,
                 'resumed',
               ).catch((error) => {
-                console.error(
-                  '[Ignite] Failed to mark session resumed:',
+                LoggerService.error({
+                  service: 'IgniteScreen',
+                  operation: 'loadState',
+                  message: 'Failed to mark session resumed',
                   error,
-                );
+                  context: { sessionId: storedState.activeSessionId },
+                });
               });
             }
           }
@@ -107,7 +114,13 @@ const IgniteScreen = () => {
               lastActive.id,
               'resumed',
             ).catch((error) => {
-              console.error('[Ignite] Failed to resume last session:', error);
+              LoggerService.error({
+                service: 'IgniteScreen',
+                operation: 'loadState',
+                message: 'Failed to resume last session',
+                error,
+                context: { sessionId: lastActive.id },
+              });
             });
           }
         }
@@ -121,7 +134,12 @@ const IgniteScreen = () => {
           UXMetricsService.track('ignite_timer_started_from_pending_handoff');
         }
       } catch (error) {
-        console.error('Failed to load ignite state', error);
+        LoggerService.error({
+          service: 'IgniteScreen',
+          operation: 'loadState',
+          message: 'Failed to load ignite state',
+          error,
+        });
       } finally {
         setIsRestoring(false);
       }
@@ -150,7 +168,12 @@ const IgniteScreen = () => {
           sessionIdRef.current = sessionId;
         })
         .catch((error) => {
-          console.error('[Ignite] Failed to start session:', error);
+          LoggerService.error({
+            service: 'IgniteScreen',
+            operation: 'startTimer',
+            message: 'Failed to start session',
+            error,
+          });
         });
     }
     start();
@@ -163,7 +186,13 @@ const IgniteScreen = () => {
     if (sessionId) {
       ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
         (error) => {
-          console.error('[Ignite] Failed to mark session abandoned:', error);
+          LoggerService.error({
+            service: 'IgniteScreen',
+            operation: 'pauseTimer',
+            message: 'Failed to mark session abandoned',
+            error,
+            context: { sessionId },
+          });
         },
       );
       sessionIdRef.current = null;
@@ -178,7 +207,13 @@ const IgniteScreen = () => {
     if (sessionId) {
       ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
         (error) => {
-          console.error('[Ignite] Failed to mark session abandoned:', error);
+          LoggerService.error({
+            service: 'IgniteScreen',
+            operation: 'resetTimer',
+            message: 'Failed to mark session abandoned',
+            error,
+            context: { sessionId },
+          });
         },
       );
       sessionIdRef.current = null;

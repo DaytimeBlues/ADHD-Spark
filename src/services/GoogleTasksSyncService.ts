@@ -3,6 +3,7 @@ import { config } from '../config';
 import { SortedItem } from './AISortService';
 import StorageService from './StorageService';
 import OverlayService from './OverlayService';
+import { LoggerService } from './LoggerService';
 
 /**
  * GoogleTasksSyncService
@@ -234,7 +235,12 @@ class GoogleTasksSyncServiceClass {
       await googleSignin.signIn();
       return true;
     } catch (error) {
-      console.error('Google sign-in failed:', error);
+      LoggerService.error({
+        service: 'GoogleTasksSyncService',
+        operation: 'signIn',
+        message: 'Google sign-in failed',
+        error,
+      });
       return false;
     }
   }
@@ -489,7 +495,13 @@ class GoogleTasksSyncServiceClass {
       );
       return true;
     } catch (error) {
-      console.error('Failed to mark Google task as completed:', error);
+      LoggerService.error({
+        service: 'GoogleTasksSyncService',
+        operation: 'completeTask',
+        message: 'Failed to mark Google task as completed',
+        error,
+        context: { listId, taskId },
+      });
       return false;
     }
   }
@@ -544,7 +556,13 @@ class GoogleTasksSyncServiceClass {
       );
       return true;
     } catch (error) {
-      console.error('Failed to create Google task:', error);
+      LoggerService.error({
+        service: 'GoogleTasksSyncService',
+        operation: 'createTask',
+        message: 'Failed to create Google task',
+        error,
+        context: { listId, title },
+      });
       return false;
     }
   }
@@ -599,7 +617,12 @@ class GoogleTasksSyncServiceClass {
       });
       return true;
     } catch (error) {
-      console.error('Failed to create Google Calendar event:', error);
+      LoggerService.error({
+        service: 'GoogleTasksSyncService',
+        operation: 'createCalendarEvent',
+        message: 'Failed to create Google Calendar event',
+        error,
+      });
       return false;
     }
   }
@@ -860,7 +883,12 @@ class GoogleTasksSyncServiceClass {
 
     this.pollTimer = setInterval(() => {
       this.syncToBrainDump().catch((error) => {
-        console.error('Foreground Google Tasks poll failed:', error);
+        LoggerService.error({
+          service: 'GoogleTasksSyncService',
+          operation: 'startForegroundPolling',
+          message: 'Foreground Google Tasks poll failed',
+          error,
+        });
       });
     }, intervalMs);
   }

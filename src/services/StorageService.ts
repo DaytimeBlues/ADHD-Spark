@@ -6,6 +6,7 @@ import type {
   Scalar,
   Transaction,
 } from '@op-engineering/op-sqlite';
+import { LoggerService } from './LoggerService';
 
 type KVDatabase = Pick<DB, 'execute' | 'transaction'>;
 type KVQueryResult = QueryResult & { rows: Array<Record<string, Scalar>> };
@@ -67,7 +68,12 @@ const runMigrations = async (): Promise<void> => {
       await StorageService.set(STORAGE_VERSION_KEY, STORAGE_VERSION.toString());
     }
   } catch (error) {
-    console.error('Storage migration error:', error);
+    LoggerService.error({
+      service: 'StorageService',
+      operation: 'runMigrations',
+      message: 'Storage migration error',
+      error,
+    });
   }
 };
 
@@ -126,7 +132,12 @@ const StorageService = {
         }
         await AsyncStorage.setItem('SQLITE_MIGRATED', 'true');
       } catch (e) {
-        console.error('Migration to SQLite failed:', e);
+        LoggerService.error({
+          service: 'StorageService',
+          operation: 'init',
+          message: 'Migration to SQLite failed',
+          error: e,
+        });
       }
     }
 
@@ -138,7 +149,13 @@ const StorageService = {
       try {
         return await AsyncStorage.getItem(key);
       } catch (error) {
-        console.error('Storage get error:', error);
+        LoggerService.error({
+          service: 'StorageService',
+          operation: 'get',
+          message: 'Storage get error (AsyncStorage)',
+          error,
+          context: { key },
+        });
         return null;
       }
     }
@@ -154,7 +171,13 @@ const StorageService = {
       }
       return null;
     } catch (error) {
-      console.error('Storage get error:', error);
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'get',
+        message: 'Storage get error (SQLite)',
+        error,
+        context: { key },
+      });
       return null;
     }
   },
@@ -176,7 +199,13 @@ const StorageService = {
       );
       return true;
     } catch (error) {
-      console.error('Storage set error:', error);
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'set',
+        message: 'Storage set error',
+        error,
+        context: { key },
+      });
       return false;
     }
   },
@@ -195,7 +224,13 @@ const StorageService = {
       await getDb().execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return true;
     } catch (error) {
-      console.error('Storage remove error:', error);
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'remove',
+        message: 'Storage remove error',
+        error,
+        context: { key },
+      });
       return false;
     }
   },
@@ -209,7 +244,13 @@ const StorageService = {
       const value = await this.get(key);
       return safeJSONParse<T>(value);
     } catch (error) {
-      console.error('Storage getJSON error:', error);
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'getJSON',
+        message: 'Storage getJSON error',
+        error,
+        context: { key },
+      });
       return null;
     }
   },
@@ -218,7 +259,13 @@ const StorageService = {
     try {
       return await this.set(key, JSON.stringify(value));
     } catch (error) {
-      console.error('Storage setJSON error:', error);
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'setJSON',
+        message: 'Storage setJSON error',
+        error,
+        context: { key },
+      });
       return false;
     }
   },

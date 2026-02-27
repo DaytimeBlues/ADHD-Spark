@@ -6,6 +6,7 @@ import { CheckInService } from '../services/CheckInService';
 import { TimerService } from '../services/TimerService';
 import { DriftService } from '../services/DriftService';
 import { BiometricService } from '../services/BiometricService';
+import { LoggerService } from '../services/LoggerService';
 import { config } from '../config';
 
 const CRITICAL_INIT_TIMEOUT_MS = 8000;
@@ -34,7 +35,12 @@ async function initializeCriticalServices(): Promise<void> {
  */
 function initializeNonBlockingServices(): undefined {
   GoogleTasksSyncService.syncToBrainDump().catch((error) => {
-    console.error('Initial Google Tasks sync failed:', error);
+    LoggerService.error({
+      service: 'bootstrap',
+      operation: 'initializeNonBlockingServices',
+      message: 'Initial Google Tasks sync failed',
+      error,
+    });
   });
   WebMCPService.init();
   CheckInService.start();
@@ -83,7 +89,12 @@ export async function bootstrapApp(): Promise<BootstrapResult> {
 
     return { success: true, errors };
   } catch (error) {
-    console.error('App initialization error:', error);
+    LoggerService.error({
+      service: 'bootstrap',
+      operation: 'bootstrapApp',
+      message: 'App initialization error',
+      error,
+    });
     errors.push(error instanceof Error ? error : new Error(String(error)));
     return { success: false, errors };
   }

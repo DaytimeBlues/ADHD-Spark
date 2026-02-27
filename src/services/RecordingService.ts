@@ -1,3 +1,5 @@
+import { LoggerService } from './LoggerService';
+
 /**
  * RecordingService
  *
@@ -86,7 +88,12 @@ class RecordingServiceClass {
       const { status } = await Audio.requestPermissionsAsync();
       return status === 'granted';
     } catch (error) {
-      console.error('Permission request failed:', error);
+      LoggerService.error({
+        service: 'RecordingService',
+        operation: 'requestPermissions',
+        message: 'Permission request failed',
+        error,
+      });
       return false;
     }
   }
@@ -119,7 +126,11 @@ class RecordingServiceClass {
       // Request permissions if not already granted
       const hasPermission = await this.requestPermissions();
       if (!hasPermission) {
-        console.error('Microphone permission not granted');
+        LoggerService.error({
+          service: 'RecordingService',
+          operation: 'startRecording',
+          message: 'Microphone permission not granted',
+        });
         return false;
       }
 
@@ -141,7 +152,12 @@ class RecordingServiceClass {
       console.log('Recording started');
       return true;
     } catch (error) {
-      console.error('Failed to start recording:', error);
+      LoggerService.error({
+        service: 'RecordingService',
+        operation: 'startRecording',
+        message: 'Failed to start recording',
+        error,
+      });
       return false;
     }
   }
@@ -192,7 +208,11 @@ class RecordingServiceClass {
       this.isRecording = false;
 
       if (!uri) {
-        console.error('No recording URI');
+        LoggerService.error({
+          service: 'RecordingService',
+          operation: 'stopRecording',
+          message: 'No recording URI',
+        });
         return null;
       }
 
@@ -202,7 +222,12 @@ class RecordingServiceClass {
         duration: status.durationMillis || 0,
       };
     } catch (error) {
-      console.error('Failed to stop recording:', error);
+      LoggerService.error({
+        service: 'RecordingService',
+        operation: 'stopRecording',
+        message: 'Failed to stop recording',
+        error,
+      });
       this.recording = null;
       this.isRecording = false;
       return null;

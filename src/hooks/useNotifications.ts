@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { NotificationService } from '../services/NotificationService';
+import { LoggerService } from '../services/LoggerService';
 
 /**
  * useNotifications
@@ -21,7 +22,12 @@ export function useNotifications() {
       const granted = await NotificationService.requestPermissions();
       setHasPermission(granted);
     } catch (error) {
-      console.error('Failed to check notification permissions:', error);
+      LoggerService.error({
+        service: 'useNotifications',
+        operation: 'checkPermission',
+        message: 'Failed to check notification permissions',
+        error,
+      });
       setHasPermission(false);
     } finally {
       setIsLoading(false);
@@ -35,7 +41,12 @@ export function useNotifications() {
       setHasPermission(granted);
       return granted;
     } catch (error) {
-      console.error('Failed to request notification permissions:', error);
+      LoggerService.error({
+        service: 'useNotifications',
+        operation: 'requestPermission',
+        message: 'Failed to request notification permissions',
+        error,
+      });
       setHasPermission(false);
       return false;
     } finally {

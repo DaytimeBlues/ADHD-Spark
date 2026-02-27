@@ -1,3 +1,5 @@
+import { LoggerService } from './LoggerService';
+
 /**
  * AgentEventBus
  *
@@ -55,7 +57,13 @@ class AgentEventBus {
       try {
         listener(payload);
       } catch (err) {
-        console.error(`AgentEventBus: error in listener for '${event}'`, err);
+        LoggerService.error({
+          service: 'AgentEventBus',
+          operation: 'emit',
+          message: `Error in listener for '${event}'`,
+          error: err,
+          context: { event },
+        });
       }
     });
   }

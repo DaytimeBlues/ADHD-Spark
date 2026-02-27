@@ -25,6 +25,7 @@ import CaptureService, {
   CaptureItem,
   CaptureStatus,
 } from '../services/CaptureService';
+import { LoggerService } from '../services/LoggerService';
 import { CosmicBackground } from '../ui/cosmic';
 
 // ============================================================================
@@ -287,7 +288,12 @@ const InboxScreen = (): JSX.Element => {
       const result = await CaptureService.getAll(filter);
       setItems(result);
     } catch (error) {
-      console.error('[InboxScreen] loadItems error:', error);
+      LoggerService.error({
+        service: 'InboxScreen',
+        operation: 'loadItems',
+        message: 'Failed to load items',
+        error,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -308,7 +314,12 @@ const InboxScreen = (): JSX.Element => {
         }
       })
       .catch((error) => {
-        console.error('[InboxScreen] load error:', error);
+        LoggerService.error({
+          service: 'InboxScreen',
+          operation: 'load',
+          message: 'Failed to load items',
+          error,
+        });
         if (isMounted) {
           setIsLoading(false);
         }
@@ -330,7 +341,13 @@ const InboxScreen = (): JSX.Element => {
     try {
       await CaptureService.promote(id, 'task');
     } catch (error) {
-      console.error('[InboxScreen] promote task error:', error);
+      LoggerService.error({
+        service: 'InboxScreen',
+        operation: 'handlePromoteTask',
+        message: 'Failed to promote task',
+        error,
+        context: { id },
+      });
     }
   }, []);
 
@@ -338,7 +355,13 @@ const InboxScreen = (): JSX.Element => {
     try {
       await CaptureService.promote(id, 'note');
     } catch (error) {
-      console.error('[InboxScreen] promote note error:', error);
+      LoggerService.error({
+        service: 'InboxScreen',
+        operation: 'handlePromoteNote',
+        message: 'Failed to promote note',
+        error,
+        context: { id },
+      });
     }
   }, []);
 
@@ -346,7 +369,13 @@ const InboxScreen = (): JSX.Element => {
     try {
       await CaptureService.discard(id);
     } catch (error) {
-      console.error('[InboxScreen] discard error:', error);
+      LoggerService.error({
+        service: 'InboxScreen',
+        operation: 'handleDiscard',
+        message: 'Failed to discard item',
+        error,
+        context: { id },
+      });
     }
   }, []);
 
