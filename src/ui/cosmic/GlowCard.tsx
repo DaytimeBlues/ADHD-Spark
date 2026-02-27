@@ -157,9 +157,9 @@ export const GlowCard = memo(function GlowCard({
       borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : 'transparent',
       ...(onPress && Platform.OS === 'web'
         ? ({
-            cursor: 'pointer',
-            transition: 'all 0.2s ease-in-out',
-          } as WebInteractiveStyle)
+          cursor: 'pointer',
+          transition: 'all 0.2s ease-in-out',
+        } as WebInteractiveStyle)
         : {}),
     }),
     [backgroundColor, resolvedPadding, isCosmic, onPress],
@@ -212,21 +212,21 @@ export const GlowCard = memo(function GlowCard({
     }
   }, [isCosmic, glow]);
 
+  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
   return (
-    <Pressable
+    <AnimatedPressable
       testID={testID}
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={disabled}
-      style={({ pressed }) => [
+      style={[
         containerStyle,
         glowStyle,
         style as ViewStyle,
-        pressed && !isCosmic && { opacity: 0.8 },
+        isPressedInternal && !isCosmic && { opacity: 0.8 },
         { transform: [{ scale: scaleAnim }] },
-        // Use internal state to silence unused warning while keeping it for potential future logic
-        isPressedInternal ? {} : {},
       ]}
       accessibilityState={{
         ...accessibilityState,
@@ -251,7 +251,7 @@ export const GlowCard = memo(function GlowCard({
       />
 
       {children}
-    </Pressable>
+    </AnimatedPressable>
   );
 });
 
