@@ -2,8 +2,8 @@ import {
   EmitterSubscription,
   NativeEventEmitter,
   NativeModules,
-  Platform,
 } from 'react-native';
+import { isAndroid, isWeb } from '../utils/PlatformUtils';
 
 const { OverlayModule } = NativeModules as {
   OverlayModule?: {
@@ -46,7 +46,7 @@ const overlayEventEmitterModule = OverlayModule
 
 // Create NativeEventEmitter only on native platforms with a valid module
 const overlayEventEmitter =
-  Platform.OS !== 'web' && overlayEventEmitterModule
+  !isWeb && overlayEventEmitterModule
     ? new NativeEventEmitter(overlayEventEmitterModule)
     : null;
 
@@ -69,7 +69,7 @@ const flushPendingOverlayCountToNative = () => {
 
 const OverlayService = {
   async canDrawOverlays(): Promise<boolean> {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return false;
     }
     if (!OverlayModule?.canDrawOverlays) {
@@ -84,7 +84,7 @@ const OverlayService = {
   },
 
   async requestOverlayPermission(): Promise<boolean> {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return false;
     }
     if (!OverlayModule?.requestOverlayPermission) {
@@ -105,7 +105,7 @@ const OverlayService = {
   },
 
   async canPostNotifications(): Promise<boolean> {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return true; // No notification permission needed on other platforms
     }
     if (!OverlayModule?.canPostNotifications) {
@@ -115,7 +115,7 @@ const OverlayService = {
   },
 
   async isRunning(): Promise<boolean> {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return false;
     }
     if (!OverlayModule?.isRunning) {
@@ -130,7 +130,7 @@ const OverlayService = {
   },
 
   startOverlay() {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return;
     }
     try {
@@ -146,7 +146,7 @@ const OverlayService = {
   },
 
   stopOverlay() {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return;
     }
     try {
@@ -161,7 +161,7 @@ const OverlayService = {
   },
 
   updateCount(count: number) {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return;
     }
     const normalizedCount = Number.isFinite(count)
@@ -179,7 +179,7 @@ const OverlayService = {
   },
 
   flushOverlayCount() {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return;
     }
     if (overlayCountUpdateTimer) {
@@ -212,7 +212,7 @@ const OverlayService = {
   },
 
   collapseOverlay() {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return;
     }
     try {
@@ -223,7 +223,7 @@ const OverlayService = {
   },
 
   async isExpanded(): Promise<boolean> {
-    if (Platform.OS !== 'android') {
+    if (!isAndroid) {
       return false;
     }
     if (!OverlayModule?.isExpanded) {

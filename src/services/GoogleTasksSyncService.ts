@@ -1,9 +1,9 @@
 import { Platform } from 'react-native';
-import { config } from '../config';
 import { SortedItem } from './AISortService';
 import StorageService from './StorageService';
 import OverlayService from './OverlayService';
 import { LoggerService } from './LoggerService';
+import { GoogleAuthService } from './GoogleAuthService';
 
 /**
  * GoogleTasksSyncService
@@ -86,38 +86,6 @@ class GoogleApiError extends Error {
   }
 }
 
-interface GoogleSigninLike {
-  configure: (config: {
-    scopes?: string[];
-    webClientId?: string;
-    iosClientId?: string;
-    offlineAccess?: boolean;
-    forceCodeForRefreshToken?: boolean;
-  }) => void;
-  hasPlayServices: (options?: {
-    showPlayServicesUpdateDialog?: boolean;
-  }) => Promise<unknown>;
-  signIn: () => Promise<unknown>;
-  signInSilently: () => Promise<unknown>;
-  getTokens: () => Promise<{ accessToken: string }>;
-  getCurrentUser?: () => Promise<{
-    scopes?: string[];
-    user?: { email?: string };
-  } | null>;
-}
-
-const getGoogleSignin = (): GoogleSigninLike | null => {
-  try {
-    const googleModule =
-      require('@react-native-google-signin/google-signin') as {
-        GoogleSignin?: GoogleSigninLike;
-      };
-    return googleModule.GoogleSignin || null;
-  } catch {
-    return null;
-  }
-};
-
 const generateSyncItemId = (): string => {
   return `google-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 };
@@ -152,117 +120,31 @@ const toGoogleTaskDue = (dueDate?: string): string | undefined => {
 };
 
 class GoogleTasksSyncServiceClass {
-  private configured = false;
+  private readonly authService = new GoogleAuthService([
+    GOOGLE_TASKS_SCOPE,
+    GOOGLE_CALENDAR_SCOPE,
+  ]);
   private pollTimer: ReturnType<typeof setInterval> | null = null;
   private isSyncing = false;
 
   configureGoogleSignIn(webClientId?: string, iosClientId?: string): void {
-    const googleSignin = getGoogleSignin();
-    if (!googleSignin) {
-      return;
-    }
-
-    googleSignin.configure({
-      scopes: [GOOGLE_TASKS_SCOPE, GOOGLE_CALENDAR_SCOPE],
-      webClientId,
-      iosClientId,
-      offlineAccess: Boolean(webClientId),
-      forceCodeForRefreshToken: false,
-    });
-    this.configured = true;
-  }
-
-  private ensureConfigured(): void {
-    if (this.configured) {
-      return;
-    }
-
-    this.configureGoogleSignIn(
-      config.googleWebClientId,
-      config.googleIosClientId,
-    );
+    this.authService.configureGoogleSignIn(webClientId, iosClientId);
   }
 
   async getCurrentUserScopes(): Promise<string[] | null> {
-    if (Platform.OS === 'web') {
-      return null;
-    }
-
-    this.ensureConfigured();
-    try {
-      const googleSignin = getGoogleSignin();
-      const user = await googleSignin?.getCurrentUser?.();
-      return Array.isArray(user?.scopes)
-        ? user.scopes.filter(
-            (scope): scope is string => typeof scope === 'string',
-          )
-        : null;
-    } catch {
-      return null;
-    }
+    return this.authService.getCurrentUserScopes();
   }
 
   async getCurrentUserEmail(): Promise<string | null> {
-    if (Platform.OS === 'web') {
-      return null;
-    }
-
-    this.ensureConfigured();
-    try {
-      const googleSignin = getGoogleSignin();
-      const user = await googleSignin?.getCurrentUser?.();
-      return typeof user?.user?.email === 'string' ? user.user.email : null;
-    } catch {
-      return null;
-    }
+    return this.authService.getCurrentUserEmail();
   }
 
   async signInInteractive(): Promise<boolean> {
-    if (Platform.OS === 'web') {
-      return false;
-    }
-
-    this.ensureConfigured();
-    try {
-      const googleSignin = getGoogleSignin();
-      if (!googleSignin) {
-        return false;
-      }
-
-      await googleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
-      await googleSignin.signIn();
-      return true;
-    } catch (error) {
-      LoggerService.error({
-        service: 'GoogleTasksSyncService',
-        operation: 'signIn',
-        message: 'Google sign-in failed',
-        error,
-      });
-      return false;
-    }
+    return this.authService.signInInteractive();
   }
 
   private async getAccessToken(): Promise<string | null> {
-    if (Platform.OS === 'web') {
-      return null;
-    }
-
-    this.ensureConfigured();
-    try {
-      const googleSignin = getGoogleSignin();
-      if (!googleSignin) {
-        return null;
-      }
-
-      await googleSignin.signInSilently();
-      const tokens = await googleSignin.getTokens();
-      return tokens.accessToken;
-    } catch {
-      return null;
-    }
+    return this.authService.getAccessToken();
   }
 
   private async readSyncState(): Promise<GoogleTasksSyncState> {

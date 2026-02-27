@@ -1,7 +1,8 @@
-import { Platform, Vibration } from 'react-native';
+import { Vibration } from 'react-native';
+import { isIOS, isWeb } from '../utils/PlatformUtils';
 
 // Detect if device has haptic engine (iOS 10+)
-const hasHapticEngine = Platform.OS === 'ios';
+const hasHapticEngine = isIOS;
 
 // Light tap for UI feedback
 const LIGHT_TAP_MS = 10;
@@ -32,7 +33,7 @@ class HapticsService {
    * Uses native haptic on iOS, vibration on Android
    */
   tap(options?: TapOptions): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
 
@@ -91,7 +92,7 @@ class HapticsService {
    * iOS only - very subtle
    */
   selection(options?: SelectionOptions): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
 
@@ -113,7 +114,7 @@ class HapticsService {
    * Success feedback - double vibration pattern
    */
   success(): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
     Vibration.vibrate([0, 50, 50, 50]);
@@ -123,7 +124,7 @@ class HapticsService {
    * Warning feedback - longer vibration
    */
   warning(): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
     Vibration.vibrate(100);
@@ -133,7 +134,7 @@ class HapticsService {
    * Error feedback - triple short vibration
    */
   error(): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
     Vibration.vibrate([0, 30, 30, 30, 30, 30]);
@@ -143,7 +144,7 @@ class HapticsService {
    * Cancel/restore feedback - sequence
    */
   cancel(): void {
-    if (Platform.OS === 'web') {
+    if (isWeb) {
       return;
     }
     Vibration.vibrate([0, 20, 50, 20]);
