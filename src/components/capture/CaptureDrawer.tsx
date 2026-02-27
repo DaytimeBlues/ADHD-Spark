@@ -22,6 +22,7 @@ import {
 import { BottomSheet } from '../../ui/cosmic/BottomSheet';
 import CaptureService, { CaptureSource } from '../../services/CaptureService';
 import RecordingService from '../../services/RecordingService';
+import { LoggerService } from '../../services/LoggerService';
 import type { BubbleState } from './CaptureBubble';
 
 // ============================================================================
@@ -353,7 +354,12 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
         setText('');
       }
     } catch (err) {
-      console.error('[PasteMode] clipboard read error:', err);
+      LoggerService.error({
+        service: 'CaptureDrawer',
+        operation: 'handleAutoPaste',
+        message: 'Clipboard read error',
+        error: err,
+      });
     } finally {
       setIsPasting(false);
     }
@@ -703,7 +709,13 @@ export const CaptureDrawer = memo(function CaptureDrawer({
         });
         showSuccess('Saved to inbox ✓');
       } catch (err) {
-        console.error('[CaptureDrawer] save error:', err);
+        LoggerService.error({
+          service: 'CaptureDrawer',
+          operation: 'saveCapture',
+          message: 'Failed to save capture',
+          error: err,
+          context: { source },
+        });
         setSaveError('Failed to save. Please try again.');
       } finally {
         setIsSaving(false);

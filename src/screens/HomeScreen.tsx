@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 import OverlayService from '../services/OverlayService';
 import StorageService from '../services/StorageService';
+import { LoggerService } from '../services/LoggerService';
 import ActivationService, {
   ActivationDailyTrendPoint,
   ActivationSummary,
@@ -273,7 +274,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         );
       }
     } catch (error) {
-      console.error('Error loading streak:', error);
+      LoggerService.error({
+        service: 'HomeScreen',
+        operation: 'loadStreak',
+        message: 'Error loading streak',
+        error,
+      });
     }
   }, []);
 
@@ -440,7 +446,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         OverlayService.stopOverlay();
         setIsOverlayEnabled(false);
       } catch (error) {
-        console.error('Failed to toggle overlay:', error);
+        LoggerService.error({
+          service: 'HomeScreen',
+          operation: 'toggleOverlay',
+          message: 'Failed to toggle overlay',
+          error,
+        });
         setIsOverlayPermissionRequesting(false);
         setIsOverlayEnabled(false);
       }

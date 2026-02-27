@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import * as Sentry from '@sentry/react-native';
+import { LoggerService } from '../services/LoggerService';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -45,8 +46,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     // Log error to console in development
     if (__DEV__) {
-      console.error('ErrorBoundary caught error:', error);
-      console.error('Error info:', errorInfo);
+      LoggerService.error({
+        service: 'ErrorBoundary',
+        operation: 'componentDidCatch',
+        message: 'ErrorBoundary caught error',
+        error,
+        context: { componentStack: errorInfo.componentStack },
+      });
     }
 
     // Send error to tracking service

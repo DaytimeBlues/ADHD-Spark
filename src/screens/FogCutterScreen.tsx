@@ -83,7 +83,12 @@ const FogCutterScreen = ({
         });
       }
     } catch (error) {
-      console.error('AI breakdown failed', error);
+      LoggerService.error({
+        service: 'FogCutterScreen',
+        operation: 'generateMicroSteps',
+        message: 'AI breakdown failed',
+        error,
+      });
     } finally {
       setIsAiLoading(false);
     }
@@ -124,7 +129,12 @@ const FogCutterScreen = ({
           setTasks(normalized);
         }
       } catch (error) {
-        console.error('Failed to load tasks', error);
+        LoggerService.error({
+          service: 'FogCutterScreen',
+          operation: 'loadTasksAndGuide',
+          message: 'Failed to load tasks',
+          error,
+        });
       } finally {
         setIsLoading(false);
       }
