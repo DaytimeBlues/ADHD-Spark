@@ -5,7 +5,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/detox/',
-    '/android.e2e.test.ts/',
+    'android\\.e2e\\.test\\.ts$',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   moduleNameMapper: {
@@ -18,6 +18,12 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   coverageThreshold: {
+    global: {
+      branches: 60,
+      functions: 60,
+      lines: 60,
+      statements: 60,
+    },
     './src/utils/helpers.ts': {
       branches: 90,
       functions: 90,

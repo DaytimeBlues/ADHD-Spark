@@ -52,13 +52,6 @@ const useTimer = ({
     [isActive, remainingSeconds, isRunningGlobal],
   );
 
-  // No internal interval here - managed by global TimerService
-  useEffect(() => {
-    // The service is started in App.tsx, but we can ensure it's running here too if needed
-    // However, we want to avoid every hook instance trying to start/stop the service
-    // if that logic becomes more complex. For now, it's safe to just let App.tsx handle it.
-  }, []);
-
   // Handle completion from store's completion signal (single source of truth)
   useEffect(() => {
     if (isActive && completedAt !== null) {
@@ -68,9 +61,9 @@ const useTimer = ({
     }
   }, [isActive, completedAt, onComplete]);
 
-  // Handle E2E controls
+  // Handle E2E controls — only in development builds
   useEffect(() => {
-    if (!isE2ETestMode() || !isActive) {
+    if (!__DEV__ || !isE2ETestMode() || !isActive) {
       return;
     }
 

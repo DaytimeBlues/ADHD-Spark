@@ -36,10 +36,15 @@ coverage/
 pw-log*.txt
 lint-output*.txt
 *_err.txt
+*_output.txt
 webpack-*.log
 jest-results.json
 test-results.json
 android/build_*.log
+
+# Debug utilities
+dump_console.cjs
+jest_full_log.txt
 
 # Local scratch / restore files
 temp_tokens.ts
@@ -47,3 +52,7 @@ tokens_restore.ts
 home_restore.tsx
 home_restore_utf8.ts
 *.log
+
+# Binary research docs (store externally)
+docs/*.pdf
+docs/*.docx
