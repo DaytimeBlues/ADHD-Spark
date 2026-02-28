@@ -13,7 +13,7 @@
  * - 'linear': Original Nothing aesthetic (monochrome, sharp, technical)
  * - 'cosmic': New Cosmic-Mystic aesthetic (deep space, glows, ethereal)
  */
-export type ThemeVariant = 'linear' | 'cosmic';
+export type ThemeVariant = 'linear' | 'cosmic' | 'phantom';
 
 // ============================================================================
 // CONSTANTS
@@ -25,6 +25,7 @@ export type ThemeVariant = 'linear' | 'cosmic';
 export const THEME_VARIANTS = {
   LINEAR: 'linear' as const,
   COSMIC: 'cosmic' as const,
+  PHANTOM: 'phantom' as const,
 };
 
 /**
@@ -50,6 +51,7 @@ const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   // Direct mappings
   linear: 'linear',
   cosmic: 'cosmic',
+  phantom: 'phantom',
 
   // Legacy/deprecated values (if any existed)
   default: 'linear',
@@ -79,7 +81,7 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
   }
 
   // Validate it's a current variant
-  if (value === 'linear' || value === 'cosmic') {
+  if (value === 'linear' || value === 'cosmic' || value === 'phantom') {
     return value;
   }
 
@@ -95,7 +97,7 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
  */
 export function isValidThemeVariant(value: unknown): value is ThemeVariant {
   return (
-    typeof value === 'string' && (value === 'linear' || value === 'cosmic')
+    typeof value === 'string' && (value === 'linear' || value === 'cosmic' || value === 'phantom')
   );
 }
 
@@ -107,7 +109,7 @@ export function assertThemeVariant(
 ): asserts value is ThemeVariant {
   if (!isValidThemeVariant(value)) {
     throw new Error(
-      `Invalid theme variant: ${value}. Expected 'linear' or 'cosmic'.`,
+      `Invalid theme variant: ${value}. Expected 'linear', 'cosmic', or 'phantom'.`,
     );
   }
 }
@@ -148,6 +150,15 @@ export const THEME_METADATA: Record<
       background: '#070712',
       accent: '#8B5CF6',
       text: '#EEF2FF',
+    },
+  },
+  phantom: {
+    label: 'Phantom',
+    description: 'High-energy Persona 5 style — jagged, kinetic, signal red',
+    preview: {
+      background: '#000000',
+      accent: '#D80000',
+      text: '#FFFFFF',
     },
   },
 };
