@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://daytimeblues.github.io/ADHD-Spark/",
   "scripts": {
-    "android": "react-native run-android --appIdSuffix dev",
+    "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "web": "webpack serve --mode development",
@@ -27,8 +27,8 @@
     "predeploy": "npm run build:web",
     "deploy": "gh-pages -d dist",
     "deploy:firebase": "npm run build:web && firebase deploy --only hosting",
-    "android:dev": "react-native run-android --appIdSuffix dev",
-    "android:clean": "react-native run-android --appIdSuffix dev --active-arch-only"
+    "android:dev": "react-native run-android",
+    "android:clean": "cd android && gradlew.bat --stop 2>nul || true && gradlew.bat :app:clean --no-daemon"
   },
   "dependencies": {
     "@op-engineering/op-sqlite": "^14.1.4",

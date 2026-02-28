@@ -1,0 +1,2 @@
+﻿src/screens/FogCutterScreen.tsx(306,19): error TS2322: Type '{ title: string; testID: string; onPress: () => void; variant: "secondary"; style: { width: number; height: number; paddingHorizontal: number; justifyContent: "center"; alignItems: "center"; borderRadius: number; }; }' is not assignable to type 'IntrinsicAttributes & LinearButtonProps'.
+  Property 'testID' does not exist on type 'IntrinsicAttributes & LinearButtonProps'.

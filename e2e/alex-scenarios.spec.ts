@@ -37,7 +37,7 @@ test.describe('Alex Persona - E2E Scenarios', () => {
         .getByPlaceholder('> INPUT_OVERWHELMING_TASK')
         .fill('Grade 30 essays by Friday');
       await page.getByPlaceholder('> ADD_MICRO_STEP').fill('Open first essay');
-      await page.getByPlaceholder('> ADD_MICRO_STEP').press('Enter');
+      await page.getByTestId('add-micro-step-btn').click();
       await page.getByText('EXECUTE_SAVE').click();
 
       await expect(page.getByText('Grade 30 essays by Friday')).toBeVisible();

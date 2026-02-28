@@ -1,0 +1,30 @@
+﻿adb : - waiting for 
+device -
+At line:1 char:25
++ Start-Sleep 
+-Seconds 8; adb 
+logcat -d -t 300 *:E 
+2>&1 | Out-File -Enc 
+...
++                     
+    ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (- waiting    
+ for device -:Stri    
+ng) [], RemoteExc    
+eption
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+--------- beginning of main
+02-28 10:09:41.020  1862  4278 E LocationManagerService: getLastLocation called by 10118/com.google.android.projection.gearhead
+02-28 10:09:41.098  1303  1341 E libPowerHal: [getCPUFreq] error cid:2, nClusterNum:2
+02-28 10:09:41.111  1303  1342 E libPowerHal: Could not open '/proc/touch_boost/force_stop_boost'
+02-28 10:09:41.111  1303  1342 E libPowerHal: error : 2, No such file or directory
+02-28 10:09:41.114  1862  4278 E LocationManagerService: getLastLocation called by 10118/com.google.android.projection.gearhead
+02-28 10:09:41.136  2628  2628 E SarPlatformInterfaceMtk: delayToSendAt because modem error
+02-28 10:09:41.311  1862  2735 E EventHub: Failed to read sysfs battery info: No such file or directory
+02-28 10:09:41.314  1862  2735 E EventHub: Failed to read sysfs battery info: No such file or directory

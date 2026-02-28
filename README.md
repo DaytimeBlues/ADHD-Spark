@@ -72,7 +72,7 @@ The native Android shell is a secondary wrapper used for platform-specific featu
 
 1. Install JDK 17 and Android Studio.
 2. `npm install`
-3. `cd android && ./gradlew clean`
+3. `npm run android:clean`
 4. `npm run android`
 
 ### Android Phone-Only Deployment (No Store)
@@ -95,7 +95,7 @@ npm run build:android:prod
 
 Profile package IDs:
 
-- Dev: `com.sparkadhd.dev`
+- Dev: `com.sparkadhd`
 - Preview: `com.sparkadhd.preview`
 - Production: `com.sparkadhd`
 

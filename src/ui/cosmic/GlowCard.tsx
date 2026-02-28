@@ -157,9 +157,9 @@ export const GlowCard = memo(function GlowCard({
       borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : 'transparent',
       ...(onPress && Platform.OS === 'web'
         ? ({
-          cursor: 'pointer',
-          transition: 'all 0.2s ease-in-out',
-        } as WebInteractiveStyle)
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out',
+          } as WebInteractiveStyle)
         : {}),
     }),
     [backgroundColor, resolvedPadding, isCosmic, onPress],

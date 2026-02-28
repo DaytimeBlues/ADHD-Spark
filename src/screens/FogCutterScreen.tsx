@@ -303,6 +303,7 @@ const FogCutterScreen = ({
                 />
                 <LinearButton
                   title="+"
+                  testID="add-micro-step-btn"
                   onPress={addMicroStep}
                   variant="secondary"
                   style={styles.addButton}
