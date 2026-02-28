@@ -38,6 +38,7 @@ import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
 import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
+import { PhantomBackground, JaggedCard, StarburstTimer, PhantomButton } from '../ui/phantom';
 
 const ANIMATION_DURATION = 300;
 const ANIMATION_STAGGER = 50;
@@ -62,7 +63,7 @@ type OverlayEvent = {
 };
 
 const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
-  const { isCosmic } = useTheme();
+  const { isCosmic, isPhantom } = useTheme();
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
@@ -496,7 +497,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     [navigateByRouteName],
   );
 
-  const styles = useMemo(() => getStyles(isCosmic), [isCosmic]);
+  const styles = useMemo(() => getStyles(isCosmic, isPhantom), [isCosmic, isPhantom]);
 
   return (
     <CosmicBackground variant="ridge" style={StyleSheet.absoluteFill}>
