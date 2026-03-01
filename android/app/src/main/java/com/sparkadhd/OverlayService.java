@@ -88,7 +88,7 @@ public class OverlayService extends Service {
   @Override
   public void onDestroy() {
     super.onDestroy();
-    stopForeground(true);
+    stopForeground(STOP_FOREGROUND_REMOVE);
     collapseMenu();
     removeViewIfAttached(menuView);
     removeViewIfAttached(scrimView);

@@ -64,3 +64,4 @@ docs/*.docx
 android/build_error*.txt
 android/build_log*.txt
 android/local.properties
+android/app/release.keystore

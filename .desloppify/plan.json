@@ -1,0 +1,1921 @@
+{
+  "version": 2,
+  "created": "2026-03-01T02:10:14+00:00",
+  "updated": "2026-03-01T02:10:14+00:00",
+  "queue_order": [],
+  "deferred": [],
+  "skipped": {},
+  "active_cluster": null,
+  "overrides": {
+    "flat_dirs::__tests__": {
+      "finding_id": "flat_dirs::__tests__",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/flat_dirs-overload",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "flat_dirs::src/services": {
+      "finding_id": "flat_dirs::src/services",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/flat_dirs-overload",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/navigation/AppNavigator.tsx": {
+      "finding_id": "single_use::src/navigation/AppNavigator.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/components/home/ModeCard.tsx": {
+      "finding_id": "single_use::src/components/home/ModeCard.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/screens/ChatScreen.tsx": {
+      "finding_id": "single_use::src/screens/ChatScreen.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useGoogleSyncPolling.ts": {
+      "finding_id": "single_use::src/hooks/useGoogleSyncPolling.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useAgentEvents.ts": {
+      "finding_id": "single_use::src/hooks/useAgentEvents.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/services/SoundService.web.ts": {
+      "finding_id": "single_use::src/services/SoundService.web.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useRetention.ts": {
+      "finding_id": "single_use::src/hooks/useRetention.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/store/useThemeStore.ts": {
+      "finding_id": "single_use::src/store/useThemeStore.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useBiometric.ts": {
+      "finding_id": "single_use::src/hooks/useBiometric.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useCheckIn.ts": {
+      "finding_id": "single_use::src/hooks/useCheckIn.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "single_use::src/hooks/useUnreviewedCount.ts": {
+      "finding_id": "single_use::src/hooks/useUnreviewedCount.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/single_use",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "cycles::src/services/CaptureService.ts::src/services/CaptureService.ts::src/store/useCaptureStore.ts": {
+      "finding_id": "cycles::src/services/CaptureService.ts::src/services/CaptureService.ts::src/store/useCaptureStore.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/cycles",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "cycles::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureDrawer.tsx": {
+      "finding_id": "cycles::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureDrawer.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/cycles",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::App.tsx": {
+      "finding_id": "orphaned::App.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/components/metro/MetroButton.tsx": {
+      "finding_id": "orphaned::src/components/metro/MetroButton.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/components/metro/MetroTile.tsx": {
+      "finding_id": "orphaned::src/components/metro/MetroTile.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/init/bootstrap.ts": {
+      "finding_id": "orphaned::src/init/bootstrap.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/components/ui/LinearCard.tsx": {
+      "finding_id": "orphaned::src/components/ui/LinearCard.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/components/metro/MetroCard.tsx": {
+      "finding_id": "orphaned::src/components/metro/MetroCard.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::playwright.config.ts": {
+      "finding_id": "orphaned::playwright.config.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::src/components/ui/ScaleButton.web.tsx": {
+      "finding_id": "orphaned::src/components/ui/ScaleButton.web.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "orphaned::__tests__/setup.ts": {
+      "finding_id": "orphaned::__tests__/setup.ts",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/orphaned",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/capture/CaptureDrawer.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/capture/CaptureDrawer.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/BottomSheet.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/BottomSheet.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/tokens.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/tokens.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/navigation/AppNavigator.tsx::untested_module": {
+      "finding_id": "test_coverage::src/navigation/AppNavigator.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/cosmicMotion.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/cosmicMotion.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/ChronoDigits.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/ChronoDigits.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/ThemeProvider.tsx::untested_module": {
+      "finding_id": "test_coverage::src/theme/ThemeProvider.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/navigation/WebNavBar.tsx::untested_module": {
+      "finding_id": "test_coverage::src/navigation/WebNavBar.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/screens/IgniteScreen.tsx::over_mocked::IgniteScreen.test.tsx": {
+      "finding_id": "test_coverage::src/screens/IgniteScreen.tsx::over_mocked::IgniteScreen.test.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::App.tsx::untested_module": {
+      "finding_id": "test_coverage::App.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/brain-dump/BrainDumpItem.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/brain-dump/BrainDumpItem.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/screens/BrainDumpScreen.tsx::over_mocked::BrainDumpScreen.test.tsx": {
+      "finding_id": "test_coverage::src/screens/BrainDumpScreen.tsx::over_mocked::BrainDumpScreen.test.tsx",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/metroTheme.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/metroTheme.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/LockScreen.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/LockScreen.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/ReEntryPrompt.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/ReEntryPrompt.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/ScaleButton.web.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/ScaleButton.web.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/brain-dump/BrainDumpInput.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/brain-dump/BrainDumpInput.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/brain-dump/BrainDumpRationale.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/brain-dump/BrainDumpRationale.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/HaloRing.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/HaloRing.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/store/useDriftStore.ts::untested_module": {
+      "finding_id": "test_coverage::src/store/useDriftStore.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/config/secrets.example.ts::untested_module": {
+      "finding_id": "test_coverage::src/config/secrets.example.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/LinearCard.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/LinearCard.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/LinearButton.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/LinearButton.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::playwright.config.ts::untested_module": {
+      "finding_id": "test_coverage::playwright.config.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/DriftCheckOverlay.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/DriftCheckOverlay.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/init/bootstrap.ts::untested_module": {
+      "finding_id": "test_coverage::src/init/bootstrap.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/store/useThemeStore.ts::untested_module": {
+      "finding_id": "test_coverage::src/store/useThemeStore.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/cosmicTokens.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/cosmicTokens.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/metro/MetroTile.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/metro/MetroTile.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/GlowCard.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/GlowCard.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ErrorBoundary.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ErrorBoundary.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/themeVariant.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/themeVariant.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/brain-dump/BrainDumpGuide.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/brain-dump/BrainDumpGuide.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/EmptyState.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/EmptyState.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/ui/EvidenceBadge.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/ui/EvidenceBadge.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/home/ModeCard.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/home/ModeCard.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/brain-dump/BrainDumpActionBar.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/brain-dump/BrainDumpActionBar.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/linearTokens.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/linearTokens.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/theme/motion.ts::untested_module": {
+      "finding_id": "test_coverage::src/theme/motion.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/RuneButton.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/RuneButton.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/metro/MetroButton.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/metro/MetroButton.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/components/metro/MetroCard.tsx::untested_module": {
+      "finding_id": "test_coverage::src/components/metro/MetroCard.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/services/GoogleAuthService.ts::untested_module": {
+      "finding_id": "test_coverage::src/services/GoogleAuthService.ts::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "test_coverage::src/ui/cosmic/CosmicBackground.tsx::untested_module": {
+      "finding_id": "test_coverage::src/ui/cosmic/CosmicBackground.tsx::untested_module",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/test_coverage",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/AnchorScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/AnchorScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/BrainDumpScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/BrainDumpScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/CalendarScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/CalendarScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/FogCutterScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/FogCutterScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/HomeScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/HomeScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/IgniteScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/IgniteScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/PomodoroScreen.tsx::monster_function": {
+      "finding_id": "smells::src/screens/PomodoroScreen.tsx::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/WebMCPService.ts::monster_function": {
+      "finding_id": "smells::src/services/WebMCPService.ts::monster_function",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-monster_function",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/ErrorBoundary.tsx::hardcoded_color": {
+      "finding_id": "smells::src/components/ErrorBoundary.tsx::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/capture/CaptureDrawer.tsx::hardcoded_color": {
+      "finding_id": "smells::src/components/capture/CaptureDrawer.tsx::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/home/ModeCard.tsx::hardcoded_color": {
+      "finding_id": "smells::src/components/home/ModeCard.tsx::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/CalendarScreen.tsx::hardcoded_color": {
+      "finding_id": "smells::src/screens/CalendarScreen.tsx::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/theme/linearTokens.ts::hardcoded_color": {
+      "finding_id": "smells::src/theme/linearTokens.ts::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/theme/themeVariant.ts::hardcoded_color": {
+      "finding_id": "smells::src/theme/themeVariant.ts::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/ui/cosmic/RuneButton.tsx::hardcoded_color": {
+      "finding_id": "smells::src/ui/cosmic/RuneButton.tsx::hardcoded_color",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_color",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/AISortService.test.ts::hardcoded_url": {
+      "finding_id": "smells::__tests__/AISortService.test.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/CalendarScreen.test.tsx::hardcoded_url": {
+      "finding_id": "smells::__tests__/CalendarScreen.test.tsx::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/ChatService.test.ts::hardcoded_url": {
+      "finding_id": "smells::__tests__/ChatService.test.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/DiagnosticsScreen.test.tsx::hardcoded_url": {
+      "finding_id": "smells::__tests__/DiagnosticsScreen.test.tsx::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/PlaudService.test.ts::hardcoded_url": {
+      "finding_id": "smells::__tests__/PlaudService.test.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::playwright.config.ts::hardcoded_url": {
+      "finding_id": "smells::playwright.config.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/config/caddi.ts::hardcoded_url": {
+      "finding_id": "smells::src/config/caddi.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/CalendarScreen.tsx::hardcoded_url": {
+      "finding_id": "smells::src/screens/CalendarScreen.tsx::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/ChatService.ts::hardcoded_url": {
+      "finding_id": "smells::src/services/ChatService.ts::hardcoded_url",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-hardcoded_url",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::App.tsx::nested_closure": {
+      "finding_id": "smells::App.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/hooks/useBiometric.ts::nested_closure": {
+      "finding_id": "smells::src/hooks/useBiometric.ts::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/hooks/useChat.ts::nested_closure": {
+      "finding_id": "smells::src/hooks/useChat.ts::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/hooks/useNotifications.ts::nested_closure": {
+      "finding_id": "smells::src/hooks/useNotifications.ts::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/AnchorScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/AnchorScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/BrainDumpScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/BrainDumpScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/CalendarScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/CalendarScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/ChatScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/ChatScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/IgniteScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/IgniteScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/PomodoroScreen.tsx::nested_closure": {
+      "finding_id": "smells::src/screens/PomodoroScreen.tsx::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/WebMCPService.ts::nested_closure": {
+      "finding_id": "smells::src/services/WebMCPService.ts::nested_closure",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-nested_closure",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/brain-dump/BrainDumpGuide.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/components/brain-dump/BrainDumpGuide.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/AnchorScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/AnchorScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/BrainDumpScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/BrainDumpScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/CalendarScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/CalendarScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/FogCutterScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/FogCutterScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/HomeScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/HomeScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/IgniteScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/IgniteScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/screens/PomodoroScreen.tsx::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/screens/PomodoroScreen.tsx::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/WebMCPService.ts::high_cyclomatic_complexity": {
+      "finding_id": "smells::src/services/WebMCPService.ts::high_cyclomatic_complexity",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-high_cyclomatic_complexity",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/GoogleTasksSyncService.web.test.ts::as_any_cast": {
+      "finding_id": "smells::__tests__/GoogleTasksSyncService.web.test.ts::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/SoundService.test.ts::as_any_cast": {
+      "finding_id": "smells::__tests__/SoundService.test.ts::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/TranscriptionService.test.ts::as_any_cast": {
+      "finding_id": "smells::__tests__/TranscriptionService.test.ts::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/brain-dump/BrainDumpInput.tsx::as_any_cast": {
+      "finding_id": "smells::src/components/brain-dump/BrainDumpInput.tsx::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/home/ModeCard.tsx::as_any_cast": {
+      "finding_id": "smells::src/components/home/ModeCard.tsx::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/navigation/AppNavigator.tsx::as_any_cast": {
+      "finding_id": "smells::src/navigation/AppNavigator.tsx::as_any_cast",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-as_any_cast",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::App.tsx::swallowed_error": {
+      "finding_id": "smells::App.tsx::swallowed_error",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/NotificationService.ts::swallowed_error": {
+      "finding_id": "smells::src/services/NotificationService.ts::swallowed_error",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/OverlayService.ts::swallowed_error": {
+      "finding_id": "smells::src/services/OverlayService.ts::swallowed_error",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/UXMetricsService.ts::swallowed_error": {
+      "finding_id": "smells::src/services/UXMetricsService.ts::swallowed_error",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-swallowed_error",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/SoundService.test.ts::any_type": {
+      "finding_id": "smells::__tests__/SoundService.test.ts::any_type",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/brain-dump/BrainDumpActionBar.tsx::any_type": {
+      "finding_id": "smells::src/components/brain-dump/BrainDumpActionBar.tsx::any_type",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/brain-dump/BrainDumpGuide.tsx::any_type": {
+      "finding_id": "smells::src/components/brain-dump/BrainDumpGuide.tsx::any_type",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/components/brain-dump/BrainDumpItem.tsx::any_type": {
+      "finding_id": "smells::src/components/brain-dump/BrainDumpItem.tsx::any_type",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-any_type",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::App.tsx::console_error_no_throw": {
+      "finding_id": "smells::App.tsx::console_error_no_throw",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/LoggerService.ts::console_error_no_throw": {
+      "finding_id": "smells::src/services/LoggerService.ts::console_error_no_throw",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-console_error_no_throw",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/ActivationService.test.ts::magic_number": {
+      "finding_id": "smells::__tests__/ActivationService.test.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/DriftService.test.ts::magic_number": {
+      "finding_id": "smells::__tests__/DriftService.test.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/NotificationService.test.ts::magic_number": {
+      "finding_id": "smells::__tests__/NotificationService.test.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::__tests__/helpers.fuzz.test.ts::magic_number": {
+      "finding_id": "smells::__tests__/helpers.fuzz.test.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::e2e/helpers/seed.ts::magic_number": {
+      "finding_id": "smells::e2e/helpers/seed.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::playwright.config.ts::magic_number": {
+      "finding_id": "smells::playwright.config.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/AISortService.ts::magic_number": {
+      "finding_id": "smells::src/services/AISortService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/ActivationService.ts::magic_number": {
+      "finding_id": "smells::src/services/ActivationService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/BiometricService.ts::magic_number": {
+      "finding_id": "smells::src/services/BiometricService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/CheckInInsightService.ts::magic_number": {
+      "finding_id": "smells::src/services/CheckInInsightService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/CheckInService.ts::magic_number": {
+      "finding_id": "smells::src/services/CheckInService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/DriftService.ts::magic_number": {
+      "finding_id": "smells::src/services/DriftService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/GoogleTasksSyncService.ts::magic_number": {
+      "finding_id": "smells::src/services/GoogleTasksSyncService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/NotificationService.ts::magic_number": {
+      "finding_id": "smells::src/services/NotificationService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/services/RetentionService.ts::magic_number": {
+      "finding_id": "smells::src/services/RetentionService.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/store/useCaptureStore.ts::magic_number": {
+      "finding_id": "smells::src/store/useCaptureStore.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "smells::src/store/useTimerStore.ts::magic_number": {
+      "finding_id": "smells::src/store/useTimerStore.ts::magic_number",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/smells-magic_number",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::App.tsx::unreviewed": {
+      "finding_id": "subjective_review::App.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::e2e/helpers/seed.ts::unreviewed": {
+      "finding_id": "subjective_review::e2e/helpers/seed.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::playwright.config.ts::unreviewed": {
+      "finding_id": "subjective_review::playwright.config.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/DriftCheckOverlay.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/DriftCheckOverlay.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ErrorBoundary.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ErrorBoundary.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/LockScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/LockScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpActionBar.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpActionBar.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpGuide.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpGuide.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpInput.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpInput.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpItem.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpItem.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpRationale.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpRationale.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/brain-dump/BrainDumpVoiceRecord.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/brain-dump/BrainDumpVoiceRecord.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/capture/CaptureBubble.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/capture/CaptureBubble.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/capture/CaptureDrawer.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/capture/CaptureDrawer.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/home/ModeCard.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/home/ModeCard.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/metro/MetroButton.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/metro/MetroButton.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/metro/MetroCard.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/metro/MetroCard.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/metro/MetroTile.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/metro/MetroTile.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/EmptyState.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/EmptyState.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/EvidenceBadge.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/EvidenceBadge.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/LinearButton.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/LinearButton.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/LinearCard.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/LinearCard.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/ReEntryPrompt.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/ReEntryPrompt.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/components/ui/ScaleButton.web.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/components/ui/ScaleButton.web.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/config/caddi.ts::unreviewed": {
+      "finding_id": "subjective_review::src/config/caddi.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/config/secrets.example.ts::unreviewed": {
+      "finding_id": "subjective_review::src/config/secrets.example.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useAgentEvents.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useAgentEvents.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useBiometric.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useBiometric.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useChat.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useChat.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useCheckIn.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useCheckIn.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useGoogleSyncPolling.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useGoogleSyncPolling.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useNotifications.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useNotifications.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useReducedMotion.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useReducedMotion.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useRetention.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useRetention.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useTimer.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useTimer.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/hooks/useUnreviewedCount.ts::unreviewed": {
+      "finding_id": "subjective_review::src/hooks/useUnreviewedCount.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/init/bootstrap.ts::unreviewed": {
+      "finding_id": "subjective_review::src/init/bootstrap.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/navigation/AppNavigator.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/navigation/AppNavigator.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/navigation/WebNavBar.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/navigation/WebNavBar.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/navigation/navigationRef.ts::unreviewed": {
+      "finding_id": "subjective_review::src/navigation/navigationRef.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/navigation/routes.ts::unreviewed": {
+      "finding_id": "subjective_review::src/navigation/routes.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/AnchorScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/AnchorScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/BrainDumpScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/BrainDumpScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/CBTGuideScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/CBTGuideScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/CalendarScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/CalendarScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/ChatScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/ChatScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/CheckInScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/CheckInScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/DiagnosticsScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/DiagnosticsScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/FogCutterScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/FogCutterScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/HomeScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/HomeScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/IgniteScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/IgniteScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/InboxScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/InboxScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/screens/PomodoroScreen.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/screens/PomodoroScreen.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/AISortService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/AISortService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/ActivationService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/ActivationService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/AgentEventBus.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/AgentEventBus.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/BiometricService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/BiometricService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/CaptureService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/CaptureService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/ChatService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/ChatService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/CheckInInsightService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/CheckInInsightService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/CheckInService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/CheckInService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/DriftService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/DriftService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/FogCutterAIService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/FogCutterAIService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/GoogleAuthService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/GoogleAuthService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/GoogleTasksSyncService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/GoogleTasksSyncService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/GoogleTasksSyncService.web.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/GoogleTasksSyncService.web.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/HapticsService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/HapticsService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/LoggerService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/LoggerService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/NotificationService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/NotificationService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/OverlayService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/OverlayService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/PlaudService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/PlaudService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/RecordingService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/RecordingService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/RetentionService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/RetentionService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/SoundService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/SoundService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/SoundService.web.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/SoundService.web.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/StorageService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/StorageService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/TimerService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/TimerService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/TranscriptionService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/TranscriptionService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/UXMetricsService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/UXMetricsService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/services/WebMCPService.ts::unreviewed": {
+      "finding_id": "subjective_review::src/services/WebMCPService.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/store/useCaptureStore.ts::unreviewed": {
+      "finding_id": "subjective_review::src/store/useCaptureStore.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/store/useThemeStore.ts::unreviewed": {
+      "finding_id": "subjective_review::src/store/useThemeStore.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/store/useTimerStore.ts::unreviewed": {
+      "finding_id": "subjective_review::src/store/useTimerStore.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/ThemeProvider.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/theme/ThemeProvider.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/cosmicMotion.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/cosmicMotion.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/cosmicTokens.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/cosmicTokens.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/linearTokens.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/linearTokens.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/metroTheme.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/metroTheme.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/motion.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/motion.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/themeVariant.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/themeVariant.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/theme/tokens.ts::unreviewed": {
+      "finding_id": "subjective_review::src/theme/tokens.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/BottomSheet.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/BottomSheet.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/ChronoDigits.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/ChronoDigits.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/CosmicBackground.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/CosmicBackground.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/GlowCard.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/GlowCard.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/HaloRing.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/HaloRing.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/ui/cosmic/RuneButton.tsx::unreviewed": {
+      "finding_id": "subjective_review::src/ui/cosmic/RuneButton.tsx::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/utils/fogCutter.ts::unreviewed": {
+      "finding_id": "subjective_review::src/utils/fogCutter.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::src/utils/helpers.ts::unreviewed": {
+      "finding_id": "subjective_review::src/utils/helpers.ts::unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    },
+    "subjective_review::.::holistic_unreviewed": {
+      "finding_id": "subjective_review::.::holistic_unreviewed",
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "cluster": "auto/subjective_review",
+      "updated_at": "2026-03-01T02:10:14+00:00"
+    }
+  },
+  "clusters": {
+    "auto/flat_dirs-overload": {
+      "name": "auto/flat_dirs-overload",
+      "description": "Fix 2 overload issues",
+      "finding_ids": [
+        "flat_dirs::__tests__",
+        "flat_dirs::src/services"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::flat_dirs::overload",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/single_use": {
+      "name": "auto/single_use",
+      "description": "Fix 11 single_use issues",
+      "finding_ids": [
+        "single_use::src/navigation/AppNavigator.tsx",
+        "single_use::src/components/home/ModeCard.tsx",
+        "single_use::src/screens/ChatScreen.tsx",
+        "single_use::src/hooks/useGoogleSyncPolling.ts",
+        "single_use::src/hooks/useAgentEvents.ts",
+        "single_use::src/services/SoundService.web.ts",
+        "single_use::src/hooks/useRetention.ts",
+        "single_use::src/store/useThemeStore.ts",
+        "single_use::src/hooks/useBiometric.ts",
+        "single_use::src/hooks/useCheckIn.ts",
+        "single_use::src/hooks/useUnreviewedCount.ts"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "detector::single_use",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/cycles": {
+      "name": "auto/cycles",
+      "description": "Fix 2 cycles issues",
+      "finding_ids": [
+        "cycles::src/services/CaptureService.ts::src/services/CaptureService.ts::src/store/useCaptureStore.ts",
+        "cycles::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureBubble.tsx::src/components/capture/CaptureDrawer.tsx"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "detector::cycles",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/orphaned": {
+      "name": "auto/orphaned",
+      "description": "Fix 9 orphaned issues",
+      "finding_ids": [
+        "orphaned::App.tsx",
+        "orphaned::src/components/metro/MetroButton.tsx",
+        "orphaned::src/components/metro/MetroTile.tsx",
+        "orphaned::src/init/bootstrap.ts",
+        "orphaned::src/components/ui/LinearCard.tsx",
+        "orphaned::src/components/metro/MetroCard.tsx",
+        "orphaned::playwright.config.ts",
+        "orphaned::src/components/ui/ScaleButton.web.tsx",
+        "orphaned::__tests__/setup.ts"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "detector::orphaned",
+      "action": "desloppify move",
+      "user_modified": false
+    },
+    "auto/test_coverage": {
+      "name": "auto/test_coverage",
+      "description": "Fix 44 test coverage issues",
+      "finding_ids": [
+        "test_coverage::src/components/capture/CaptureDrawer.tsx::untested_module",
+        "test_coverage::src/ui/cosmic/BottomSheet.tsx::untested_module",
+        "test_coverage::src/theme/tokens.ts::untested_module",
+        "test_coverage::src/navigation/AppNavigator.tsx::untested_module",
+        "test_coverage::src/theme/cosmicMotion.ts::untested_module",
+        "test_coverage::src/ui/cosmic/ChronoDigits.tsx::untested_module",
+        "test_coverage::src/theme/ThemeProvider.tsx::untested_module",
+        "test_coverage::src/navigation/WebNavBar.tsx::untested_module",
+        "test_coverage::src/screens/IgniteScreen.tsx::over_mocked::IgniteScreen.test.tsx",
+        "test_coverage::App.tsx::untested_module",
+        "test_coverage::src/components/brain-dump/BrainDumpItem.tsx::untested_module",
+        "test_coverage::src/screens/BrainDumpScreen.tsx::over_mocked::BrainDumpScreen.test.tsx",
+        "test_coverage::src/theme/metroTheme.ts::untested_module",
+        "test_coverage::src/components/LockScreen.tsx::untested_module",
+        "test_coverage::src/components/ui/ReEntryPrompt.tsx::untested_module",
+        "test_coverage::src/components/ui/ScaleButton.web.tsx::untested_module",
+        "test_coverage::src/components/brain-dump/BrainDumpInput.tsx::untested_module",
+        "test_coverage::src/components/brain-dump/BrainDumpRationale.tsx::untested_module",
+        "test_coverage::src/ui/cosmic/HaloRing.tsx::untested_module",
+        "test_coverage::src/store/useDriftStore.ts::untested_module",
+        "test_coverage::src/config/secrets.example.ts::untested_module",
+        "test_coverage::src/components/ui/LinearCard.tsx::untested_module",
+        "test_coverage::src/components/ui/LinearButton.tsx::untested_module",
+        "test_coverage::playwright.config.ts::untested_module",
+        "test_coverage::src/components/DriftCheckOverlay.tsx::untested_module",
+        "test_coverage::src/init/bootstrap.ts::untested_module",
+        "test_coverage::src/store/useThemeStore.ts::untested_module",
+        "test_coverage::src/theme/cosmicTokens.ts::untested_module",
+        "test_coverage::src/components/metro/MetroTile.tsx::untested_module",
+        "test_coverage::src/ui/cosmic/GlowCard.tsx::untested_module",
+        "test_coverage::src/components/ErrorBoundary.tsx::untested_module",
+        "test_coverage::src/theme/themeVariant.ts::untested_module",
+        "test_coverage::src/components/brain-dump/BrainDumpGuide.tsx::untested_module",
+        "test_coverage::src/components/ui/EmptyState.tsx::untested_module",
+        "test_coverage::src/components/ui/EvidenceBadge.tsx::untested_module",
+        "test_coverage::src/components/home/ModeCard.tsx::untested_module",
+        "test_coverage::src/components/brain-dump/BrainDumpActionBar.tsx::untested_module",
+        "test_coverage::src/theme/linearTokens.ts::untested_module",
+        "test_coverage::src/theme/motion.ts::untested_module",
+        "test_coverage::src/ui/cosmic/RuneButton.tsx::untested_module",
+        "test_coverage::src/components/metro/MetroButton.tsx::untested_module",
+        "test_coverage::src/components/metro/MetroCard.tsx::untested_module",
+        "test_coverage::src/services/GoogleAuthService.ts::untested_module",
+        "test_coverage::src/ui/cosmic/CosmicBackground.tsx::untested_module"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage",
+      "action": "add tests for untested production modules \u2014 prioritize by import count",
+      "user_modified": false
+    },
+    "auto/smells-monster_function": {
+      "name": "auto/smells-monster_function",
+      "description": "Fix 8 monster function issues",
+      "finding_ids": [
+        "smells::src/screens/AnchorScreen.tsx::monster_function",
+        "smells::src/screens/BrainDumpScreen.tsx::monster_function",
+        "smells::src/screens/CalendarScreen.tsx::monster_function",
+        "smells::src/screens/FogCutterScreen.tsx::monster_function",
+        "smells::src/screens/HomeScreen.tsx::monster_function",
+        "smells::src/screens/IgniteScreen.tsx::monster_function",
+        "smells::src/screens/PomodoroScreen.tsx::monster_function",
+        "smells::src/services/WebMCPService.ts::monster_function"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::monster_function",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-hardcoded_color": {
+      "name": "auto/smells-hardcoded_color",
+      "description": "Fix 7 hardcoded color issues",
+      "finding_ids": [
+        "smells::src/components/ErrorBoundary.tsx::hardcoded_color",
+        "smells::src/components/capture/CaptureDrawer.tsx::hardcoded_color",
+        "smells::src/components/home/ModeCard.tsx::hardcoded_color",
+        "smells::src/screens/CalendarScreen.tsx::hardcoded_color",
+        "smells::src/theme/linearTokens.ts::hardcoded_color",
+        "smells::src/theme/themeVariant.ts::hardcoded_color",
+        "smells::src/ui/cosmic/RuneButton.tsx::hardcoded_color"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::hardcoded_color",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-hardcoded_url": {
+      "name": "auto/smells-hardcoded_url",
+      "description": "Fix 9 hardcoded url issues",
+      "finding_ids": [
+        "smells::__tests__/AISortService.test.ts::hardcoded_url",
+        "smells::__tests__/CalendarScreen.test.tsx::hardcoded_url",
+        "smells::__tests__/ChatService.test.ts::hardcoded_url",
+        "smells::__tests__/DiagnosticsScreen.test.tsx::hardcoded_url",
+        "smells::__tests__/PlaudService.test.ts::hardcoded_url",
+        "smells::playwright.config.ts::hardcoded_url",
+        "smells::src/config/caddi.ts::hardcoded_url",
+        "smells::src/screens/CalendarScreen.tsx::hardcoded_url",
+        "smells::src/services/ChatService.ts::hardcoded_url"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::hardcoded_url",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-nested_closure": {
+      "name": "auto/smells-nested_closure",
+      "description": "Fix 11 nested closure issues",
+      "finding_ids": [
+        "smells::App.tsx::nested_closure",
+        "smells::src/hooks/useBiometric.ts::nested_closure",
+        "smells::src/hooks/useChat.ts::nested_closure",
+        "smells::src/hooks/useNotifications.ts::nested_closure",
+        "smells::src/screens/AnchorScreen.tsx::nested_closure",
+        "smells::src/screens/BrainDumpScreen.tsx::nested_closure",
+        "smells::src/screens/CalendarScreen.tsx::nested_closure",
+        "smells::src/screens/ChatScreen.tsx::nested_closure",
+        "smells::src/screens/IgniteScreen.tsx::nested_closure",
+        "smells::src/screens/PomodoroScreen.tsx::nested_closure",
+        "smells::src/services/WebMCPService.ts::nested_closure"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::nested_closure",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-high_cyclomatic_complexity": {
+      "name": "auto/smells-high_cyclomatic_complexity",
+      "description": "Fix 9 high cyclomatic complexity issues",
+      "finding_ids": [
+        "smells::src/components/brain-dump/BrainDumpGuide.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/AnchorScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/BrainDumpScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/CalendarScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/FogCutterScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/HomeScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/IgniteScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/screens/PomodoroScreen.tsx::high_cyclomatic_complexity",
+        "smells::src/services/WebMCPService.ts::high_cyclomatic_complexity"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::high_cyclomatic_complexity",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-as_any_cast": {
+      "name": "auto/smells-as_any_cast",
+      "description": "Fix 6 as any cast issues",
+      "finding_ids": [
+        "smells::__tests__/GoogleTasksSyncService.web.test.ts::as_any_cast",
+        "smells::__tests__/SoundService.test.ts::as_any_cast",
+        "smells::__tests__/TranscriptionService.test.ts::as_any_cast",
+        "smells::src/components/brain-dump/BrainDumpInput.tsx::as_any_cast",
+        "smells::src/components/home/ModeCard.tsx::as_any_cast",
+        "smells::src/navigation/AppNavigator.tsx::as_any_cast"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::as_any_cast",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-swallowed_error": {
+      "name": "auto/smells-swallowed_error",
+      "description": "Fix 4 swallowed error issues",
+      "finding_ids": [
+        "smells::App.tsx::swallowed_error",
+        "smells::src/services/NotificationService.ts::swallowed_error",
+        "smells::src/services/OverlayService.ts::swallowed_error",
+        "smells::src/services/UXMetricsService.ts::swallowed_error"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::swallowed_error",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-any_type": {
+      "name": "auto/smells-any_type",
+      "description": "Fix 4 any type issues",
+      "finding_ids": [
+        "smells::__tests__/SoundService.test.ts::any_type",
+        "smells::src/components/brain-dump/BrainDumpActionBar.tsx::any_type",
+        "smells::src/components/brain-dump/BrainDumpGuide.tsx::any_type",
+        "smells::src/components/brain-dump/BrainDumpItem.tsx::any_type"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::any_type",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-console_error_no_throw": {
+      "name": "auto/smells-console_error_no_throw",
+      "description": "Fix 2 console error no throw issues",
+      "finding_ids": [
+        "smells::App.tsx::console_error_no_throw",
+        "smells::src/services/LoggerService.ts::console_error_no_throw"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::console_error_no_throw",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/smells-magic_number": {
+      "name": "auto/smells-magic_number",
+      "description": "Fix 17 magic number issues",
+      "finding_ids": [
+        "smells::__tests__/ActivationService.test.ts::magic_number",
+        "smells::__tests__/DriftService.test.ts::magic_number",
+        "smells::__tests__/NotificationService.test.ts::magic_number",
+        "smells::__tests__/helpers.fuzz.test.ts::magic_number",
+        "smells::e2e/helpers/seed.ts::magic_number",
+        "smells::playwright.config.ts::magic_number",
+        "smells::src/services/AISortService.ts::magic_number",
+        "smells::src/services/ActivationService.ts::magic_number",
+        "smells::src/services/BiometricService.ts::magic_number",
+        "smells::src/services/CheckInInsightService.ts::magic_number",
+        "smells::src/services/CheckInService.ts::magic_number",
+        "smells::src/services/DriftService.ts::magic_number",
+        "smells::src/services/GoogleTasksSyncService.ts::magic_number",
+        "smells::src/services/NotificationService.ts::magic_number",
+        "smells::src/services/RetentionService.ts::magic_number",
+        "smells::src/store/useCaptureStore.ts::magic_number",
+        "smells::src/store/useTimerStore.ts::magic_number"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "typed::smells::magic_number",
+      "action": "fix code smells",
+      "user_modified": false
+    },
+    "auto/subjective_review": {
+      "name": "auto/subjective_review",
+      "description": "Address 100 subjective_review review findings",
+      "finding_ids": [
+        "subjective_review::App.tsx::unreviewed",
+        "subjective_review::e2e/helpers/seed.ts::unreviewed",
+        "subjective_review::playwright.config.ts::unreviewed",
+        "subjective_review::src/components/DriftCheckOverlay.tsx::unreviewed",
+        "subjective_review::src/components/ErrorBoundary.tsx::unreviewed",
+        "subjective_review::src/components/LockScreen.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpActionBar.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpGuide.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpInput.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpItem.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpRationale.tsx::unreviewed",
+        "subjective_review::src/components/brain-dump/BrainDumpVoiceRecord.tsx::unreviewed",
+        "subjective_review::src/components/capture/CaptureBubble.tsx::unreviewed",
+        "subjective_review::src/components/capture/CaptureDrawer.tsx::unreviewed",
+        "subjective_review::src/components/home/ModeCard.tsx::unreviewed",
+        "subjective_review::src/components/metro/MetroButton.tsx::unreviewed",
+        "subjective_review::src/components/metro/MetroCard.tsx::unreviewed",
+        "subjective_review::src/components/metro/MetroTile.tsx::unreviewed",
+        "subjective_review::src/components/ui/EmptyState.tsx::unreviewed",
+        "subjective_review::src/components/ui/EvidenceBadge.tsx::unreviewed",
+        "subjective_review::src/components/ui/LinearButton.tsx::unreviewed",
+        "subjective_review::src/components/ui/LinearCard.tsx::unreviewed",
+        "subjective_review::src/components/ui/ReEntryPrompt.tsx::unreviewed",
+        "subjective_review::src/components/ui/ScaleButton.web.tsx::unreviewed",
+        "subjective_review::src/config/caddi.ts::unreviewed",
+        "subjective_review::src/config/secrets.example.ts::unreviewed",
+        "subjective_review::src/hooks/useAgentEvents.ts::unreviewed",
+        "subjective_review::src/hooks/useBiometric.ts::unreviewed",
+        "subjective_review::src/hooks/useChat.ts::unreviewed",
+        "subjective_review::src/hooks/useCheckIn.ts::unreviewed",
+        "subjective_review::src/hooks/useGoogleSyncPolling.ts::unreviewed",
+        "subjective_review::src/hooks/useNotifications.ts::unreviewed",
+        "subjective_review::src/hooks/useReducedMotion.ts::unreviewed",
+        "subjective_review::src/hooks/useRetention.ts::unreviewed",
+        "subjective_review::src/hooks/useTimer.ts::unreviewed",
+        "subjective_review::src/hooks/useUnreviewedCount.ts::unreviewed",
+        "subjective_review::src/init/bootstrap.ts::unreviewed",
+        "subjective_review::src/navigation/AppNavigator.tsx::unreviewed",
+        "subjective_review::src/navigation/WebNavBar.tsx::unreviewed",
+        "subjective_review::src/navigation/navigationRef.ts::unreviewed",
+        "subjective_review::src/navigation/routes.ts::unreviewed",
+        "subjective_review::src/screens/AnchorScreen.tsx::unreviewed",
+        "subjective_review::src/screens/BrainDumpScreen.tsx::unreviewed",
+        "subjective_review::src/screens/CBTGuideScreen.tsx::unreviewed",
+        "subjective_review::src/screens/CalendarScreen.tsx::unreviewed",
+        "subjective_review::src/screens/ChatScreen.tsx::unreviewed",
+        "subjective_review::src/screens/CheckInScreen.tsx::unreviewed",
+        "subjective_review::src/screens/DiagnosticsScreen.tsx::unreviewed",
+        "subjective_review::src/screens/FogCutterScreen.tsx::unreviewed",
+        "subjective_review::src/screens/HomeScreen.tsx::unreviewed",
+        "subjective_review::src/screens/IgniteScreen.tsx::unreviewed",
+        "subjective_review::src/screens/InboxScreen.tsx::unreviewed",
+        "subjective_review::src/screens/PomodoroScreen.tsx::unreviewed",
+        "subjective_review::src/services/AISortService.ts::unreviewed",
+        "subjective_review::src/services/ActivationService.ts::unreviewed",
+        "subjective_review::src/services/AgentEventBus.ts::unreviewed",
+        "subjective_review::src/services/BiometricService.ts::unreviewed",
+        "subjective_review::src/services/CaptureService.ts::unreviewed",
+        "subjective_review::src/services/ChatService.ts::unreviewed",
+        "subjective_review::src/services/CheckInInsightService.ts::unreviewed",
+        "subjective_review::src/services/CheckInService.ts::unreviewed",
+        "subjective_review::src/services/DriftService.ts::unreviewed",
+        "subjective_review::src/services/FogCutterAIService.ts::unreviewed",
+        "subjective_review::src/services/GoogleAuthService.ts::unreviewed",
+        "subjective_review::src/services/GoogleTasksSyncService.ts::unreviewed",
+        "subjective_review::src/services/GoogleTasksSyncService.web.ts::unreviewed",
+        "subjective_review::src/services/HapticsService.ts::unreviewed",
+        "subjective_review::src/services/LoggerService.ts::unreviewed",
+        "subjective_review::src/services/NotificationService.ts::unreviewed",
+        "subjective_review::src/services/OverlayService.ts::unreviewed",
+        "subjective_review::src/services/PlaudService.ts::unreviewed",
+        "subjective_review::src/services/RecordingService.ts::unreviewed",
+        "subjective_review::src/services/RetentionService.ts::unreviewed",
+        "subjective_review::src/services/SoundService.ts::unreviewed",
+        "subjective_review::src/services/SoundService.web.ts::unreviewed",
+        "subjective_review::src/services/StorageService.ts::unreviewed",
+        "subjective_review::src/services/TimerService.ts::unreviewed",
+        "subjective_review::src/services/TranscriptionService.ts::unreviewed",
+        "subjective_review::src/services/UXMetricsService.ts::unreviewed",
+        "subjective_review::src/services/WebMCPService.ts::unreviewed",
+        "subjective_review::src/store/useCaptureStore.ts::unreviewed",
+        "subjective_review::src/store/useThemeStore.ts::unreviewed",
+        "subjective_review::src/store/useTimerStore.ts::unreviewed",
+        "subjective_review::src/theme/ThemeProvider.tsx::unreviewed",
+        "subjective_review::src/theme/cosmicMotion.ts::unreviewed",
+        "subjective_review::src/theme/cosmicTokens.ts::unreviewed",
+        "subjective_review::src/theme/linearTokens.ts::unreviewed",
+        "subjective_review::src/theme/metroTheme.ts::unreviewed",
+        "subjective_review::src/theme/motion.ts::unreviewed",
+        "subjective_review::src/theme/themeVariant.ts::unreviewed",
+        "subjective_review::src/theme/tokens.ts::unreviewed",
+        "subjective_review::src/ui/cosmic/BottomSheet.tsx::unreviewed",
+        "subjective_review::src/ui/cosmic/ChronoDigits.tsx::unreviewed",
+        "subjective_review::src/ui/cosmic/CosmicBackground.tsx::unreviewed",
+        "subjective_review::src/ui/cosmic/GlowCard.tsx::unreviewed",
+        "subjective_review::src/ui/cosmic/HaloRing.tsx::unreviewed",
+        "subjective_review::src/ui/cosmic/RuneButton.tsx::unreviewed",
+        "subjective_review::src/utils/fogCutter.ts::unreviewed",
+        "subjective_review::src/utils/helpers.ts::unreviewed",
+        "subjective_review::.::holistic_unreviewed"
+      ],
+      "created_at": "2026-03-01T02:10:14+00:00",
+      "updated_at": "2026-03-01T02:10:14+00:00",
+      "auto": true,
+      "cluster_key": "detector::subjective_review",
+      "action": "run `desloppify review --prepare` to evaluate files against quality dimensions",
+      "user_modified": false
+    }
+  },
+  "superseded": {}
+}
