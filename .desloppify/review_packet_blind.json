@@ -753,7 +753,15 @@
           "importers": 5
         },
         {
+          "file": "src/theme/linearTokens.ts",
+          "importers": 3
+        },
+        {
           "file": "src/screens/IgniteScreen.tsx",
+          "importers": 3
+        },
+        {
+          "file": "src/ui/cosmic/CosmicBackground.tsx",
           "importers": 3
         },
         {
@@ -762,14 +770,6 @@
         },
         {
           "file": "src/theme/themeVariant.ts",
-          "importers": 3
-        },
-        {
-          "file": "src/theme/linearTokens.ts",
-          "importers": 3
-        },
-        {
-          "file": "src/ui/cosmic/CosmicBackground.tsx",
           "importers": 3
         },
         {
@@ -797,9 +797,9 @@
             "src\\services/": 9,
             "src\\components/": 3,
             "src\\navigation/": 2,
+            "src\\theme/": 1,
             "src\\config/": 1,
-            "src\\store/": 1,
-            "src\\theme/": 1
+            "src\\store/": 1
           }
         },
         "src\\components/": {
@@ -932,8 +932,8 @@
           },
           "imported_by_dirs": {
             "src\\services/": 7,
-            "__tests__/": 2,
             "src\\screens/": 2,
+            "__tests__/": 2,
             "src\\init/": 1,
             ".": 1
           }
@@ -1087,8 +1087,8 @@
             "src\\components\\capture/": 5,
             "src\\store/": 5,
             "src\\components/": 2,
-            "src\\components\\ui/": 1,
-            "src\\components\\home/": 1
+            "src\\components\\home/": 1,
+            "src\\navigation/": 1
           }
         },
         "src\\store/": {
@@ -1110,8 +1110,8 @@
             "src\\theme/": 1
           },
           "imported_by_dirs": {
-            "src\\services/": 3,
             "__tests__/": 3,
+            "src\\services/": 3,
             "src\\screens/": 2,
             ".": 1,
             "src\\theme/": 1,
@@ -2514,11 +2514,11 @@
         "src/theme/ThemeProvider.tsx",
         "src/components/ui/LinearButton.tsx",
         "src/theme/cosmicTokens.ts",
+        "src/theme/linearTokens.ts",
         "src/screens/IgniteScreen.tsx",
+        "src/ui/cosmic/CosmicBackground.tsx",
         "src/ui/cosmic/GlowCard.tsx",
         "src/theme/themeVariant.ts",
-        "src/theme/linearTokens.ts",
-        "src/ui/cosmic/CosmicBackground.tsx",
         "src/theme/metroTheme.ts"
       ],
       "why": "critical untested paths, API inconsistency",
@@ -2837,10 +2837,10 @@
         "src/store/useCaptureStore.ts",
         "src/components/capture/CaptureBubble.tsx",
         "src/theme/cosmicTokens.ts",
-        "src/ui/cosmic/GlowCard.tsx",
-        "src/theme/themeVariant.ts",
         "src/theme/linearTokens.ts",
         "src/ui/cosmic/CosmicBackground.tsx",
+        "src/ui/cosmic/GlowCard.tsx",
+        "src/theme/themeVariant.ts",
         "src/theme/metroTheme.ts",
         "src/components/capture/index.ts",
         "src/config/secrets.example.ts",
