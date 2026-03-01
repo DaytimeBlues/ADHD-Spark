@@ -1,21 +1,10 @@
 {
   "version": 2,
   "created": "2026-03-01T02:10:14+00:00",
-  "updated": "2026-03-01T06:42:46+00:00",
+  "updated": "2026-03-01T06:36:58+00:00",
   "queue_order": [],
   "deferred": [],
-  "skipped": {
-    "single_use::src/hooks/useAgentEvents.ts": {
-      "finding_id": "single_use::src/hooks/useAgentEvents.ts",
-      "kind": "permanent",
-      "reason": null,
-      "note": "Infrastructure hook intended for AgentEventBus, currently unused in production but verified and documented.",
-      "attestation": "I have actually investigated this and determined it is valid infrastructure code. I am not gaming the score.",
-      "created_at": "2026-03-01T06:42:46+00:00",
-      "review_after": null,
-      "skipped_at_scan": 2
-    }
-  },
+  "skipped": {},
   "active_cluster": null,
   "overrides": {
     "flat_dirs::__tests__": {

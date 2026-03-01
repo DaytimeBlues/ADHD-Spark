@@ -34,7 +34,7 @@ import { ReentryPromptLevel } from '../services/RetentionService';
 import useReducedMotion from '../hooks/useReducedMotion';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/ThemeProvider';
-import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
+import ModeCard, { ModeCardMode } from './ModeCard';
 import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';

@@ -9,8 +9,8 @@
   "verified_strict_score": 87.9,
   "stats": {
     "total": 266,
-    "open": 266,
-    "fixed": 0,
+    "open": 265,
+    "fixed": 1,
     "auto_resolved": 0,
     "wontfix": 0,
     "false_positive": 0,
@@ -30,8 +30,8 @@
         "false_positive": 0
       },
       "3": {
-        "open": 155,
-        "fixed": 0,
+        "open": 154,
+        "fixed": 1,
         "auto_resolved": 0,
         "wontfix": 0,
         "false_positive": 0
@@ -388,17 +388,23 @@
         "loc": 229,
         "sole_importer": "src/screens/HomeScreen.tsx"
       },
-      "status": "open",
-      "note": null,
+      "status": "fixed",
+      "note": "Moved to src/screens alongside its only importer HomeScreen.tsx",
       "first_seen": "2026-03-01T02:10:00+00:00",
       "last_seen": "2026-03-01T02:17:08+00:00",
-      "resolved_at": null,
+      "resolved_at": "2026-03-01T06:36:58+00:00",
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
       "suppressed": false,
       "suppressed_at": null,
-      "suppression_pattern": null
+      "suppression_pattern": null,
+      "resolution_attestation": {
+        "kind": "manual",
+        "text": "I have actually moved the file down next to its importer and I am not gaming the score by resolving without fixing.",
+        "attested_at": "2026-03-01T06:36:58+00:00",
+        "scan_verified": false
+      }
     },
     "single_use::src/screens/ChatScreen.tsx": {
       "id": "single_use::src/screens/ChatScreen.tsx",
@@ -6732,8 +6738,8 @@
     "dimensions": []
   },
   "subjective_integrity": {
-    "status": "pass",
-    "target_score": 95.0,
+    "status": "disabled",
+    "target_score": null,
     "matched_count": 0,
     "matched_dimensions": [],
     "reset_dimensions": []
@@ -7661,9 +7667,10 @@
     }
   },
   "reminder_history": {
-    "auto_fixers_available": 1,
-    "zone_classification": 1,
-    "dry_run_first": 1,
-    "report_scores": 1
+    "auto_fixers_available": 2,
+    "zone_classification": 2,
+    "dry_run_first": 2,
+    "report_scores": 2,
+    "feedback_nudge": 1
   }
 }

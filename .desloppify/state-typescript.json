@@ -9,10 +9,10 @@
   "verified_strict_score": 87.9,
   "stats": {
     "total": 266,
-    "open": 266,
-    "fixed": 0,
+    "open": 264,
+    "fixed": 1,
     "auto_resolved": 0,
-    "wontfix": 0,
+    "wontfix": 1,
     "false_positive": 0,
     "by_tier": {
       "1": {
@@ -30,10 +30,10 @@
         "false_positive": 0
       },
       "3": {
-        "open": 155,
-        "fixed": 0,
+        "open": 153,
+        "fixed": 1,
         "auto_resolved": 0,
-        "wontfix": 0,
+        "wontfix": 1,
         "false_positive": 0
       },
       "4": {
@@ -388,17 +388,23 @@
         "loc": 229,
         "sole_importer": "src/screens/HomeScreen.tsx"
       },
-      "status": "open",
-      "note": null,
+      "status": "fixed",
+      "note": "Moved to src/screens alongside its only importer HomeScreen.tsx",
       "first_seen": "2026-03-01T02:10:00+00:00",
       "last_seen": "2026-03-01T02:17:08+00:00",
-      "resolved_at": null,
+      "resolved_at": "2026-03-01T06:36:58+00:00",
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
       "suppressed": false,
       "suppressed_at": null,
-      "suppression_pattern": null
+      "suppression_pattern": null,
+      "resolution_attestation": {
+        "kind": "manual",
+        "text": "I have actually moved the file down next to its importer and I am not gaming the score by resolving without fixing.",
+        "attested_at": "2026-03-01T06:36:58+00:00",
+        "scan_verified": false
+      }
     },
     "single_use::src/screens/ChatScreen.tsx": {
       "id": "single_use::src/screens/ChatScreen.tsx",
@@ -457,17 +463,34 @@
         "loc": 40,
         "sole_importer": "__tests__/useAgentEvents.test.tsx"
       },
-      "status": "open",
-      "note": null,
+      "status": "wontfix",
+      "note": "Infrastructure hook intended for AgentEventBus, currently unused in production but verified and documented.",
       "first_seen": "2026-03-01T02:10:00+00:00",
       "last_seen": "2026-03-01T02:17:08+00:00",
-      "resolved_at": null,
+      "resolved_at": "2026-03-01T06:42:46+00:00",
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
       "suppressed": false,
       "suppressed_at": null,
-      "suppression_pattern": null
+      "suppression_pattern": null,
+      "resolution_attestation": {
+        "kind": "manual",
+        "text": "I have actually investigated this and determined it is valid infrastructure code. I am not gaming the score.",
+        "attested_at": "2026-03-01T06:42:46+00:00",
+        "scan_verified": false
+      },
+      "wontfix_scan_count": 2,
+      "wontfix_snapshot": {
+        "captured_at": "2026-03-01T06:42:46+00:00",
+        "scan_count": 2,
+        "tier": 3,
+        "confidence": "medium",
+        "detail": {
+          "loc": 40,
+          "sole_importer": "__tests__/useAgentEvents.test.tsx"
+        }
+      }
     },
     "single_use::src/services/SoundService.web.ts": {
       "id": "single_use::src/services/SoundService.web.ts",
@@ -6732,8 +6755,8 @@
     "dimensions": []
   },
   "subjective_integrity": {
-    "status": "pass",
-    "target_score": 95.0,
+    "status": "disabled",
+    "target_score": null,
     "matched_count": 0,
     "matched_dimensions": [],
     "reset_dimensions": []

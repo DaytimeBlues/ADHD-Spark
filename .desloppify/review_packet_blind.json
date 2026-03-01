@@ -462,7 +462,7 @@
           "camelCase": 5
         },
         "screens/": {
-          "PascalCase": 2,
+          "PascalCase": 3,
           "camelCase": 2
         },
         "services/": {
@@ -753,11 +753,7 @@
           "importers": 5
         },
         {
-          "file": "src/theme/linearTokens.ts",
-          "importers": 3
-        },
-        {
-          "file": "src/screens/IgniteScreen.tsx",
+          "file": "src/theme/themeVariant.ts",
           "importers": 3
         },
         {
@@ -765,15 +761,19 @@
           "importers": 3
         },
         {
+          "file": "src/theme/metroTheme.ts",
+          "importers": 3
+        },
+        {
+          "file": "src/screens/IgniteScreen.tsx",
+          "importers": 3
+        },
+        {
           "file": "src/ui/cosmic/GlowCard.tsx",
           "importers": 3
         },
         {
-          "file": "src/theme/themeVariant.ts",
-          "importers": 3
-        },
-        {
-          "file": "src/theme/metroTheme.ts",
+          "file": "src/theme/linearTokens.ts",
           "importers": 3
         }
       ]
@@ -797,9 +797,9 @@
             "src\\services/": 9,
             "src\\components/": 3,
             "src\\navigation/": 2,
-            "src\\theme/": 1,
             "src\\config/": 1,
-            "src\\store/": 1
+            "src\\store/": 1,
+            "src\\theme/": 1
           }
         },
         "src\\components/": {
@@ -818,8 +818,8 @@
           "imports_from_dirs": {
             "src\\ui\\cosmic/": 5,
             "src\\theme/": 4,
-            "src\\services/": 2,
-            "src\\components\\ui/": 2
+            "src\\components\\ui/": 2,
+            "src\\services/": 2
           },
           "imported_by_dirs": {
             ".": 3,
@@ -960,8 +960,8 @@
           },
           "imports_from_dirs": {
             "src\\services/": 10,
-            "src\\store/": 1,
-            "src\\utils/": 1
+            "src\\utils/": 1,
+            "src\\store/": 1
           },
           "imported_by_dirs": {
             "__tests__/": 10,
@@ -986,8 +986,8 @@
           "imports_from_dirs": {
             "src\\theme/": 3,
             "src\\screens/": 2,
-            "src\\components/": 1,
             "src\\components\\capture/": 1,
+            "src\\components/": 1,
             "src\\services/": 1
           },
           "imported_by_dirs": {
@@ -998,7 +998,7 @@
           }
         },
         "src\\screens/": {
-          "file_count": 12,
+          "file_count": 13,
           "files": [
             "AnchorScreen.tsx",
             "BrainDumpScreen.tsx",
@@ -1011,17 +1011,18 @@
             "HomeScreen.tsx",
             "IgniteScreen.tsx",
             "InboxScreen.tsx",
+            "ModeCard.tsx",
             "PomodoroScreen.tsx"
           ],
-          "total_loc": 7967,
+          "total_loc": 8196,
           "avg_fan_in": 1.4,
-          "avg_fan_out": 7.7,
+          "avg_fan_out": 7.3,
           "zones": {
-            "production": 12
+            "production": 13
           },
           "imports_from_dirs": {
-            "src\\services/": 31,
-            "src\\theme/": 24,
+            "src\\services/": 32,
+            "src\\theme/": 26,
             "src\\ui\\cosmic/": 12,
             "src\\components\\ui/": 8,
             "src\\hooks/": 4,
@@ -1080,15 +1081,15 @@
           },
           "imported_by_dirs": {
             "__tests__/": 37,
-            "src\\screens/": 31,
+            "src\\screens/": 32,
             "src\\hooks/": 10,
             ".": 9,
             "src\\init/": 8,
             "src\\components\\capture/": 5,
             "src\\store/": 5,
             "src\\components/": 2,
-            "src\\components\\home/": 1,
-            "src\\navigation/": 1
+            "src\\navigation/": 1,
+            "src\\components\\ui/": 1
           }
         },
         "src\\store/": {
@@ -1110,8 +1111,8 @@
             "src\\theme/": 1
           },
           "imported_by_dirs": {
-            "__tests__/": 3,
             "src\\services/": 3,
+            "__tests__/": 3,
             "src\\screens/": 2,
             ".": 1,
             "src\\theme/": 1,
@@ -1140,14 +1141,13 @@
             "src\\store/": 1
           },
           "imported_by_dirs": {
-            "src\\screens/": 24,
+            "src\\screens/": 26,
             "src\\components\\brain-dump/": 12,
             "src\\ui\\cosmic/": 10,
             "src\\components\\ui/": 5,
             "src\\components/": 4,
             "src\\navigation/": 3,
             "src\\components\\metro/": 3,
-            "src\\components\\home/": 2,
             "src\\store/": 1,
             ".": 1
           }
@@ -1219,8 +1219,8 @@
         }
       ],
       "coupling_matrix": {
-        "src\\screens/ \u2192 src\\services/": 31,
-        "src\\screens/ \u2192 src\\theme/": 24,
+        "src\\screens/ \u2192 src\\services/": 32,
+        "src\\screens/ \u2192 src\\theme/": 26,
         "src\\components\\brain-dump/ \u2192 src\\theme/": 12,
         "src\\screens/ \u2192 src\\ui\\cosmic/": 12,
         "src\\hooks/ \u2192 src\\services/": 10,
@@ -1463,17 +1463,6 @@
           ]
         },
         {
-          "file": "src/components/home/ModeCard.tsx",
-          "detector_count": 4,
-          "finding_count": 5,
-          "detectors": [
-            "single_use",
-            "smells",
-            "subjective_review",
-            "test_coverage"
-          ]
-        },
-        {
           "file": "playwright.config.ts",
           "detector_count": 4,
           "finding_count": 5,
@@ -1637,6 +1626,16 @@
             "subjective_review",
             "test_coverage"
           ]
+        },
+        {
+          "file": "src/init/bootstrap.ts",
+          "detector_count": 3,
+          "finding_count": 3,
+          "detectors": [
+            "orphaned",
+            "subjective_review",
+            "test_coverage"
+          ]
         }
       ],
       "systemic_patterns": [
@@ -1686,13 +1685,13 @@
         },
         {
           "pattern": "hardcoded_color",
-          "file_count": 7,
+          "file_count": 6,
           "hotspots": [
             "src/components/ErrorBoundary.tsx (1)",
             "src/components/capture/CaptureDrawer.tsx (1)",
-            "src/components/home/ModeCard.tsx (1)",
             "src/screens/CalendarScreen.tsx (1)",
-            "src/theme/linearTokens.ts (1)"
+            "src/theme/linearTokens.ts (1)",
+            "src/theme/themeVariant.ts (1)"
           ]
         }
       ]
@@ -1762,7 +1761,7 @@
         "default_export": 1
       },
       "screens/": {
-        "default_export": 12,
+        "default_export": 13,
         "named_export": 1
       },
       "services/": {
@@ -1890,13 +1889,6 @@
         "smells: 2x `as any` type casts",
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
-      "src/components/home/ModeCard.tsx": [
-        "single_use: Single-use (229 LOC): only imported by src/screens/HomeScreen.tsx",
-        "test_coverage: Untested module (229 LOC, 0 importers)",
-        "smells: 2x Hardcoded color values",
-        "smells: 1x `as any` type casts",
-        "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
-      ],
       "src/screens/ChatScreen.tsx": [
         "single_use: Single-use (211 LOC): only imported by __tests__/ChatScreen.test.tsx",
         "smells: 1x Deeply nested closures \u2014 extract to module level",
@@ -1904,10 +1896,6 @@
       ],
       "src/hooks/useGoogleSyncPolling.ts": [
         "single_use: Single-use (44 LOC): only imported by __tests__/useGoogleSyncPolling.test.tsx",
-        "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
-      ],
-      "src/hooks/useAgentEvents.ts": [
-        "single_use: Single-use (40 LOC): only imported by __tests__/useAgentEvents.test.tsx",
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
       "src/services/SoundService.web.ts": [
@@ -2246,6 +2234,9 @@
       "src/components/brain-dump/BrainDumpVoiceRecord.tsx": [
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
+      "src/hooks/useAgentEvents.ts": [
+        "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
+      ],
       "src/hooks/useReducedMotion.ts": [
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
@@ -2514,12 +2505,12 @@
         "src/theme/ThemeProvider.tsx",
         "src/components/ui/LinearButton.tsx",
         "src/theme/cosmicTokens.ts",
-        "src/theme/linearTokens.ts",
-        "src/screens/IgniteScreen.tsx",
-        "src/ui/cosmic/CosmicBackground.tsx",
-        "src/ui/cosmic/GlowCard.tsx",
         "src/theme/themeVariant.ts",
-        "src/theme/metroTheme.ts"
+        "src/ui/cosmic/CosmicBackground.tsx",
+        "src/theme/metroTheme.ts",
+        "src/screens/IgniteScreen.tsx",
+        "src/ui/cosmic/GlowCard.tsx",
+        "src/theme/linearTokens.ts"
       ],
       "why": "critical untested paths, API inconsistency",
       "concern_signals": []
@@ -2584,7 +2575,6 @@
         "src/components/capture/CaptureDrawer.tsx",
         "src/services/GoogleTasksSyncService.ts",
         "App.tsx",
-        "src/components/home/ModeCard.tsx",
         "playwright.config.ts",
         "src/navigation/AppNavigator.tsx",
         "src/ui/cosmic/RuneButton.tsx"
@@ -2625,7 +2615,6 @@
         "src/components/brain-dump/BrainDumpInput.tsx",
         "src/components/brain-dump/BrainDumpItem.tsx",
         "src/components/capture/CaptureDrawer.tsx",
-        "src/components/home/ModeCard.tsx",
         "src/components/metro/MetroButton.tsx",
         "src/components/metro/MetroCard.tsx",
         "src/components/metro/MetroTile.tsx",
@@ -2654,7 +2643,7 @@
         "src/services/OverlayService.ts"
       ],
       "why": "mechanical detectors identified structural patterns needing judgment; concern types: design_concern, mixed_responsibilities, systemic_pattern, systemic_smell",
-      "total_candidate_files": 35,
+      "total_candidate_files": 34,
       "concern_signals": [
         {
           "type": "design_concern",
@@ -2744,18 +2733,6 @@
         },
         {
           "type": "design_concern",
-          "file": "src/components/home/ModeCard.tsx",
-          "summary": "Design signals from single_use, smells",
-          "question": "Review the flagged patterns \u2014 are they design problems that need addressing, or acceptable given the file's role?",
-          "evidence": [
-            "Flagged by: single_use, smells",
-            "[single_use] Single-use (229 LOC): only imported by src/screens/HomeScreen.tsx",
-            "[smells] 2x Hardcoded color values",
-            "[smells] 1x `as any` type casts"
-          ]
-        },
-        {
-          "type": "design_concern",
           "file": "src/components/metro/MetroButton.tsx",
           "summary": "Design signals from orphaned",
           "question": "Is this file truly dead, or is it used via a non-import mechanism (dynamic import, CLI entry point, plugin)?",
@@ -2782,6 +2759,16 @@
           "evidence": [
             "Flagged by: orphaned",
             "[orphaned] Orphaned file (110 LOC): zero importers, not an entry point"
+          ]
+        },
+        {
+          "type": "design_concern",
+          "file": "src/components/ui/LinearCard.tsx",
+          "summary": "Design signals from orphaned",
+          "question": "Is this file truly dead, or is it used via a non-import mechanism (dynamic import, CLI entry point, plugin)?",
+          "evidence": [
+            "Flagged by: orphaned",
+            "[orphaned] Orphaned file (75 LOC): zero importers, not an entry point"
           ]
         }
       ],
@@ -2837,11 +2824,11 @@
         "src/store/useCaptureStore.ts",
         "src/components/capture/CaptureBubble.tsx",
         "src/theme/cosmicTokens.ts",
-        "src/theme/linearTokens.ts",
-        "src/ui/cosmic/CosmicBackground.tsx",
-        "src/ui/cosmic/GlowCard.tsx",
         "src/theme/themeVariant.ts",
+        "src/ui/cosmic/CosmicBackground.tsx",
         "src/theme/metroTheme.ts",
+        "src/ui/cosmic/GlowCard.tsx",
+        "src/theme/linearTokens.ts",
         "src/components/capture/index.ts",
         "src/config/secrets.example.ts",
         "src/hooks/useAgentEvents.ts",
@@ -2860,7 +2847,6 @@
         "src\\hooks/useAgentEvents.ts",
         "src\\hooks/useBiometric.ts",
         "src\\hooks/useChat.ts",
-        "src/components/home/ModeCard.tsx",
         "src/navigation/AppNavigator.tsx",
         "src/ui/cosmic/RuneButton.tsx",
         "src/components/ErrorBoundary.tsx",
@@ -2922,7 +2908,6 @@
         "src/components/capture/CaptureBubble.tsx",
         "src/components/capture/CaptureDrawer.tsx",
         "src/components/capture/index.ts",
-        "src/components/home/ModeCard.tsx",
         "src/components/metro/MetroButton.tsx",
         "src/components/metro/MetroCard.tsx",
         "src/components/metro/MetroTile.tsx",
@@ -2961,6 +2946,7 @@
         "src/screens/HomeScreen.tsx",
         "src/screens/IgniteScreen.tsx",
         "src/screens/InboxScreen.tsx",
+        "src/screens/ModeCard.tsx",
         "src/screens/PomodoroScreen.tsx",
         "src/services/AISortService.ts",
         "src/services/ActivationService.ts",

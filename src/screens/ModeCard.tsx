@@ -10,9 +10,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Tokens } from '../../theme/tokens';
-import HapticsService from '../../services/HapticsService';
-import { useTheme } from '../../theme/ThemeProvider';
+import { Tokens } from '../theme/tokens';
+import HapticsService from '../services/HapticsService';
+import { useTheme } from '../theme/ThemeProvider';
 
 export type ModeCardMode = {
   name: string;
