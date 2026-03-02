@@ -1,5 +1,6 @@
 {
   "version": 1,
+<<<<<<< HEAD
   "created": "2026-03-01T02:09:07+00:00",
   "last_scan": "2026-03-01T02:17:08+00:00",
   "scan_count": 2,
@@ -10,12 +11,25 @@
   "stats": {
     "total": 266,
     "open": 265,
+=======
+  "created": "2026-03-01T07:46:13+00:00",
+  "last_scan": "2026-03-01T07:46:13+00:00",
+  "scan_count": 1,
+  "overall_score": 0.0,
+  "objective_score": 100.0,
+  "strict_score": 0.0,
+  "verified_strict_score": 100.0,
+  "stats": {
+    "total": 5,
+    "open": 4,
+>>>>>>> UI3
     "fixed": 1,
     "auto_resolved": 0,
     "wontfix": 0,
     "false_positive": 0,
     "by_tier": {
       "1": {
+<<<<<<< HEAD
         "open": 1,
         "fixed": 0,
         "auto_resolved": 0,
@@ -31,13 +45,21 @@
       },
       "3": {
         "open": 154,
+=======
+        "open": 2,
+>>>>>>> UI3
         "fixed": 1,
         "auto_resolved": 0,
         "wontfix": 0,
         "false_positive": 0
       },
+<<<<<<< HEAD
       "4": {
         "open": 100,
+=======
+      "2": {
+        "open": 2,
+>>>>>>> UI3
         "fixed": 0,
         "auto_resolved": 0,
         "wontfix": 0,
@@ -46,6 +68,7 @@
     }
   },
   "findings": {
+<<<<<<< HEAD
     "logs::App.tsx::Sentry": {
       "id": "logs::App.tsx::Sentry",
       "detector": "logs",
@@ -67,10 +90,39 @@
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
+=======
+    "review::.::holistic::incomplete_migration::deprecated_themeprovider::338c7c13": {
+      "id": "review::.::holistic::incomplete_migration::deprecated_themeprovider::338c7c13",
+      "detector": "review",
+      "file": ".",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "ThemeProvider marked deprecated but widely used",
+      "detail": {
+        "holistic": true,
+        "dimension": "incomplete_migration",
+        "related_files": [
+          "src/theme/ThemeProvider.tsx"
+        ],
+        "evidence": [
+          "ThemeProvider is marked as @deprecated with a note saying it's no longer required, yet it has 28 importers and still performs pass-through logic."
+        ],
+        "suggestion": "Phase out ThemeProvider by migrating callers to directly use useThemeStore or removing the wrapper where possible.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-01T07:46:13+00:00",
+      "last_seen": "2026-03-01T07:46:13+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+>>>>>>> UI3
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null
     },
+<<<<<<< HEAD
     "deprecated::src/theme/ThemeProvider.tsx::ThemeProvider": {
       "id": "deprecated::src/theme/ThemeProvider.tsx::ThemeProvider",
       "detector": "deprecated",
@@ -90,10 +142,39 @@
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
+=======
+    "review::.::holistic::high_level_elegance::monster_homescreen::ebb79588": {
+      "id": "review::.::holistic::high_level_elegance::monster_homescreen::ebb79588",
+      "detector": "review",
+      "file": ".",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "HomeScreen.tsx is a monster component",
+      "detail": {
+        "holistic": true,
+        "dimension": "high_level_elegance",
+        "related_files": [
+          "src/screens/HomeScreen.tsx"
+        ],
+        "evidence": [
+          "HomeScreen.tsx is 972 lines long, managing complex animations, local state, and numerous sub-components (ModeCard, etc) within a single file."
+        ],
+        "suggestion": "Extract the entrance animation logic, style generation, and sub-components into sibling files in a focused directory.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-01T07:46:13+00:00",
+      "last_seen": "2026-03-01T07:46:13+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+>>>>>>> UI3
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null
     },
+<<<<<<< HEAD
     "structural::src/components/capture/CaptureDrawer.tsx": {
       "id": "structural::src/components/capture/CaptureDrawer.tsx",
       "detector": "structural",
@@ -118,10 +199,39 @@
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
+=======
+    "review::.::holistic::initialization_coupling::storage_init_coupling::ed4f64f6": {
+      "id": "review::.::holistic::initialization_coupling::storage_init_coupling::ed4f64f6",
+      "detector": "review",
+      "file": ".",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Eager database initialization and module-level side effects",
+      "detail": {
+        "holistic": true,
+        "dimension": "initialization_coupling",
+        "related_files": [
+          "src/services/StorageService.ts"
+        ],
+        "evidence": [
+          "StorageService eager-loads sqlite via 'require' and initializes the 'db' variable at module scope, which makes server-side rendering or testing without mocks fragile."
+        ],
+        "suggestion": "Move database opening logic into the 'init' function or use a lazy getter.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-01T07:46:13+00:00",
+      "last_seen": "2026-03-01T07:46:13+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+>>>>>>> UI3
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null
     },
+<<<<<<< HEAD
     "structural::src/screens/HomeScreen.tsx": {
       "id": "structural::src/screens/HomeScreen.tsx",
       "detector": "structural",
@@ -396,11 +506,41 @@
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
+=======
+    "review::.::holistic::cross_module_architecture::capture_service_cycle::f3d934c2": {
+      "id": "review::.::holistic::cross_module_architecture::capture_service_cycle::f3d934c2",
+      "detector": "review",
+      "file": ".",
+      "tier": 1,
+      "confidence": "high",
+      "summary": "Import cycle between CaptureService and useCaptureStore",
+      "detail": {
+        "holistic": true,
+        "dimension": "cross_module_architecture",
+        "related_files": [
+          "src/services/CaptureService.ts",
+          "src/store/useCaptureStore.ts"
+        ],
+        "evidence": [
+          "A mutual dependency existence between the state persistence layer and the business logic service."
+        ],
+        "suggestion": "Refactor CaptureService to be a pure middleware or move common types to a shared location to break the cycle.",
+        "reasoning": ""
+      },
+      "status": "fixed",
+      "note": "Extracted shared types into src/types/capture.ts",
+      "first_seen": "2026-03-01T07:46:13+00:00",
+      "last_seen": "2026-03-01T07:46:13+00:00",
+      "resolved_at": "2026-03-01T09:50:51+00:00",
+      "reopen_count": 0,
+      "lang": "typescript",
+>>>>>>> UI3
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null,
       "resolution_attestation": {
         "kind": "manual",
+<<<<<<< HEAD
         "text": "I have actually moved the file down next to its importer and I am not gaming the score by resolving without fixing.",
         "attested_at": "2026-03-01T06:36:58+00:00",
         "scan_verified": false
@@ -6706,11 +6846,45 @@
       "reopen_count": 0,
       "lang": "typescript",
       "zone": "production",
+=======
+        "text": "I have actually extracted the types to src/types/capture.ts and updated imports to break the cycle and I am not gaming the score by resolving without fixing.",
+        "attested_at": "2026-03-01T09:50:51+00:00",
+        "scan_verified": false
+      }
+    },
+    "review::.::holistic::ai_generated_debt::nosy_logger::beab0712": {
+      "id": "review::.::holistic::ai_generated_debt::nosy_logger::beab0712",
+      "detector": "review",
+      "file": ".",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Nosy debug logging patterns and restating comments",
+      "detail": {
+        "holistic": true,
+        "dimension": "ai_generated_debt",
+        "related_files": [
+          "src/services/LoggerService.ts"
+        ],
+        "evidence": [
+          "LoggerService includes heavy logging of full object dumps and contains docstrings that merely restate the function signature (// Log an error message above .error())."
+        ],
+        "suggestion": "Streamline logging payloads and remove redundant comments that don't add 'why' context.",
+        "reasoning": ""
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-01T07:46:13+00:00",
+      "last_seen": "2026-03-01T07:46:13+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "lang": "typescript",
+>>>>>>> UI3
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null
     }
   },
+<<<<<<< HEAD
   "scan_coverage": {
     "typescript": {
       "status": "full",
@@ -6731,6 +6905,9 @@
       "updated_at": "2026-03-01T02:17:08+00:00"
     }
   },
+=======
+  "scan_coverage": {},
+>>>>>>> UI3
   "score_confidence": {
     "status": "full",
     "confidence": 1.0,
@@ -6745,6 +6922,7 @@
     "reset_dimensions": []
   },
   "subjective_assessments": {},
+<<<<<<< HEAD
   "scan_history": [
     {
       "timestamp": "2026-03-01T02:10:14+00:00",
@@ -6765,6 +6943,33 @@
         "matched_count": 0,
         "reset_count": 0,
         "target_score": 95.0
+=======
+  "potentials": {
+    "typescript": {
+      "review": 10
+    }
+  },
+  "scan_history": [
+    {
+      "timestamp": "2026-03-01T07:46:13+00:00",
+      "lang": "typescript",
+      "strict_score": 0.0,
+      "verified_strict_score": 100.0,
+      "objective_score": 100.0,
+      "overall_score": 0.0,
+      "open": 5,
+      "diff_new": 5,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_findings": 5,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "disabled",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": null
+>>>>>>> UI3
       },
       "score_confidence": {
         "status": "full",
@@ -6773,6 +6978,7 @@
         "dimension_count": 0
       },
       "dimension_scores": {
+<<<<<<< HEAD
         "File health": {
           "score": 95.4,
           "strict": 95.4
@@ -6922,6 +7128,8 @@
           "score": 98.5,
           "strict": 98.5
         },
+=======
+>>>>>>> UI3
         "Naming quality": {
           "score": 0.0,
           "strict": 0.0
@@ -7005,6 +7213,7 @@
       }
     }
   ],
+<<<<<<< HEAD
   "lang_capabilities": {
     "typescript": {
       "fixers": [
@@ -7225,6 +7434,14 @@
       },
       "strict": 98.5
     },
+=======
+  "tool_hash": "8495418538fd",
+  "scan_path": null,
+  "scan_completeness": {
+    "typescript": "full"
+  },
+  "dimension_scores": {
+>>>>>>> UI3
     "Naming quality": {
       "score": 0.0,
       "strict_score": 0.0,
@@ -7362,13 +7579,21 @@
       "strict_score": 0.0,
       "verified_strict_score": 0.0,
       "checks": 10,
+<<<<<<< HEAD
       "issues": 0,
+=======
+      "issues": 1,
+>>>>>>> UI3
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
           "pass_rate": 0.0,
+<<<<<<< HEAD
           "issues": 0,
+=======
+          "issues": 1,
+>>>>>>> UI3
           "weighted_failures": 10.0,
           "assessment_score": 0.0,
           "placeholder": true,
@@ -7384,13 +7609,21 @@
       "strict_score": 0.0,
       "verified_strict_score": 0.0,
       "checks": 10,
+<<<<<<< HEAD
       "issues": 0,
+=======
+      "issues": 1,
+>>>>>>> UI3
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
           "pass_rate": 0.0,
+<<<<<<< HEAD
           "issues": 0,
+=======
+          "issues": 1,
+>>>>>>> UI3
           "weighted_failures": 10.0,
           "assessment_score": 0.0,
           "placeholder": true,
@@ -7472,13 +7705,21 @@
       "strict_score": 0.0,
       "verified_strict_score": 0.0,
       "checks": 10,
+<<<<<<< HEAD
       "issues": 0,
+=======
+      "issues": 1,
+>>>>>>> UI3
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
           "pass_rate": 0.0,
+<<<<<<< HEAD
           "issues": 0,
+=======
+          "issues": 1,
+>>>>>>> UI3
           "weighted_failures": 10.0,
           "assessment_score": 0.0,
           "placeholder": true,
@@ -7604,13 +7845,21 @@
       "strict_score": 0.0,
       "verified_strict_score": 0.0,
       "checks": 10,
+<<<<<<< HEAD
       "issues": 0,
+=======
+      "issues": 1,
+>>>>>>> UI3
       "tier": 4,
       "detectors": {
         "subjective_assessment": {
           "potential": 10,
           "pass_rate": 0.0,
+<<<<<<< HEAD
           "issues": 0,
+=======
+          "issues": 1,
+>>>>>>> UI3
           "weighted_failures": 10.0,
           "assessment_score": 0.0,
           "placeholder": true,
@@ -7666,6 +7915,7 @@
       "strict": 0.0
     }
   },
+<<<<<<< HEAD
   "reminder_history": {
     "auto_fixers_available": 2,
     "zone_classification": 2,
@@ -7673,4 +7923,28 @@
     "report_scores": 2,
     "feedback_nudge": 1
   }
+=======
+  "review_cache": {
+    "files": {},
+    "holistic": {
+      "reviewed_at": "2026-03-01T07:46:14+00:00",
+      "file_count_at_review": 0,
+      "finding_count": 5
+    }
+  },
+  "assessment_import_audit": [
+    {
+      "timestamp": "2026-03-01T07:46:14+00:00",
+      "mode": "findings_only",
+      "trusted": false,
+      "reason": "external imports cannot self-attest trust (blind packet not found: C:\\Users\\Steve\\OneDrive\\Desktop\\Github Repos\\spark-adhd\\.desloppify\\review_packet_blind.json); run review --run-batches to apply assessments automatically",
+      "override_used": false,
+      "attested_external": false,
+      "provisional": false,
+      "provisional_count": 0,
+      "attest": "",
+      "import_file": ".desloppify\\external_review_sessions\\ext_20260301_073749_8d795fa1\\canonical_import_20260301_074528.json"
+    }
+  ]
+>>>>>>> UI3
 }

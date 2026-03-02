@@ -36,6 +36,13 @@
     }
   </style>
   
+  <script>
+    // Process polyfill for Webpack/Browser compatibility
+    window.process = window.process || {};
+    window.process.env = window.process.env || {};
+    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'development';
+  </script>
+  
   <!-- Service Worker Registration for PWA Offline Support -->
   <script>
     if ('serviceWorker' in navigator) {

@@ -11,6 +11,7 @@ import React from 'react';
 
 import { LinearTokens } from './linearTokens';
 import { CosmicTokens } from './cosmicTokens';
+import { PhantomTokens } from './phantomTokens';
 import { ThemeVariant, THEME_METADATA } from './themeVariant';
 
 import { useThemeStore } from '../store/useThemeStore';
@@ -22,9 +23,10 @@ import { useThemeStore } from '../store/useThemeStore';
 export interface ThemeContextValue {
   variant: ThemeVariant;
   setVariant: (variant: ThemeVariant) => Promise<void>;
-  t: typeof LinearTokens | typeof CosmicTokens;
+  t: typeof LinearTokens | typeof CosmicTokens | typeof PhantomTokens;
   isCosmic: boolean;
   isLinear: boolean;
+  isPhantom: boolean;
   isLoaded: boolean;
   metadata: (typeof THEME_METADATA)[ThemeVariant];
 }
@@ -36,12 +38,19 @@ export interface ThemeContextValue {
 export function useTheme(): ThemeContextValue {
   const { variant, setVariant, _hasHydrated } = useThemeStore();
 
+  const tokens = variant === 'cosmic'
+    ? CosmicTokens
+    : variant === 'phantom'
+      ? PhantomTokens
+      : LinearTokens;
+
   return {
     variant,
     setVariant: async (v: ThemeVariant) => setVariant(v),
-    t: variant === 'cosmic' ? CosmicTokens : LinearTokens,
+    t: tokens,
     isCosmic: variant === 'cosmic',
     isLinear: variant === 'linear',
+    isPhantom: variant === 'phantom',
     isLoaded: _hasHydrated,
     metadata: THEME_METADATA[variant],
   };

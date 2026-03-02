@@ -753,15 +753,11 @@
           "importers": 5
         },
         {
+          "file": "src/theme/linearTokens.ts",
+          "importers": 3
+        },
+        {
           "file": "src/theme/themeVariant.ts",
-          "importers": 3
-        },
-        {
-          "file": "src/ui/cosmic/CosmicBackground.tsx",
-          "importers": 3
-        },
-        {
-          "file": "src/theme/metroTheme.ts",
           "importers": 3
         },
         {
@@ -769,11 +765,15 @@
           "importers": 3
         },
         {
-          "file": "src/ui/cosmic/GlowCard.tsx",
+          "file": "src/theme/metroTheme.ts",
           "importers": 3
         },
         {
-          "file": "src/theme/linearTokens.ts",
+          "file": "src/ui/cosmic/CosmicBackground.tsx",
+          "importers": 3
+        },
+        {
+          "file": "src/ui/cosmic/GlowCard.tsx",
           "importers": 3
         }
       ]
@@ -934,8 +934,8 @@
             "src\\services/": 7,
             "src\\screens/": 2,
             "__tests__/": 2,
-            "src\\init/": 1,
-            ".": 1
+            ".": 1,
+            "src\\init/": 1
           }
         },
         "src\\hooks/": {
@@ -1088,8 +1088,8 @@
             "src\\components\\capture/": 5,
             "src\\store/": 5,
             "src\\components/": 2,
-            "src\\navigation/": 1,
-            "src\\components\\ui/": 1
+            "src\\components\\ui/": 1,
+            "src\\navigation/": 1
           }
         },
         "src\\store/": {
@@ -1386,11 +1386,6 @@
       ],
       "dead_code": [
         {
-          "file": "App.tsx",
-          "kind": "orphaned",
-          "loc": 256
-        },
-        {
           "file": "src/components/metro/MetroButton.tsx",
           "kind": "orphaned",
           "loc": 117
@@ -1416,29 +1411,12 @@
           "loc": 50
         },
         {
-          "file": "playwright.config.ts",
-          "kind": "orphaned",
-          "loc": 35
-        },
-        {
           "file": "src/components/ui/ScaleButton.web.tsx",
           "kind": "orphaned",
           "loc": 35
         }
       ],
       "signal_density": [
-        {
-          "file": "App.tsx",
-          "detector_count": 5,
-          "finding_count": 7,
-          "detectors": [
-            "logs",
-            "orphaned",
-            "smells",
-            "subjective_review",
-            "test_coverage"
-          ]
-        },
         {
           "file": "src/screens/BrainDumpScreen.tsx",
           "detector_count": 5,
@@ -1452,23 +1430,23 @@
           ]
         },
         {
+          "file": "App.tsx",
+          "detector_count": 4,
+          "finding_count": 6,
+          "detectors": [
+            "logs",
+            "smells",
+            "subjective_review",
+            "test_coverage"
+          ]
+        },
+        {
           "file": "src/screens/IgniteScreen.tsx",
           "detector_count": 4,
           "finding_count": 6,
           "detectors": [
             "smells",
             "structural",
-            "subjective_review",
-            "test_coverage"
-          ]
-        },
-        {
-          "file": "playwright.config.ts",
-          "detector_count": 4,
-          "finding_count": 5,
-          "detectors": [
-            "orphaned",
-            "smells",
             "subjective_review",
             "test_coverage"
           ]
@@ -1545,6 +1523,16 @@
             "smells",
             "structural",
             "subjective_review"
+          ]
+        },
+        {
+          "file": "playwright.config.ts",
+          "detector_count": 3,
+          "finding_count": 4,
+          "detectors": [
+            "smells",
+            "subjective_review",
+            "test_coverage"
           ]
         },
         {
@@ -1816,7 +1804,6 @@
     "existing_findings": {
       "App.tsx": [
         "logs: 1 tagged logs [Sentry]",
-        "orphaned: Orphaned file (256 LOC): zero importers, not an entry point",
         "test_coverage: Untested module (256 LOC, 0 importers)",
         "smells: 2x Deeply nested closures \u2014 extract to module level",
         "smells: 1x Catch blocks that only log (swallowed errors)",
@@ -1957,20 +1944,10 @@
         "test_coverage: Untested module (50 LOC, 0 importers)",
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
-      "playwright.config.ts": [
-        "orphaned: Orphaned file (35 LOC): zero importers, not an entry point",
-        "test_coverage: Untested module (35 LOC, 0 importers)",
-        "smells: 2x Hardcoded URL in source code",
-        "smells: 1x Magic numbers (>1000 in logic)",
-        "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
-      ],
       "src/components/ui/ScaleButton.web.tsx": [
         "orphaned: Orphaned file (35 LOC): zero importers, not an entry point",
         "test_coverage: Untested module (35 LOC, 0 importers)",
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
-      ],
-      "__tests__/setup.ts": [
-        "orphaned: Orphaned file (14 LOC): zero importers, not an entry point"
       ],
       "src/components/brain-dump/index.ts": [
         "facade: Re-export facade (8 LOC): imports from ./BrainDumpItem, ./BrainDumpItem, ./Brain"
@@ -2045,6 +2022,12 @@
       ],
       "src/components/ui/LinearButton.tsx": [
         "test_coverage: Untested module (206 LOC, 0 importers)",
+        "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
+      ],
+      "playwright.config.ts": [
+        "test_coverage: Untested module (35 LOC, 0 importers)",
+        "smells: 2x Hardcoded URL in source code",
+        "smells: 1x Magic numbers (>1000 in logic)",
         "subjective_review: No design review on record \u2014 run `desloppify review --prepare`"
       ],
       "src/components/DriftCheckOverlay.tsx": [
@@ -2505,12 +2488,12 @@
         "src/theme/ThemeProvider.tsx",
         "src/components/ui/LinearButton.tsx",
         "src/theme/cosmicTokens.ts",
+        "src/theme/linearTokens.ts",
         "src/theme/themeVariant.ts",
-        "src/ui/cosmic/CosmicBackground.tsx",
-        "src/theme/metroTheme.ts",
         "src/screens/IgniteScreen.tsx",
-        "src/ui/cosmic/GlowCard.tsx",
-        "src/theme/linearTokens.ts"
+        "src/theme/metroTheme.ts",
+        "src/ui/cosmic/CosmicBackground.tsx",
+        "src/ui/cosmic/GlowCard.tsx"
       ],
       "why": "critical untested paths, API inconsistency",
       "concern_signals": []
@@ -2575,7 +2558,6 @@
         "src/components/capture/CaptureDrawer.tsx",
         "src/services/GoogleTasksSyncService.ts",
         "App.tsx",
-        "playwright.config.ts",
         "src/navigation/AppNavigator.tsx",
         "src/ui/cosmic/RuneButton.tsx"
       ],
@@ -2648,23 +2630,22 @@
         {
           "type": "design_concern",
           "file": "App.tsx",
-          "summary": "Design signals from orphaned, smells",
-          "question": "Is this file truly dead, or is it used via a non-import mechanism (dynamic import, CLI entry point, plugin)?",
+          "summary": "Design signals from smells",
+          "question": "Review the flagged patterns \u2014 are they design problems that need addressing, or acceptable given the file's role?",
           "evidence": [
-            "Flagged by: orphaned, smells",
-            "[orphaned] Orphaned file (256 LOC): zero importers, not an entry point",
+            "Flagged by: smells",
             "[smells] 2x Deeply nested closures \u2014 extract to module level",
-            "[smells] 1x Catch blocks that only log (swallowed errors)"
+            "[smells] 1x Catch blocks that only log (swallowed errors)",
+            "[smells] 2x console.error without throw/return"
           ]
         },
         {
           "type": "design_concern",
           "file": "playwright.config.ts",
-          "summary": "Design signals from orphaned, smells",
-          "question": "Is this file truly dead, or is it used via a non-import mechanism (dynamic import, CLI entry point, plugin)?",
+          "summary": "Design signals from smells",
+          "question": "Review the flagged patterns \u2014 are they design problems that need addressing, or acceptable given the file's role?",
           "evidence": [
-            "Flagged by: orphaned, smells",
-            "[orphaned] Orphaned file (35 LOC): zero importers, not an entry point",
+            "Flagged by: smells",
             "[smells] 2x Hardcoded URL in source code",
             "[smells] 1x Magic numbers (>1000 in logic)"
           ]
@@ -2824,11 +2805,11 @@
         "src/store/useCaptureStore.ts",
         "src/components/capture/CaptureBubble.tsx",
         "src/theme/cosmicTokens.ts",
-        "src/theme/themeVariant.ts",
-        "src/ui/cosmic/CosmicBackground.tsx",
-        "src/theme/metroTheme.ts",
-        "src/ui/cosmic/GlowCard.tsx",
         "src/theme/linearTokens.ts",
+        "src/theme/themeVariant.ts",
+        "src/theme/metroTheme.ts",
+        "src/ui/cosmic/CosmicBackground.tsx",
+        "src/ui/cosmic/GlowCard.tsx",
         "src/components/capture/index.ts",
         "src/config/secrets.example.ts",
         "src/hooks/useAgentEvents.ts",
@@ -2971,7 +2952,33 @@
         "src/services/SoundService.ts",
         "src/services/SoundService.web.ts",
         "src/services/StorageService.ts",
-        "src/services/TimerService.ts"
+        "src/services/TimerService.ts",
+        "src/services/TranscriptionService.ts",
+        "src/services/UXMetricsService.ts",
+        "src/services/WebMCPService.ts",
+        "src/store/useCaptureStore.ts",
+        "src/store/useDriftStore.ts",
+        "src/store/useThemeStore.ts",
+        "src/store/useTimerStore.ts",
+        "src/theme/ThemeProvider.tsx",
+        "src/theme/cosmicMotion.ts",
+        "src/theme/cosmicTokens.ts",
+        "src/theme/linearTokens.ts",
+        "src/theme/metroTheme.ts",
+        "src/theme/motion.ts",
+        "src/theme/themeVariant.ts",
+        "src/theme/tokens.ts",
+        "src/ui/cosmic/BottomSheet.tsx",
+        "src/ui/cosmic/ChronoDigits.tsx",
+        "src/ui/cosmic/CosmicBackground.tsx",
+        "src/ui/cosmic/GlowCard.tsx",
+        "src/ui/cosmic/HaloRing.tsx",
+        "src/ui/cosmic/RuneButton.tsx",
+        "src/ui/cosmic/index.ts",
+        "src/ui/cosmic/types.ts",
+        "src/utils/PlatformUtils.ts",
+        "src/utils/fogCutter.ts",
+        "src/utils/helpers.ts"
       ],
       "why": "thorough default: evaluate cross-cutting quality across all production files",
       "concern_signals": []
@@ -2981,27 +2988,9 @@
     "requested": [],
     "default": []
   },
-  "config": {
-    "review_max_age_days": 30,
-    "review_batch_max_files": 80,
-    "holistic_max_age_days": 30,
-    "generate_scorecard": true,
-    "badge_path": "scorecard.png",
-    "exclude": [],
-    "ignore": [],
-    "ignore_metadata": {},
-    "zone_overrides": {},
-    "review_dimensions": [],
-    "large_files_threshold": 0,
-    "props_threshold": 0,
-    "finding_noise_budget": 10,
-    "finding_noise_global_budget": 0,
-    "needs_rescan": false,
-    "languages": {}
-  },
   "narrative": {
     "phase": "middle_grind",
-    "headline": "\u26a0 1 security finding \u2014 review before other cleanup. 264 findings open. Naming quality (0.0%) needs attention \u2014 run `desloppify next` to start.",
+    "headline": "\u26a0 1 security finding \u2014 review before other cleanup. 261 findings open. Naming quality (0.0%) needs attention \u2014 run `desloppify next` to start.",
     "dimensions": {
       "lowest_dimensions": [
         {
@@ -3047,8 +3036,8 @@
       {
         "type": "reorganize",
         "detector": "orphaned",
-        "count": 9,
-        "description": "9 orphaned findings \u2014 delete dead files or relocate with `desloppify move`",
+        "count": 6,
+        "description": "6 orphaned findings \u2014 delete dead files or relocate with `desloppify move`",
         "command": "desloppify show orphaned --status open",
         "impact": 0.0,
         "dimension": "Code quality",
@@ -3213,7 +3202,7 @@
     "strategy": {
       "fixer_leverage": {
         "auto_fixable_count": 1,
-        "total_count": 264,
+        "total_count": 261,
         "coverage": 0.004,
         "impact_ratio": 0.0,
         "recommendation": "none"
@@ -3237,7 +3226,7 @@
             6,
             7
           ],
-          "file_count": 23,
+          "file_count": 20,
           "total_impact": 0.0,
           "automation": "manual",
           "run_first": false
@@ -3295,7 +3284,7 @@
       "move": {
         "available": true,
         "relevant": true,
-        "reason": "9 orphaned files + 9 single-use files + 2 flat directories + 1 naming issues",
+        "reason": "6 orphaned files + 9 single-use files + 2 flat directories + 1 naming issues",
         "usage": "desloppify move <source> <dest> [--dry-run]"
       },
       "plan": {
@@ -3311,9 +3300,9 @@
     },
     "debt": {
       "overall_gap": 0.0,
-      "wontfix_count": 1,
-      "worst_dimension": null,
-      "worst_gap": 0.0,
+      "wontfix_count": 4,
+      "worst_dimension": "Code quality",
+      "worst_gap": 0.2,
       "trend": "stable"
     },
     "milestone": null,
@@ -3330,7 +3319,7 @@
       {
         "type": "wontfix_gap",
         "severity": "medium",
-        "message": "Strict/lenient gap is 0.0 pts with 1 wontfix findings"
+        "message": "Strict/lenient gap is 0.0 pts with 4 wontfix findings"
       }
     ],
     "strict_target": {
@@ -3371,5 +3360,24 @@
       "feedback_nudge": 1
     }
   },
-  "next_command": "desloppify review --run-batches --runner codex --parallel"
+  "next_command": "desloppify review --external-submit --session-id <id> --import <file>",
+  "config": {
+    "target_strict_score": 95,
+    "review_max_age_days": 30,
+    "review_batch_max_files": 80,
+    "holistic_max_age_days": 30,
+    "generate_scorecard": true,
+    "badge_path": "scorecard.png",
+    "exclude": [],
+    "ignore": [],
+    "ignore_metadata": {},
+    "zone_overrides": {},
+    "review_dimensions": [],
+    "large_files_threshold": 0,
+    "props_threshold": 0,
+    "finding_noise_budget": 10,
+    "finding_noise_global_budget": 0,
+    "needs_rescan": false,
+    "languages": {}
+  }
 }

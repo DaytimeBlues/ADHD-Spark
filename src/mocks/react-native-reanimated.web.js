@@ -123,6 +123,48 @@ const runOnJS = (fn) => fn;
 const runOnUI = (fn) => fn;
 
 // ---------------------------------------------------------------------------
+// Layout animation presets (FadeIn, SlideInDown, SlideInRight, etc.)
+// Each returns a chainable builder whose methods are no-ops on web.
+// ---------------------------------------------------------------------------
+
+function createLayoutAnimationBuilder() {
+  const builder = {
+    delay: () => builder,
+    duration: () => builder,
+    easing: () => builder,
+    springify: () => builder,
+    damping: () => builder,
+    stiffness: () => builder,
+    withInitialValues: () => builder,
+    withCallback: () => builder,
+    build: () => ({}),
+  };
+  return builder;
+}
+
+const FadeIn = createLayoutAnimationBuilder();
+const FadeInUp = createLayoutAnimationBuilder();
+const FadeInDown = createLayoutAnimationBuilder();
+const FadeInLeft = createLayoutAnimationBuilder();
+const FadeInRight = createLayoutAnimationBuilder();
+const FadeOut = createLayoutAnimationBuilder();
+const FadeOutUp = createLayoutAnimationBuilder();
+const FadeOutDown = createLayoutAnimationBuilder();
+const FadeOutLeft = createLayoutAnimationBuilder();
+const FadeOutRight = createLayoutAnimationBuilder();
+const SlideInDown = createLayoutAnimationBuilder();
+const SlideInUp = createLayoutAnimationBuilder();
+const SlideInLeft = createLayoutAnimationBuilder();
+const SlideInRight = createLayoutAnimationBuilder();
+const SlideOutDown = createLayoutAnimationBuilder();
+const SlideOutUp = createLayoutAnimationBuilder();
+const SlideOutLeft = createLayoutAnimationBuilder();
+const SlideOutRight = createLayoutAnimationBuilder();
+const ZoomIn = createLayoutAnimationBuilder();
+const ZoomOut = createLayoutAnimationBuilder();
+const Layout = createLayoutAnimationBuilder();
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
@@ -146,4 +188,26 @@ module.exports = {
   createAnimatedComponent,
   runOnJS,
   runOnUI,
+  // Layout animation presets
+  FadeIn,
+  FadeInUp,
+  FadeInDown,
+  FadeInLeft,
+  FadeInRight,
+  FadeOut,
+  FadeOutUp,
+  FadeOutDown,
+  FadeOutLeft,
+  FadeOutRight,
+  SlideInDown,
+  SlideInUp,
+  SlideInLeft,
+  SlideInRight,
+  SlideOutDown,
+  SlideOutUp,
+  SlideOutLeft,
+  SlideOutRight,
+  ZoomIn,
+  ZoomOut,
+  Layout,
 };

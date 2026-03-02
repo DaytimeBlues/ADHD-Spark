@@ -14,7 +14,14 @@ import { ROUTES } from './routes';
 import { CaptureBubble } from '../components/capture';
 import ErrorBoundary from '../components/ErrorBoundary';
 
-// Critical screens - loaded normally
+// Phase 6: P5 UI Migration - Primary tabs use P5 screens
+// Critical P5 screens - loaded normally for primary tabs
+import { P5DashboardScreen } from '../screens/p5';
+import { P5FocusTimerScreen } from '../screens/p5';
+import { P5TasksScreen } from '../screens/p5';
+import { P5JournalScreen } from '../screens/p5';
+
+// Legacy screens (kept for reference/fallback)
 import HomeScreen from '../screens/HomeScreen';
 import IgniteScreen from '../screens/IgniteScreen';
 
@@ -93,6 +100,13 @@ const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 const LazyChat = withSuspense(ChatScreen);
 const LazyInbox = withSuspense(InboxScreen);
 
+// Phase 6: Wrapped P5 screens for primary tabs (with ErrorBoundary)
+const SafeP5DashboardScreen = withErrorBoundary(P5DashboardScreen);
+const SafeP5FocusTimerScreen = withErrorBoundary(P5FocusTimerScreen);
+const SafeP5TasksScreen = withErrorBoundary(P5TasksScreen);
+const SafeP5JournalScreen = withErrorBoundary(P5JournalScreen);
+
+// Legacy wrapped screens (kept for HomeStack and modals)
 const SafeHomeScreen = withErrorBoundary(HomeScreen);
 const SafeIgniteScreen = withErrorBoundary(IgniteScreen);
 const SafeLazyFogCutter = withErrorBoundary(LazyFogCutter);
@@ -167,19 +181,20 @@ const TabNavigator = () => {
         },
       }}
     >
+      {/* Phase 6: Primary tabs migrated to P5 UI equivalents */}
       <Tab.Screen
         name={ROUTES.HOME}
-        component={HomeStack}
+        component={SafeP5DashboardScreen}
         options={{ tabBarIcon: HomeTabIcon }}
       />
       <Tab.Screen
         name={ROUTES.FOCUS}
-        component={SafeIgniteScreen}
+        component={SafeP5FocusTimerScreen}
         options={{ tabBarIcon: FocusTabIcon }}
       />
       <Tab.Screen
         name={ROUTES.TASKS}
-        component={SafeLazyBrainDump}
+        component={SafeP5TasksScreen}
         options={{ tabBarIcon: TasksTabIcon }}
       />
       <Tab.Screen
@@ -189,7 +204,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name={ROUTES.CHAT}
-        component={SafeLazyChat}
+        component={SafeP5JournalScreen}
         options={{ tabBarIcon: ChatTabIcon }}
       />
     </Tab.Navigator>

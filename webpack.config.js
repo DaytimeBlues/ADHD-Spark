@@ -2,9 +2,22 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
+// Fix for Windows Webpack crash (-1073741510 / Access Violation)
+// Standard file watching can trigger memory access errors in some Windows environments.
+// Polling via Chokidar is a reliable workaround.
+process.env.CHOKIDAR_USEPOLLING = 'true';
+
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   const disableDevOverlay = Boolean(process.env.CI);
+
+  // Filter environment variables to include those starting with EXPO_PUBLIC_
+  const envVars = Object.keys(process.env)
+    .filter((key) => key.startsWith('EXPO_PUBLIC_'))
+    .reduce((acc, key) => {
+      acc[`process.env.${key}`] = JSON.stringify(process.env[key]);
+      return acc;
+    }, {});
 
   return {
     mode: argv.mode || 'development',
@@ -71,6 +84,7 @@ module.exports = (env, argv) => {
         'process.env.NODE_ENV': JSON.stringify(
           isProduction ? 'production' : 'development',
         ),
+        ...envVars,
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',
@@ -87,8 +101,12 @@ module.exports = (env, argv) => {
         overlay: !disableDevOverlay,
       },
       historyApiFallback: true,
-      port: 3000,
+      port: 3001,
       open: true,
+    },
+    watchOptions: {
+      poll: 1000,
+      ignored: /node_modules/,
     },
   };
 };

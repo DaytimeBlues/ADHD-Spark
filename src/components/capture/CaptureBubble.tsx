@@ -29,6 +29,9 @@ import CaptureService from '../../services/CaptureService';
 import { CheckInService } from '../../services/CheckInService';
 import { navigationRef } from '../../navigation/navigationRef';
 import { ROUTES } from '../../navigation/routes';
+import { useCaptureStore } from '../../store/useCaptureStore';
+import { useTaskStore } from '../../store/useTaskStore';
+import OverlayService from '../../services/OverlayService';
 import { CaptureDrawer } from './CaptureDrawer';
 
 // ============================================================================
@@ -74,6 +77,15 @@ export const CaptureBubble = memo(function CaptureBubble() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [bubbleState, setBubbleState] = useState<BubbleState>('idle');
   const [badgeCount, setBadgeCount] = useState(0);
+
+  // Task Store Integration
+  const activeTaskCount = useTaskStore((state) => state.getActiveCount());
+  const totalBadgeCount = badgeCount + activeTaskCount;
+
+  // Sync with native overlay
+  useEffect(() => {
+    OverlayService.updateCount(totalBadgeCount);
+  }, [totalBadgeCount]);
 
   // Animation refs
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -353,18 +365,18 @@ export const CaptureBubble = memo(function CaptureBubble() {
         </Pressable>
 
         {/* Badge */}
-        {badgeCount > 0 &&
+        {totalBadgeCount > 0 &&
           bubbleState !== 'recording' &&
           bubbleState !== 'processing' && (
             <Pressable
               style={styles.badge}
               testID="capture-bubble-badge"
               onPress={handleBadgePress}
-              accessibilityLabel="Open capture inbox"
+              accessibilityLabel={`Open capture inbox, ${totalBadgeCount} items to review`}
               accessibilityRole="button"
             >
               <Text style={styles.badgeText}>
-                {badgeCount > 99 ? '99+' : badgeCount}
+                {totalBadgeCount > 99 ? '99+' : totalBadgeCount}
               </Text>
             </Pressable>
           )}

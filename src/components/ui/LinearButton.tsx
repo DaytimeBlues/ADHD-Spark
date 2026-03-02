@@ -20,6 +20,7 @@ interface LinearButtonProps {
   disabled?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  testID?: string;
 }
 
 export const LinearButton: React.FC<LinearButtonProps> = ({
@@ -31,6 +32,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
   disabled = false,
   style,
   textStyle,
+  testID,
 }) => {
   const getVariantStyles = () => {
     switch (variant) {
@@ -76,6 +78,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 
   return (
     <Pressable
+      testID={testID}
       onPress={handlePress}
       disabled={disabled || loading}
       style={({

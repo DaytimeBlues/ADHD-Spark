@@ -23,6 +23,8 @@ import { BottomSheet } from '../../ui/cosmic/BottomSheet';
 import CaptureService, { CaptureSource } from '../../services/CaptureService';
 import RecordingService from '../../services/RecordingService';
 import { LoggerService } from '../../services/LoggerService';
+import { RuneButton } from '../../ui/cosmic/RuneButton';
+import { useTaskStore } from '../../store/useTaskStore';
 import type { BubbleState } from './CaptureBubble';
 
 // ============================================================================
@@ -37,13 +39,14 @@ export interface CaptureDrawerProps {
   currentBubbleState: BubbleState;
 }
 
-type DrawerMode = CaptureSource;
+type DrawerMode = CaptureSource | 'task';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
 const MODES: Array<{ id: DrawerMode; icon: string; label: string }> = [
+  { id: 'task', icon: '📝', label: 'TASK' },
   { id: 'voice', icon: '🎙', label: 'VOICE' },
   { id: 'text', icon: '⌨', label: 'TEXT' },
   { id: 'photo', icon: '📷', label: 'PHOTO' },
@@ -169,16 +172,14 @@ const VoiceMode = memo(function VoiceMode({
   return (
     <View style={styles.modeContent}>
       {phase === 'idle' && (
-        <Pressable
-          testID="capture-record-toggle"
-          style={[styles.recordBtn, { backgroundColor: C.violet }]}
+        <RuneButton
+          variant="primary"
           onPress={handleStartRecording}
-          accessibilityLabel="Start recording"
-          accessibilityRole="button"
+          leftIcon={<Text style={styles.recordBtnIcon}>🎙</Text>}
+          style={styles.recordBtn}
         >
-          <Text style={styles.recordBtnIcon}>🎙</Text>
-          <Text style={styles.recordBtnLabel}>TAP TO RECORD</Text>
-        </Pressable>
+          TAP TO RECORD
+        </RuneButton>
       )}
 
       {phase === 'recording' && (
@@ -192,15 +193,14 @@ const VoiceMode = memo(function VoiceMode({
           <Text style={[styles.recordingHint, { color: C.mutedText }]}>
             Recording…
           </Text>
-          <Pressable
-            testID="capture-stop-recording"
-            style={[styles.stopBtn, { borderColor: C.teal }]}
+          <RuneButton
+            variant="secondary"
+            size="md"
             onPress={handleStopRecording}
-            accessibilityLabel="Stop recording"
-            accessibilityRole="button"
+            style={[styles.stopBtn, { borderColor: C.teal }]}
           >
-            <Text style={[styles.stopBtnText, { color: C.teal }]}>■ STOP</Text>
-          </Pressable>
+            STOP
+          </RuneButton>
         </View>
       )}
 
@@ -222,25 +222,20 @@ const VoiceMode = memo(function VoiceMode({
             {transcript}
           </Text>
           <View style={styles.confirmRow}>
-            <Pressable
-              style={[styles.confirmBtn, { backgroundColor: C.violet }]}
+            <RuneButton
+              variant="primary"
               onPress={handleConfirm}
-              testID="capture-confirm"
-              accessibilityLabel="Save to inbox"
-              accessibilityRole="button"
+              style={styles.confirmBtn}
             >
-              <Text style={styles.confirmBtnText}>SAVE TO INBOX</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.discardBtn, { borderColor: C.rose }]}
+              SAVE TO INBOX
+            </RuneButton>
+            <RuneButton
+              variant="danger"
               onPress={handleDiscard}
-              accessibilityLabel="Discard recording"
-              accessibilityRole="button"
+              style={styles.discardBtn}
             >
-              <Text style={[styles.discardBtnText, { color: C.rose }]}>
-                DISCARD
-              </Text>
-            </Pressable>
+              DISCARD
+            </RuneButton>
           </View>
         </View>
       )}
@@ -306,20 +301,14 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
         returnKeyType="default"
         accessibilityLabel="Capture text input"
       />
-      <Pressable
-        testID="capture-confirm"
-        style={[
-          styles.confirmBtn,
-          { backgroundColor: text.trim() ? C.violet : C.border },
-          styles.marginTop12,
-        ]}
+      <RuneButton
         onPress={handleConfirm}
         disabled={!text.trim()}
-        accessibilityLabel="Save to inbox"
-        accessibilityRole="button"
+        variant="primary"
+        style={styles.marginTop12}
       >
-        <Text style={styles.confirmBtnText}>SAVE TO INBOX</Text>
-      </Pressable>
+        SAVE TO INBOX
+      </RuneButton>
     </View>
   );
 });
@@ -402,22 +391,14 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
             textAlignVertical="top"
             accessibilityLabel="Paste capture input"
           />
-          <Pressable
-            testID="capture-confirm"
-            style={[
-              styles.confirmBtn,
-              {
-                backgroundColor: text.trim() ? C.violet : C.border,
-              },
-              styles.marginTop12,
-            ]}
+          <RuneButton
             onPress={handleConfirm}
             disabled={!text.trim()}
-            accessibilityLabel="Save to inbox"
-            accessibilityRole="button"
+            variant="primary"
+            style={styles.marginTop12}
           >
-            <Text style={styles.confirmBtnText}>SAVE TO INBOX</Text>
-          </Pressable>
+            SAVE TO INBOX
+          </RuneButton>
         </>
       )}
     </View>
@@ -461,19 +442,13 @@ const MeetingMode = memo(function MeetingMode({ onCapture }: MeetingModeProps) {
         textAlignVertical="top"
         accessibilityLabel="Meeting notes input"
       />
-      <Pressable
-        testID="capture-confirm"
-        style={[
-          styles.confirmBtn,
-          { backgroundColor: C.violet },
-          styles.marginTop12,
-        ]}
+      <RuneButton
         onPress={handleConfirm}
-        accessibilityLabel="Save meeting to inbox"
-        accessibilityRole="button"
+        variant="primary"
+        style={styles.marginTop12}
       >
-        <Text style={styles.confirmBtnText}>SAVE MEETING NOTES</Text>
-      </Pressable>
+        SAVE MEETING NOTES
+      </RuneButton>
     </View>
   );
 });
@@ -500,10 +475,10 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
               type: string;
               accept: string;
               onchange:
-                | ((e: {
-                    target: { files?: { 0?: { name: string } } };
-                  }) => void)
-                | null;
+              | ((e: {
+                target: { files?: { 0?: { name: string } } };
+              }) => void)
+              | null;
               click: () => void;
             };
           };
@@ -555,19 +530,13 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
             placeholderTextColor={C.mutedText}
             accessibilityLabel="Photo caption input"
           />
-          <Pressable
-            testID="capture-confirm"
-            style={[
-              styles.confirmBtn,
-              { backgroundColor: C.violet },
-              styles.marginTop12,
-            ]}
+          <RuneButton
             onPress={handleConfirm}
-            accessibilityLabel="Save photo to inbox"
-            accessibilityRole="button"
+            variant="primary"
+            style={styles.marginTop12}
           >
-            <Text style={styles.confirmBtnText}>SAVE TO INBOX</Text>
-          </Pressable>
+            SAVE TO INBOX
+          </RuneButton>
         </View>
       ) : (
         <Pressable
@@ -633,29 +602,73 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
         textAlignVertical="top"
         accessibilityLabel="Check-in input"
       />
-      <Pressable
-        testID="capture-checkin-confirm"
-        style={[
-          styles.confirmBtn,
-          { backgroundColor: text.trim() ? C.gold : C.border },
-          styles.marginTop12,
-        ]}
+      <RuneButton
         onPress={handleConfirm}
         disabled={!text.trim()}
-        accessibilityLabel="Save check-in"
-        accessibilityRole="button"
+        variant={text.trim() ? 'primary' : 'secondary'}
+        style={styles.marginTop12}
       >
-        <Text
-          style={[
-            styles.confirmBtnText,
-            text.trim()
-              ? styles.checkInBtnTextActive
-              : styles.checkInBtnTextDisabled,
-          ]}
-        >
-          LOG PROGRESS
-        </Text>
-      </Pressable>
+        LOG PROGRESS
+      </RuneButton>
+    </View>
+  );
+});
+
+// ============================================================================
+// TASK MODE
+// ============================================================================
+
+interface TaskModeProps {
+  onSuccess: () => void;
+}
+
+const TaskMode = memo(function TaskMode({ onSuccess }: TaskModeProps) {
+  const [title, setTitle] = useState('');
+  const addTaskStore = useTaskStore((state) => state.addTask);
+
+  const handleConfirm = useCallback(() => {
+    const trimmed = title.trim();
+    if (!trimmed) {
+      return;
+    }
+    addTaskStore({
+      title: trimmed,
+      priority: 'normal',
+      source: 'manual',
+    });
+    setTitle('');
+    onSuccess();
+  }, [title, addTaskStore, onSuccess]);
+
+  return (
+    <View style={styles.modeContent}>
+      <Text style={[styles.meetingLabel, { color: C.mutedText }]}>
+        NEW MISSION
+      </Text>
+      <TextInput
+        testID="capture-task-input"
+        style={[
+          styles.textInput,
+          { color: C.starlight, borderColor: C.border },
+        ]}
+        value={title}
+        onChangeText={setTitle}
+        placeholder="What needs to be done?"
+        placeholderTextColor={C.mutedText}
+        multiline
+        autoFocus
+        numberOfLines={2}
+        textAlignVertical="top"
+        accessibilityLabel="Task title input"
+      />
+      <RuneButton
+        variant="primary"
+        onPress={handleConfirm}
+        disabled={!title.trim()}
+        style={styles.marginTop12}
+      >
+        ADD TASK
+      </RuneButton>
     </View>
   );
 });
@@ -670,7 +683,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
   onStateChange,
   currentBubbleState,
 }: CaptureDrawerProps) {
-  const [activeMode, setActiveMode] = useState<DrawerMode>('text');
+  const [activeMode, setActiveMode] = useState<DrawerMode>('task');
   const [successMsg, setSuccessMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -826,6 +839,9 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
       {/* Active mode content */}
       <View style={styles.modePanel}>
+        {activeMode === 'task' && (
+          <TaskMode onSuccess={() => showSuccess('Task added ✓')} />
+        )}
         {activeMode === 'voice' && (
           <VoiceMode
             onCapture={handleVoiceCapture}
