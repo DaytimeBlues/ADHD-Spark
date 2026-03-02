@@ -71,6 +71,7 @@ module.exports = (env, argv) => {
         'process.env.NODE_ENV': JSON.stringify(
           isProduction ? 'production' : 'development',
         ),
+        'process.env': JSON.stringify({}),
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { zustandStorage } from '../services/StorageService';
-import type { CaptureItem, CaptureStatus } from '../services/CaptureService';
+import type { CaptureItem, CaptureStatus } from '../types/capture';
 
 interface CaptureState {
   items: CaptureItem[];

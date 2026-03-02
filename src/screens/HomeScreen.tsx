@@ -4,7 +4,7 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 import {
   View,
   Text,
@@ -21,24 +21,24 @@ import {
   TouchableOpacity,
   NativeModules,
   Share,
-} from 'react-native';
-import OverlayService from '../services/OverlayService';
-import StorageService from '../services/StorageService';
-import { LoggerService } from '../services/LoggerService';
+} from "react-native";
+import OverlayService from "../services/OverlayService";
+import StorageService from "../services/StorageService";
+import { LoggerService } from "../services/LoggerService";
 import ActivationService, {
   ActivationDailyTrendPoint,
   ActivationSummary,
-} from '../services/ActivationService';
-import RetentionService from '../services/RetentionService';
-import { ReentryPromptLevel } from '../services/RetentionService';
-import useReducedMotion from '../hooks/useReducedMotion';
-import { Tokens } from '../theme/tokens';
-import { useTheme } from '../theme/ThemeProvider';
-import ModeCard, { ModeCardMode } from '../components/home/ModeCard';
-import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
-import { ROUTES } from '../navigation/routes';
-import { CosmicBackground, GlowCard } from '../ui/cosmic';
-import { PhantomBackground, JaggedCard, StarburstTimer, PhantomButton } from '../ui/phantom';
+} from "../services/ActivationService";
+import RetentionService from "../services/RetentionService";
+import { ReentryPromptLevel } from "../services/RetentionService";
+import useReducedMotion from "../hooks/useReducedMotion";
+import { Tokens } from "../theme/tokens";
+import { useTheme } from "../theme/ThemeProvider";
+import ModeCard, { ModeCardMode } from "../components/home/ModeCard";
+import { ReEntryPrompt } from "../components/ui/ReEntryPrompt";
+import { ROUTES } from "../navigation/routes";
+import { CosmicBackground, GlowCard } from "../ui/cosmic";
+import { getStyles } from "./HomeScreen.styles";
 
 const ANIMATION_DURATION = 300;
 const ANIMATION_STAGGER = 50;
@@ -63,7 +63,7 @@ type OverlayEvent = {
 };
 
 const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
-  const { isCosmic, isPhantom } = useTheme();
+  const { isCosmic } = useTheme();
   const [streak, setStreak] = useState(0);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
@@ -75,7 +75,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     ActivationDailyTrendPoint[]
   >([]);
   const [reentryPromptLevel, setReentryPromptLevel] =
-    useState<ReentryPromptLevel>('none');
+    useState<ReentryPromptLevel>("none");
   const prefersReducedMotion = useReducedMotion();
 
   const trendMetrics = useMemo(() => {
@@ -125,12 +125,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     }
 
     const diagnostics = [
-      `overlay_enabled=${isOverlayEnabled ? 'yes' : 'no'}`,
-      `permission_requesting=${isOverlayPermissionRequesting ? 'yes' : 'no'}`,
+      `overlay_enabled=${isOverlayEnabled ? "yes" : "no"}`,
+      `permission_requesting=${isOverlayPermissionRequesting ? "yes" : "no"}`,
       ...overlayEvents.map((event) => {
         return `${new Date(event.timestamp).toISOString()} ${event.label}`;
       }),
-    ].join('\n');
+    ].join("\n");
 
     try {
       const clipboardModule = NativeModules.Clipboard as
@@ -139,24 +139,24 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
       if (clipboardModule?.setString) {
         clipboardModule.setString(diagnostics);
-        addOverlayEvent('Diagnostics copied');
+        addOverlayEvent("Diagnostics copied");
         AccessibilityInfo.announceForAccessibility(
-          'Overlay diagnostics copied to clipboard',
+          "Overlay diagnostics copied to clipboard",
         );
         return;
       }
 
       await Share.share({
-        title: 'Overlay diagnostics',
+        title: "Overlay diagnostics",
         message: diagnostics,
       });
-      addOverlayEvent('Diagnostics shared');
-      AccessibilityInfo.announceForAccessibility('Overlay diagnostics shared');
+      addOverlayEvent("Diagnostics shared");
+      AccessibilityInfo.announceForAccessibility("Overlay diagnostics shared");
     } catch (error) {
-      console.warn('Failed to export diagnostics:', error);
-      addOverlayEvent('Diagnostics export failed');
+      console.warn("Failed to export diagnostics:", error);
+      addOverlayEvent("Diagnostics export failed");
       AccessibilityInfo.announceForAccessibility(
-        'Overlay diagnostics export failed',
+        "Overlay diagnostics export failed",
       );
     }
   }, [
@@ -166,58 +166,58 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     overlayEvents,
   ]);
 
-  const cardWidth = '49%';
+  const cardWidth = "49%";
 
   const modes = useMemo<Mode[]>(
     () => [
       {
-        id: 'resume',
-        name: 'Resume',
-        icon: 'play-circle',
-        desc: 'CONTINUE',
-        accent: '#8B5CF6',
+        id: "resume",
+        name: "Resume",
+        icon: "play-circle",
+        desc: "CONTINUE",
+        accent: "#8B5CF6",
       },
       {
-        id: 'ignite',
-        name: 'Ignite',
-        icon: 'fire',
-        desc: 'START TASKS',
-        accent: '#8B5CF6',
+        id: "ignite",
+        name: "Ignite",
+        icon: "fire",
+        desc: "START TASKS",
+        accent: "#8B5CF6",
       },
       {
-        id: 'fogcutter',
-        name: 'Fog Cutter',
-        icon: 'weather-windy',
-        desc: 'BREAK IT DOWN',
-        accent: '#8B5CF6',
+        id: "fogcutter",
+        name: "Fog Cutter",
+        icon: "weather-windy",
+        desc: "BREAK IT DOWN",
+        accent: "#8B5CF6",
       },
       {
-        id: 'pomodoro',
-        name: 'Pomodoro',
-        icon: 'timer-sand',
-        desc: 'STAY ON TRACK',
-        accent: '#2DD4BF',
+        id: "pomodoro",
+        name: "Pomodoro",
+        icon: "timer-sand",
+        desc: "STAY ON TRACK",
+        accent: "#2DD4BF",
       },
       {
-        id: 'anchor',
-        name: 'Anchor',
-        icon: 'anchor',
-        desc: 'REGULATE',
-        accent: '#243BFF',
+        id: "anchor",
+        name: "Anchor",
+        icon: "anchor",
+        desc: "REGULATE",
+        accent: "#243BFF",
       },
       {
-        id: 'checkin',
-        name: 'Check In',
-        icon: 'chart-bar',
-        desc: 'TRACK MOOD',
-        accent: '#2DD4BF',
+        id: "checkin",
+        name: "Check In",
+        icon: "chart-bar",
+        desc: "TRACK MOOD",
+        accent: "#2DD4BF",
       },
       {
-        id: 'cbtguide',
-        name: 'CBT Guide',
-        icon: 'brain',
-        desc: 'LEARN',
-        accent: '#8B5CF6',
+        id: "cbtguide",
+        name: "CBT Guide",
+        icon: "brain",
+        desc: "LEARN",
+        accent: "#8B5CF6",
       },
     ],
     [],
@@ -229,12 +229,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   ).current;
 
   const checkOverlayState = useCallback(async () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       try {
         const running = await OverlayService.isRunning();
         setIsOverlayEnabled(running);
       } catch (error) {
-        console.warn('Failed to check overlay state:', error);
+        console.warn("Failed to check overlay state:", error);
         setIsOverlayEnabled(false);
       }
     }
@@ -265,20 +265,20 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
       setActivationTrend(trend);
       setReentryPromptLevel(reentryPrompt);
 
-      if (reentryPrompt === 'gentle_restart') {
+      if (reentryPrompt === "gentle_restart") {
         AccessibilityInfo.announceForAccessibility(
-          'Welcome back. Start with one small focus session.',
+          "Welcome back. Start with one small focus session.",
         );
-      } else if (reentryPrompt === 'fresh_restart') {
+      } else if (reentryPrompt === "fresh_restart") {
         AccessibilityInfo.announceForAccessibility(
-          'Fresh restart. Begin with a tiny step in Fog Cutter or Ignite.',
+          "Fresh restart. Begin with a tiny step in Fog Cutter or Ignite.",
         );
       }
     } catch (error) {
       LoggerService.error({
-        service: 'HomeScreen',
-        operation: 'loadStreak',
-        message: 'Error loading streak',
+        service: "HomeScreen",
+        operation: "loadStreak",
+        message: "Error loading streak",
         error,
       });
     }
@@ -322,14 +322,14 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   ]);
 
   useEffect(() => {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
     const appStateSubscription = AppState.addEventListener(
-      'change',
+      "change",
       (nextState: AppStateStatus) => {
-        if (nextState === 'active') {
+        if (nextState === "active") {
           checkOverlayState();
         }
       },
@@ -341,63 +341,63 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   }, [checkOverlayState]);
 
   useEffect(() => {
-    if (Platform.OS !== 'android') {
+    if (Platform.OS !== "android") {
       return;
     }
 
     const unsubscribePermissionRequested = OverlayService.addEventListener(
-      'overlay_permission_requested',
+      "overlay_permission_requested",
       () => {
         setIsOverlayPermissionRequesting(true);
-        addOverlayEvent('Permission requested');
+        addOverlayEvent("Permission requested");
         AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request started',
+          "Overlay permission request started",
         );
       },
     );
 
     const unsubscribePermissionResult = OverlayService.addEventListener(
-      'overlay_permission_result',
+      "overlay_permission_result",
       ({ granted }) => {
         setIsOverlayPermissionRequesting(false);
-        addOverlayEvent(`Permission result: ${granted ? 'GRANTED' : 'DENIED'}`);
+        addOverlayEvent(`Permission result: ${granted ? "GRANTED" : "DENIED"}`);
         AccessibilityInfo.announceForAccessibility(
-          granted ? 'Overlay permission granted' : 'Overlay permission denied',
+          granted ? "Overlay permission granted" : "Overlay permission denied",
         );
       },
     );
 
     const unsubscribePermissionTimeout = OverlayService.addEventListener(
-      'overlay_permission_timeout',
+      "overlay_permission_timeout",
       () => {
         setIsOverlayPermissionRequesting(false);
-        addOverlayEvent('Permission timeout');
+        addOverlayEvent("Permission timeout");
         AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request timed out',
+          "Overlay permission request timed out",
         );
       },
     );
 
     const unsubscribePermissionError = OverlayService.addEventListener(
-      'overlay_permission_error',
+      "overlay_permission_error",
       () => {
         setIsOverlayPermissionRequesting(false);
-        addOverlayEvent('Permission error');
+        addOverlayEvent("Permission error");
         AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request failed',
+          "Overlay permission request failed",
         );
       },
     );
 
     const unsubscribeOverlayStarted = OverlayService.addEventListener(
-      'overlay_started',
+      "overlay_started",
       () => {
         setIsOverlayEnabled(true);
       },
     );
 
     const unsubscribeOverlayStopped = OverlayService.addEventListener(
-      'overlay_stopped',
+      "overlay_stopped",
       () => {
         setIsOverlayEnabled(false);
       },
@@ -415,7 +415,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const toggleOverlay = useCallback(
     async (value: boolean) => {
-      if (Platform.OS !== 'android') {
+      if (Platform.OS !== "android") {
         return;
       }
 
@@ -448,9 +448,9 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         setIsOverlayEnabled(false);
       } catch (error) {
         LoggerService.error({
-          service: 'HomeScreen',
-          operation: 'toggleOverlay',
-          message: 'Failed to toggle overlay',
+          service: "HomeScreen",
+          operation: "toggleOverlay",
+          message: "Failed to toggle overlay",
           error,
         });
         setIsOverlayPermissionRequesting(false);
@@ -480,15 +480,15 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   const handlePress = useCallback(
     (modeId: string) => {
-      if (modeId === 'checkin') {
+      if (modeId === "checkin") {
         navigateByRouteName(ROUTES.CHECK_IN);
-      } else if (modeId === 'cbtguide') {
+      } else if (modeId === "cbtguide") {
         navigateByRouteName(ROUTES.CBT_GUIDE);
-      } else if (modeId === 'fogcutter') {
+      } else if (modeId === "fogcutter") {
         navigateByRouteName(ROUTES.FOG_CUTTER);
-      } else if (modeId === 'pomodoro') {
+      } else if (modeId === "pomodoro") {
         navigateByRouteName(ROUTES.POMODORO);
-      } else if (modeId === 'anchor') {
+      } else if (modeId === "anchor") {
         navigateByRouteName(ROUTES.ANCHOR);
       } else {
         navigateByRouteName(ROUTES.FOCUS);
@@ -497,7 +497,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     [navigateByRouteName],
   );
 
-  const styles = useMemo(() => getStyles(isCosmic, isPhantom), [isCosmic, isPhantom]);
+  const styles = useMemo(() => getStyles(isCosmic), [isCosmic]);
 
   return (
     <CosmicBackground variant="ridge" style={StyleSheet.absoluteFill}>
@@ -530,14 +530,14 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   style={styles.streakBadge}
                   testID="home-streak-badge"
                   accessibilityRole="text"
-                  accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? 'days' : 'day'}`}
+                  accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? "days" : "day"}`}
                 >
                   <Text
                     style={styles.streakText}
                     testID="home-streak"
                     accessibilityLabel="home-streak"
                   >
-                    STREAK.{streak.toString().padStart(3, '0')}
+                    STREAK.{streak.toString().padStart(3, "0")}
                   </Text>
                 </View>
               </View>
@@ -596,8 +596,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                   )}
                 </View>
 
-                {(reentryPromptLevel === 'gentle_restart' ||
-                  reentryPromptLevel === 'fresh_restart') && (
+                {(reentryPromptLevel === "gentle_restart" ||
+                  reentryPromptLevel === "fresh_restart") && (
                   <ReEntryPrompt
                     level={reentryPromptLevel}
                     onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
@@ -607,10 +607,10 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
               </GlowCard>
             )}
 
-            {Platform.OS === 'android' && (
+            {Platform.OS === "android" && (
               <GlowCard
-                glow={isOverlayEnabled ? 'medium' : 'soft'}
-                tone={isOverlayEnabled ? 'raised' : 'base'}
+                glow={isOverlayEnabled ? "medium" : "soft"}
+                tone={isOverlayEnabled ? "raised" : "base"}
                 padding="sm"
                 style={[
                   styles.overlayCard,
@@ -627,10 +627,10 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                     accessibilityLiveRegion="polite"
                   >
                     {isOverlayPermissionRequesting
-                      ? 'REQ_PERM...'
+                      ? "REQ_PERM..."
                       : isOverlayEnabled
-                        ? 'ACTIVE'
-                        : 'INACTIVE'}
+                        ? "ACTIVE"
+                        : "INACTIVE"}
                   </Text>
                 </View>
                 <Switch
@@ -656,7 +656,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
               </GlowCard>
             )}
 
-            {Platform.OS === 'android' && __DEV__ && (
+            {Platform.OS === "android" && __DEV__ && (
               <View style={styles.debugPanel}>
                 <Text style={styles.debugTitle}>LOGS</Text>
                 {overlayEvents.length === 0 ? (
@@ -666,10 +666,10 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
                     <Text key={event.id} style={styles.debugText}>
                       {new Date(event.timestamp).toLocaleTimeString([], {
                         hour12: false,
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      })}{' '}
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}{" "}
                       :: {event.label}
                     </Text>
                   ))
@@ -718,254 +718,5 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     </CosmicBackground>
   );
 };
-
-const getStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'transparent',
-    },
-    scrollContent: {
-      flexGrow: 1,
-      padding: Tokens.spacing[4],
-      alignItems: 'center',
-    },
-    maxWidthWrapper: {
-      width: '100%',
-      maxWidth: 960,
-    },
-    header: {
-      marginBottom: Tokens.spacing[8],
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-start',
-      paddingTop: Tokens.spacing[4],
-      borderBottomWidth: 1,
-      borderBottomColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.08)'
-        : Tokens.colors.neutral.dark,
-      paddingBottom: Tokens.spacing[6],
-    },
-    title: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xl,
-      fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      letterSpacing: -1,
-      ...(isCosmic && Platform.OS === 'web'
-        ? {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-          }
-        : {}),
-    },
-    systemStatusRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 4,
-    },
-    systemStatusText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.6)'
-        : Tokens.colors.text.tertiary,
-      marginRight: 6,
-      letterSpacing: 1.5,
-    },
-    statusDot: {
-      width: 6,
-      height: 6,
-      borderRadius: 3,
-      backgroundColor: isCosmic ? '#2DD4BF' : Tokens.colors.success.main,
-    },
-    streakBadge: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: isCosmic
-        ? 'rgba(14, 20, 40, 0.8)'
-        : Tokens.colors.neutral.darker,
-      paddingHorizontal: Tokens.spacing[3],
-      paddingVertical: 4,
-      borderRadius: isCosmic ? 12 : Tokens.radii.none,
-      borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.border,
-    },
-    streakText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      fontWeight: '700',
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-      letterSpacing: 1,
-    },
-    activationCard: {
-      marginBottom: Tokens.spacing[6],
-    },
-    activationHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: Tokens.spacing[4],
-      borderBottomWidth: 1,
-      borderBottomColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.08)'
-        : Tokens.colors.neutral.dark,
-      paddingBottom: Tokens.spacing[2],
-    },
-    activationTitle: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.8)'
-        : Tokens.colors.text.secondary,
-      letterSpacing: 1,
-    },
-    activationRate: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.lg,
-      fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    },
-    activationGrid: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    statBox: {
-      flex: 1,
-    },
-    statLabel: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.6)'
-        : Tokens.colors.text.tertiary,
-      marginBottom: 2,
-      letterSpacing: 0.5,
-    },
-    statValue: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.base,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      fontWeight: '700',
-    },
-    textSuccess: { color: isCosmic ? '#2DD4BF' : Tokens.colors.success.main },
-    textError: { color: isCosmic ? '#FB7185' : Tokens.colors.error.main },
-    textNeutral: { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
-    overlayCard: {
-      marginBottom: Tokens.spacing[6],
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    overlayCardActive: {},
-    headerRight: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: Tokens.spacing[3],
-    },
-    settingsButton: {
-      width: 32,
-      height: 32,
-      borderRadius: isCosmic ? 8 : 0,
-      backgroundColor: isCosmic
-        ? 'rgba(14, 20, 40, 0.8)'
-        : Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.border,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    settingsButtonText: {
-      fontSize: 18,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.8)'
-        : Tokens.colors.text.secondary,
-      marginTop: Platform.OS === 'web' ? -2 : 0,
-    },
-    overlayTextGroup: {
-      flex: 1,
-    },
-    overlayTitle: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      letterSpacing: 1,
-    },
-    overlayStatus: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.6)'
-        : Tokens.colors.text.secondary,
-      marginTop: 2,
-      letterSpacing: 0.5,
-    },
-    overlayStatusActive: {
-      color: isCosmic ? '#2DD4BF' : Tokens.colors.success.main,
-    },
-    modesGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-      rowGap: Tokens.spacing[3],
-    },
-    debugPanel: {
-      marginBottom: Tokens.spacing[6],
-      padding: Tokens.spacing[3],
-      backgroundColor: isCosmic
-        ? 'rgba(14, 20, 40, 0.8)'
-        : Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: 'rgba(185, 194, 217, 0.12)',
-      borderStyle: 'dashed',
-      borderRadius: isCosmic ? 12 : 0,
-    },
-    debugTitle: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      color: isCosmic ? '#6B7A9C' : Tokens.colors.text.tertiary,
-      marginBottom: Tokens.spacing[2],
-      textTransform: 'uppercase',
-    },
-    debugText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      color: isCosmic
-        ? 'rgba(185, 194, 217, 0.6)'
-        : Tokens.colors.text.secondary,
-      marginBottom: 2,
-    },
-    debugButtonRow: {
-      flexDirection: 'row',
-      gap: Tokens.spacing[2],
-      marginTop: Tokens.spacing[2],
-    },
-    debugButton: {
-      paddingVertical: 4,
-      paddingHorizontal: 8,
-      backgroundColor: isCosmic
-        ? 'rgba(14, 20, 40, 0.8)'
-        : Tokens.colors.neutral.dark,
-      borderWidth: 1,
-      borderColor: 'rgba(185, 194, 217, 0.12)',
-      borderRadius: isCosmic ? 6 : 0,
-    },
-    debugButtonText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: 10,
-      fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-    },
-    negativeMarginTop24: {
-      marginTop: -24,
-    },
-    zIndex10: {
-      zIndex: 10,
-    },
-  });
 
 export default HomeScreen;
