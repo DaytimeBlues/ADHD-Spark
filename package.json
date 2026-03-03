@@ -2,7 +2,7 @@
   "name": "adhd-caddi-rn",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://daytimeblues.github.io/ADHD-CADDI-V1/",
+  "homepage": "https://daytimeblues.github.io/ADHD-CADDI/",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",

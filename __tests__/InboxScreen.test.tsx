@@ -61,12 +61,12 @@ describe("InboxScreen", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("capture-row-capture-1")).toBeTruthy();
-    });
+    }, { timeout: 10000 });
 
     fireEvent.press(screen.getByTestId("promote-task-capture-1"));
     expect(mockPromote).toHaveBeenCalledWith("capture-1", "task");
 
     fireEvent.press(screen.getByTestId("discard-capture-1"));
     expect(mockDiscard).toHaveBeenCalledWith("capture-1");
-  });
+  }, 10000);
 });

@@ -48,7 +48,7 @@ describe("ChatScreen", () => {
   it("renders chat UI and sends message", () => {
     render(<ChatScreen />);
 
-    expect(screen.getByText("SPARK_ASSISTANT")).toBeTruthy();
+    expect(screen.getByText("CADDI_ASSISTANT")).toBeTruthy();
     expect(screen.getByText("HOW CAN I HELP YOU FOCUS TODAY?")).toBeTruthy();
 
     fireEvent.changeText(

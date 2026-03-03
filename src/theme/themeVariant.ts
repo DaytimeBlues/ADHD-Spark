@@ -52,6 +52,7 @@ const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   cosmic: 'cosmic',
 
   // Legacy/deprecated values (if any existed)
+  phantom: 'cosmic',
   default: 'linear',
   dark: 'linear',
   light: 'linear',

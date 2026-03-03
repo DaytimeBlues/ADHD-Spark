@@ -2,22 +2,23 @@
 
 A behavioral activation tool for ADHD, designed as a high-performance **PWA (Progressive Web App)** with an optional React Native mobile bridge.
 
-> [!IMPORTANT] > **Primary Workflow**: Most developers should use the **Web/PWA** version. It provides the full app experience through any mobile browser and can be "Installed" as a standalone app on your home screen.
+> [!IMPORTANT]  
+> **Primary Workflow**: Most developers should use the **Web/PWA** version. It provides the full app experience through any mobile browser and can be "Installed" as a standalone app on your home screen.
 
 ## Deployment Status
 
-- **Live PWA**: [https://DaytimeBlues.github.io/adhd-caddi-v1](https://DaytimeBlues.github.io/adhd-caddi-v1)
+- **Live PWA**: [https://daytimeblues.github.io/ADHD-CADDI-V1/](https://daytimeblues.github.io/ADHD-CADDI-V1/)
 
 ## Features
 
 - **Ignite** - 5-minute focus timer with brown noise
-- **Fog Cutter** - Break overwhelming tasks into micro-steps
+- **Fog Cutter** - Break overwhelming tasks into micro-steps with AI-powered suggestions
 - **Pomodoro** - Classic Pomodoro technique (25/5)
 - **Anchor** - Breathing exercises (4-7-8, Box, Energize)
-- **Check In** - Mood and energy tracking with recommendations
+- **Check In** - Mood and energy tracking with AI-powered insights
 - **Brain Dump** - Quick capture for racing thoughts with AI-powered sorting suggestions
-- **Security** - Built-in security checklist and secret scanning (gitleaks) support
 - **Calendar** - Simple monthly view
+- **Cosmic Theme** - Default mystical deep space aesthetic with ethereal glows and smooth animations
 
 ## Getting Started (Web/PWA)
 

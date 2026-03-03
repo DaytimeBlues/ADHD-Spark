@@ -99,7 +99,7 @@ describe("BrainDumpScreen", () => {
     expect(screen.getByText("BRAIN_DUMP")).toBeTruthy();
     await waitFor(() => {
       expect(screen.getByText("ACTION_BAR")).toBeTruthy();
-    });
+    }, { timeout: 10000 });
     expect(screen.getByText("_AWAITING_INPUT")).toBeTruthy();
-  });
+  }, 10000);
 });

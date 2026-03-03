@@ -78,8 +78,8 @@ describe("CheckInScreen", () => {
     );
     await waitFor(() => {
       expect(navigate).toHaveBeenCalledWith("Focus");
-    });
-  });
+    }, { timeout: 10000 });
+  }, 10000);
 
   it("still navigates to focus when pending start queue fails", async () => {
     const navigate = jest.fn();

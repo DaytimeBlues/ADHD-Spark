@@ -58,7 +58,8 @@
         window.process.env.NODE_ENV || "development";
     </script>
 
-    <!-- Service Worker Registration for PWA Offline Support -->
+    <!-- Service Worker Registration for PWA Offline Support (Temporarily disabled for development/cache flushing) -->
+    <!--
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
@@ -76,6 +77,7 @@
         });
       }
     </script>
+    -->
   </head>
 
   <body>
