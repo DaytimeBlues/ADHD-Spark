@@ -46,6 +46,7 @@ if (config.environment === "production") {
     beforeSend: (event) => {
       // Don't send errors in development
       if (__DEV__) {
+        // eslint-disable-next-line no-console
         console.log("[Sentry] Would send error:", event);
         return null;
       }
@@ -73,6 +74,7 @@ export const useAppBootstrap = () => {
 
     const initializeNonBlockingServices = () => {
       void GoogleTasksSyncService.syncToBrainDump().catch((error) => {
+        // eslint-disable-next-line no-console
         console.error("Initial Google Tasks sync failed:", error);
       });
       WebMCPService.init();
@@ -89,6 +91,7 @@ export const useAppBootstrap = () => {
           config.googleIosClientId;
 
         if (!hasGoogleConfig && Platform.OS !== "web") {
+          // eslint-disable-next-line no-console
           console.warn(
             "[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.",
           );

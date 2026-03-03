@@ -1,0 +1,2171 @@
+assets by status 2.92 MiB [1m[32m[cached][39m[22m 12 assets
+runtime modules 7.33 KiB 11 modules
+modules by path [1m./node_modules/[39m[22m 4.11 MiB (javascript) 1.09 KiB (asset)
+  javascript modules 3.96 MiB 1257 modules
+  asset modules 1.09 KiB (asset) 84 bytes (javascript)
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon.png[39m[22m 207 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon-mask.png[39m[22m 913 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  [1m./node_modules/react-native-vector-icons/dist/glyphmaps/MaterialCommu...(truncated)[39m[22m 160 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+modules by path [1m./src/[39m[22m 617 KiB 92 modules
+[1m./index.web.js[39m[22m 3.5 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./App.tsx[39m[22m 9.55 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./app.json[39m[22m 57 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-application/build/Application.js[39m[22m [1m[32m1:1028-1056[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-application\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-application\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-application\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-application\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-application\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/getExpoPushTokenAsync.js 1:530-557
+ @ ./node_modules/expo-notifications/build/index.js 1:5549-5583
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-av/build/AV.js[39m[22m [1m[32m1:1154-1175[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-asset' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'[39m[22m
+resolve 'expo-asset' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-asset)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-asset doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-av/build/Audio.js 1:1581-1596
+ @ ./node_modules/expo-av/build/index.js 1:392-410
+ @ ./src/services/RecordingService.ts 1:1077-1095
+ @ ./src/screens/BrainDumpScreen.tsx 1:1037-1076
+ @ ./src/navigation/AppNavigator.tsx 1:1092-1129
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-av/build/AV.js[39m[22m [1m[32m1:1197-1225[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-av/build/Audio.js 1:1581-1596
+ @ ./node_modules/expo-av/build/index.js 1:392-410
+ @ ./src/services/RecordingService.ts 1:1077-1095
+ @ ./src/screens/BrainDumpScreen.tsx 1:1037-1076
+ @ ./src/navigation/AppNavigator.tsx 1:1092-1129
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-av/build/Audio/Recording.js[39m[22m [1m[32m1:1033-1061[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\package.json (relative path: ./build/Audio)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-av/build/Audio.js 1:832-860
+ @ ./node_modules/expo-av/build/index.js 1:392-410
+ @ ./src/services/RecordingService.ts 1:1077-1095
+ @ ./src/screens/BrainDumpScreen.tsx 1:1037-1076
+ @ ./src/navigation/AppNavigator.tsx 1:1092-1129
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-av/build/Audio/Sound.js[39m[22m [1m[32m1:805-833[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\package.json (relative path: ./build/Audio)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\Audio\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-av/build/Audio.js 1:1186-1210
+ @ ./node_modules/expo-av/build/index.js 1:392-410
+ @ ./src/services/RecordingService.ts 1:1077-1095
+ @ ./src/screens/BrainDumpScreen.tsx 1:1037-1076
+ @ ./src/navigation/AppNavigator.tsx 1:1092-1129
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-av/build/ExponentAV.web.js[39m[22m [1m[32m1:570-598[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-av\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-av/build/Audio.js 1:792-815
+ @ ./node_modules/expo-av/build/index.js 1:392-410
+ @ ./src/services/RecordingService.ts 1:1077-1095
+ @ ./src/screens/BrainDumpScreen.tsx 1:1037-1076
+ @ ./src/navigation/AppNavigator.tsx 1:1092-1129
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-constants/build/Constants.js[39m[22m [1m[32m1:769-797[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-constants\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-constants\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-constants\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-constants\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-constants\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/getDevicePushTokenAsync.web.js 1:402-427
+ @ ./node_modules/expo-notifications/build/index.js 1:5355-5391
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-haptics/src/Haptics.ts[39m[22m [1m[32m1:898-926[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-haptics\src'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-haptics\src'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-haptics\package.json (relative path: ./src)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-haptics\src\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-haptics\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./src/services/HapticsService.ts 1:1201-1224
+ @ ./src/navigation/WebNavBar.tsx 1:434-471
+ @ ./src/navigation/AppNavigator.tsx 1:715-737
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-local-authentication/build/LocalAuthentication.js[39m[22m [1m[32m1:998-1026[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./src/services/BiometricService.ts 1:841-877
+ @ ./App.tsx 1:1727-1769
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-local-authentication/build/LocalAuthentication.types.js[39m[22m [1m[32m1:134-162[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-local-authentication\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-local-authentication/build/LocalAuthentication.js 1:1202-1240
+ @ ./src/services/BiometricService.ts 1:841-877
+ @ ./App.tsx 1:1727-1769
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js[39m[22m [1m[32m1:545-573[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7844-7891
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationCategoriesModule.js[39m[22m [1m[32m1:364-392[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/deleteNotificationCategoryAsync.js 1:475-516
+ @ ./node_modules/expo-notifications/build/index.js 1:7573-7617
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationPermissions.js[39m[22m [1m[32m1:442-470[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:9262-9298
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationPermissionsModule.js[39m[22m [1m[32m1:364-392[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/NotificationPermissions.js 1:529-571
+ @ ./node_modules/expo-notifications/build/index.js 1:9262-9298
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/Notifications.types.js[39m[22m [1m[32m1:295-323[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:11017-11049
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationsEmitter.js[39m[22m [1m[32m1:981-1009[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:8445-8478
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationsEmitterModule.js[39m[22m [1m[32m1:104-132[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/NotificationsEmitter.js 1:1065-1104
+ @ ./node_modules/expo-notifications/build/index.js 1:8445-8478
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationsHandler.js[39m[22m [1m[32m1:906-934[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:8852-8885
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/NotificationsHandlerModule.js[39m[22m [1m[32m1:104-132[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/NotificationsHandler.js 1:990-1029
+ @ ./node_modules/expo-notifications/build/index.js 1:8852-8885
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/PushTokenManager.js[39m[22m [1m[32m1:104-132[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/unregisterForNotificationsAsync.js 1:463-492
+ @ ./node_modules/expo-notifications/build/index.js 1:5453-5497
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/ServerRegistrationModule.web.js[39m[22m [1m[32m1:364-392[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/getExpoPushTokenAsync.js 1:816-853
+ @ ./node_modules/expo-notifications/build/index.js 1:5549-5583
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/TokenEmitter.js[39m[22m [1m[32m1:211-239[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:8070-8095
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/cancelAllScheduledNotificationsAsync.js[39m[22m [1m[32m1:394-422[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7258-7307
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/cancelScheduledNotificationAsync.js[39m[22m [1m[32m1:390-418[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7146-7191
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/deleteNotificationCategoryAsync.js[39m[22m [1m[32m1:389-417[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7573-7617
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/dismissAllNotificationsAsync.js[39m[22m [1m[32m1:386-414[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5838-5879
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/dismissNotificationAsync.js[39m[22m [1m[32m1:382-410[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5742-5779
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getAllScheduledNotificationsAsync.js[39m[22m [1m[32m1:391-419[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:6943-6989
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getBadgeCountAsync.js[39m[22m [1m[32m1:376-404[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:6768-6799
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getDevicePushTokenAsync.web.js[39m[22m [1m[32m1:450-478[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5355-5391
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getExpoPushTokenAsync.js[39m[22m [1m[32m1:649-677[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5549-5583
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getNextTriggerDateAsync.js[39m[22m [1m[32m1:381-409[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7671-7707
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getNotificationCategoriesAsync.js[39m[22m [1m[32m1:388-416[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7368-7411
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/getPresentedNotificationsAsync.js[39m[22m [1m[32m1:388-416[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5644-5687
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/index.js[39m[22m [1m[32m1:5287-5302[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/registerTaskAsync.js[39m[22m [1m[32m1:375-403[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7938-7968
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/scheduleNotificationAsync.js[39m[22m [1m[32m1:701-729[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7045-7083
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/setBadgeCountAsync.js[39m[22m [1m[32m1:376-404[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:6848-6879
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/setNotificationCategoryAsync.js[39m[22m [1m[32m1:386-414[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:7470-7511
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/unregisterForNotificationsAsync.js[39m[22m [1m[32m1:389-417[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:5453-5497
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/unregisterTaskAsync.js[39m[22m [1m[32m1:377-405[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/index.js 1:8018-8050
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/utils/updateDevicePushTokenAsync.js[39m[22m [1m[32m1:730-758[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\utils'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\utils'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build/utils)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\utils\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js 1:832-877
+ @ ./node_modules/expo-notifications/build/index.js 1:7844-7891
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js[39m[22m [1m[32m1:104-119[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/TokenEmitter.js 1:343-377
+ @ ./node_modules/expo-notifications/build/index.js 1:8070-8095
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js[39m[22m [1m[32m1:141-169[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'[39m[22m
+resolve 'expo-modules-core' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build'
+  Parsed request is a module
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\package.json (relative path: ./build)
+    Field 'browser' doesn't contain a valid alias configuration
+    resolve as module
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\build\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-notifications\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\node_modules doesn't exist[39m[22m or is not a directory
+      looking for modules in C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules
+        single file module
+          using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./node_modules/expo-modules-core)
+            no extension
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+            .web.tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.tsx doesn't exist[39m[22m
+            .web.ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.ts doesn't exist[39m[22m
+            .web.js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.web.js doesn't exist[39m[22m
+            .tsx
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.tsx doesn't exist[39m[22m
+            .ts
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.ts doesn't exist[39m[22m
+            .js
+              Field 'browser' doesn't contain a valid alias configuration
+[1m[31m              C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core.js doesn't exist[39m[22m
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\node_modules\expo-modules-core doesn't exist[39m[22m
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\Github Repos\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\Desktop\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\OneDrive\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\Steve\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\Users\node_modules doesn't exist[39m[22m or is not a directory
+[1m[31m      C:\node_modules doesn't exist[39m[22m or is not a directory
+ @ ./node_modules/expo-notifications/build/TokenEmitter.js 1:343-377
+ @ ./node_modules/expo-notifications/build/index.js 1:8070-8095
+ @ ./src/services/NotificationService.ts 1:629-658
+ @ ./src/store/useTimerStore.ts 1:247-289
+ @ ./src/services/TimerService.ts 1:388-421
+ @ ./App.tsx 1:1484-1522
+ @ ./index.web.js 1:682-698
+
+[1m[31mERROR[39m[22m in [1m./src/screens/HomeScreen.tsx[39m[22m [1m[32m1:1288-1326[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../components/home/ModeCard' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens'[39m[22m
+resolve '../components/home/ModeCard' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens'
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./src/screens)
+    Field 'browser' doesn't contain a valid alias configuration
+    using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./src/components/home/ModeCard)
+      no extension
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard doesn't exist[39m[22m
+      .web.tsx
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.tsx doesn't exist[39m[22m
+      .web.ts
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.ts doesn't exist[39m[22m
+      .web.js
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.js doesn't exist[39m[22m
+      .tsx
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.tsx doesn't exist[39m[22m
+      .ts
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.ts doesn't exist[39m[22m
+      .js
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.js doesn't exist[39m[22m
+      as directory
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard doesn't exist[39m[22m
+ @ ./src/navigation/AppNavigator.tsx 1:937-969
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+webpack 5.104.1 compiled with [1m[31m45 errors[39m[22m in 99698 ms

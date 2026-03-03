@@ -573,6 +573,11 @@ const BrainDumpScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {isCosmic && (
+        <CosmicBackground variant="nebula">
+          <View style={StyleSheet.absoluteFill} />
+        </CosmicBackground>
+      )}
       <View style={styles.centerContainer}>
         <View style={styles.contentWrapper}>
           <View style={styles.header}>
@@ -678,11 +683,6 @@ const BrainDumpScreen = () => {
           />
         </View>
       </View>
-      {isCosmic && (
-        <CosmicBackground variant="nebula">
-          <View style={StyleSheet.absoluteFill} />
-        </CosmicBackground>
-      )}
     </SafeAreaView>
   );
 };

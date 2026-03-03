@@ -124,7 +124,7 @@ export const useFogCutter = (
 
   const addMicroStep = useCallback(() => {
     if (newStep.trim()) {
-      HapticsService.lightTap();
+      HapticsService.tap({ intensity: 'light' });
       setMicroSteps((prev) => [...prev, newStep.trim()]);
       setNewStep("");
     }

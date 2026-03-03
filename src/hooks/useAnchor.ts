@@ -39,6 +39,7 @@ export const useAnchor = (): UseAnchorReturn => {
   const [phase, setPhase] = useState<BreathingPhase>("inhale");
   const phaseRef = useRef<BreathingPhase>("inhale");
   const patternRef = useRef<BreathingPattern | null>(null);
+  const phaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const {
     timeLeft: count,
@@ -68,7 +69,7 @@ export const useAnchor = (): UseAnchorReturn => {
       phaseRef.current = nextPhase;
       setTime(p[nextPhase] || p.inhale);
       // Re-start for the next phase
-      setTimeout(() => start(), 0);
+      phaseTimeoutRef.current = setTimeout(() => start(), 0);
     },
   });
 
@@ -107,6 +108,11 @@ export const useAnchor = (): UseAnchorReturn => {
     reset();
     setPattern(null);
     patternRef.current = null;
+    // Clear pending phase transition timeout
+    if (phaseTimeoutRef.current) {
+      clearTimeout(phaseTimeoutRef.current);
+      phaseTimeoutRef.current = null;
+    }
   }, [reset]);
 
   const getPhaseText = useCallback(() => {
@@ -138,6 +144,15 @@ export const useAnchor = (): UseAnchorReturn => {
         return 1;
     }
   }, [phase]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (phaseTimeoutRef.current) {
+        clearTimeout(phaseTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     pattern,

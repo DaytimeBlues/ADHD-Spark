@@ -36,12 +36,12 @@ const PRIORITY_LABELS: Record<TaskPriority, string> = {
 };
 
 /**
- * CosmicTasksScreen
+ * TasksScreen
  *
- * Refactored task manager with Cosmic UI aesthetic.
+ * Task manager with Cosmic UI aesthetic.
  * Focuses on soft glows, nebula colors, and rounded corners.
  */
-export const P5TasksScreen = memo(function P5TasksScreen() {
+export const TasksScreen = memo(function TasksScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
@@ -568,4 +568,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default P5TasksScreen;
+export default TasksScreen;

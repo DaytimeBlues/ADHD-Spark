@@ -12,6 +12,7 @@ ios/build
 .env.*.local
 src/config/secrets.ts
 secrets.json
+android/app/google-services.json
 
 # Build outputs
 dist/

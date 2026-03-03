@@ -29,7 +29,7 @@ import CaptureService from "../../services/CaptureService";
 import { CheckInService } from "../../services/CheckInService";
 import { navigationRef } from "../../navigation/navigationRef";
 import { ROUTES } from "../../navigation/routes";
-import { useCaptureStore } from "../../store/useCaptureStore";
+
 import { useTaskStore } from "../../store/useTaskStore";
 import OverlayService from "../../services/OverlayService";
 import { CaptureDrawer } from "./CaptureDrawer";

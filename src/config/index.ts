@@ -45,6 +45,17 @@ const getConfig = (): Config => {
     aiMaxRetries: 3,
   };
 
+  // Log warning if direct AI provider is used in production
+  const warnDirectProvider = (provider: string) => {
+    if (config.environment === "production") {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[SECURITY WARNING] Using '${provider}' AI provider in production exposes API keys in the client bundle. ` +
+          `Consider using 'vercel' provider with a server-side proxy instead.`
+      );
+    }
+  };
+
   if (typeof process !== "undefined" && process.env) {
     if (process.env.EXPO_PUBLIC_API_BASE_URL) {
       config.apiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -62,6 +73,7 @@ const getConfig = (): Config => {
       config.geminiApiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
       // If a Gemini key is explicitly provided, default to direct mode
       config.aiProvider = "gemini-direct";
+      warnDirectProvider("gemini-direct");
     }
 
     if (process.env.EXPO_PUBLIC_MOONSHOT_API_KEY) {
@@ -69,6 +81,7 @@ const getConfig = (): Config => {
       // Default to kimi-direct if key provided but no provider set
       if (!process.env.EXPO_PUBLIC_AI_PROVIDER) {
         config.aiProvider = "kimi-direct";
+        warnDirectProvider("kimi-direct");
       }
     }
 
@@ -81,8 +94,10 @@ const getConfig = (): Config => {
       config.aiProvider = "vercel";
     } else if (process.env.EXPO_PUBLIC_AI_PROVIDER === "gemini-direct") {
       config.aiProvider = "gemini-direct";
+      warnDirectProvider("gemini-direct");
     } else if (process.env.EXPO_PUBLIC_AI_PROVIDER === "kimi-direct") {
       config.aiProvider = "kimi-direct";
+      warnDirectProvider("kimi-direct");
     }
 
     if (process.env.EXPO_PUBLIC_AI_TIMEOUT) {

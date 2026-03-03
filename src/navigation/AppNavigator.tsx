@@ -84,7 +84,6 @@ const withErrorBoundary = <P extends object>(
 
 const LazyFogCutter = withSuspense(FogCutterScreen);
 const LazyPomodoro = withSuspense(PomodoroScreen);
-const LazyBrainDump = withSuspense(BrainDumpScreen);
 const LazyCalendar = withSuspense(CalendarScreen);
 const LazyAnchor = withSuspense(AnchorScreen);
 const LazyCheckIn = withSuspense(CheckInScreen);

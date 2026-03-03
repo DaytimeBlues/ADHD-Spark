@@ -118,6 +118,15 @@ const VoiceMode = memo(function VoiceMode({
     }
   }, []);
 
+  // Cleanup interval on unmount
+  React.useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
   const handleStartRecording = useCallback(async () => {
     setErrorMsg("");
     const granted = await RecordingService.requestPermissions();
@@ -476,8 +485,8 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
               accept: string;
               onchange:
                 | ((e: {
-                    target: { files?: { 0?: { name: string } } };
-                  }) => void)
+                  target: { files?: { 0?: { name: string } } };
+                }) => void)
                 | null;
               click: () => void;
             };
@@ -687,6 +696,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
   const [successMsg, setSuccessMsg] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const successTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     if (visible && currentBubbleState === "needs-checkin") {
@@ -694,10 +704,19 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     }
   }, [visible, currentBubbleState]);
 
+  // Cleanup success timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const showSuccess = useCallback(
     (msg: string) => {
       setSuccessMsg(msg);
-      setTimeout(() => {
+      successTimeoutRef.current = setTimeout(() => {
         setSuccessMsg("");
         onClose();
       }, 1200);

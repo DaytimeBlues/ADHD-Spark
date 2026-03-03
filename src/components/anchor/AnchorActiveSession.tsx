@@ -18,7 +18,7 @@ const BREATHING_CIRCLE_SIZE = 240;
 const INNER_CIRCLE_SIZE = 140;
 
 export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
-  pattern,
+  pattern: _pattern,
   patternConfig,
   phase,
   count,

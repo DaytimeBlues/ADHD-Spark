@@ -1,0 +1,36 @@
+assets by status 1.09 KiB [1m[32m[cached][39m[22m 2 assets
+assets by path [1m[32m*.js[39m[22m 3 MiB
+  asset [1m[33mbundle.73708d5a5b7097bbf841.js[39m[22m [1m[33m2.86 MiB[39m[22m [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m [1m[33m[big][39m[22m (name: main) 1 related asset
+  asset [1m[32m39.ea7a3822a688b1c171c1.js[39m[22m 34.6 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m222.3e756c341b6b3a4a42a3.js[39m[22m 23.7 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m390.ac21e129033bc444c49c.js[39m[22m 17.3 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m363.c47d734f4600c7112793.js[39m[22m 17.2 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m898.3aee3a2a2c47fa0aa9d4.js[39m[22m 17.2 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m163.b0ce2a350f48366e2b7f.js[39m[22m 12.3 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m611.a281066e8a71cc593f53.js[39m[22m 10.8 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+  asset [1m[32m469.e09b24c96043601cc563.js[39m[22m 10.6 KiB [1m[32m[emitted][39m[22m [1m[32m[immutable][39m[22m [1m[32m[minimized][39m[22m
+asset [1m[32mindex.html[39m[22m 2.17 KiB [1m[32m[emitted][39m[22m
+runtime modules 7.33 KiB 11 modules
+modules by path [1m./node_modules/[39m[22m 4.25 MiB (javascript) 1.09 KiB (asset)
+  javascript modules 4.09 MiB 1352 modules
+  asset modules 1.09 KiB (asset) 84 bytes (javascript)
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon.png[39m[22m 207 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon-mask.png[39m[22m 913 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  [1m./node_modules/react-native-vector-icons/dist/glyphmaps/MaterialCommu...(truncated)[39m[22m 160 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+modules by path [1m./src/[39m[22m 625 KiB 93 modules
+[1m./index.web.js[39m[22m 3.5 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./App.tsx[39m[22m 9.55 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./app.json[39m[22m 57 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+
+[1m[33mWARNING[39m[22m in [1masset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  bundle.73708d5a5b7097bbf841.js (2.86 MiB)[39m[22m
+
+[1m[33mWARNING[39m[22m in [1mentrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  main (2.86 MiB)
+      bundle.73708d5a5b7097bbf841.js
+[39m[22m
+
+webpack 5.104.1 compiled with [1m[33m2 warnings[39m[22m in 112674 ms

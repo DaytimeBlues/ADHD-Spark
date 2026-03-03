@@ -51,7 +51,7 @@ export const Shimmer: React.FC<ShimmerProps> = ({
       style={[
         styles.container,
         {
-          width: width as any,
+          width: width as any, // DimensionValue accepts string|number but RN types don't reflect this for web
           height,
           backgroundColor: isCosmic
             ? "rgba(139, 92, 246, 0.1)"

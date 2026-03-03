@@ -1,0 +1,47 @@
+assets by status 3 MiB [1m[32m[cached][39m[22m 12 assets
+runtime modules 7.33 KiB 11 modules
+modules by path [1m./node_modules/[39m[22m 4.25 MiB (javascript) 1.09 KiB (asset)
+  javascript modules 4.09 MiB 1352 modules
+  asset modules 1.09 KiB (asset) 84 bytes (javascript)
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon.png[39m[22m 207 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+    [1m./node_modules/@react-navigation/elements/lib/module/assets/back-icon-mask.png[39m[22m 913 bytes (asset) 42 bytes (javascript) [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+  [1m./node_modules/react-native-vector-icons/dist/glyphmaps/MaterialCommu...(truncated)[39m[22m 160 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+modules by path [1m./src/[39m[22m 617 KiB 92 modules
+[1m./index.web.js[39m[22m 3.5 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./App.tsx[39m[22m 9.55 KiB [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+[1m./app.json[39m[22m 57 bytes [1m[33m[built][39m[22m [1m[33m[code generated][39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/screens/HomeScreen.tsx[39m[22m [1m[32m1:1288-1326[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../components/home/ModeCard' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens'[39m[22m
+resolve '../components/home/ModeCard' in 'C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens'
+  using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./src/screens)
+    Field 'browser' doesn't contain a valid alias configuration
+    using description file: C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\package.json (relative path: ./src/components/home/ModeCard)
+      no extension
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard doesn't exist[39m[22m
+      .web.tsx
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.tsx doesn't exist[39m[22m
+      .web.ts
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.ts doesn't exist[39m[22m
+      .web.js
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.web.js doesn't exist[39m[22m
+      .tsx
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.tsx doesn't exist[39m[22m
+      .ts
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.ts doesn't exist[39m[22m
+      .js
+        Field 'browser' doesn't contain a valid alias configuration
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard.js doesn't exist[39m[22m
+      as directory
+[1m[31m        C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\components\home\ModeCard doesn't exist[39m[22m
+ @ ./src/navigation/AppNavigator.tsx 1:937-969
+ @ ./App.tsx 1:835-875
+ @ ./index.web.js 1:682-698
+
+webpack 5.104.1 compiled with [1m[31m1 error[39m[22m in 100024 ms

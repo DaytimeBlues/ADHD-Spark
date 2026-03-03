@@ -1,4 +1,5 @@
 /* eslint-env serviceworker */
+/* eslint-disable no-console */
 /**
  * Service Worker for Spark ADHD PWA
  * Provides offline support and caching strategies

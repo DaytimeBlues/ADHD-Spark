@@ -55,6 +55,23 @@ class WebMCPService {
       return;
     }
 
+    // Only allow WebMCP tool registration in development or on localhost
+    const isDev = __DEV__;
+    const isLocalhost =
+      typeof globalThis !== "undefined" &&
+      "location" in globalThis &&
+      ((globalThis as typeof globalThis & { location?: { hostname?: string } }).
+        location?.hostname === "localhost" ||
+        (globalThis as typeof globalThis & { location?: { hostname?: string } }).
+          location?.hostname === "127.0.0.1");
+    if (!isDev && !isLocalhost) {
+      // eslint-disable-next-line no-console
+      console.log(
+        "WebMCP: Skipping tool registration (not in dev or localhost)",
+      );
+      return;
+    }
+
     const registerTools = () => {
       if (this.isInitialized) {
         return;
@@ -62,10 +79,12 @@ class WebMCPService {
       const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
         .navigator?.modelContext;
       if (!modelContext?.registerTool) {
+        // eslint-disable-next-line no-console
         console.log("WebMCP: API not found, retrying...");
         return;
       }
 
+      // eslint-disable-next-line no-console
       console.log("WebMCP: Registering tools...");
 
       // ── 1. Start Timer ────────────────────────────────────────────────────

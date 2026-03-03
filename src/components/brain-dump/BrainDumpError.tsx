@@ -41,7 +41,7 @@ export const BrainDumpError: React.FC<BrainDumpErrorProps> = ({
   );
 };
 
-const getStyles = (isCosmic: boolean) =>
+const getStyles = (_isCosmic: boolean) =>
   StyleSheet.create({
     errorContainer: {
       marginTop: Tokens.spacing[2],

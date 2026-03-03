@@ -13,7 +13,7 @@
  * - 'linear': Original Nothing aesthetic (monochrome, sharp, technical)
  * - 'cosmic': New Cosmic-Mystic aesthetic (deep space, glows, ethereal)
  */
-export type ThemeVariant = "linear" | "cosmic" | "phantom";
+export type ThemeVariant = 'linear' | 'cosmic';
 
 // ============================================================================
 // CONSTANTS
@@ -23,21 +23,20 @@ export type ThemeVariant = "linear" | "cosmic" | "phantom";
  * Theme variant constants for type-safe usage
  */
 export const THEME_VARIANTS = {
-  LINEAR: "linear" as const,
-  COSMIC: "cosmic" as const,
-  PHANTOM: "phantom" as const,
+  LINEAR: 'linear' as const,
+  COSMIC: 'cosmic' as const,
 };
 
 /**
  * Storage key for theme persistence
  * (matches existing STORAGE_KEYS.theme in StorageService)
  */
-export const THEME_STORAGE_KEY = "theme";
+export const THEME_STORAGE_KEY = 'theme';
 
 /**
  * Default theme variant
  */
-export const DEFAULT_THEME_VARIANT: ThemeVariant = "cosmic";
+export const DEFAULT_THEME_VARIANT: ThemeVariant = 'cosmic';
 
 // ============================================================================
 // MIGRATION UTILITIES
@@ -49,15 +48,14 @@ export const DEFAULT_THEME_VARIANT: ThemeVariant = "cosmic";
  */
 const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   // Direct mappings
-  linear: "linear",
-  cosmic: "cosmic",
-  phantom: "phantom",
+  linear: 'linear',
+  cosmic: 'cosmic',
 
   // Legacy/deprecated values (if any existed)
-  default: "linear",
-  dark: "linear",
-  light: "linear",
-  metro: "linear",
+  default: 'linear',
+  dark: 'linear',
+  light: 'linear',
+  metro: 'linear',
 };
 
 /**
@@ -80,8 +78,7 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
     return LEGACY_THEME_MAP[value];
   }
 
-  // Validate it's a current variant
-  if (value === "linear" || value === "cosmic" || value === "phantom") {
+  if (value === 'linear' || value === 'cosmic') {
     return value;
   }
 
@@ -97,8 +94,7 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
  */
 export function isValidThemeVariant(value: unknown): value is ThemeVariant {
   return (
-    typeof value === "string" &&
-    (value === "linear" || value === "cosmic" || value === "phantom")
+    typeof value === 'string' && (value === 'linear' || value === 'cosmic')
   );
 }
 
@@ -110,7 +106,7 @@ export function assertThemeVariant(
 ): asserts value is ThemeVariant {
   if (!isValidThemeVariant(value)) {
     throw new Error(
-      `Invalid theme variant: ${value}. Expected 'linear', 'cosmic', or 'phantom'.`,
+      `Invalid theme variant: ${value}. Expected 'linear' or 'cosmic'.`,
     );
   }
 }
@@ -136,30 +132,21 @@ export const THEME_METADATA: Record<
   }
 > = {
   linear: {
-    label: "Linear",
-    description: "Clean monochrome aesthetic with sharp edges",
+    label: 'Linear',
+    description: 'Clean monochrome aesthetic with sharp edges',
     preview: {
-      background: "#000000",
-      accent: "#8B5CF6",
-      text: "#FFFFFF",
+      background: '#000000',
+      accent: '#8B5CF6',
+      text: '#FFFFFF',
     },
   },
   cosmic: {
-    label: "Cosmic",
-    description: "Mystical deep space with ethereal glows",
+    label: 'Cosmic',
+    description: 'Mystical deep space with ethereal glows',
     preview: {
-      background: "#070712",
-      accent: "#8B5CF6",
-      text: "#EEF2FF",
-    },
-  },
-  phantom: {
-    label: "Phantom",
-    description: "High-energy Persona 5 style — jagged, kinetic, signal red",
-    preview: {
-      background: "#000000",
-      accent: "#D80000",
-      text: "#FFFFFF",
+      background: '#070712',
+      accent: '#8B5CF6',
+      text: '#EEF2FF',
     },
   },
 };

@@ -15,11 +15,11 @@ class NotificationServiceClass {
 
   async requestPermissions() {
     const permissions = (await Notifications.getPermissionsAsync()) as any;
-    let finalStatus = permissions.status;
+    let finalStatus: string = permissions.status;
 
     if (finalStatus !== "granted") {
       const result = (await Notifications.requestPermissionsAsync()) as any;
-      finalStatus = result.status;
+      finalStatus = result.status as string;
     }
 
     return finalStatus === "granted";

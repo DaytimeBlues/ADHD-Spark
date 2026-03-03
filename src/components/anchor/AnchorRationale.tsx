@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { Tokens } from "../../theme/tokens";
 import { useTheme } from "../../theme/ThemeProvider";
 import { GlowCard } from "../../ui/cosmic";
