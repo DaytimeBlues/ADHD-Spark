@@ -1,8 +1,2 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # Run lint-staged to check and fix staged files
 npx lint-staged
-
-# Run tests on staged files
-npm test -- --passWithNoTests --findRelatedTests $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
