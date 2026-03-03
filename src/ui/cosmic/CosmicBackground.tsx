@@ -9,10 +9,10 @@
  * Based on deep-research-report (2).md specification
  */
 
-import React, { memo, useMemo } from "react";
-import { View, StyleSheet, ViewStyle, Platform, StyleProp } from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { BackgroundVariant } from "./types";
+import React, { memo, useMemo } from 'react';
+import { View, StyleSheet, ViewStyle, Platform, StyleProp } from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { BackgroundVariant } from './types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -47,14 +47,14 @@ type WebViewStyle = ViewStyle & {
  * Generate ridge silhouette SVG data URI
  * Per research spec: simplified silhouettes as structure
  */
-function ridgeSvgDataUri(fill = "rgba(10, 12, 24, 0.92)"): string {
+function ridgeSvgDataUri(fill = 'rgba(10, 12, 24, 0.92)'): string {
   const svg = `
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
     <path fill="${fill}" d="M0,192L120,202.7C240,213,480,235,720,224C960,213,1200,171,1320,149.3L1440,128L1440,320L0,320Z"/>
   </svg>`;
   const encoded = encodeURIComponent(svg)
-    .replace(/'/g, "%27")
-    .replace(/"/g, "%22");
+    .replace(/'/g, '%27')
+    .replace(/"/g, '%22');
   return `url("data:image/svg+xml,${encoded}")`;
 }
 
@@ -98,34 +98,34 @@ export const CosmicBackground = memo(function CosmicBackground({
 
     // Per spec: colors.bg.obsidian, midnight, deepSpace
     const c = {
-      obsidian: "#070712",
-      midnight: "#0B1022",
-      deepSpace: "#111A33",
+      obsidian: '#070712',
+      midnight: '#0B1022',
+      deepSpace: '#111A33',
     };
 
-    if (variant === "nebula") {
+    if (variant === 'nebula') {
       // Per spec: luminous center with multiple radial gradients
       return [
-        "radial-gradient(900px 600px at 55% 30%, rgba(139,92,246,0.18) 0%, transparent 60%)",
-        "radial-gradient(700px 500px at 20% 70%, rgba(36,59,255,0.12) 0%, transparent 55%)",
+        'radial-gradient(900px 600px at 55% 30%, rgba(139,92,246,0.18) 0%, transparent 60%)',
+        'radial-gradient(700px 500px at 20% 70%, rgba(36,59,255,0.12) 0%, transparent 55%)',
         `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 52%, #1A0F38 100%)`,
-      ].join(",");
+      ].join(',');
     }
 
-    if (variant === "moon") {
+    if (variant === 'moon') {
       // Per spec: calm radial halo with gold accent
       return [
-        "radial-gradient(520px 520px at 70% 18%, rgba(246,193,119,0.10) 0%, transparent 62%)",
+        'radial-gradient(520px 520px at 70% 18%, rgba(246,193,119,0.10) 0%, transparent 62%)',
         `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 60%, ${c.deepSpace} 100%)`,
-      ].join(",");
+      ].join(',');
     }
 
     // Ridge: grounded with silhouettes
     return [
-      "radial-gradient(700px 520px at 50% 18%, rgba(139,92,246,0.10) 0%, transparent 58%)",
+      'radial-gradient(700px 520px at 50% 18%, rgba(139,92,246,0.10) 0%, transparent 58%)',
       `linear-gradient(180deg, ${c.obsidian} 0%, ${c.midnight} 55%, ${c.deepSpace} 100%)`,
       ridgeSvgDataUri(),
-    ].join(",");
+    ].join(',');
   }, [isCosmic, variant]);
 
   // Get native background color
@@ -134,21 +134,21 @@ export const CosmicBackground = memo(function CosmicBackground({
       return { backgroundColor: t.colors.neutral.darkest };
     }
     // Deep rich space background for Native - matching the brutalist theme
-    return { backgroundColor: "#070712" };
+    return { backgroundColor: '#070712' };
   }, [isCosmic, t.colors.neutral.darkest]);
 
   // Web-specific styles with multi-layer backgrounds
   const webStyle: WebViewStyle | null = useMemo(() => {
-    return Platform.OS === "web" && isCosmic && webBackgroundImage
+    return Platform.OS === 'web' && isCosmic && webBackgroundImage
       ? ({
           backgroundImage: webBackgroundImage,
-          backgroundRepeat: "no-repeat",
+          backgroundRepeat: 'no-repeat',
           backgroundPosition:
-            variant === "ridge"
-              ? "center center, center center, center bottom"
-              : "center",
+            variant === 'ridge'
+              ? 'center center, center center, center bottom'
+              : 'center',
           backgroundSize:
-            variant === "ridge" ? "cover, cover, 100% 34%" : "cover",
+            variant === 'ridge' ? 'cover, cover, 100% 34%' : 'cover',
         } as WebViewStyle)
       : null;
   }, [isCosmic, webBackgroundImage, variant]);
@@ -161,7 +161,7 @@ export const CosmicBackground = memo(function CosmicBackground({
       {children}
 
       {/* Background Noise/Grain Concept #47 */}
-      {Platform.OS === "web" && (
+      {Platform.OS === 'web' && (
         <View
           style={[
             StyleSheet.absoluteFillObject,
@@ -181,8 +181,8 @@ export const CosmicBackground = memo(function CosmicBackground({
           style={[
             styles.dimmer,
             Platform.select({
-              web: { background: "rgba(7, 7, 18, 0.35)" },
-              default: { backgroundColor: "rgba(7, 7, 18, 0.35)" },
+              web: { background: 'rgba(7, 7, 18, 0.35)' },
+              default: { backgroundColor: 'rgba(7, 7, 18, 0.35)' },
             }),
           ]}
           pointerEvents="none"
@@ -199,7 +199,7 @@ export const CosmicBackground = memo(function CosmicBackground({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    position: "relative",
+    position: 'relative',
   },
   dimmer: {
     ...StyleSheet.absoluteFillObject,

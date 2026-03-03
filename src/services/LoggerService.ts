@@ -13,9 +13,9 @@
  *   });
  */
 
-import { config } from "../config";
+import { config } from '../config';
 
-export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
 export interface LogContext {
   [key: string]: unknown;
@@ -35,48 +35,48 @@ class LoggerServiceClass {
   private isDev: boolean;
 
   constructor() {
-    this.isDev = config.environment === "development";
+    this.isDev = config.environment === 'development';
   }
 
   /**
    * Log a debug message (development only)
    */
-  public debug(entry: Omit<LogEntry, "level" | "timestamp">): void {
+  public debug(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
     if (!this.isDev) {
       return;
     }
-    this.log({ ...entry, level: "debug" });
+    this.log({ ...entry, level: 'debug' });
   }
 
   /**
    * Log an informational message
    */
-  public info(entry: Omit<LogEntry, "level" | "timestamp">): void {
-    this.log({ ...entry, level: "info" });
+  public info(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
+    this.log({ ...entry, level: 'info' });
   }
 
   /**
    * Log a warning message
    */
-  public warn(entry: Omit<LogEntry, "level" | "timestamp">): void {
-    this.log({ ...entry, level: "warn" });
+  public warn(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
+    this.log({ ...entry, level: 'warn' });
   }
 
   /**
    * Log an error message
    */
-  public error(entry: Omit<LogEntry, "level" | "timestamp">): void {
-    this.log({ ...entry, level: "error" });
+  public error(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
+    this.log({ ...entry, level: 'error' });
   }
 
   /**
    * Log a fatal error (application cannot continue)
    */
-  public fatal(entry: Omit<LogEntry, "level" | "timestamp">): void {
-    this.log({ ...entry, level: "fatal" });
+  public fatal(entry: Omit<LogEntry, 'level' | 'timestamp'>): void {
+    this.log({ ...entry, level: 'fatal' });
   }
 
-  private log(entry: Omit<LogEntry, "timestamp">): void {
+  private log(entry: Omit<LogEntry, 'timestamp'>): void {
     const timestamp = new Date().toISOString();
     const fullEntry: LogEntry = { ...entry, timestamp };
 
@@ -110,12 +110,12 @@ class LoggerServiceClass {
           args.push(`Stack: ${error.stack}`);
         }
       } else {
-        args.push("Error:", error);
+        args.push('Error:', error);
       }
     }
 
     if (context && Object.keys(context).length > 0) {
-      args.push("Context:", context);
+      args.push('Context:', context);
     }
 
     consoleMethod(...args);
@@ -125,7 +125,7 @@ class LoggerServiceClass {
     // In production, we could send to Sentry, LogRocket, or other services
     // For now, use console.error for errors/fatals so they're captured by crash reporters
 
-    if (entry.level === "error" || entry.level === "fatal") {
+    if (entry.level === 'error' || entry.level === 'fatal') {
       // Structured logging for production error tracking
       const errorPayload = {
         timestamp: entry.timestamp,
@@ -155,14 +155,14 @@ class LoggerServiceClass {
 
   private getConsoleMethod(level: LogLevel): (...args: unknown[]) => void {
     switch (level) {
-      case "debug":
+      case 'debug':
         return console.log;
-      case "info":
+      case 'info':
         return console.info;
-      case "warn":
+      case 'warn':
         return console.warn;
-      case "error":
-      case "fatal":
+      case 'error':
+      case 'fatal':
         return console.error;
       default:
         return console.log;

@@ -1,5 +1,5 @@
-import StorageService from "./StorageService";
-import { config } from "../config";
+import StorageService from './StorageService';
+import { config } from '../config';
 
 export interface CheckInEntry {
   timestamp: number;
@@ -13,7 +13,7 @@ export interface CheckInInsight {
   generatedAt: number;
 }
 
-const INSIGHT_CACHE_KEY = "checkInInsightCache";
+const INSIGHT_CACHE_KEY = 'checkInInsightCache';
 const INSIGHT_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — regen once per day
 
 /**
@@ -22,17 +22,17 @@ const INSIGHT_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — regen once per day
  */
 function buildContext(entries: CheckInEntry[]): string {
   if (entries.length === 0) {
-    return "No recent check-ins.";
+    return 'No recent check-ins.';
   }
 
   const lines = entries.slice(0, 7).map((e) => {
     const date = new Date(e.timestamp).toLocaleDateString();
-    const mood = e.mood ? `mood: ${e.mood}` : "";
-    const energy = e.energy != null ? `energy: ${e.energy}/5` : "";
-    return [date, mood, energy].filter(Boolean).join(", ");
+    const mood = e.mood ? `mood: ${e.mood}` : '';
+    const energy = e.energy != null ? `energy: ${e.energy}/5` : '';
+    return [date, mood, energy].filter(Boolean).join(', ');
   });
 
-  return lines.join("\n");
+  return lines.join('\n');
 }
 
 /**
@@ -65,8 +65,8 @@ const CheckInInsightService = {
 
     try {
       const response = await fetch(`${config.apiBaseUrl}/api/insight`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ context }),
         signal: controller.signal,
       });
@@ -86,8 +86,8 @@ const CheckInInsightService = {
 
       if (
         !payload ||
-        typeof payload !== "object" ||
-        typeof (payload as { insight?: unknown }).insight !== "string"
+        typeof payload !== 'object' ||
+        typeof (payload as { insight?: unknown }).insight !== 'string'
       ) {
         return null;
       }
@@ -102,7 +102,7 @@ const CheckInInsightService = {
       return insight;
     } catch (err) {
       clearTimeout(timer);
-      console.warn("CheckInInsight: unavailable", err);
+      console.warn('CheckInInsight: unavailable', err);
       return null; // Graceful — insight is additive, not critical
     }
   },
@@ -114,7 +114,7 @@ const CheckInInsightService = {
     // In a real app, we'd fetch actual history.
     // For the Vibe Coding demo, we'll fetch what's in storage or use a mock if empty.
     const entries =
-      (await StorageService.getJSON<CheckInEntry[]>("checkInHistory")) || [];
+      (await StorageService.getJSON<CheckInEntry[]>('checkInHistory')) || [];
 
     // If no history yet, we'll provide a placeholder or skip AI to avoid empty context
     if (entries.length === 0) {

@@ -3,8 +3,8 @@
  * Provides minimal stub implementations for the hooks and components we use
  */
 
-const React = require("react");
-const { View } = require("react-native");
+const React = require('react');
+const { View } = require('react-native');
 
 // Create a simple Animated View mock
 const AnimatedView = React.forwardRef((props, ref) =>
@@ -55,7 +55,7 @@ module.exports = {
   withDelay,
   withSequence,
   interpolate,
-  Extrapolate: { CLAMP: "clamp", IDENTITY: "identity", EXTEND: "extend" },
+  Extrapolate: { CLAMP: 'clamp', IDENTITY: 'identity', EXTEND: 'extend' },
   runOnJS: (f) => f,
   runOnUI: (f) => f,
   useAnimatedReaction: () => {},

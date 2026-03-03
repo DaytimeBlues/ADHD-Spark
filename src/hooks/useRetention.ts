@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import RetentionService, {
   ReentryPromptLevel,
-} from "../services/RetentionService";
+} from '../services/RetentionService';
 
 /**
  * useRetention
@@ -12,7 +12,7 @@ import RetentionService, {
  */
 export function useRetention() {
   const [streak, setStreak] = useState(0);
-  const [reentryLevel, setReentryLevel] = useState<ReentryPromptLevel>("none");
+  const [reentryLevel, setReentryLevel] = useState<ReentryPromptLevel>('none');
 
   useEffect(() => {
     const checkState = async () => {

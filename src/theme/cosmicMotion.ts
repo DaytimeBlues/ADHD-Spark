@@ -36,26 +36,26 @@ export const cosmicDurations = {
 
 export const cosmicEasings = {
   // Standard
-  linear: "linear",
+  linear: 'linear',
 
   // Entrance (deceleration)
-  easeOut: "cubic-bezier(0.0, 0.0, 0.2, 1)",
-  easeOutCubic: "cubic-bezier(0.0, 0.0, 0.2, 1)",
-  easeOutQuart: "cubic-bezier(0.0, 0.0, 0.2, 1)",
+  easeOut: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  easeOutCubic: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  easeOutQuart: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
 
   // Exit (acceleration)
-  easeIn: "cubic-bezier(0.4, 0.0, 1, 1)",
-  easeInCubic: "cubic-bezier(0.4, 0.0, 1, 1)",
+  easeIn: 'cubic-bezier(0.4, 0.0, 1, 1)',
+  easeInCubic: 'cubic-bezier(0.4, 0.0, 1, 1)',
 
   // Both (for symmetric animations like breathing)
-  easeInOut: "cubic-bezier(0.4, 0.0, 0.2, 1)",
-  easeInOutSine: "cubic-bezier(0.4, 0.0, 0.2, 1)",
-  easeInOutCubic: "cubic-bezier(0.4, 0.0, 0.2, 1)",
+  easeInOut: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  easeInOutSine: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  easeInOutCubic: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 
   // Aliases
-  standard: "cubic-bezier(0.2, 0.0, 0.2, 1)",
-  out: "cubic-bezier(0.0, 0.0, 0.2, 1)",
-  inOut: "cubic-bezier(0.4, 0.0, 0.2, 1)",
+  standard: 'cubic-bezier(0.2, 0.0, 0.2, 1)',
+  out: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  inOut: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
 } as const;
 
 // ============================================================================
@@ -133,7 +133,7 @@ export const cosmicReducedMotion = {
   // or minimal opacity changes instead of scale/movement
   press: {
     duration: 0,
-    easing: "linear",
+    easing: 'linear',
   },
   fadeIn: {
     duration: cosmicDurations.base,

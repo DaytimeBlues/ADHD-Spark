@@ -1,4 +1,4 @@
-type OverlayServiceModule = typeof import("../src/services/OverlayService");
+type OverlayServiceModule = typeof import('../src/services/OverlayService');
 
 const mockOverlayModule = {
   startOverlay: jest.fn(),
@@ -20,7 +20,7 @@ const loadOverlayService = (): OverlayServiceModule => {
     delete mockListeners[key];
   });
 
-  jest.doMock("react-native", () => {
+  jest.doMock('react-native', () => {
     class MockNativeEventEmitter {
       addListener(eventName: string, listener: (payload?: unknown) => void) {
         if (!mockListeners[eventName]) {
@@ -43,7 +43,7 @@ const loadOverlayService = (): OverlayServiceModule => {
       },
       NativeEventEmitter: MockNativeEventEmitter,
       Platform: {
-        OS: "android",
+        OS: 'android',
       },
       __emitOverlayEvent: (eventName: string, payload?: unknown) => {
         (mockListeners[eventName] || []).forEach((listener) =>
@@ -53,18 +53,18 @@ const loadOverlayService = (): OverlayServiceModule => {
     };
   });
 
-  return require("../src/services/OverlayService");
+  return require('../src/services/OverlayService');
 };
 
-describe("OverlayService", () => {
+describe('OverlayService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("returns false when permission request times out", async () => {
+  it('returns false when permission request times out', async () => {
     const { default: OverlayService } = loadOverlayService();
     mockOverlayModule.requestOverlayPermission.mockRejectedValueOnce(
-      new Error("E_OVERLAY_PERMISSION_TIMEOUT"),
+      new Error('E_OVERLAY_PERMISSION_TIMEOUT'),
     );
 
     const granted = await OverlayService.requestOverlayPermission();
@@ -73,7 +73,7 @@ describe("OverlayService", () => {
     expect(mockOverlayModule.requestOverlayPermission).toHaveBeenCalledTimes(1);
   });
 
-  it("clears pending count updates when overlay is stopped", () => {
+  it('clears pending count updates when overlay is stopped', () => {
     const { default: OverlayService } = loadOverlayService();
     jest.useFakeTimers();
 
@@ -88,14 +88,14 @@ describe("OverlayService", () => {
     jest.useRealTimers();
   });
 
-  it("subscribes and unsubscribes overlay permission timeout events", () => {
+  it('subscribes and unsubscribes overlay permission timeout events', () => {
     const { default: OverlayService, OVERLAY_EVENTS } = loadOverlayService();
     const listener = jest.fn();
     const unsubscribe = OverlayService.addEventListener(
       OVERLAY_EVENTS.permissionTimeout,
       listener,
     );
-    const reactNative = require("react-native") as {
+    const reactNative = require('react-native') as {
       __emitOverlayEvent: (eventName: string, payload?: unknown) => void;
     };
 
@@ -107,7 +107,7 @@ describe("OverlayService", () => {
     expect(listener).toHaveBeenCalledTimes(1);
   });
 
-  it("returns running state from native overlay module", async () => {
+  it('returns running state from native overlay module', async () => {
     const { default: OverlayService } = loadOverlayService();
     mockOverlayModule.isRunning.mockResolvedValueOnce(true);
 

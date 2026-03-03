@@ -1,13 +1,13 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component, ReactNode } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-} from "react-native";
-import * as Sentry from "@sentry/react-native";
-import { LoggerService } from "../services/LoggerService";
+} from 'react-native';
+import * as Sentry from '@sentry/react-native';
+import { LoggerService } from '../services/LoggerService';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -47,9 +47,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Log error to console in development
     if (__DEV__) {
       LoggerService.error({
-        service: "ErrorBoundary",
-        operation: "componentDidCatch",
-        message: "ErrorBoundary caught error",
+        service: 'ErrorBoundary',
+        operation: 'componentDidCatch',
+        message: 'ErrorBoundary caught error',
         error,
         context: { componentStack: errorInfo.componentStack },
       });
@@ -114,59 +114,59 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   title: {
     fontSize: 24,
-    fontWeight: "700",
-    color: "#ffffff",
+    fontWeight: '700',
+    color: '#ffffff',
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   message: {
     fontSize: 16,
-    color: "#a0a0a0",
-    textAlign: "center",
+    color: '#a0a0a0',
+    textAlign: 'center',
     marginBottom: 32,
     lineHeight: 24,
   },
   debugContainer: {
-    backgroundColor: "#2a2a3e",
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     padding: 16,
     marginBottom: 24,
     maxHeight: 200,
-    width: "100%",
+    width: '100%',
   },
   debugTitle: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#ff6b6b",
+    fontWeight: '600',
+    color: '#ff6b6b',
     marginBottom: 8,
   },
   debugText: {
     fontSize: 12,
-    color: "#d0d0d0",
-    fontFamily: "monospace",
+    color: '#d0d0d0',
+    fontFamily: 'monospace',
   },
   button: {
-    backgroundColor: "#A06EE1",
+    backgroundColor: '#A06EE1',
     paddingHorizontal: 32,
     paddingVertical: 16,
     borderRadius: 100,
     minWidth: 200,
-    alignItems: "center",
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });
 

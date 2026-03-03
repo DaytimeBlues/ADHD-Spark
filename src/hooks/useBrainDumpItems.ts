@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { LayoutAnimation, Platform, AccessibilityInfo } from "react-native";
-import StorageService from "../services/StorageService";
-import UXMetricsService from "../services/UXMetricsService";
-import { LoggerService } from "../services/LoggerService";
-import OverlayService from "../services/OverlayService";
-import { generateId } from "../utils/helpers";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { LayoutAnimation, Platform, AccessibilityInfo } from 'react-native';
+import StorageService from '../services/StorageService';
+import UXMetricsService from '../services/UXMetricsService';
+import { LoggerService } from '../services/LoggerService';
+import OverlayService from '../services/OverlayService';
+import { generateId } from '../utils/helpers';
 
 const PERSIST_DEBOUNCE_MS = 300;
 const OVERLAY_COUNT_DEBOUNCE_MS = 250;
@@ -13,7 +13,7 @@ export interface DumpItem {
   id: string;
   text: string;
   createdAt: string;
-  source: "text" | "audio";
+  source: 'text' | 'audio';
   audioPath?: string;
 }
 
@@ -27,7 +27,7 @@ interface UseBrainDumpItemsReturn {
   isLoading: boolean;
   addItem: (
     text: string,
-    source?: "text" | "audio",
+    source?: 'text' | 'audio',
     audioPath?: string,
   ) => void;
   deleteItem: (id: string) => void;
@@ -60,16 +60,16 @@ export const useBrainDumpItems = ({
         const normalized = storedItems.filter((item) => {
           return Boolean(item?.id && item?.text && item?.createdAt);
         });
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
         setItems(normalized);
       }
     } catch (error) {
       LoggerService.error({
-        service: "BrainDumpItems",
-        operation: "loadItems",
-        message: "Failed to load items",
+        service: 'BrainDumpItems',
+        operation: 'loadItems',
+        message: 'Failed to load items',
         error,
       });
     } finally {
@@ -93,9 +93,9 @@ export const useBrainDumpItems = ({
         items,
       ).catch((error) =>
         LoggerService.error({
-          service: "BrainDumpItems",
-          operation: "persistItems",
-          message: "Failed to persist brain dump items",
+          service: 'BrainDumpItems',
+          operation: 'persistItems',
+          message: 'Failed to persist brain dump items',
           error,
           context: { itemCount: items.length },
         }),
@@ -124,8 +124,8 @@ export const useBrainDumpItems = ({
   }, [items, isLoading]);
 
   const addItem = useCallback(
-    (text: string, source: "text" | "audio" = "text", audioPath?: string) => {
-      if (Platform.OS !== "web") {
+    (text: string, source: 'text' | 'audio' = 'text', audioPath?: string) => {
+      if (Platform.OS !== 'web') {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       }
       const newItem: DumpItem = {
@@ -138,7 +138,7 @@ export const useBrainDumpItems = ({
       setItems((prevItems) => {
         const next = [newItem, ...prevItems];
         if (!guideDismissed && !hasTrackedFirstItem.current) {
-          UXMetricsService.track("brain_dump_first_item_added");
+          UXMetricsService.track('brain_dump_first_item_added');
           hasTrackedFirstItem.current = true;
           onFirstItemAdded?.();
         }
@@ -149,18 +149,18 @@ export const useBrainDumpItems = ({
   );
 
   const deleteItem = useCallback((id: string) => {
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   }, []);
 
   const clearAll = useCallback(() => {
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setItems([]);
-    AccessibilityInfo.announceForAccessibility("All items cleared.");
+    AccessibilityInfo.announceForAccessibility('All items cleared.');
   }, []);
 
   return {

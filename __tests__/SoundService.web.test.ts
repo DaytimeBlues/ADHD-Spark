@@ -1,7 +1,7 @@
-import SoundService from "../src/services/SoundService.web";
+import SoundService from '../src/services/SoundService.web';
 
-describe("SoundService.web", () => {
-  it("executes all methods without throwing", async () => {
+describe('SoundService.web', () => {
+  it('executes all methods without throwing', async () => {
     await expect(SoundService.initBrownNoise()).resolves.toBeUndefined();
     expect(() => SoundService.playBrownNoise()).not.toThrow();
     expect(() => SoundService.pauseBrownNoise()).not.toThrow();

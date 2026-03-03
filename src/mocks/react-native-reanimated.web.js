@@ -10,8 +10,8 @@
  * webpack.config.js.
  */
 
-const React = require("react");
-const { View } = require("react-native");
+const React = require('react');
+const { View } = require('react-native');
 
 // ---------------------------------------------------------------------------
 // Animated namespace (mirrors RN's own Animated API shape)
@@ -33,16 +33,16 @@ const Animated = Object.assign(
   {
     View: AnimatedView,
     Text: React.forwardRef((props, ref) =>
-      React.createElement("Text", { ...props, ref }),
+      React.createElement('Text', { ...props, ref }),
     ),
     Image: React.forwardRef((props, ref) =>
-      React.createElement("Image", { ...props, ref }),
+      React.createElement('Image', { ...props, ref }),
     ),
     ScrollView: React.forwardRef((props, ref) =>
-      React.createElement("ScrollView", { ...props, ref }),
+      React.createElement('ScrollView', { ...props, ref }),
     ),
     FlatList: React.forwardRef((props, ref) =>
-      React.createElement("FlatList", { ...props, ref }),
+      React.createElement('FlatList', { ...props, ref }),
     ),
     createAnimatedComponent,
   },
@@ -84,15 +84,15 @@ const interpolate = (_value, _inputRange, outputRange /*, options */) =>
 // ---------------------------------------------------------------------------
 
 const Extrapolate = {
-  CLAMP: "clamp",
-  EXTEND: "extend",
-  IDENTITY: "identity",
+  CLAMP: 'clamp',
+  EXTEND: 'extend',
+  IDENTITY: 'identity',
 };
 
 const ReduceMotion = {
-  System: "system",
-  Always: "always",
-  Never: "never",
+  System: 'system',
+  Always: 'always',
+  Never: 'never',
 };
 
 const Easing = {

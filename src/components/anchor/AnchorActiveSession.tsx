@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
-import { ChronoDigits, HaloRing, RuneButton } from "../../ui/cosmic";
-import { LinearButton } from "../ui/LinearButton";
-import { BreathingPattern, PatternConfig } from "../../hooks/useAnchor";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
+import { ChronoDigits, HaloRing, RuneButton } from '../../ui/cosmic';
+import { LinearButton } from '../ui/LinearButton';
+import { BreathingPattern, PatternConfig } from '../../hooks/useAnchor';
 
 interface AnchorActiveSessionProps {
   pattern: BreathingPattern;
@@ -29,28 +29,28 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
 
   const getPhaseText = () => {
     switch (phase) {
-      case "inhale":
-        return "BREATHE IN";
-      case "hold":
-        return "HOLD";
-      case "exhale":
-        return "BREATHE OUT";
-      case "wait":
-        return "REST";
+      case 'inhale':
+        return 'BREATHE IN';
+      case 'hold':
+        return 'HOLD';
+      case 'exhale':
+        return 'BREATHE OUT';
+      case 'wait':
+        return 'REST';
       default:
-        return "";
+        return '';
     }
   };
 
   const getCircleScale = () => {
     switch (phase) {
-      case "inhale":
+      case 'inhale':
         return 1.5;
-      case "hold":
+      case 'hold':
         return 1.5;
-      case "exhale":
+      case 'exhale':
         return 1;
-      case "wait":
+      case 'wait':
         return 1;
       default:
         return 1;
@@ -84,7 +84,7 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
           <Text style={styles.phaseText}>{getPhaseText()}</Text>
           {isCosmic ? (
             <ChronoDigits
-              value={count.toString().padStart(2, "0")}
+              value={count.toString().padStart(2, '0')}
               size="hero"
               glow="medium"
               testID="anchor-count"
@@ -122,53 +122,53 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
 const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     activeContainer: {
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: "100%",
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
       flex: 1,
       paddingVertical: Tokens.spacing[8],
     },
     activeHeader: {
-      alignItems: "center",
-      width: "100%",
+      alignItems: 'center',
+      width: '100%',
     },
     patternName: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[400],
-      fontSize: Tokens.type["2xl"],
-      fontWeight: "600",
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[400],
+      fontSize: Tokens.type['2xl'],
+      fontWeight: '600',
       letterSpacing: 1,
     },
     breathingCircle: {
       width: BREATHING_CIRCLE_SIZE,
       height: BREATHING_CIRCLE_SIZE,
-      alignItems: "center",
-      justifyContent: "center",
-      position: "relative",
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
       marginVertical: Tokens.spacing[8],
     },
     breathingOverlay: {
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     circle: {
       width: INNER_CIRCLE_SIZE,
       height: INNER_CIRCLE_SIZE,
       borderRadius: Tokens.radii.full,
       backgroundColor: Tokens.colors.brand[600],
-      position: "absolute",
+      position: 'absolute',
       opacity: 0.3,
     },
     phaseText: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      fontSize: Tokens.type["2xl"],
-      fontWeight: "700",
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontSize: Tokens.type['2xl'],
+      fontWeight: '700',
       zIndex: 1,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 1,
@@ -176,8 +176,8 @@ const getStyles = (isCosmic: boolean) =>
     countText: {
       fontFamily: Tokens.type.fontFamily.mono,
       color: Tokens.colors.text.tertiary,
-      fontSize: Tokens.type["5xl"],
-      fontWeight: "800",
+      fontSize: Tokens.type['5xl'],
+      fontWeight: '800',
       zIndex: 1,
     },
     stopButton: {

@@ -2,8 +2,8 @@ import {
   EmitterSubscription,
   NativeEventEmitter,
   NativeModules,
-} from "react-native";
-import { isAndroid, isWeb } from "../utils/PlatformUtils";
+} from 'react-native';
+import { isAndroid, isWeb } from '../utils/PlatformUtils';
 
 const { OverlayModule } = NativeModules as {
   OverlayModule?: {
@@ -22,12 +22,12 @@ const { OverlayModule } = NativeModules as {
 };
 
 export const OVERLAY_EVENTS = {
-  started: "overlay_started",
-  stopped: "overlay_stopped",
-  permissionRequested: "overlay_permission_requested",
-  permissionResult: "overlay_permission_result",
-  permissionTimeout: "overlay_permission_timeout",
-  permissionError: "overlay_permission_error",
+  started: 'overlay_started',
+  stopped: 'overlay_stopped',
+  permissionRequested: 'overlay_permission_requested',
+  permissionResult: 'overlay_permission_result',
+  permissionTimeout: 'overlay_permission_timeout',
+  permissionError: 'overlay_permission_error',
 } as const;
 
 export type OverlayEventName =
@@ -63,7 +63,7 @@ const flushPendingOverlayCountToNative = () => {
   try {
     OverlayModule.updateCount(pendingOverlayCount);
   } catch (error) {
-    console.warn("OverlayService.updateCount failed:", error);
+    console.warn('OverlayService.updateCount failed:', error);
   }
 };
 
@@ -78,7 +78,7 @@ const OverlayService = {
     try {
       return await OverlayModule.canDrawOverlays();
     } catch (error) {
-      console.warn("OverlayService.canDrawOverlays failed:", error);
+      console.warn('OverlayService.canDrawOverlays failed:', error);
       return false;
     }
   },
@@ -97,7 +97,7 @@ const OverlayService = {
     try {
       return await OverlayModule.requestOverlayPermission();
     } catch (error) {
-      console.warn("OverlayService.requestOverlayPermission failed:", error);
+      console.warn('OverlayService.requestOverlayPermission failed:', error);
       return false;
     } finally {
       overlayPermissionRequestInProgress = false;
@@ -124,7 +124,7 @@ const OverlayService = {
     try {
       return await OverlayModule.isRunning();
     } catch (error) {
-      console.warn("OverlayService.isRunning failed:", error);
+      console.warn('OverlayService.isRunning failed:', error);
       return false;
     }
   },
@@ -141,7 +141,7 @@ const OverlayService = {
       flushPendingOverlayCountToNative();
       OverlayModule?.startOverlay?.();
     } catch (error) {
-      console.warn("OverlayService.startOverlay failed:", error);
+      console.warn('OverlayService.startOverlay failed:', error);
     }
   },
 
@@ -156,7 +156,7 @@ const OverlayService = {
       }
       OverlayModule?.stopOverlay?.();
     } catch (error) {
-      console.warn("OverlayService.stopOverlay failed:", error);
+      console.warn('OverlayService.stopOverlay failed:', error);
     }
   },
 
@@ -218,7 +218,7 @@ const OverlayService = {
     try {
       OverlayModule?.collapseOverlay?.();
     } catch (error) {
-      console.warn("OverlayService.collapseOverlay failed:", error);
+      console.warn('OverlayService.collapseOverlay failed:', error);
     }
   },
 
@@ -232,7 +232,7 @@ const OverlayService = {
     try {
       return await OverlayModule.isExpanded();
     } catch (error) {
-      console.warn("OverlayService.isExpanded failed:", error);
+      console.warn('OverlayService.isExpanded failed:', error);
       return false;
     }
   },

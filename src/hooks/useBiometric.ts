@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { BiometricService } from "../services/BiometricService";
+import { useState, useEffect } from 'react';
+import { BiometricService } from '../services/BiometricService';
 
 /**
  * useBiometric

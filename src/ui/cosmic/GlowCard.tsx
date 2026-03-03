@@ -5,22 +5,22 @@
  * Used for cards, panels, and interactive surfaces in the cosmic theme.
  */
 
-import React, { memo, useMemo, useRef, useState, useCallback } from "react";
+import React, { memo, useMemo, useRef, useState, useCallback } from 'react';
 import {
   Pressable,
   StyleSheet,
   ViewStyle,
   Animated,
   Platform,
-} from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { surfaceColors, webBoxShadows } from "../../theme/cosmicTokens";
+} from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { surfaceColors, webBoxShadows } from '../../theme/cosmicTokens';
 import {
   GlowLevel,
   SurfaceTone,
   CosmicPressableProps,
   CardPadding,
-} from "./types";
+} from './types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -41,7 +41,7 @@ export interface GlowCardProps extends CosmicPressableProps {
 }
 
 type WebInteractiveStyle = ViewStyle & {
-  cursor?: "pointer";
+  cursor?: 'pointer';
   transition?: string;
 };
 
@@ -56,9 +56,9 @@ type WebInteractiveStyle = ViewStyle & {
  */
 export const GlowCard = memo(function GlowCard({
   children,
-  glow = "none",
-  tone = "base",
-  padding = "md",
+  glow = 'none',
+  tone = 'base',
+  padding = 'md',
   onPress,
   disabled,
   style,
@@ -84,11 +84,11 @@ export const GlowCard = memo(function GlowCard({
     }
 
     switch (tone) {
-      case "base":
+      case 'base':
         return surfaceColors.base;
-      case "raised":
+      case 'raised':
         return surfaceColors.raised;
-      case "sunken":
+      case 'sunken':
         return surfaceColors.sunken;
       default:
         return surfaceColors.base;
@@ -134,7 +134,7 @@ export const GlowCard = memo(function GlowCard({
 
   // Derived styles based on tone and padding
   const resolvedPadding = useMemo(() => {
-    if (typeof padding === "number") {
+    if (typeof padding === 'number') {
       return padding;
     }
 
@@ -154,11 +154,11 @@ export const GlowCard = memo(function GlowCard({
       borderRadius: isCosmic ? 24 : 8,
       padding: resolvedPadding,
       borderWidth: 1,
-      borderColor: isCosmic ? "rgba(185, 194, 217, 0.12)" : "transparent",
-      ...(onPress && Platform.OS === "web"
+      borderColor: isCosmic ? 'rgba(185, 194, 217, 0.12)' : 'transparent',
+      ...(onPress && Platform.OS === 'web'
         ? ({
-            cursor: "pointer",
-            transition: "all 0.2s ease-in-out",
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out',
           } as WebInteractiveStyle)
         : {}),
     }),
@@ -167,14 +167,14 @@ export const GlowCard = memo(function GlowCard({
 
   // Glow shadow styles for cosmic theme
   const glowStyle = useMemo((): ViewStyle => {
-    if (!isCosmic || glow === "none") {
+    if (!isCosmic || glow === 'none') {
       return {};
     }
 
-    const glowColor = "#8B5CF6";
+    const glowColor = '#8B5CF6';
 
     switch (glow) {
-      case "soft":
+      case 'soft':
         return Platform.select({
           web: { boxShadow: webBoxShadows.soft },
           default: {
@@ -185,7 +185,7 @@ export const GlowCard = memo(function GlowCard({
             elevation: 2,
           },
         }) as ViewStyle;
-      case "medium":
+      case 'medium':
         return Platform.select({
           web: { boxShadow: webBoxShadows.medium },
           default: {
@@ -196,11 +196,11 @@ export const GlowCard = memo(function GlowCard({
             elevation: 4,
           },
         }) as ViewStyle;
-      case "strong":
+      case 'strong':
         return Platform.select({
           web: { boxShadow: webBoxShadows.strong },
           default: {
-            shadowColor: "#2DD4BF",
+            shadowColor: '#2DD4BF',
             shadowOffset: { width: 0, height: 12 },
             shadowOpacity: 0.28,
             shadowRadius: 22,
@@ -237,7 +237,7 @@ export const GlowCard = memo(function GlowCard({
         selected: !!accessibilityState?.selected,
       }}
       accessibilityLabel={accessibilityLabel}
-      accessibilityRole={accessibilityRole || (onPress ? "button" : undefined)}
+      accessibilityRole={accessibilityRole || (onPress ? 'button' : undefined)}
       accessibilityHint={accessibilityHint}
     >
       <Animated.View
@@ -257,10 +257,10 @@ export const GlowCard = memo(function GlowCard({
 
 const styles = StyleSheet.create({
   bgCosmic: {
-    backgroundColor: "rgba(139, 92, 246, 0.1)",
+    backgroundColor: 'rgba(139, 92, 246, 0.1)',
   },
   bgLinear: {
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
   },
 });
 

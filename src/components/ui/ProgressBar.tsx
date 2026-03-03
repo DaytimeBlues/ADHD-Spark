@@ -1,21 +1,21 @@
-import React from "react";
-import { View, StyleSheet, ViewStyle } from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { CosmicTokens } from "../../theme/cosmicTokens";
+import React from 'react';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { CosmicTokens } from '../../theme/cosmicTokens';
 
 interface ProgressBarProps {
   current: number;
   total: number;
-  size?: "sm" | "md" | "lg";
-  color?: "default" | "success" | "brand";
+  size?: 'sm' | 'md' | 'lg';
+  color?: 'default' | 'success' | 'brand';
   style?: ViewStyle;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   current,
   total,
-  size = "md",
-  color = "default",
+  size = 'md',
+  color = 'default',
   style,
 }) => {
   const { isCosmic, t } = useTheme();
@@ -24,9 +24,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   const getHeight = () => {
     switch (size) {
-      case "sm":
+      case 'sm':
         return 4;
-      case "lg":
+      case 'lg':
         return 12;
       default:
         return 8;
@@ -36,9 +36,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const getColor = () => {
     if (!isCosmic) {
       switch (color) {
-        case "success":
+        case 'success':
           return CosmicTokens.colors.semantic.success;
-        case "brand":
+        case 'brand':
           return t.colors.brand[500];
         default:
           return t.colors.brand[500];
@@ -46,9 +46,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     }
 
     switch (color) {
-      case "success":
+      case 'success':
         return CosmicTokens.colors.semantic.success; // auroraTeal
-      case "brand":
+      case 'brand':
         return CosmicTokens.colors.semantic.primary; // nebulaViolet
       default:
         return CosmicTokens.colors.semantic.primary;
@@ -66,7 +66,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           {
             height,
             backgroundColor: isCosmic
-              ? "rgba(185, 194, 217, 0.2)"
+              ? 'rgba(185, 194, 217, 0.2)'
               : t.colors.neutral.dark,
             borderRadius: height / 2,
           },
@@ -90,10 +90,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
   },
   background: {
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   fill: {
     // Fill animates via width change

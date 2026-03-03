@@ -1,9 +1,9 @@
-import { renderHook, act } from "@testing-library/react-native";
-import { useBiometric } from "../src/hooks/useBiometric";
-import { BiometricService } from "../src/services/BiometricService";
+import { renderHook, act } from '@testing-library/react-native';
+import { useBiometric } from '../src/hooks/useBiometric';
+import { BiometricService } from '../src/services/BiometricService';
 
 // Mock BiometricService
-jest.mock("../src/services/BiometricService", () => ({
+jest.mock('../src/services/BiometricService', () => ({
   BiometricService: {
     subscribe: jest.fn(),
     authenticate: jest.fn(),
@@ -12,18 +12,18 @@ jest.mock("../src/services/BiometricService", () => ({
   },
 }));
 
-describe("useBiometric", () => {
+describe('useBiometric', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should subscribe to BiometricService on mount", () => {
+  it('should subscribe to BiometricService on mount', () => {
     renderHook(() => useBiometric());
 
     expect(BiometricService.subscribe).toHaveBeenCalled();
   });
 
-  it("should update isUnlocked when service notifies", () => {
+  it('should update isUnlocked when service notifies', () => {
     let subscriberCallback: ((unlocked: boolean) => void) | null = null;
 
     (BiometricService.subscribe as jest.Mock).mockImplementation(
@@ -46,7 +46,7 @@ describe("useBiometric", () => {
     expect(result.current.isUnlocked).toBe(false);
   });
 
-  it("should unsubscribe from BiometricService on unmount", () => {
+  it('should unsubscribe from BiometricService on unmount', () => {
     const unsubscribe = jest.fn();
     (BiometricService.subscribe as jest.Mock).mockReturnValue(unsubscribe);
 
@@ -57,25 +57,25 @@ describe("useBiometric", () => {
     expect(unsubscribe).toHaveBeenCalled();
   });
 
-  it("should provide authenticate function", () => {
+  it('should provide authenticate function', () => {
     const { result } = renderHook(() => useBiometric());
 
-    expect(typeof result.current.authenticate).toBe("function");
+    expect(typeof result.current.authenticate).toBe('function');
   });
 
-  it("should provide toggleSecurity function", () => {
+  it('should provide toggleSecurity function', () => {
     const { result } = renderHook(() => useBiometric());
 
-    expect(typeof result.current.toggleSecurity).toBe("function");
+    expect(typeof result.current.toggleSecurity).toBe('function');
   });
 
-  it("should provide isSecured value", () => {
+  it('should provide isSecured value', () => {
     const { result } = renderHook(() => useBiometric());
 
-    expect(typeof result.current.isSecured).toBe("boolean");
+    expect(typeof result.current.isSecured).toBe('boolean');
   });
 
-  it("should call BiometricService.authenticate when authenticate is called", () => {
+  it('should call BiometricService.authenticate when authenticate is called', () => {
     const { result } = renderHook(() => useBiometric());
 
     result.current.authenticate();
@@ -83,7 +83,7 @@ describe("useBiometric", () => {
     expect(BiometricService.authenticate).toHaveBeenCalled();
   });
 
-  it("should call BiometricService.toggleSecurity when toggleSecurity is called", () => {
+  it('should call BiometricService.toggleSecurity when toggleSecurity is called', () => {
     const { result } = renderHook(() => useBiometric());
 
     result.current.toggleSecurity(true);

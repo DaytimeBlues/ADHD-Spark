@@ -1,8 +1,8 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
-import { GlowCard } from "../../ui/cosmic";
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
+import { GlowCard } from '../../ui/cosmic';
 
 export const AnchorRationale: React.FC = () => {
   const { isCosmic } = useTheme();
@@ -25,23 +25,23 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     rationaleCard: {
       marginBottom: Tokens.spacing[6],
-      width: "100%",
+      width: '100%',
     },
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      fontWeight: '700',
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: Tokens.spacing[2],
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     rationaleText: {
       fontFamily: Tokens.type.fontFamily.body,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       lineHeight: 22,
-      flexWrap: "wrap",
+      flexWrap: 'wrap',
     },
   });
 

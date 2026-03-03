@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text, StyleSheet, ViewStyle } from "react-native";
-import { Tokens } from "../../theme/tokens";
+import React from 'react';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { Tokens } from '../../theme/tokens';
 
 interface LinearCardProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   header: {
     paddingVertical: Tokens.spacing[3],
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[1],
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontWeight: "400",
+    fontWeight: '400',
     fontSize: Tokens.type.xs,
     color: Tokens.colors.text.secondary,
     letterSpacing: 0.5,

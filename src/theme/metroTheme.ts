@@ -2,22 +2,22 @@
 // Principles: Typography-first, Content over Chrome, Authentic Digitally
 
 export const MetroPalette = {
-  black: "#000000",
-  white: "#FFFFFF",
-  gray: "#767676",
-  darkGray: "#1D1D1D", // Surface alternative
-  lightGray: "#D0D0D0",
+  black: '#000000',
+  white: '#FFFFFF',
+  gray: '#767676',
+  darkGray: '#1D1D1D', // Surface alternative
+  lightGray: '#D0D0D0',
 
   // Classic Metro Accents
-  blue: "#2D89EF", // Windows Blue
-  green: "#00A300", // Xbox Green
-  lime: "#99B433",
-  teal: "#00ABA9",
-  magenta: "#FF0097",
-  purple: "#7E3878",
-  orange: "#E3A21A",
-  red: "#EE1111",
-  cobalt: "#0050EF",
+  blue: '#2D89EF', // Windows Blue
+  green: '#00A300', // Xbox Green
+  lime: '#99B433',
+  teal: '#00ABA9',
+  magenta: '#FF0097',
+  purple: '#7E3878',
+  orange: '#E3A21A',
+  red: '#EE1111',
+  cobalt: '#0050EF',
 };
 
 export const MetroSpacing = {
@@ -31,11 +31,11 @@ export const MetroSpacing = {
 };
 
 export const MetroTypography = {
-  fontFamily: "System", // Relies on SF Pro (iOS) / Roboto (Android)
+  fontFamily: 'System', // Relies on SF Pro (iOS) / Roboto (Android)
   weights: {
-    light: "300" as const,
-    regular: "400" as const,
-    bold: "700" as const,
+    light: '300' as const,
+    regular: '400' as const,
+    bold: '700' as const,
   },
   sizes: {
     display: 48, // Page titles
@@ -65,4 +65,4 @@ export const metroTheme: MetroThemeType = {
   type: MetroTypography,
 };
 
-export { Tokens, type TokensType } from "./tokens";
+export { Tokens, type TokensType } from './tokens';

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { AccessibilityInfo } from "react-native";
+import { useEffect, useState } from 'react';
+import { AccessibilityInfo } from 'react-native';
 
 const useReducedMotion = (): boolean => {
   const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
@@ -23,7 +23,7 @@ const useReducedMotion = (): boolean => {
     loadReduceMotionPreference();
 
     const subscription = AccessibilityInfo.addEventListener?.(
-      "reduceMotionChanged",
+      'reduceMotionChanged',
       setReduceMotionEnabled,
     );
 

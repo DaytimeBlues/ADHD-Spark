@@ -8,11 +8,11 @@
 
 import TranscriptionService, {
   TranscriptionResult,
-} from "./TranscriptionService";
+} from './TranscriptionService';
 import GoogleTasksSyncService, {
   GoogleExportResult,
   GoogleTasksSyncResult,
-} from "./GoogleTasksSyncService";
+} from './GoogleTasksSyncService';
 
 // Re-export types
 export type { TranscriptionResult, GoogleExportResult, GoogleTasksSyncResult };

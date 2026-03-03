@@ -6,13 +6,13 @@
  * but delegates actual state management and reactivity to Zustand.
  */
 
-import { useCaptureStore } from "../store/useCaptureStore";
+import { useCaptureStore } from '../store/useCaptureStore';
 import type {
   CaptureItem,
   CaptureSource,
   CaptureStatus,
   NewCaptureInput,
-} from "../types/capture";
+} from '../types/capture';
 
 export type { CaptureSource, CaptureStatus, CaptureItem, NewCaptureInput };
 
@@ -50,7 +50,7 @@ class CaptureServiceClass {
       ...input,
       id: generateId(),
       createdAt: Date.now(),
-      status: "unreviewed",
+      status: 'unreviewed',
     };
     useCaptureStore.getState().addItem(item);
     return item;
@@ -63,16 +63,16 @@ class CaptureServiceClass {
     useCaptureStore.getState().updateItem(id, patch);
   }
 
-  promote(id: string, to: "task" | "note"): void {
+  promote(id: string, to: 'task' | 'note'): void {
     useCaptureStore.getState().updateItem(id, {
-      status: "promoted",
+      status: 'promoted',
       promotedTo: to,
       promotedAt: Date.now(),
     });
   }
 
   discard(id: string): void {
-    useCaptureStore.getState().updateItem(id, { status: "discarded" });
+    useCaptureStore.getState().updateItem(id, { status: 'discarded' });
   }
 
   /**

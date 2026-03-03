@@ -1,21 +1,21 @@
-import React from "react";
+import React from 'react';
 import {
   Pressable,
   Text,
   StyleSheet,
   ViewStyle,
   TextStyle,
-} from "react-native";
+} from 'react-native';
 import {
   MetroPalette,
   MetroSpacing,
   MetroTypography,
-} from "../../theme/metroTheme";
+} from '../../theme/metroTheme';
 
 interface MetroButtonProps {
   title: string;
   onPress: () => void;
-  variant?: "filled" | "outline" | "link";
+  variant?: 'filled' | 'outline' | 'link';
   accentColor?: string;
   disabled?: boolean;
   style?: ViewStyle;
@@ -25,7 +25,7 @@ interface MetroButtonProps {
 export const MetroButton: React.FC<MetroButtonProps> = ({
   title,
   onPress,
-  variant = "filled",
+  variant = 'filled',
   accentColor = MetroPalette.blue,
   disabled = false,
   style,
@@ -38,17 +38,17 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
       style={({ pressed }) => [
         styles.base,
         disabled && styles.disabled,
-        variant === "filled" && {
+        variant === 'filled' && {
           backgroundColor: disabled ? MetroPalette.darkGray : accentColor,
           ...(!disabled && styles.shadow),
         },
-        variant === "outline" && {
+        variant === 'outline' && {
           borderColor: disabled ? MetroPalette.gray : accentColor,
           borderWidth: 2,
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           ...(!disabled && styles.shadow),
         },
-        variant === "link" && { backgroundColor: "transparent" },
+        variant === 'link' && { backgroundColor: 'transparent' },
         pressed && !disabled && styles.pressed,
         style,
       ]}
@@ -57,15 +57,15 @@ export const MetroButton: React.FC<MetroButtonProps> = ({
         <Text
           style={[
             styles.text,
-            variant === "filled" && { color: MetroPalette.white },
-            variant === "outline" && {
+            variant === 'filled' && { color: MetroPalette.white },
+            variant === 'outline' && {
               color: disabled ? MetroPalette.gray : accentColor,
             },
-            variant === "link" && {
+            variant === 'link' && {
               color: disabled ? MetroPalette.gray : accentColor,
             },
-            variant === "link" && styles.textUnderline,
-            pressed && variant === "link" && styles.textOpacity07,
+            variant === 'link' && styles.textUnderline,
+            pressed && variant === 'link' && styles.textOpacity07,
             textStyle,
           ]}
         >
@@ -81,19 +81,19 @@ const styles = StyleSheet.create({
     paddingVertical: MetroSpacing.m,
     paddingHorizontal: MetroSpacing.l,
     minHeight: 48,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 0, // Explicitly sharp
   },
   shadow: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 4,
   },
   textUnderline: {
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
   textOpacity07: {
     opacity: 0.7,

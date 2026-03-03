@@ -1,4 +1,4 @@
-import { SortedItem } from "./AISortService";
+import { SortedItem } from './AISortService';
 
 export interface GoogleTasksSyncResult {
   importedCount: number;
@@ -13,11 +13,11 @@ export interface GoogleExportResult {
   skippedCount: number;
   authRequired: boolean;
   errorCode?:
-    | "auth_required"
-    | "auth_failed"
-    | "network"
-    | "rate_limited"
-    | "api_error";
+    | 'auth_required'
+    | 'auth_failed'
+    | 'network'
+    | 'rate_limited'
+    | 'api_error';
   errorMessage?: string;
 }
 
@@ -46,8 +46,8 @@ class GoogleTasksSyncServiceClass {
       createdEvents: 0,
       skippedCount: items.length,
       authRequired: true,
-      errorCode: "auth_required",
-      errorMessage: "Google sign-in is not available on web yet.",
+      errorCode: 'auth_required',
+      errorMessage: 'Google sign-in is not available on web yet.',
     };
   }
 

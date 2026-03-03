@@ -4,93 +4,93 @@
 export const LinearColors = {
   // Brand - Purple Accent (Refined Indigo/Violet)
   brand: {
-    50: "#F5F3FF",
-    100: "#EDE9FE",
-    200: "#DDD6FE",
-    300: "#C4B5FD",
-    400: "#A78BFA",
-    500: "#8B5CF6",
-    600: "#7C3AED", // Primary Accent (High Contrast Violet)
-    700: "#6D28D9",
-    800: "#5B21B6",
-    900: "#4C1D95",
+    50: '#F5F3FF',
+    100: '#EDE9FE',
+    200: '#DDD6FE',
+    300: '#C4B5FD',
+    400: '#A78BFA',
+    500: '#8B5CF6',
+    600: '#7C3AED', // Primary Accent (High Contrast Violet)
+    700: '#6D28D9',
+    800: '#5B21B6',
+    900: '#4C1D95',
   },
 
   // Indigo alias mapped to the new brand palette
   indigo: {
-    primary: "#7C3AED",
-    hover: "#6D28D9",
-    active: "#5B21B6",
-    subtle: "rgba(124, 58, 237, 0.1)",
+    primary: '#7C3AED',
+    hover: '#6D28D9',
+    active: '#5B21B6',
+    subtle: 'rgba(124, 58, 237, 0.1)',
   },
 
   // Danger/Error
   danger: {
-    50: "#FEF2F2",
-    100: "#FEE2E2",
-    200: "#FECACA",
-    300: "#FCA5A5",
-    400: "#F87171",
-    500: "#EF4444",
-    600: "#DC2626",
-    700: "#B91C1C",
-    800: "#991B1B",
-    900: "#7F1D1D",
+    50: '#FEF2F2',
+    100: '#FEE2E2',
+    200: '#FECACA',
+    300: '#FCA5A5',
+    400: '#F87171',
+    500: '#EF4444',
+    600: '#DC2626',
+    700: '#B91C1C',
+    800: '#991B1B',
+    900: '#7F1D1D',
   },
 
   // Monochrome Palette (Pure Black/White/Gray)
   neutral: {
     // Named keys
-    darkest: "#000000", // Pure Black
-    darker: "#0A0A0A", // Almost Black
-    dark: "#141414", // Surface
-    border: "#FFFFFF", // Primary Border (Pure White)
-    borderSubtle: "#444444", // Divider Gray
+    darkest: '#000000', // Pure Black
+    darker: '#0A0A0A', // Almost Black
+    dark: '#141414', // Surface
+    border: '#FFFFFF', // Primary Border (Pure White)
+    borderSubtle: '#444444', // Divider Gray
 
     // Glass Tokens
-    glass: "rgba(255, 255, 255, 0.03)",
-    glassStroke: "rgba(255, 255, 255, 0.1)",
+    glass: 'rgba(255, 255, 255, 0.03)',
+    glassStroke: 'rgba(255, 255, 255, 0.1)',
 
     // Numbered scale
-    0: "#FFFFFF",
-    50: "#FAFAFA",
-    100: "#F0F0F0",
-    200: "#E0E0E0",
-    300: "#C0C0C0",
-    400: "#A0A0A0",
-    500: "#808080",
-    600: "#606060",
-    700: "#404040",
-    800: "#202020",
-    900: "#000000",
+    0: '#FFFFFF',
+    50: '#FAFAFA',
+    100: '#F0F0F0',
+    200: '#E0E0E0',
+    300: '#C0C0C0',
+    400: '#A0A0A0',
+    500: '#808080',
+    600: '#606060',
+    700: '#404040',
+    800: '#202020',
+    900: '#000000',
   },
 
   // Text
   text: {
-    primary: "#FFFFFF",
-    placeholder: "#666666",
-    secondary: "#888888",
-    tertiary: "#555555",
-    disabled: "#333333",
-    link: "#7C3AED",
+    primary: '#FFFFFF',
+    placeholder: '#666666',
+    secondary: '#888888',
+    tertiary: '#555555',
+    disabled: '#333333',
+    link: '#7C3AED',
   },
 
   // Semantic
   success: {
-    main: "#00FF00", // Terminal Green
-    subtle: "rgba(0, 255, 0, 0.1)",
+    main: '#00FF00', // Terminal Green
+    subtle: 'rgba(0, 255, 0, 0.1)',
   },
   warning: {
-    main: "#FFD700", // Industrial Yellow
-    subtle: "rgba(255, 215, 0, 0.1)",
+    main: '#FFD700', // Industrial Yellow
+    subtle: 'rgba(255, 215, 0, 0.1)',
   },
   error: {
-    main: "#FF0000",
-    subtle: "rgba(255, 0, 0, 0.1)",
+    main: '#FF0000',
+    subtle: 'rgba(255, 0, 0, 0.1)',
   },
   info: {
-    main: "#FFFFFF",
-    subtle: "rgba(255, 255, 255, 0.1)",
+    main: '#FFFFFF',
+    subtle: 'rgba(255, 255, 255, 0.1)',
   },
 } as const;
 
@@ -142,18 +142,18 @@ export const LinearTypography = {
     // Extended
     lg: 16,
     xl: 18,
-    "2xl": 24,
-    "3xl": 30,
-    "4xl": 36,
-    "5xl": 48,
+    '2xl': 24,
+    '3xl': 30,
+    '4xl': 36,
+    '5xl': 48,
     giga: 72,
     timerHero: 140,
   },
   weight: {
-    regular: "400" as const,
-    medium: "500" as const,
-    semibold: "600" as const,
-    bold: "700" as const,
+    regular: '400' as const,
+    medium: '500' as const,
+    semibold: '600' as const,
+    bold: '700' as const,
   },
   lineHeight: {
     tight: 1.1,
@@ -170,21 +170,21 @@ export const LinearTypography = {
 
 export const LinearElevation = {
   none: {
-    shadowColor: "transparent",
+    shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
     elevation: 0,
   },
   sm: {
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOffset: { width: 2, height: 2 }, // Hard shadow
     shadowOpacity: 0.5,
     shadowRadius: 0, // Zero radius for retro/sharp feel
     elevation: 2,
   },
   md: {
-    shadowColor: "#000000",
+    shadowColor: '#000000',
     shadowOffset: { width: 4, height: 4 }, // Hard shadow
     shadowOpacity: 0.8,
     shadowRadius: 0,

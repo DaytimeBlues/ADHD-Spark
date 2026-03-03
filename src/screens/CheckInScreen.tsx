@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,18 +6,18 @@ import {
   Pressable,
   SafeAreaView,
   Platform,
-} from "react-native";
-import { CosmicBackground, GlowCard, RuneButton } from "../ui/cosmic";
-import { EvidenceBadge } from "../components/ui/EvidenceBadge";
+} from 'react-native';
+import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
+import { EvidenceBadge } from '../components/ui/EvidenceBadge';
 import ActivationService, {
   ActivationSource,
-} from "../services/ActivationService";
-import { ROUTES } from "../navigation/routes";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import CheckInInsightService from "../services/CheckInInsightService";
+} from '../services/ActivationService';
+import { ROUTES } from '../navigation/routes';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import CheckInInsightService from '../services/CheckInInsightService';
 
-const HOVER_SHADOW = "0 0 0 rgba(0,0,0,0)";
+const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 
 type CheckInNavigation = {
   navigate: (route: string) => void;
@@ -36,31 +36,31 @@ export const getRecommendationAction = (
   if (mood >= 4 && energy >= 4) {
     return {
       route: ROUTES.FOCUS,
-      source: "checkin_prompt",
-      cta: "START IGNITE",
+      source: 'checkin_prompt',
+      cta: 'START IGNITE',
     };
   }
 
   if (mood <= 2 && energy <= 2) {
     return {
       route: ROUTES.ANCHOR,
-      source: "checkin_prompt",
-      cta: "OPEN ANCHOR",
+      source: 'checkin_prompt',
+      cta: 'OPEN ANCHOR',
     };
   }
 
   if (energy <= 2) {
     return {
       route: ROUTES.FOG_CUTTER,
-      source: "checkin_prompt",
-      cta: "OPEN FOG CUTTER",
+      source: 'checkin_prompt',
+      cta: 'OPEN FOG CUTTER',
     };
   }
 
   return {
     route: ROUTES.TASKS,
-    source: "checkin_prompt",
-    cta: "OPEN BRAIN DUMP",
+    source: 'checkin_prompt',
+    cta: 'OPEN BRAIN DUMP',
   };
 };
 
@@ -86,61 +86,61 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
 
   const moods = [
     {
-      quote: "“I am a forest, and a night of dark trees.”",
-      author: "Nietzsche",
-      label: "Low",
+      quote: '“I am a forest, and a night of dark trees.”',
+      author: 'Nietzsche',
+      label: 'Low',
       value: 1,
     },
     {
-      quote: "“A melancholy of mine own.”",
-      author: "Shakespeare",
-      label: "Down",
+      quote: '“A melancholy of mine own.”',
+      author: 'Shakespeare',
+      label: 'Down',
       value: 2,
     },
-    { quote: "“I simply am.”", author: "Kafka", label: "Neutral", value: 3 },
+    { quote: '“I simply am.”', author: 'Kafka', label: 'Neutral', value: 3 },
     {
-      quote: "“I celebrate myself, and sing myself.”",
-      author: "Whitman",
-      label: "Good",
+      quote: '“I celebrate myself, and sing myself.”',
+      author: 'Whitman',
+      label: 'Good',
       value: 4,
     },
     {
-      quote: "“I dwell in possibility.”",
-      author: "Dickinson",
-      label: "Great",
+      quote: '“I dwell in possibility.”',
+      author: 'Dickinson',
+      label: 'Great',
       value: 5,
     },
   ];
 
   const energyLevels = [
     {
-      quote: "“I am worn out with dreams.”",
-      author: "Wilde",
-      label: "Drained",
+      quote: '“I am worn out with dreams.”',
+      author: 'Wilde',
+      label: 'Drained',
       value: 1,
     },
     {
-      quote: "“A strange languor has come over me.”",
-      author: "Shelley",
-      label: "Low",
+      quote: '“A strange languor has come over me.”',
+      author: 'Shelley',
+      label: 'Low',
       value: 2,
     },
     {
-      quote: "“I am awake, and the world is awake.”",
-      author: "Thoreau",
-      label: "Medium",
+      quote: '“I am awake, and the world is awake.”',
+      author: 'Thoreau',
+      label: 'Medium',
       value: 3,
     },
     {
-      quote: "“There is a vitality, a life force.”",
-      author: "Graham",
-      label: "High",
+      quote: '“There is a vitality, a life force.”',
+      author: 'Graham',
+      label: 'High',
       value: 4,
     },
     {
-      quote: "“I contain multitudes.”",
-      author: "Whitman",
-      label: "Full",
+      quote: '“I contain multitudes.”',
+      author: 'Whitman',
+      label: 'Full',
       value: 5,
     },
   ];
@@ -151,23 +151,23 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
     }
     if (mood <= 2 && energy <= 2) {
       return {
-        title: "🌱 GENTLE START",
-        desc: "Try the Anchor breathing exercise to ground yourself.",
+        title: '🌱 GENTLE START',
+        desc: 'Try the Anchor breathing exercise to ground yourself.',
       };
     }
     if (mood >= 4 && energy >= 4) {
       return {
-        title: "🚀 RIDE THE WAVE",
-        desc: "Perfect time for a Ignite focus session!",
+        title: '🚀 RIDE THE WAVE',
+        desc: 'Perfect time for a Ignite focus session!',
       };
     }
     if (energy <= 2) {
       return {
-        title: "💪 MICRO TASK",
-        desc: "Try Fog Cutter with just one micro-step.",
+        title: '💪 MICRO TASK',
+        desc: 'Try Fog Cutter with just one micro-step.',
       };
     }
-    return { title: "📝 BRAIN DUMP", desc: "Clear your mind before starting." };
+    return { title: '📝 BRAIN DUMP', desc: 'Clear your mind before starting.' };
   };
 
   const recommendation = getRecommendation();
@@ -187,12 +187,12 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
             source: action.source,
             requestedAt: new Date().toISOString(),
             context: {
-              reason: "checkin_high_readiness",
+              reason: 'checkin_high_readiness',
             },
           });
         } catch (error) {
           console.warn(
-            "Failed to queue pending ignite start from check-in:",
+            'Failed to queue pending ignite start from check-in:',
             error,
           );
         }
@@ -351,7 +351,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 >
                   {mood !== null && energy !== null
                     ? getRecommendationAction(mood, energy).cta
-                    : "CONTINUE"}
+                    : 'CONTINUE'}
                 </RuneButton>
               </GlowCard>
             )}
@@ -366,38 +366,38 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
     },
     webContainer: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       maxWidth: Tokens.layout.maxWidth.prose,
-      alignSelf: "center",
+      alignSelf: 'center',
     },
     content: {
       flex: 1,
       padding: Tokens.spacing[6],
     },
     title: {
-      fontFamily: isCosmic ? "Space Grotesk" : Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type["4xl"],
-      fontWeight: "800",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
+      fontSize: Tokens.type['4xl'],
+      fontWeight: '800',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
-      textAlign: "center",
-      ...(isCosmic && Platform.OS === "web"
+      textAlign: 'center',
+      ...(isCosmic && Platform.OS === 'web'
         ? {
-            textShadow: "0 0 20px rgba(139, 92, 246, 0.3)",
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
           }
         : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.base,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       marginBottom: Tokens.spacing[4],
-      textAlign: "center",
+      textAlign: 'center',
       letterSpacing: 1,
     },
     rationaleCard: {
@@ -406,51 +406,51 @@ const getStyles = (isCosmic: boolean) =>
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
-      color: isCosmic ? "#2DD4BF" : Tokens.colors.brand[500],
+      fontWeight: '700',
+      color: isCosmic ? '#2DD4BF' : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: Tokens.spacing[2],
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     rationaleText: {
       fontFamily: Tokens.type.fontFamily.body,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       lineHeight: 22,
-      flexWrap: "wrap",
+      flexWrap: 'wrap',
     },
     section: {
       marginBottom: Tokens.spacing[8],
     },
     sectionTitle: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       fontSize: Tokens.type.sm,
-      fontWeight: "600",
+      fontWeight: '600',
       marginBottom: Tokens.spacing[4],
       letterSpacing: 1,
     },
     options: {
-      flexDirection: "column",
+      flexDirection: 'column',
       gap: Tokens.spacing[3],
     },
     option: {
       padding: Tokens.spacing[5],
       borderRadius: isCosmic ? 20 : Tokens.radii.none,
       backgroundColor: isCosmic
-        ? "rgba(14, 20, 40, 0.6)"
+        ? 'rgba(14, 20, 40, 0.6)'
         : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(185, 194, 217, 0.12)"
+        ? 'rgba(185, 194, 217, 0.12)'
         : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
-          transition: "all 0.2s ease",
-          cursor: "pointer",
+          transition: 'all 0.2s ease',
+          cursor: 'pointer',
           ...(isCosmic
             ? {
-                backdropFilter: "blur(8px)",
+                backdropFilter: 'blur(8px)',
               }
             : {}),
         },
@@ -458,7 +458,7 @@ const getStyles = (isCosmic: boolean) =>
     },
     optionHovered: {
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.5)"
+        ? 'rgba(139, 92, 246, 0.5)'
         : Tokens.colors.text.tertiary,
       transform: [{ translateY: -2 }],
       ...Platform.select({
@@ -469,14 +469,14 @@ const getStyles = (isCosmic: boolean) =>
     },
     optionPressed: {
       transform: [{ scale: Tokens.motion.scales.press }],
-      backgroundColor: isCosmic ? "#111A33" : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
     },
     selected: {
-      borderColor: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
-      borderTopColor: isCosmic ? "#A78BFA" : undefined, // Concept #43: Highlight
+      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      borderTopColor: isCosmic ? '#A78BFA' : undefined, // Concept #43: Highlight
       borderTopWidth: isCosmic ? 2 : 1,
       backgroundColor: isCosmic
-        ? "rgba(139, 92, 246, 0.18)"
+        ? 'rgba(139, 92, 246, 0.18)'
         : Tokens.colors.brand[900],
       transform: [{ translateY: -4 }, { scale: 1.01 }],
       ...Tokens.elevation.none,
@@ -484,15 +484,15 @@ const getStyles = (isCosmic: boolean) =>
         web: isCosmic
           ? {
               boxShadow:
-                "0 0 0 2px rgba(139,92,246,0.4), 0 0 20px rgba(139,92,246,0.25)",
+                '0 0 0 2px rgba(139,92,246,0.4), 0 0 20px rgba(139,92,246,0.25)',
             }
           : {
-              boxShadow: "0 0 0 0",
+              boxShadow: '0 0 0 0',
             },
       }),
     },
     optionContent: {
-      flexDirection: "column",
+      flexDirection: 'column',
       gap: 2,
     },
     quote: {
@@ -500,32 +500,32 @@ const getStyles = (isCosmic: boolean) =>
         ? '"Space Grotesk", sans-serif'
         : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
-      fontStyle: "italic",
+      fontStyle: 'italic',
       color: isCosmic
-        ? "rgba(238, 242, 255, 0.78)"
+        ? 'rgba(238, 242, 255, 0.78)'
         : Tokens.colors.text.secondary,
       lineHeight: 22,
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[1],
     },
     selectedQuote: {
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     },
     author: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.tertiary,
-      alignSelf: "flex-end",
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      alignSelf: 'flex-end',
     },
     label: {
       fontFamily: Tokens.type.fontFamily.mono,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
+      fontWeight: '700',
       letterSpacing: 1,
     },
     selectedLabel: {
-      color: isCosmic ? "#2DD4BF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#2DD4BF' : Tokens.colors.text.primary,
     },
     recommendation: {
       marginTop: Tokens.spacing[4],
@@ -533,21 +533,21 @@ const getStyles = (isCosmic: boolean) =>
     recommendationTitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[1],
     },
     recommendationSubtitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "600",
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.tertiary,
+      fontWeight: '600',
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
       letterSpacing: 1,
       marginBottom: Tokens.spacing[3],
     },
     recommendationText: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.primary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.primary,
       fontSize: Tokens.type.base,
       lineHeight: Tokens.type.base * 1.5,
       marginBottom: Tokens.spacing[2],
@@ -558,10 +558,10 @@ const getStyles = (isCosmic: boolean) =>
     },
     insightBox: {
       backgroundColor: isCosmic
-        ? "rgba(139, 92, 246, 0.1)"
+        ? 'rgba(139, 92, 246, 0.1)'
         : Tokens.colors.neutral.darkest,
       borderLeftWidth: 2,
-      borderLeftColor: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      borderLeftColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       padding: Tokens.spacing[3],
       marginVertical: Tokens.spacing[4],
       borderRadius: isCosmic ? 4 : 0,
@@ -569,15 +569,15 @@ const getStyles = (isCosmic: boolean) =>
     insightLabel: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       marginBottom: 4,
       letterSpacing: 1,
     },
     insightText: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
-      fontStyle: "italic",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontStyle: 'italic',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       lineHeight: 20,
     },
   });

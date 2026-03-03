@@ -1,12 +1,12 @@
-import React from "react";
-import { Pressable, Text, StyleSheet, ViewStyle, View } from "react-native";
+import React from 'react';
+import { Pressable, Text, StyleSheet, ViewStyle, View } from 'react-native';
 import {
   MetroPalette,
   MetroSpacing,
   MetroTypography,
-} from "../../theme/metroTheme";
+} from '../../theme/metroTheme';
 
-type TileSize = "small" | "medium" | "wide";
+type TileSize = 'small' | 'medium' | 'wide';
 
 interface MetroTileProps {
   title: string;
@@ -22,7 +22,7 @@ export const MetroTile: React.FC<MetroTileProps> = ({
   title,
   count,
   icon,
-  size = "medium",
+  size = 'medium',
   accentColor = MetroPalette.blue,
   onPress,
   style,
@@ -31,11 +31,11 @@ export const MetroTile: React.FC<MetroTileProps> = ({
     // Assuming a base unit width for the grid column
     // This is approximate; in a real grid this would be controlled by parent
     switch (tileSize) {
-      case "small":
+      case 'small':
         return { width: 100, height: 100 };
-      case "medium":
+      case 'medium':
         return { width: 150, height: 150 };
-      case "wide":
+      case 'wide':
         return { width: 310, height: 150 }; // 2x medium + gutter
       default:
         return { width: 150, height: 150 };
@@ -70,7 +70,7 @@ export const MetroTile: React.FC<MetroTileProps> = ({
 const styles = StyleSheet.create({
   base: {
     padding: MetroSpacing.m,
-    justifyContent: "flex-end", // Text at bottom
+    justifyContent: 'flex-end', // Text at bottom
     marginBottom: MetroSpacing.gutter,
     marginRight: MetroSpacing.gutter,
     borderRadius: 0,
@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   topRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginBottom: MetroSpacing.s,
   },
   iconContainer: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     fontSize: MetroTypography.sizes.h3,
     fontWeight: MetroTypography.weights.regular,
     color: MetroPalette.white,
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     right: 0,
   },
@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
     fontSize: MetroTypography.sizes.body,
     fontWeight: MetroTypography.weights.regular,
     color: MetroPalette.white,
-    marginTop: "auto", // Pushes to bottom if no flex
+    marginTop: 'auto', // Pushes to bottom if no flex
   },
 });

@@ -1,4 +1,4 @@
-import { useTimerStore } from "../store/useTimerStore";
+import { useTimerStore } from '../store/useTimerStore';
 
 /**
  * TimerService
@@ -17,7 +17,7 @@ class TimerServiceClass {
 
   private checkE2EMode() {
     const globalRecord =
-      typeof globalThis === "undefined"
+      typeof globalThis === 'undefined'
         ? null
         : (globalThis as unknown as Record<string, unknown>);
 

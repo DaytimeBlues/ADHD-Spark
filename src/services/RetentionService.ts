@@ -1,6 +1,6 @@
-import StorageService from "./StorageService";
+import StorageService from './StorageService';
 
-export type ReentryPromptLevel = "none" | "gentle_restart" | "fresh_restart";
+export type ReentryPromptLevel = 'none' | 'gentle_restart' | 'fresh_restart';
 
 const GRACE_DAYS_PER_WINDOW = 1;
 const GRACE_WINDOW_DAYS = 7;
@@ -10,13 +10,13 @@ const getDateOnly = (isoDate: string): string => {
 };
 
 const dayDifference = (fromISO: string, toISO: string): number => {
-  const from = new Date(fromISO + "T00:00:00Z").getTime();
-  const to = new Date(toISO + "T00:00:00Z").getTime();
+  const from = new Date(fromISO + 'T00:00:00Z').getTime();
+  const to = new Date(toISO + 'T00:00:00Z').getTime();
   return Math.floor((to - from) / (24 * 60 * 60 * 1000));
 };
 
 const parsePositiveInt = (raw: string | null, fallback: number): number => {
-  const parsed = Number.parseInt(raw ?? "", 10);
+  const parsed = Number.parseInt(raw ?? '', 10);
   if (Number.isNaN(parsed) || parsed < 0) {
     return fallback;
   }
@@ -36,7 +36,7 @@ const RetentionService = {
         StorageService.get(StorageService.STORAGE_KEYS.retentionGraceDaysUsed),
       ]);
 
-    const currentStreak = Number.parseInt(streakRaw ?? "0", 10) || 0;
+    const currentStreak = Number.parseInt(streakRaw ?? '0', 10) || 0;
     const activeWindowStart =
       graceWindowStart &&
       dayDifference(graceWindowStart, today) >= 0 &&
@@ -49,10 +49,10 @@ const RetentionService = {
         : 0;
 
     if (!lastUseDate) {
-      if (typeof StorageService.set === "function") {
+      if (typeof StorageService.set === 'function') {
         await Promise.all([
           StorageService.set(StorageService.STORAGE_KEYS.lastUseDate, today),
-          StorageService.set(StorageService.STORAGE_KEYS.streakCount, "1"),
+          StorageService.set(StorageService.STORAGE_KEYS.streakCount, '1'),
           StorageService.set(
             StorageService.STORAGE_KEYS.retentionGraceWindowStart,
             activeWindowStart,
@@ -80,7 +80,7 @@ const RetentionService = {
       ? graceDaysUsed + 1
       : graceDaysUsed;
 
-    if (typeof StorageService.set === "function") {
+    if (typeof StorageService.set === 'function') {
       await Promise.all([
         StorageService.set(StorageService.STORAGE_KEYS.lastUseDate, today),
         StorageService.set(
@@ -109,21 +109,21 @@ const RetentionService = {
     );
 
     if (!lastUseDate) {
-      return "none";
+      return 'none';
     }
 
     const today = getDateOnly(now.toISOString());
     const diff = dayDifference(lastUseDate, today);
 
     if (diff <= 1) {
-      return "none";
+      return 'none';
     }
 
     if (diff <= 3) {
-      return "gentle_restart";
+      return 'gentle_restart';
     }
 
-    return "fresh_restart";
+    return 'fresh_restart';
   },
 };
 

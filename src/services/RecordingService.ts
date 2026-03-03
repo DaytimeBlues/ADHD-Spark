@@ -1,4 +1,4 @@
-import { LoggerService } from "./LoggerService";
+import { LoggerService } from './LoggerService';
 
 /**
  * RecordingService
@@ -44,7 +44,7 @@ interface E2ERecordingMock {
 }
 
 const getE2ERecordingMock = (): E2ERecordingMock | null => {
-  if (typeof globalThis === "undefined") {
+  if (typeof globalThis === 'undefined') {
     return null;
   }
 
@@ -54,7 +54,7 @@ const getE2ERecordingMock = (): E2ERecordingMock | null => {
   }
 
   const mock = globalRecord.__SPARK_E2E_RECORDING_MOCK__;
-  if (!mock || typeof mock !== "object") {
+  if (!mock || typeof mock !== 'object') {
     return null;
   }
 
@@ -63,7 +63,7 @@ const getE2ERecordingMock = (): E2ERecordingMock | null => {
 
 const loadAudioModule = (): AudioModule | null => {
   try {
-    const module = require("expo-av") as { Audio?: AudioModule };
+    const module = require('expo-av') as { Audio?: AudioModule };
     return module.Audio ?? null;
   } catch {
     return null;
@@ -81,17 +81,17 @@ class RecordingServiceClass {
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn("Recording unavailable: expo-av is not installed");
+        console.warn('Recording unavailable: expo-av is not installed');
         return false;
       }
 
       const { status } = await Audio.requestPermissionsAsync();
-      return status === "granted";
+      return status === 'granted';
     } catch (error) {
       LoggerService.error({
-        service: "RecordingService",
-        operation: "requestPermissions",
-        message: "Permission request failed",
+        service: 'RecordingService',
+        operation: 'requestPermissions',
+        message: 'Permission request failed',
         error,
       });
       return false;
@@ -112,14 +112,14 @@ class RecordingServiceClass {
     }
 
     if (this.isRecording) {
-      console.warn("Already recording");
+      console.warn('Already recording');
       return false;
     }
 
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn("Recording unavailable: expo-av is not installed");
+        console.warn('Recording unavailable: expo-av is not installed');
         return false;
       }
 
@@ -127,9 +127,9 @@ class RecordingServiceClass {
       const hasPermission = await this.requestPermissions();
       if (!hasPermission) {
         LoggerService.error({
-          service: "RecordingService",
-          operation: "startRecording",
-          message: "Microphone permission not granted",
+          service: 'RecordingService',
+          operation: 'startRecording',
+          message: 'Microphone permission not granted',
         });
         return false;
       }
@@ -149,13 +149,13 @@ class RecordingServiceClass {
       this.recording = recording;
       this.isRecording = true;
 
-      console.log("Recording started");
+      console.log('Recording started');
       return true;
     } catch (error) {
       LoggerService.error({
-        service: "RecordingService",
-        operation: "startRecording",
-        message: "Failed to start recording",
+        service: 'RecordingService',
+        operation: 'startRecording',
+        message: 'Failed to start recording',
         error,
       });
       return false;
@@ -175,20 +175,20 @@ class RecordingServiceClass {
 
       this.isRecording = false;
       return {
-        uri: e2eMock.uri ?? "mock://spark-recording.m4a",
+        uri: e2eMock.uri ?? 'mock://spark-recording.m4a',
         duration: e2eMock.duration ?? 1500,
       };
     }
 
     if (!this.recording || !this.isRecording) {
-      console.warn("No active recording");
+      console.warn('No active recording');
       return null;
     }
 
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn("Recording unavailable: expo-av is not installed");
+        console.warn('Recording unavailable: expo-av is not installed');
         this.recording = null;
         this.isRecording = false;
         return null;
@@ -209,23 +209,23 @@ class RecordingServiceClass {
 
       if (!uri) {
         LoggerService.error({
-          service: "RecordingService",
-          operation: "stopRecording",
-          message: "No recording URI",
+          service: 'RecordingService',
+          operation: 'stopRecording',
+          message: 'No recording URI',
         });
         return null;
       }
 
-      console.log("Recording stopped:", uri);
+      console.log('Recording stopped:', uri);
       return {
         uri,
         duration: status.durationMillis || 0,
       };
     } catch (error) {
       LoggerService.error({
-        service: "RecordingService",
-        operation: "stopRecording",
-        message: "Failed to stop recording",
+        service: 'RecordingService',
+        operation: 'stopRecording',
+        message: 'Failed to stop recording',
         error,
       });
       this.recording = null;

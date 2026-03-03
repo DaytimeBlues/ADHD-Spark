@@ -1,4 +1,4 @@
-jest.mock("react-native-sound", () => {
+jest.mock('react-native-sound', () => {
   const MockSound = function (
     this: any,
     _file: string,
@@ -16,21 +16,21 @@ jest.mock("react-native-sound", () => {
     }
   };
 
-  (MockSound as any).MAIN_BUNDLE = "main";
+  (MockSound as any).MAIN_BUNDLE = 'main';
   return MockSound;
 });
 
-jest.mock("../src/services/LoggerService", () => ({
+jest.mock('../src/services/LoggerService', () => ({
   __esModule: true,
   LoggerService: {
     error: jest.fn(),
   },
 }));
 
-import SoundService from "../src/services/SoundService";
+import SoundService from '../src/services/SoundService';
 
-describe("SoundService", () => {
-  it("runs all sound methods without throwing", async () => {
+describe('SoundService', () => {
+  it('runs all sound methods without throwing', async () => {
     await expect(SoundService.initBrownNoise()).resolves.toBeUndefined();
 
     expect(() => SoundService.playBrownNoise()).not.toThrow();

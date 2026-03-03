@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface ExampleTaskChipProps {
   label: string;
@@ -21,10 +21,10 @@ const ExampleTaskChip: React.FC<ExampleTaskChipProps> = ({
         styles.chip,
         {
           backgroundColor: isCosmic
-            ? "rgba(139, 92, 246, 0.2)"
+            ? 'rgba(139, 92, 246, 0.2)'
             : Tokens.colors.neutral.darker,
           borderColor: isCosmic
-            ? "rgba(139, 92, 246, 0.4)"
+            ? 'rgba(139, 92, 246, 0.4)'
             : Tokens.colors.neutral.border,
         },
         pressed && styles.chipPressed,
@@ -33,7 +33,7 @@ const ExampleTaskChip: React.FC<ExampleTaskChipProps> = ({
       <Text
         style={[
           styles.chipText,
-          { color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary },
+          { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
         ]}
       >
         {label}
@@ -47,11 +47,11 @@ interface EmptyStateExamplesProps {
 }
 
 const EXAMPLE_TASKS = [
-  "Clean my room",
-  "Write an email",
-  "Study for exam",
-  "Plan dinner",
-  "Fix the bug",
+  'Clean my room',
+  'Write an email',
+  'Study for exam',
+  'Plan dinner',
+  'Fix the bug',
 ];
 
 export const EmptyStateExamples: React.FC<EmptyStateExamplesProps> = ({
@@ -64,7 +64,7 @@ export const EmptyStateExamples: React.FC<EmptyStateExamplesProps> = ({
       <Text
         style={[
           styles.title,
-          { color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500] },
+          { color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500] },
         ]}
       >
         TRY AN EXAMPLE
@@ -85,20 +85,20 @@ export const EmptyStateExamples: React.FC<EmptyStateExamplesProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginTop: Tokens.spacing[4],
-    alignItems: "center",
+    alignItems: 'center',
   },
   title: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
     marginBottom: Tokens.spacing[3],
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   chipContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: Tokens.spacing[2],
   },
   chip: {

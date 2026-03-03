@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
-import { View, TextInput, StyleSheet, Platform } from "react-native";
-import { LinearButton } from "../../components/ui/LinearButton";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React, { useState, useRef } from 'react';
+import { View, TextInput, StyleSheet, Platform } from 'react-native';
+import { LinearButton } from '../../components/ui/LinearButton';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 export interface BrainDumpInputProps {
   onAdd: (text: string) => void;
@@ -11,14 +11,14 @@ export interface BrainDumpInputProps {
 export const BrainDumpInput: React.FC<BrainDumpInputProps> = ({ onAdd }) => {
   const { isCosmic } = useTheme();
   const styles = getStyles(isCosmic);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
   const handleAdd = () => {
     if (input.trim()) {
       onAdd(input.trim());
-      setInput("");
+      setInput('');
     }
   };
 
@@ -57,42 +57,42 @@ export const BrainDumpInput: React.FC<BrainDumpInputProps> = ({ onAdd }) => {
 const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     inputSection: {
-      flexDirection: "row",
+      flexDirection: 'row',
       marginBottom: isCosmic ? 16 : Tokens.spacing[5],
       gap: isCosmic ? 8 : Tokens.spacing[2],
-      alignItems: "center",
+      alignItems: 'center',
     },
     inputWrapper: {
       flex: 1,
       backgroundColor: isCosmic
-        ? "rgba(11, 16, 34, 0.8)"
+        ? 'rgba(11, 16, 34, 0.8)'
         : Tokens.colors.neutral.darker,
       borderRadius: isCosmic ? 12 : Tokens.radii.none,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.25)"
+        ? 'rgba(139, 92, 246, 0.25)'
         : Tokens.colors.neutral.border,
       minHeight: 48,
-      justifyContent: "center",
+      justifyContent: 'center',
       ...(isCosmic
         ? Platform.select({
             web: {
-              backdropFilter: "blur(12px)",
+              backdropFilter: 'blur(12px)',
               boxShadow: `
               0 0 0 1px rgba(139, 92, 246, 0.1),
               inset 0 1px 0 rgba(255, 255, 255, 0.03),
               0 4px 16px rgba(7, 7, 18, 0.3)
             `,
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             },
           })
         : Platform.select({
-            web: { transition: "all 0.2s ease" },
+            web: { transition: 'all 0.2s ease' },
           })),
     },
     inputWrapperFocused: {
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.8)"
+        ? 'rgba(139, 92, 246, 0.8)'
         : Tokens.colors.text.primary,
       ...(isCosmic
         ? Platform.select({
@@ -108,21 +108,21 @@ const getStyles = (isCosmic: boolean) =>
     },
     input: {
       paddingHorizontal: Tokens.spacing[3],
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
       minHeight: 48,
-      textAlignVertical: "center",
+      textAlignVertical: 'center',
       paddingVertical: 0,
       ...Platform.select({
-        web: { outlineStyle: "none" } as any,
+        web: { outlineStyle: 'none' } as any,
       }),
     },
     addButton: {
       minHeight: 48,
       width: 60,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
     },
   });

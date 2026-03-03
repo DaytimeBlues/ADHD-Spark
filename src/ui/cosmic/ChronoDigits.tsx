@@ -5,12 +5,12 @@
  * Prevents layout shift during countdown with fixed-width digits.
  */
 
-import React, { memo, useMemo } from "react";
-import { Text, TextStyle, Platform } from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { LinearTokens } from "../../theme/linearTokens";
-import { cosmicTypography, textGlowStyles } from "../../theme/cosmicTokens";
-import { TimerSize, TimerColor, GlowLevel } from "./types";
+import React, { memo, useMemo } from 'react';
+import { Text, TextStyle, Platform } from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { LinearTokens } from '../../theme/linearTokens';
+import { cosmicTypography, textGlowStyles } from '../../theme/cosmicTokens';
+import { TimerSize, TimerColor, GlowLevel } from './types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -63,9 +63,9 @@ export interface ChronoDigitsProps {
  */
 export const ChronoDigits = memo(function ChronoDigits({
   value,
-  size = "lg",
-  glow = "none",
-  color = "default",
+  size = 'lg',
+  glow = 'none',
+  color = 'default',
   testID,
   style,
 }: ChronoDigitsProps) {
@@ -74,13 +74,13 @@ export const ChronoDigits = memo(function ChronoDigits({
   // Get font size based on size variant
   const getFontSize = useMemo(() => {
     switch (size) {
-      case "sm":
+      case 'sm':
         return 24;
-      case "md":
+      case 'md':
         return 36;
-      case "lg":
+      case 'lg':
         return 48;
-      case "hero":
+      case 'hero':
         return 72;
       default:
         return 48;
@@ -88,18 +88,18 @@ export const ChronoDigits = memo(function ChronoDigits({
   }, [size]);
 
   // Get font weight based on size
-  const getFontWeight = useMemo((): TextStyle["fontWeight"] => {
+  const getFontWeight = useMemo((): TextStyle['fontWeight'] => {
     switch (size) {
-      case "sm":
-        return "400";
-      case "md":
-        return "400";
-      case "lg":
-        return "600";
-      case "hero":
-        return "700";
+      case 'sm':
+        return '400';
+      case 'md':
+        return '400';
+      case 'lg':
+        return '600';
+      case 'hero':
+        return '700';
       default:
-        return "600";
+        return '600';
     }
   }, [size]);
 
@@ -109,13 +109,13 @@ export const ChronoDigits = memo(function ChronoDigits({
       // Linear theme colors — cast is safe: !isCosmic guarantees t is LinearTokens
       const lt = t as typeof LinearTokens;
       switch (color) {
-        case "success":
+        case 'success':
           return lt.colors.success.main;
-        case "warning":
+        case 'warning':
           return lt.colors.warning.main;
-        case "neutral":
+        case 'neutral':
           return lt.colors.neutral[400];
-        case "default":
+        case 'default':
         default:
           return lt.colors.neutral[0];
       }
@@ -123,22 +123,22 @@ export const ChronoDigits = memo(function ChronoDigits({
 
     // Cosmic theme colors
     switch (color) {
-      case "success":
-        return "#2DD4BF"; // auroraTeal
-      case "warning":
-        return "#F6C177"; // starlightGold
-      case "neutral":
-        return "#B9C2D9"; // mist
-      case "default":
+      case 'success':
+        return '#2DD4BF'; // auroraTeal
+      case 'warning':
+        return '#F6C177'; // starlightGold
+      case 'neutral':
+        return '#B9C2D9'; // mist
+      case 'default':
       default:
-        return "#EEF2FF"; // starlight
+        return '#EEF2FF'; // starlight
     }
   }, [isCosmic, t, color]);
 
   // Get glow text shadow style
   // Per research spec: use textGlowStyles from tokens
   const getGlowStyle = useMemo((): TextStyle => {
-    if (!isCosmic || glow === "none") {
+    if (!isCosmic || glow === 'none') {
       return {};
     }
 
@@ -146,19 +146,19 @@ export const ChronoDigits = memo(function ChronoDigits({
     const baseGlow = textGlowStyles[glow] || {};
 
     // Adjust color based on variant
-    if (color === "success") {
+    if (color === 'success') {
       return (Platform.select({
         web: {
-          textShadow: "0 0 18px rgba(45, 212, 191, 0.40)",
+          textShadow: '0 0 18px rgba(45, 212, 191, 0.40)',
         },
         default: {},
       }) ?? {}) as TextStyle;
     }
 
-    if (color === "warning") {
+    if (color === 'warning') {
       return (Platform.select({
         web: {
-          textShadow: "0 0 18px rgba(246, 193, 119, 0.40)",
+          textShadow: '0 0 18px rgba(246, 193, 119, 0.40)',
         },
         default: {},
       }) ?? {}) as TextStyle;
@@ -172,21 +172,21 @@ export const ChronoDigits = memo(function ChronoDigits({
   const textStyle = useMemo(
     (): TextStyle => ({
       fontSize: getFontSize,
-      fontWeight: isCosmic ? "400" : getFontWeight,
+      fontWeight: isCosmic ? '400' : getFontWeight,
       color: getColor,
       fontFamily: isCosmic
         ? cosmicTypography.timer.fontFamily
         : Platform.select({
-            web: "JetBrains Mono, Fira Code, SF Mono, Consolas, monospace",
-            ios: "Menlo",
-            android: "monospace",
-            default: "monospace",
+            web: 'JetBrains Mono, Fira Code, SF Mono, Consolas, monospace',
+            ios: 'Menlo',
+            android: 'monospace',
+            default: 'monospace',
           }),
       // Tabular nums prevents layout shift during countdown
-      fontVariant: ["tabular-nums"],
+      fontVariant: ['tabular-nums'],
       letterSpacing: isCosmic
         ? cosmicTypography.timer.letterSpacing
-        : size === "hero"
+        : size === 'hero'
           ? -0.02
           : 0,
       ...getGlowStyle,

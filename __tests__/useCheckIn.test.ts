@@ -1,9 +1,9 @@
-import { renderHook, act } from "@testing-library/react-native";
-import { useCheckIn } from "../src/hooks/useCheckIn";
-import { CheckInService } from "../src/services/CheckInService";
+import { renderHook, act } from '@testing-library/react-native';
+import { useCheckIn } from '../src/hooks/useCheckIn';
+import { CheckInService } from '../src/services/CheckInService';
 
 // Mock CheckInService
-jest.mock("../src/services/CheckInService", () => ({
+jest.mock('../src/services/CheckInService', () => ({
   CheckInService: {
     isPending: jest.fn().mockReturnValue(false),
     subscribe: jest.fn(),
@@ -13,12 +13,12 @@ jest.mock("../src/services/CheckInService", () => ({
   },
 }));
 
-describe("useCheckIn", () => {
+describe('useCheckIn', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should initialize with CheckInService pending status", () => {
+  it('should initialize with CheckInService pending status', () => {
     (CheckInService.isPending as jest.Mock).mockReturnValue(true);
 
     const { result } = renderHook(() => useCheckIn());
@@ -27,13 +27,13 @@ describe("useCheckIn", () => {
     expect(result.current.isPending).toBe(true);
   });
 
-  it("should subscribe to CheckInService on mount", () => {
+  it('should subscribe to CheckInService on mount', () => {
     renderHook(() => useCheckIn());
 
     expect(CheckInService.subscribe).toHaveBeenCalled();
   });
 
-  it("should update isPending when service notifies", () => {
+  it('should update isPending when service notifies', () => {
     let subscriberCallback: ((pending: boolean) => void) | null = null;
 
     (CheckInService.subscribe as jest.Mock).mockImplementation(
@@ -56,7 +56,7 @@ describe("useCheckIn", () => {
     expect(result.current.isPending).toBe(true);
   });
 
-  it("should unsubscribe from CheckInService on unmount", () => {
+  it('should unsubscribe from CheckInService on unmount', () => {
     const unsubscribe = jest.fn();
     (CheckInService.subscribe as jest.Mock).mockReturnValue(unsubscribe);
 
@@ -67,25 +67,25 @@ describe("useCheckIn", () => {
     expect(unsubscribe).toHaveBeenCalled();
   });
 
-  it("should provide setPending function", () => {
+  it('should provide setPending function', () => {
     const { result } = renderHook(() => useCheckIn());
 
-    expect(typeof result.current.setPending).toBe("function");
+    expect(typeof result.current.setPending).toBe('function');
   });
 
-  it("should provide start function", () => {
+  it('should provide start function', () => {
     const { result } = renderHook(() => useCheckIn());
 
-    expect(typeof result.current.start).toBe("function");
+    expect(typeof result.current.start).toBe('function');
   });
 
-  it("should provide stop function", () => {
+  it('should provide stop function', () => {
     const { result } = renderHook(() => useCheckIn());
 
-    expect(typeof result.current.stop).toBe("function");
+    expect(typeof result.current.stop).toBe('function');
   });
 
-  it("should call CheckInService.setPending when setPending is called", () => {
+  it('should call CheckInService.setPending when setPending is called', () => {
     const { result } = renderHook(() => useCheckIn());
 
     result.current.setPending(true);
@@ -93,7 +93,7 @@ describe("useCheckIn", () => {
     expect(CheckInService.setPending).toHaveBeenCalledWith(true);
   });
 
-  it("should call CheckInService.start when start is called", () => {
+  it('should call CheckInService.start when start is called', () => {
     const { result } = renderHook(() => useCheckIn());
 
     result.current.start(5000);
@@ -101,7 +101,7 @@ describe("useCheckIn", () => {
     expect(CheckInService.start).toHaveBeenCalledWith(5000);
   });
 
-  it("should call CheckInService.stop when stop is called", () => {
+  it('should call CheckInService.stop when stop is called', () => {
     const { result } = renderHook(() => useCheckIn());
 
     result.current.stop();

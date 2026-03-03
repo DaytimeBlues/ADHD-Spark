@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { zustandStorage } from "../services/StorageService";
-import { NotificationService } from "../services/NotificationService";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { zustandStorage } from '../services/StorageService';
+import { NotificationService } from '../services/NotificationService';
 
-export type TimerMode = "pomodoro" | "ignite" | "fog_cutter" | null;
+export type TimerMode = 'pomodoro' | 'ignite' | 'fog_cutter' | null;
 
 interface TimerState {
   activeMode: TimerMode;
@@ -53,11 +53,11 @@ export const useTimerStore = create<TimerState>()(
           isWorking,
         });
 
-        const title = isWorking ? "Focus Session Complete" : "Break Finished";
+        const title = isWorking ? 'Focus Session Complete' : 'Break Finished';
         const body =
-          mode === "pomodoro"
-            ? "Time to switch gears!"
-            : "Your timer has finished.";
+          mode === 'pomodoro'
+            ? 'Time to switch gears!'
+            : 'Your timer has finished.';
         NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },
 
@@ -87,9 +87,9 @@ export const useTimerStore = create<TimerState>()(
         });
 
         const title = state.isWorking
-          ? "Focus Session Complete"
-          : "Break Finished";
-        const body = "Your resumed timer has finished.";
+          ? 'Focus Session Complete'
+          : 'Break Finished';
+        const body = 'Your resumed timer has finished.';
         NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
       },
 
@@ -151,7 +151,7 @@ export const useTimerStore = create<TimerState>()(
       },
     }),
     {
-      name: "timer-storage",
+      name: 'timer-storage',
       storage: createJSONStorage(() => zustandStorage),
       // Only persist essential state, not necessarily the exact second boundary
       partialize: (state) => ({

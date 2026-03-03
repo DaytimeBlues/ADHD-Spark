@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   fireEvent,
   render,
   screen,
   waitFor,
-} from "@testing-library/react-native";
+} from '@testing-library/react-native';
 import CheckInScreen, {
   getRecommendationAction,
-} from "../src/screens/CheckInScreen";
+} from '../src/screens/CheckInScreen';
 
 const mockRequestPendingStart = jest.fn();
 
-jest.mock("../src/services/ActivationService", () => ({
+jest.mock('../src/services/ActivationService', () => ({
   __esModule: true,
   default: {
     requestPendingStart: (...args: unknown[]) =>
@@ -20,14 +20,14 @@ jest.mock("../src/services/ActivationService", () => ({
 }));
 
 // Mock CheckInInsightService to prevent async fetch calls
-jest.mock("../src/services/CheckInInsightService", () => ({
+jest.mock('../src/services/CheckInInsightService', () => ({
   __esModule: true,
   default: {
     getPersonalizedInsight: jest.fn().mockResolvedValue(null),
   },
 }));
 
-jest.mock("../src/components/ui/LinearButton", () => ({
+jest.mock('../src/components/ui/LinearButton', () => ({
   LinearButton: ({
     title,
     onPress,
@@ -35,7 +35,7 @@ jest.mock("../src/components/ui/LinearButton", () => ({
     title: string;
     onPress: () => void;
   }) => {
-    const { Pressable, Text } = require("react-native");
+    const { Pressable, Text } = require('react-native');
     return (
       <Pressable onPress={onPress}>
         <Text>{title}</Text>
@@ -44,7 +44,7 @@ jest.mock("../src/components/ui/LinearButton", () => ({
   },
 }));
 
-describe("CheckInScreen", () => {
+describe('CheckInScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockRequestPendingStart.mockResolvedValue(undefined);
@@ -54,52 +54,55 @@ describe("CheckInScreen", () => {
     jest.clearAllMocks();
   });
 
-  it("maps high readiness to focus ignite action", () => {
+  it('maps high readiness to focus ignite action', () => {
     const action = getRecommendationAction(5, 5);
-    expect(action.route).toBe("Focus");
-    expect(action.cta).toBe("START IGNITE");
+    expect(action.route).toBe('Focus');
+    expect(action.cta).toBe('START IGNITE');
   });
 
-  it("queues pending ignite start and navigates on high readiness CTA", async () => {
+  it('queues pending ignite start and navigates on high readiness CTA', async () => {
     const navigate = jest.fn();
 
     render(<CheckInScreen navigation={{ navigate }} />);
 
-    fireEvent.press(screen.getByTestId("mood-option-5"));
-    fireEvent.press(screen.getByTestId("energy-option-5"));
+    fireEvent.press(screen.getByTestId('mood-option-5'));
+    fireEvent.press(screen.getByTestId('energy-option-5'));
 
-    const cta = await screen.findByText("START IGNITE");
+    const cta = await screen.findByText('START IGNITE');
     fireEvent.press(cta);
 
     expect(mockRequestPendingStart).toHaveBeenCalledWith(
       expect.objectContaining({
-        source: "checkin_prompt",
+        source: 'checkin_prompt',
       }),
     );
-    await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith("Focus");
-    }, { timeout: 10000 });
+    await waitFor(
+      () => {
+        expect(navigate).toHaveBeenCalledWith('Focus');
+      },
+      { timeout: 10000 },
+    );
   }, 10000);
 
-  it("still navigates to focus when pending start queue fails", async () => {
+  it('still navigates to focus when pending start queue fails', async () => {
     const navigate = jest.fn();
-    mockRequestPendingStart.mockRejectedValueOnce(new Error("storage down"));
+    mockRequestPendingStart.mockRejectedValueOnce(new Error('storage down'));
 
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     render(<CheckInScreen navigation={{ navigate }} />);
 
-    fireEvent.press(screen.getByTestId("mood-option-5"));
-    fireEvent.press(screen.getByTestId("energy-option-5"));
+    fireEvent.press(screen.getByTestId('mood-option-5'));
+    fireEvent.press(screen.getByTestId('energy-option-5'));
 
-    const cta = await screen.findByText("START IGNITE");
+    const cta = await screen.findByText('START IGNITE');
     fireEvent.press(cta);
 
     await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith("Focus");
+      expect(navigate).toHaveBeenCalledWith('Focus');
     });
     expect(warnSpy).toHaveBeenCalledWith(
-      "Failed to queue pending ignite start from check-in:",
+      'Failed to queue pending ignite start from check-in:',
       expect.any(Error),
     );
 

@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { LayoutAnimation, Platform, UIManager } from "react-native";
-import StorageService from "../services/StorageService";
-import UXMetricsService from "../services/UXMetricsService";
-import { LoggerService } from "../services/LoggerService";
-import HapticsService from "../services/HapticsService";
-import { generateId } from "../utils/helpers";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import StorageService from '../services/StorageService';
+import UXMetricsService from '../services/UXMetricsService';
+import { LoggerService } from '../services/LoggerService';
+import HapticsService from '../services/HapticsService';
+import { generateId } from '../utils/helpers';
 import {
   MicroStep,
   advanceTaskProgress,
   normalizeMicroSteps,
-} from "../utils/fogCutter";
+} from '../utils/fogCutter';
 
 export interface Task {
   id: string;
@@ -47,9 +47,9 @@ interface UseFogCutterReturn {
 export const useFogCutter = (
   onTaskSaved?: (taskId: string) => void,
 ): UseFogCutterReturn => {
-  const [task, setTask] = useState("");
+  const [task, setTask] = useState('');
   const [microSteps, setMicroSteps] = useState<string[]>([]);
-  const [newStep, setNewStep] = useState("");
+  const [newStep, setNewStep] = useState('');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +63,7 @@ export const useFogCutter = (
 
   // Initialize layout animation on Android
   useEffect(() => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
         UIManager.setLayoutAnimationEnabledExperimental(true);
       }
@@ -101,9 +101,9 @@ export const useFogCutter = (
       }
     } catch (error) {
       LoggerService.error({
-        service: "FogCutter",
-        operation: "loadTasks",
-        message: "Failed to load tasks",
+        service: 'FogCutter',
+        operation: 'loadTasks',
+        message: 'Failed to load tasks',
         error,
       });
     } finally {
@@ -126,7 +126,7 @@ export const useFogCutter = (
     if (newStep.trim()) {
       HapticsService.tap({ intensity: 'light' });
       setMicroSteps((prev) => [...prev, newStep.trim()]);
-      setNewStep("");
+      setNewStep('');
     }
   }, [newStep]);
 
@@ -144,13 +144,13 @@ export const useFogCutter = (
       setLatestSavedTaskId(newTask.id);
 
       if (!guideDismissed && !showGuide && !hasTrackedFirstTask.current) {
-        UXMetricsService.track("fog_cutter_first_task_saved");
+        UXMetricsService.track('fog_cutter_first_task_saved');
         hasTrackedFirstTask.current = true;
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setShowGuide(true);
       }
 
-      setTask("");
+      setTask('');
       setMicroSteps([]);
 
       onTaskSaved?.(newTask.id);

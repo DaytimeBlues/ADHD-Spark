@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 import {
   agentEventBus,
   AgentEventName,
   AgentEventPayloads,
-} from "../services/AgentEventBus";
+} from '../services/AgentEventBus';
 
 /**
  * useAgentEvents

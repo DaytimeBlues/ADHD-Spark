@@ -1,7 +1,7 @@
-import { TimerService } from "../src/services/TimerService";
-import { useTimerStore } from "../src/store/useTimerStore";
+import { TimerService } from '../src/services/TimerService';
+import { useTimerStore } from '../src/store/useTimerStore';
 
-describe("TimerService", () => {
+describe('TimerService', () => {
   beforeEach(() => {
     // Reset store state
     useTimerStore.setState({
@@ -25,15 +25,15 @@ describe("TimerService", () => {
     jest.useRealTimers();
   });
 
-  it("should be a singleton with required methods", () => {
+  it('should be a singleton with required methods', () => {
     expect(TimerService).toBeDefined();
-    expect(typeof TimerService.start).toBe("function");
-    expect(typeof TimerService.stop).toBe("function");
-    expect(typeof TimerService.updateTickRate).toBe("function");
+    expect(typeof TimerService.start).toBe('function');
+    expect(typeof TimerService.stop).toBe('function');
+    expect(typeof TimerService.updateTickRate).toBe('function');
   });
 
-  it("should start the interval when start() is called", () => {
-    const setIntervalSpy = jest.spyOn(global, "setInterval");
+  it('should start the interval when start() is called', () => {
+    const setIntervalSpy = jest.spyOn(global, 'setInterval');
 
     TimerService.start();
 
@@ -43,8 +43,8 @@ describe("TimerService", () => {
     setIntervalSpy.mockRestore();
   });
 
-  it("should not create multiple intervals when start() is called multiple times", () => {
-    const setIntervalSpy = jest.spyOn(global, "setInterval");
+  it('should not create multiple intervals when start() is called multiple times', () => {
+    const setIntervalSpy = jest.spyOn(global, 'setInterval');
 
     TimerService.start();
     TimerService.start();
@@ -55,8 +55,8 @@ describe("TimerService", () => {
     setIntervalSpy.mockRestore();
   });
 
-  it("should stop the interval when stop() is called", () => {
-    const clearIntervalSpy = jest.spyOn(global, "clearInterval");
+  it('should stop the interval when stop() is called', () => {
+    const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
 
     TimerService.start();
     TimerService.stop();
@@ -66,9 +66,9 @@ describe("TimerService", () => {
     clearIntervalSpy.mockRestore();
   });
 
-  it("should update tick rate and restart interval when updateTickRate is called", () => {
-    const clearIntervalSpy = jest.spyOn(global, "clearInterval");
-    const setIntervalSpy = jest.spyOn(global, "setInterval");
+  it('should update tick rate and restart interval when updateTickRate is called', () => {
+    const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
+    const setIntervalSpy = jest.spyOn(global, 'setInterval');
 
     TimerService.start();
     TimerService.updateTickRate(500);
@@ -80,8 +80,8 @@ describe("TimerService", () => {
     setIntervalSpy.mockRestore();
   });
 
-  it("should not restart interval when updateTickRate is called but interval is not running", () => {
-    const setIntervalSpy = jest.spyOn(global, "setInterval");
+  it('should not restart interval when updateTickRate is called but interval is not running', () => {
+    const setIntervalSpy = jest.spyOn(global, 'setInterval');
 
     TimerService.updateTickRate(500);
 

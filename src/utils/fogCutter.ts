@@ -1,6 +1,6 @@
-import { generateId } from "./helpers";
+import { generateId } from './helpers';
 
-export type MicroStepStatus = "new" | "next" | "in_progress" | "done";
+export type MicroStepStatus = 'new' | 'next' | 'in_progress' | 'done';
 
 export type MicroStep = {
   id: string;
@@ -13,13 +13,13 @@ export const ensureSingleNext = (steps: MicroStep[]): MicroStep[] => {
   let hasInProgress = false;
 
   const normalized: MicroStep[] = steps.map((step) => {
-    if (step.status === "in_progress") {
+    if (step.status === 'in_progress') {
       hasInProgress = true;
     }
 
-    if (step.status === "next") {
+    if (step.status === 'next') {
       if (seenNext) {
-        return { ...step, status: "new" };
+        return { ...step, status: 'new' };
       }
       seenNext = true;
     }
@@ -28,16 +28,16 @@ export const ensureSingleNext = (steps: MicroStep[]): MicroStep[] => {
   });
 
   if (!seenNext && !hasInProgress && normalized.length > 0) {
-    const firstNewIndex = normalized.findIndex((step) => step.status === "new");
+    const firstNewIndex = normalized.findIndex((step) => step.status === 'new');
     const fallbackIndex =
       firstNewIndex >= 0
         ? firstNewIndex
-        : normalized.findIndex((step) => step.status !== "done");
+        : normalized.findIndex((step) => step.status !== 'done');
 
     if (fallbackIndex >= 0) {
       normalized[fallbackIndex] = {
         ...normalized[fallbackIndex],
-        status: "next",
+        status: 'next',
       };
     }
   }
@@ -56,31 +56,31 @@ export const advanceTaskProgress = <
 
   const steps = [...task.microSteps];
   const inProgressIndex = steps.findIndex(
-    (step) => step.status === "in_progress",
+    (step) => step.status === 'in_progress',
   );
 
   if (inProgressIndex >= 0) {
     steps[inProgressIndex] = {
       ...steps[inProgressIndex],
-      status: "done",
+      status: 'done',
     };
   } else {
-    const nextIndex = steps.findIndex((step) => step.status === "next");
+    const nextIndex = steps.findIndex((step) => step.status === 'next');
     const fallbackIndex =
       nextIndex >= 0
         ? nextIndex
-        : steps.findIndex((step) => step.status === "new");
+        : steps.findIndex((step) => step.status === 'new');
 
     if (fallbackIndex >= 0) {
       steps[fallbackIndex] = {
         ...steps[fallbackIndex],
-        status: "in_progress",
+        status: 'in_progress',
       };
     }
   }
 
   const normalized = ensureSingleNext(steps);
-  const isCompleted = normalized.every((step) => step.status === "done");
+  const isCompleted = normalized.every((step) => step.status === 'done');
 
   return {
     ...task,
@@ -90,7 +90,7 @@ export const advanceTaskProgress = <
 };
 
 export const getTaskProgressSummary = (steps: MicroStep[]): string => {
-  const done = steps.filter((step) => step.status === "done").length;
+  const done = steps.filter((step) => step.status === 'done').length;
   return `${done}/${steps.length} DONE`;
 };
 
@@ -102,23 +102,23 @@ export const normalizeMicroSteps = (
   }
 
   const converted: MicroStep[] = steps.map((item, index) => {
-    if (typeof item === "string") {
+    if (typeof item === 'string') {
       return {
         id: generateId(),
         text: item,
-        status: index === 0 ? "next" : "new",
+        status: index === 0 ? 'next' : 'new',
       };
     }
 
     const status: MicroStepStatus =
-      item.status === "new" ||
-      item.status === "next" ||
-      item.status === "in_progress" ||
-      item.status === "done"
+      item.status === 'new' ||
+      item.status === 'next' ||
+      item.status === 'in_progress' ||
+      item.status === 'done'
         ? item.status
         : index === 0
-          ? "next"
-          : "new";
+          ? 'next'
+          : 'new';
 
     return {
       id: item.id || generateId(),

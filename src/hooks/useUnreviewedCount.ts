@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import CaptureService from "../services/CaptureService";
+import { useState, useEffect } from 'react';
+import CaptureService from '../services/CaptureService';
 
 /**
  * useUnreviewedCount

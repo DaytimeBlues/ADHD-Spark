@@ -1,6 +1,6 @@
-import { CheckInService } from "../src/services/CheckInService";
+import { CheckInService } from '../src/services/CheckInService';
 
-describe("CheckInService", () => {
+describe('CheckInService', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
@@ -13,7 +13,7 @@ describe("CheckInService", () => {
     jest.useRealTimers();
   });
 
-  it("notifies subscribers immediately with current state", () => {
+  it('notifies subscribers immediately with current state', () => {
     const callback = jest.fn();
 
     CheckInService.subscribe(callback);
@@ -21,7 +21,7 @@ describe("CheckInService", () => {
     expect(callback).toHaveBeenCalledWith(false);
   });
 
-  it("updates pending state and notifies subscribers", () => {
+  it('updates pending state and notifies subscribers', () => {
     const callback = jest.fn();
     CheckInService.subscribe(callback);
 
@@ -31,7 +31,7 @@ describe("CheckInService", () => {
     expect(callback).toHaveBeenLastCalledWith(true);
   });
 
-  it("sets pending after interval when started", () => {
+  it('sets pending after interval when started', () => {
     CheckInService.start(1000);
 
     jest.advanceTimersByTime(1000);
@@ -39,7 +39,7 @@ describe("CheckInService", () => {
     expect(CheckInService.isPending()).toBe(true);
   });
 
-  it("stops interval and prevents pending updates", () => {
+  it('stops interval and prevents pending updates', () => {
     CheckInService.start(1000);
     CheckInService.stop();
 
@@ -48,7 +48,7 @@ describe("CheckInService", () => {
     expect(CheckInService.isPending()).toBe(false);
   });
 
-  it("unsubscribes listeners", () => {
+  it('unsubscribes listeners', () => {
     const callback = jest.fn();
     const unsubscribe = CheckInService.subscribe(callback);
 

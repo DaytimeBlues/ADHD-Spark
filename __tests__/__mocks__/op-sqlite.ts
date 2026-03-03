@@ -18,7 +18,7 @@ class MockTransaction {
     params?: (string | number | null)[],
   ): Promise<{ rows: MockRow[] }> {
     // Simple SQL parsing for INSERT/REPLACE
-    if (sql.includes("INSERT OR REPLACE")) {
+    if (sql.includes('INSERT OR REPLACE')) {
       const key = params?.[0] as string;
       const value = params?.[1] as string;
       if (key !== undefined && value !== undefined) {
@@ -28,7 +28,7 @@ class MockTransaction {
     }
 
     // Simple SQL parsing for SELECT
-    if (sql.includes("SELECT")) {
+    if (sql.includes('SELECT')) {
       const key = params?.[0] as string;
       if (key !== undefined && this.data.has(key)) {
         return { rows: [{ key, value: this.data.get(key)! }] };
@@ -37,7 +37,7 @@ class MockTransaction {
     }
 
     // Simple SQL parsing for DELETE
-    if (sql.includes("DELETE")) {
+    if (sql.includes('DELETE')) {
       const key = params?.[0] as string;
       if (key !== undefined) {
         this.data.delete(key);
@@ -46,7 +46,7 @@ class MockTransaction {
     }
 
     // CREATE TABLE - no-op for mock
-    if (sql.includes("CREATE TABLE")) {
+    if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
     }
 

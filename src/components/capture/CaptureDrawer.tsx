@@ -8,7 +8,7 @@
  * to the inbox via CaptureService.
  */
 
-import React, { memo, useState, useCallback } from "react";
+import React, { memo, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -18,14 +18,14 @@ import {
   ActivityIndicator,
   Platform,
   ScrollView,
-} from "react-native";
-import { BottomSheet } from "../../ui/cosmic/BottomSheet";
-import CaptureService, { CaptureSource } from "../../services/CaptureService";
-import RecordingService from "../../services/RecordingService";
-import { LoggerService } from "../../services/LoggerService";
-import { RuneButton } from "../../ui/cosmic/RuneButton";
-import { useTaskStore } from "../../store/useTaskStore";
-import type { BubbleState } from "./CaptureBubble";
+} from 'react-native';
+import { BottomSheet } from '../../ui/cosmic/BottomSheet';
+import CaptureService, { CaptureSource } from '../../services/CaptureService';
+import RecordingService from '../../services/RecordingService';
+import { LoggerService } from '../../services/LoggerService';
+import { RuneButton } from '../../ui/cosmic/RuneButton';
+import { useTaskStore } from '../../store/useTaskStore';
+import type { BubbleState } from './CaptureBubble';
 
 // ============================================================================
 // TYPES
@@ -39,48 +39,48 @@ export interface CaptureDrawerProps {
   currentBubbleState: BubbleState;
 }
 
-type DrawerMode = CaptureSource | "task";
+type DrawerMode = CaptureSource | 'task';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
 const MODES: Array<{ id: DrawerMode; icon: string; label: string }> = [
-  { id: "task", icon: "📝", label: "TASK" },
-  { id: "voice", icon: "🎙", label: "VOICE" },
-  { id: "text", icon: "⌨", label: "TEXT" },
-  { id: "photo", icon: "📷", label: "PHOTO" },
-  { id: "paste", icon: "📋", label: "PASTE" },
-  { id: "meeting", icon: "👥", label: "MEETING" },
-  { id: "checkin", icon: "🎯", label: "CHECK-IN" },
+  { id: 'task', icon: '📝', label: 'TASK' },
+  { id: 'voice', icon: '🎙', label: 'VOICE' },
+  { id: 'text', icon: '⌨', label: 'TEXT' },
+  { id: 'photo', icon: '📷', label: 'PHOTO' },
+  { id: 'paste', icon: '📋', label: 'PASTE' },
+  { id: 'meeting', icon: '👥', label: 'MEETING' },
+  { id: 'checkin', icon: '🎯', label: 'CHECK-IN' },
 ];
 
 const MEETING_TEMPLATE = (now: Date): string => {
-  const date = now.toLocaleDateString("en-AU", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
+  const date = now.toLocaleDateString('en-AU', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   });
-  const time = now.toLocaleTimeString("en-AU", {
-    hour: "2-digit",
-    minute: "2-digit",
+  const time = now.toLocaleTimeString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit',
   });
   return `Meeting: ${date} at ${time}\n\nAttendees:\n\nNotes:\n\nAction items:\n`;
 };
 
 // Cosmic colors
 const C = {
-  violet: "#8B5CF6",
-  teal: "#2DD4BF",
-  rose: "#FB7185",
-  gold: "#F6C177",
-  starlight: "#EEF2FF",
-  mist: "#B9C2D9",
-  mutedText: "rgba(238,242,255,0.56)",
-  surface: "rgba(18, 26, 52, 0.96)",
-  border: "rgba(185, 194, 217, 0.12)",
-  activeModeTab: "rgba(139, 92, 246, 0.15)",
+  violet: '#8B5CF6',
+  teal: '#2DD4BF',
+  rose: '#FB7185',
+  gold: '#F6C177',
+  starlight: '#EEF2FF',
+  mist: '#B9C2D9',
+  mutedText: 'rgba(238,242,255,0.56)',
+  surface: 'rgba(18, 26, 52, 0.96)',
+  border: 'rgba(185, 194, 217, 0.12)',
+  activeModeTab: 'rgba(139, 92, 246, 0.15)',
 } as const;
 
 // ============================================================================
@@ -97,11 +97,11 @@ const VoiceMode = memo(function VoiceMode({
   onStateChange,
 }: VoiceModeProps) {
   const [phase, setPhase] = useState<
-    "idle" | "recording" | "processing" | "done" | "error"
-  >("idle");
+    'idle' | 'recording' | 'processing' | 'done' | 'error'
+  >('idle');
   const [elapsedMs, setElapsedMs] = useState(0);
-  const [transcript, setTranscript] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [transcript, setTranscript] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
   const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startTimer = useCallback(() => {
@@ -128,41 +128,41 @@ const VoiceMode = memo(function VoiceMode({
   }, []);
 
   const handleStartRecording = useCallback(async () => {
-    setErrorMsg("");
+    setErrorMsg('');
     const granted = await RecordingService.requestPermissions();
     if (!granted) {
-      setPhase("error");
-      setErrorMsg("Microphone permission denied. Tap to grant access.");
+      setPhase('error');
+      setErrorMsg('Microphone permission denied. Tap to grant access.');
       return;
     }
     const started = await RecordingService.startRecording();
     if (!started) {
-      setPhase("error");
-      setErrorMsg("Could not start recording. Please try again.");
+      setPhase('error');
+      setErrorMsg('Could not start recording. Please try again.');
       return;
     }
-    setPhase("recording");
-    onStateChange("recording");
+    setPhase('recording');
+    onStateChange('recording');
     startTimer();
   }, [onStateChange, startTimer]);
 
   const handleStopRecording = useCallback(async () => {
     stopTimer();
-    setPhase("processing");
-    onStateChange("processing");
+    setPhase('processing');
+    onStateChange('processing');
     const result = await RecordingService.stopRecording();
     if (!result) {
-      setPhase("error");
-      setErrorMsg("Recording failed. Please try again.");
-      onStateChange("idle");
+      setPhase('error');
+      setErrorMsg('Recording failed. Please try again.');
+      onStateChange('idle');
       return;
     }
     // In v1, use uri as raw — transcription is async/future
     // For now, create a placeholder transcript
     const rawText = `[Voice note — ${Math.round(result.duration / 1000)}s recording]`;
     setTranscript(rawText);
-    setPhase("done");
-    onStateChange("idle");
+    setPhase('done');
+    onStateChange('idle');
   }, [stopTimer, onStateChange]);
 
   const handleConfirm = useCallback(() => {
@@ -170,17 +170,17 @@ const VoiceMode = memo(function VoiceMode({
   }, [onCapture, transcript]);
 
   const handleDiscard = useCallback(() => {
-    setPhase("idle");
-    setTranscript("");
-    setErrorMsg("");
-    onStateChange("idle");
+    setPhase('idle');
+    setTranscript('');
+    setErrorMsg('');
+    onStateChange('idle');
   }, [onStateChange]);
 
-  const elapsed = `${Math.floor(elapsedMs / 60000)}:${String(Math.floor((elapsedMs % 60000) / 1000)).padStart(2, "0")}`;
+  const elapsed = `${Math.floor(elapsedMs / 60000)}:${String(Math.floor((elapsedMs % 60000) / 1000)).padStart(2, '0')}`;
 
   return (
     <View style={styles.modeContent}>
-      {phase === "idle" && (
+      {phase === 'idle' && (
         <RuneButton
           variant="primary"
           onPress={handleStartRecording}
@@ -191,7 +191,7 @@ const VoiceMode = memo(function VoiceMode({
         </RuneButton>
       )}
 
-      {phase === "recording" && (
+      {phase === 'recording' && (
         <View style={styles.recordingActive}>
           <View
             style={[styles.recordingIndicator, { backgroundColor: C.teal }]}
@@ -213,7 +213,7 @@ const VoiceMode = memo(function VoiceMode({
         </View>
       )}
 
-      {phase === "processing" && (
+      {phase === 'processing' && (
         <View style={styles.processingState}>
           <ActivityIndicator size="large" color={C.violet} />
           <Text style={[styles.processingText, { color: C.mutedText }]}>
@@ -222,7 +222,7 @@ const VoiceMode = memo(function VoiceMode({
         </View>
       )}
 
-      {phase === "done" && (
+      {phase === 'done' && (
         <View style={styles.transcriptContainer}>
           <Text style={[styles.transcriptLabel, { color: C.mutedText }]}>
             CAPTURED
@@ -249,14 +249,14 @@ const VoiceMode = memo(function VoiceMode({
         </View>
       )}
 
-      {phase === "error" && (
+      {phase === 'error' && (
         <View style={styles.errorState}>
           <Text style={[styles.errorText, { color: C.rose }]}>{errorMsg}</Text>
           <Pressable
             style={[styles.retryBtn, { borderColor: C.violet }]}
             onPress={() => {
-              setPhase("idle");
-              setErrorMsg("");
+              setPhase('idle');
+              setErrorMsg('');
             }}
             accessibilityLabel="Try again"
             accessibilityRole="button"
@@ -280,7 +280,7 @@ interface TextModeProps {
 }
 
 const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
 
   const handleConfirm = useCallback(() => {
     const trimmed = text.trim();
@@ -288,7 +288,7 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
       return;
     }
     onCapture(trimmed);
-    setText("");
+    setText('');
   }, [text, onCapture]);
 
   return (
@@ -331,13 +331,13 @@ interface PasteModeProps {
 }
 
 const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [isPasting, setIsPasting] = useState(false);
 
   const handleAutoPaste = useCallback(async () => {
     setIsPasting(true);
     try {
-      if (Platform.OS === "web") {
+      if (Platform.OS === 'web') {
         // navigator.clipboard is a web-only API; cast for type safety
         const webNavigator = navigator as typeof navigator & {
           clipboard?: { readText: () => Promise<string> };
@@ -349,13 +349,13 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
       } else {
         // React Native Clipboard not available without @react-native-clipboard/clipboard
         // Fall back to manual text entry
-        setText("");
+        setText('');
       }
     } catch (err) {
       LoggerService.error({
-        service: "CaptureDrawer",
-        operation: "handleAutoPaste",
-        message: "Clipboard read error",
+        service: 'CaptureDrawer',
+        operation: 'handleAutoPaste',
+        message: 'Clipboard read error',
         error: err,
       });
     } finally {
@@ -373,7 +373,7 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
       return;
     }
     onCapture(trimmed);
-    setText("");
+    setText('');
   }, [text, onCapture]);
 
   return (
@@ -383,7 +383,7 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
       ) : (
         <>
           <Text style={[styles.pasteHint, { color: C.mutedText }]}>
-            {text ? "Edit before saving:" : "Paste or type content:"}
+            {text ? 'Edit before saving:' : 'Paste or type content:'}
           </Text>
           <TextInput
             testID="capture-text-input"
@@ -472,21 +472,21 @@ interface PhotoModeProps {
 
 const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
   const [selectedUri, setSelectedUri] = useState<string | null>(null);
-  const [caption, setCaption] = useState("");
+  const [caption, setCaption] = useState('');
 
   const handlePickFile = useCallback(() => {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       // document and HTMLInputElement are web-only APIs; use globalThis cast
       const doc = (
         globalThis as typeof globalThis & {
           document?: {
-            createElement: (tag: "input") => {
+            createElement: (tag: 'input') => {
               type: string;
               accept: string;
               onchange:
                 | ((e: {
-                  target: { files?: { 0?: { name: string } } };
-                }) => void)
+                    target: { files?: { 0?: { name: string } } };
+                  }) => void)
                 | null;
               click: () => void;
             };
@@ -496,9 +496,9 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
       if (!doc) {
         return;
       }
-      const input = doc.createElement("input");
-      input.type = "file";
-      input.accept = "image/*";
+      const input = doc.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
       input.onchange = (e) => {
         const files = (e.target as { files?: { 0?: unknown; length: number } })
           .files;
@@ -514,10 +514,10 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
   }, []);
 
   const handleConfirm = useCallback(() => {
-    const raw = caption.trim() || "[Photo capture]";
+    const raw = caption.trim() || '[Photo capture]';
     onCapture(raw, selectedUri ?? undefined);
     setSelectedUri(null);
-    setCaption("");
+    setCaption('');
   }, [caption, selectedUri, onCapture]);
 
   return (
@@ -558,7 +558,7 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           <Text style={[styles.photoPickLabel, { color: C.violet }]}>
             SELECT PHOTO
           </Text>
-          {Platform.OS !== "web" && (
+          {Platform.OS !== 'web' && (
             <Text style={[styles.photoPickHint, { color: C.mutedText }]}>
               Camera/gallery coming in v2
             </Text>
@@ -578,7 +578,7 @@ interface CheckInModeProps {
 }
 
 const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
 
   const handleConfirm = useCallback(() => {
     const trimmed = text.trim();
@@ -586,13 +586,13 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
       return;
     }
     onCapture(`[Check-In]\n${trimmed}`);
-    setText("");
+    setText('');
   }, [text, onCapture]);
 
   return (
     <View style={styles.modeContent}>
       <Text style={[styles.meetingLabel, styles.checkInPrompt]}>
-        What are you doing?{"\n"}What should you be doing?
+        What are you doing?{'\n'}What should you be doing?
       </Text>
 
       <TextInput
@@ -614,7 +614,7 @@ const CheckInMode = memo(function CheckInMode({ onCapture }: CheckInModeProps) {
       <RuneButton
         onPress={handleConfirm}
         disabled={!text.trim()}
-        variant={text.trim() ? "primary" : "secondary"}
+        variant={text.trim() ? 'primary' : 'secondary'}
         style={styles.marginTop12}
       >
         LOG PROGRESS
@@ -632,7 +632,7 @@ interface TaskModeProps {
 }
 
 const TaskMode = memo(function TaskMode({ onSuccess }: TaskModeProps) {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const addTaskStore = useTaskStore((state) => state.addTask);
 
   const handleConfirm = useCallback(() => {
@@ -642,10 +642,10 @@ const TaskMode = memo(function TaskMode({ onSuccess }: TaskModeProps) {
     }
     addTaskStore({
       title: trimmed,
-      priority: "normal",
-      source: "manual",
+      priority: 'normal',
+      source: 'manual',
     });
-    setTitle("");
+    setTitle('');
     onSuccess();
   }, [title, addTaskStore, onSuccess]);
 
@@ -692,15 +692,17 @@ export const CaptureDrawer = memo(function CaptureDrawer({
   onStateChange,
   currentBubbleState,
 }: CaptureDrawerProps) {
-  const [activeMode, setActiveMode] = useState<DrawerMode>("task");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [activeMode, setActiveMode] = useState<DrawerMode>('task');
+  const [successMsg, setSuccessMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const successTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const successTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   React.useEffect(() => {
-    if (visible && currentBubbleState === "needs-checkin") {
-      setActiveMode("checkin");
+    if (visible && currentBubbleState === 'needs-checkin') {
+      setActiveMode('checkin');
     }
   }, [visible, currentBubbleState]);
 
@@ -717,7 +719,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
     (msg: string) => {
       setSuccessMsg(msg);
       successTimeoutRef.current = setTimeout(() => {
-        setSuccessMsg("");
+        setSuccessMsg('');
         onClose();
       }, 1200);
     },
@@ -739,16 +741,16 @@ export const CaptureDrawer = memo(function CaptureDrawer({
           transcript: extra?.transcript,
           attachmentUri: extra?.attachmentUri,
         });
-        showSuccess("Saved to inbox ✓");
+        showSuccess('Saved to inbox ✓');
       } catch (err) {
         LoggerService.error({
-          service: "CaptureDrawer",
-          operation: "saveCapture",
-          message: "Failed to save capture",
+          service: 'CaptureDrawer',
+          operation: 'saveCapture',
+          message: 'Failed to save capture',
           error: err,
           context: { source },
         });
-        setSaveError("Failed to save. Please try again.");
+        setSaveError('Failed to save. Please try again.');
       } finally {
         setIsSaving(false);
       }
@@ -758,28 +760,28 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
   const handleVoiceCapture = useCallback(
     (raw: string, transcript?: string) =>
-      handleCapture("voice", raw, { transcript }),
+      handleCapture('voice', raw, { transcript }),
     [handleCapture],
   );
   const handleTextCapture = useCallback(
-    (raw: string) => handleCapture("text", raw),
+    (raw: string) => handleCapture('text', raw),
     [handleCapture],
   );
   const handlePasteCapture = useCallback(
-    (raw: string) => handleCapture("paste", raw),
+    (raw: string) => handleCapture('paste', raw),
     [handleCapture],
   );
   const handleMeetingCapture = useCallback(
-    (raw: string) => handleCapture("meeting", raw),
+    (raw: string) => handleCapture('meeting', raw),
     [handleCapture],
   );
   const handleCheckInCapture = useCallback(
-    (raw: string) => handleCapture("checkin", raw),
+    (raw: string) => handleCapture('checkin', raw),
     [handleCapture],
   );
   const handlePhotoCapture = useCallback(
     (raw: string, attachmentUri?: string) =>
-      handleCapture("photo", raw, { attachmentUri }),
+      handleCapture('photo', raw, { attachmentUri }),
     [handleCapture],
   );
 
@@ -793,7 +795,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       scrollable={false}
     >
       {/* Success flash */}
-      {successMsg !== "" && (
+      {successMsg !== '' && (
         <View style={styles.successBanner}>
           <Text style={[styles.successText, { color: C.teal }]}>
             {successMsg}
@@ -858,28 +860,28 @@ export const CaptureDrawer = memo(function CaptureDrawer({
 
       {/* Active mode content */}
       <View style={styles.modePanel}>
-        {activeMode === "task" && (
-          <TaskMode onSuccess={() => showSuccess("Task added ✓")} />
+        {activeMode === 'task' && (
+          <TaskMode onSuccess={() => showSuccess('Task added ✓')} />
         )}
-        {activeMode === "voice" && (
+        {activeMode === 'voice' && (
           <VoiceMode
             onCapture={handleVoiceCapture}
             onStateChange={onStateChange}
           />
         )}
-        {activeMode === "text" && <TextMode onCapture={handleTextCapture} />}
-        {activeMode === "paste" && <PasteMode onCapture={handlePasteCapture} />}
-        {activeMode === "meeting" && (
+        {activeMode === 'text' && <TextMode onCapture={handleTextCapture} />}
+        {activeMode === 'paste' && <PasteMode onCapture={handlePasteCapture} />}
+        {activeMode === 'meeting' && (
           <MeetingMode onCapture={handleMeetingCapture} />
         )}
-        {activeMode === "checkin" && (
+        {activeMode === 'checkin' && (
           <CheckInMode onCapture={handleCheckInCapture} />
         )}
-        {activeMode === "photo" && <PhotoMode onCapture={handlePhotoCapture} />}
+        {activeMode === 'photo' && <PhotoMode onCapture={handlePhotoCapture} />}
       </View>
 
       {/* Offline banner */}
-      {currentBubbleState === "offline" && (
+      {currentBubbleState === 'offline' && (
         <View style={styles.offlineBanner}>
           <Text style={[styles.offlineText, { color: C.gold }]}>
             ⊗ Offline — captures will sync when reconnected
@@ -905,19 +907,19 @@ const styles = StyleSheet.create({
     maxHeight: 64,
   },
   modeTabsContent: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 10,
     gap: 8,
   },
   modeTab: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "rgba(185, 194, 217, 0.15)",
+    borderColor: 'rgba(185, 194, 217, 0.15)',
     gap: 5,
   },
   modeTabIcon: {
@@ -925,7 +927,7 @@ const styles = StyleSheet.create({
   },
   modeTabLabel: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.8,
   },
 
@@ -942,9 +944,9 @@ const styles = StyleSheet.create({
 
   // Voice mode
   recordBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 10,
     paddingVertical: 20,
     borderRadius: 14,
@@ -954,13 +956,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   recordBtnLabel: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1.2,
   },
   recordingActive: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 16,
     gap: 8,
   },
@@ -971,9 +973,9 @@ const styles = StyleSheet.create({
   },
   recordingTime: {
     fontSize: 32,
-    fontWeight: "300",
+    fontWeight: '300',
     letterSpacing: 2,
-    fontVariant: ["tabular-nums"],
+    fontVariant: ['tabular-nums'],
   },
   recordingHint: {
     fontSize: 12,
@@ -988,11 +990,11 @@ const styles = StyleSheet.create({
   },
   stopBtnText: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   processingState: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 28,
     gap: 12,
   },
@@ -1006,7 +1008,7 @@ const styles = StyleSheet.create({
   },
   transcriptLabel: {
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1.5,
   },
   transcriptText: {
@@ -1014,7 +1016,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   confirmRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
     marginTop: 4,
   },
@@ -1022,20 +1024,20 @@ const styles = StyleSheet.create({
   // Shared confirm/discard
   confirmBtn: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 10,
   },
   confirmBtnText: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   discardBtn: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderRadius: 10,
@@ -1043,19 +1045,19 @@ const styles = StyleSheet.create({
   },
   discardBtnText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 0.8,
   },
 
   // Error / retry
   errorState: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 20,
     gap: 12,
   },
   errorText: {
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 20,
   },
   retryBtn: {
@@ -1066,7 +1068,7 @@ const styles = StyleSheet.create({
   },
   retryBtnText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 0.8,
   },
 
@@ -1077,7 +1079,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 15,
     minHeight: 100,
-    backgroundColor: "rgba(7, 7, 18, 0.4)",
+    backgroundColor: 'rgba(7, 7, 18, 0.4)',
   },
   textInputMeeting: {
     borderWidth: 1,
@@ -1085,7 +1087,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     minHeight: 160,
-    backgroundColor: "rgba(7, 7, 18, 0.4)",
+    backgroundColor: 'rgba(7, 7, 18, 0.4)',
     lineHeight: 22,
   },
 
@@ -1099,19 +1101,19 @@ const styles = StyleSheet.create({
   // Meeting mode
   meetingLabel: {
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1.5,
     marginBottom: 8,
   },
 
   // Photo mode
   photoPickBtn: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 32,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     gap: 8,
     marginTop: 8,
   },
@@ -1120,12 +1122,12 @@ const styles = StyleSheet.create({
   },
   photoPickLabel: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   photoPickHint: {
     fontSize: 11,
-    textAlign: "center",
+    textAlign: 'center',
   },
   photoPreview: {
     gap: 10,
@@ -1143,10 +1145,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   checkInBtnTextActive: {
-    color: "#070712",
+    color: '#070712',
   },
   checkInBtnTextDisabled: {
-    color: "#888",
+    color: '#888',
   },
 
   // Success banner
@@ -1156,17 +1158,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "rgba(45, 212, 191, 0.15)",
+    alignItems: 'center',
+    backgroundColor: 'rgba(45, 212, 191, 0.15)',
   },
 
   errorBanner: {
-    backgroundColor: "rgba(251, 113, 133, 0.15)",
+    backgroundColor: 'rgba(251, 113, 133, 0.15)',
   },
 
   successText: {
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 0.5,
   },
 
@@ -1177,7 +1179,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: "rgba(246, 193, 119, 0.12)",
+    backgroundColor: 'rgba(246, 193, 119, 0.12)',
   },
 
   offlineText: {
@@ -1187,21 +1189,21 @@ const styles = StyleSheet.create({
 
   // Loading overlay
   loadingOverlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(7, 7, 18, 0.7)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(7, 7, 18, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 100,
     gap: 8,
   },
 
   loadingText: {
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: '500',
     letterSpacing: 0.5,
   },
 });

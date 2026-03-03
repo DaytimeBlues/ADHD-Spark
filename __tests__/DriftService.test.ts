@@ -4,8 +4,8 @@ const mockAddEventListener = jest.fn();
 const mockShowOverlay = jest.fn();
 let mockIsVisible = false;
 
-describe("DriftService", () => {
-  let DriftService: typeof import("../src/services/DriftService").DriftService;
+describe('DriftService', () => {
+  let DriftService: typeof import('../src/services/DriftService').DriftService;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -24,13 +24,13 @@ describe("DriftService", () => {
       },
     );
 
-    jest.doMock("react-native", () => ({
+    jest.doMock('react-native', () => ({
       AppState: {
         addEventListener: mockAddEventListener,
       },
     }));
 
-    jest.doMock("../src/store/useDriftStore", () => ({
+    jest.doMock('../src/store/useDriftStore', () => ({
       useDriftStore: {
         getState: jest.fn(() => ({
           isVisible: mockIsVisible,
@@ -39,7 +39,7 @@ describe("DriftService", () => {
       },
     }));
 
-    DriftService = require("../src/services/DriftService").DriftService;
+    DriftService = require('../src/services/DriftService').DriftService;
   });
 
   afterEach(() => {
@@ -47,7 +47,7 @@ describe("DriftService", () => {
     jest.useRealTimers();
   });
 
-  it("starts drift checks on init", () => {
+  it('starts drift checks on init', () => {
     DriftService.init();
 
     jest.advanceTimersByTime(60 * 60 * 1000);
@@ -55,7 +55,7 @@ describe("DriftService", () => {
     expect(mockShowOverlay).toHaveBeenCalled();
   });
 
-  it("does not show overlay when already visible", () => {
+  it('does not show overlay when already visible', () => {
     mockIsVisible = true;
 
     DriftService.triggerDriftCheck();
@@ -63,7 +63,7 @@ describe("DriftService", () => {
     expect(mockShowOverlay).not.toHaveBeenCalled();
   });
 
-  it("stops checks when app goes inactive and resumes on active", () => {
+  it('stops checks when app goes inactive and resumes on active', () => {
     DriftService.init();
     const handler = (
       mockAddEventListener as jest.Mock & {
@@ -71,16 +71,16 @@ describe("DriftService", () => {
       }
     ).callback;
 
-    handler?.("inactive");
+    handler?.('inactive');
     jest.advanceTimersByTime(60 * 60 * 1000);
     expect(mockShowOverlay).not.toHaveBeenCalled();
 
-    handler?.("active");
+    handler?.('active');
     jest.advanceTimersByTime(60 * 60 * 1000);
     expect(mockShowOverlay).toHaveBeenCalledTimes(1);
   });
 
-  it("removes app state subscription on destroy", () => {
+  it('removes app state subscription on destroy', () => {
     const remove = jest.fn();
     mockAddEventListener.mockReturnValueOnce({ remove });
 

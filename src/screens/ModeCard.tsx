@@ -1,4 +1,4 @@
-import React, { useCallback, useState, memo } from "react";
+import React, { useCallback, useState, memo } from 'react';
 import {
   Animated,
   Platform,
@@ -8,11 +8,11 @@ import {
   Text,
   View,
   ViewStyle,
-} from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Tokens } from "../theme/tokens";
-import HapticsService from "../services/HapticsService";
-import { useTheme } from "../theme/ThemeProvider";
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Tokens } from '../theme/tokens';
+import HapticsService from '../services/HapticsService';
+import { useTheme } from '../theme/ThemeProvider';
 
 export type ModeCardMode = {
   name: string;
@@ -33,10 +33,10 @@ type WebInteractiveStyle = {
   boxShadow?: string;
   borderColor?: string;
   outlineColor?: string;
-  outlineStyle?: "solid" | "dotted" | "dashed";
+  outlineStyle?: 'solid' | 'dotted' | 'dashed';
   outlineWidth?: number;
   outlineOffset?: number;
-  cursor?: "pointer";
+  cursor?: 'pointer';
   transition?: string;
 };
 
@@ -56,27 +56,27 @@ function ModeCardComponent({
   const { isCosmic } = useTheme();
 
   const hoverStyle: WebInteractiveStyle | undefined =
-    Platform.OS === "web" && (isHovered || isFocused)
+    Platform.OS === 'web' && (isHovered || isFocused)
       ? ({
-          borderColor: "rgba(255, 255, 255, 0.25)",
-          backgroundColor: "#232A42",
-          transform: "translateY(-2px)",
+          borderColor: 'rgba(255, 255, 255, 0.25)',
+          backgroundColor: '#232A42',
+          transform: 'translateY(-2px)',
           boxShadow: `0 12px 40px rgba(0,0,0,0.3), 0 0 24px ${mode.accent}25`,
         } as WebInteractiveStyle)
       : undefined;
 
   const focusStyle: WebInteractiveStyle | undefined =
-    Platform.OS === "web" && isFocused
+    Platform.OS === 'web' && isFocused
       ? ({
           outlineColor: mode.accent,
-          outlineStyle: "solid",
+          outlineStyle: 'solid',
           outlineWidth: 2,
           outlineOffset: 2,
         } as WebInteractiveStyle)
       : undefined;
 
   const handlePress = useCallback(() => {
-    HapticsService.tap({ key: "modeCard" });
+    HapticsService.tap({ key: 'modeCard' });
     onPress();
   }, [onPress]);
 
@@ -95,17 +95,17 @@ function ModeCardComponent({
         style={({ pressed }) => [
           styles.card,
           isCosmic ? styles.cardCosmic : styles.cardStandard,
-          Platform.OS === "web" &&
+          Platform.OS === 'web' &&
             ({
-              cursor: "pointer",
-              transition: "all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)",
+              cursor: 'pointer',
+              transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
             } as WebInteractiveStyle),
           pressed && { transform: [{ scale: 0.97 }], opacity: 0.9 },
           hoverStyle,
           focusStyle,
         ]}
       >
-        {Platform.OS === "web" && <View style={styles.webGradientOverlay} />}
+        {Platform.OS === 'web' && <View style={styles.webGradientOverlay} />}
         <View style={styles.cardHeader}>
           <Icon
             name={mode.icon}
@@ -125,7 +125,7 @@ function ModeCardComponent({
             style={[
               styles.cardTitle,
               isHovered && {
-                color: "#FFFFFF",
+                color: '#FFFFFF',
               },
             ]}
           >
@@ -149,24 +149,24 @@ const styles = StyleSheet.create({
     borderRadius: 24, // Generous, friendly corner radius
     borderWidth: 1,
     minHeight: CARD_MIN_HEIGHT,
-    justifyContent: "space-between",
-    overflow: "hidden",
+    justifyContent: 'space-between',
+    overflow: 'hidden',
   },
   cardCosmic: {
-    backgroundColor: "#1E2336", // Warm, soft navy matte finish
-    borderColor: "rgba(255, 255, 255, 0.08)",
-    borderTopColor: "rgba(255, 255, 255, 0.15)", // Gentle light catch
+    backgroundColor: '#1E2336', // Warm, soft navy matte finish
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: 'rgba(255, 255, 255, 0.15)', // Gentle light catch
     ...Platform.select({
       web: {
-        backdropFilter: "blur(24px)", // Soften the background
-        WebkitBackdropFilter: "blur(24px)",
+        backdropFilter: 'blur(24px)', // Soften the background
+        WebkitBackdropFilter: 'blur(24px)',
         boxShadow:
-          "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+          '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
       } as any,
       default: {
-        backgroundColor: "#1E2336", // Reliable, solid but soft color for Native
+        backgroundColor: '#1E2336', // Reliable, solid but soft color for Native
         elevation: 4, // Gentle drop shadow on Android
-        shadowColor: "#000",
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -180,23 +180,23 @@ const styles = StyleSheet.create({
   webGradientOverlay: {
     ...StyleSheet.absoluteFillObject,
     opacity: 1,
-    ...(Platform.OS === "web" && {
+    ...(Platform.OS === 'web' && {
       backgroundImage:
-        "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%)",
-      pointerEvents: "none",
+        'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%)',
+      pointerEvents: 'none',
     }),
   },
   cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     zIndex: 2,
   },
   accentDot: {
     width: DOT_SIZE,
     height: DOT_SIZE,
     borderRadius: DOT_SIZE / 2,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   accentDotActive: {
     // This is overridden dynamically now
@@ -208,20 +208,20 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
-    fontWeight: "700",
-    color: "#EEF2FF", // Soft starlight white
+    fontWeight: '700',
+    color: '#EEF2FF', // Soft starlight white
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1.2,
   },
   cardDesc: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
-    color: "rgba(238, 242, 255, 0.65)",
+    color: 'rgba(238, 242, 255, 0.65)',
     lineHeight: 18,
     letterSpacing: 0.3, // Reduced spacing for easier reading
   },
   cardDescHovered: {
-    color: "rgba(238, 242, 255, 0.95)",
+    color: 'rgba(238, 242, 255, 0.95)',
   },
 });
 

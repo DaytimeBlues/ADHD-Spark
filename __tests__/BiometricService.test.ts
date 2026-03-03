@@ -5,13 +5,13 @@ const mockHasHardwareAsync = jest.fn();
 const mockIsEnrolledAsync = jest.fn();
 const mockAddEventListener = jest.fn(() => ({ remove: jest.fn() }));
 
-jest.mock("expo-local-authentication", () => ({
+jest.mock('expo-local-authentication', () => ({
   authenticateAsync: mockAuthenticateAsync,
   hasHardwareAsync: mockHasHardwareAsync,
   isEnrolledAsync: mockIsEnrolledAsync,
 }));
 
-jest.mock("../src/services/StorageService", () => ({
+jest.mock('../src/services/StorageService', () => ({
   __esModule: true,
   default: {
     getJSON: jest.fn(),
@@ -19,23 +19,23 @@ jest.mock("../src/services/StorageService", () => ({
   },
 }));
 
-describe("BiometricService", () => {
-  let BiometricService: typeof import("../src/services/BiometricService").BiometricService;
-  let StorageService: typeof import("../src/services/StorageService").default;
+describe('BiometricService', () => {
+  let BiometricService: typeof import('../src/services/BiometricService').BiometricService;
+  let StorageService: typeof import('../src/services/StorageService').default;
 
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
 
-    jest.doMock("react-native", () => ({
+    jest.doMock('react-native', () => ({
       AppState: {
         addEventListener: mockAddEventListener,
       },
     }));
 
-    StorageService = require("../src/services/StorageService").default;
+    StorageService = require('../src/services/StorageService').default;
     BiometricService =
-      require("../src/services/BiometricService").BiometricService;
+      require('../src/services/BiometricService').BiometricService;
 
     (StorageService.getJSON as jest.Mock).mockResolvedValue(false);
     (StorageService.setJSON as jest.Mock).mockResolvedValue(true);
@@ -44,21 +44,21 @@ describe("BiometricService", () => {
     mockAuthenticateAsync.mockResolvedValue({ success: true });
   });
 
-  it("subscribes to app state on construction", () => {
+  it('subscribes to app state on construction', () => {
     expect(mockAddEventListener).toHaveBeenCalledWith(
-      "change",
+      'change',
       expect.any(Function),
     );
   });
 
-  it("loads security flag during init", async () => {
+  it('loads security flag during init', async () => {
     await BiometricService.init();
 
-    expect(StorageService.getJSON).toHaveBeenCalledWith("isBiometricSecured");
+    expect(StorageService.getJSON).toHaveBeenCalledWith('isBiometricSecured');
     expect(BiometricService.getIsSecured()).toBe(false);
   });
 
-  it("returns false when enabling security without biometric support", async () => {
+  it('returns false when enabling security without biometric support', async () => {
     mockHasHardwareAsync.mockResolvedValue(false);
 
     const result = await BiometricService.toggleSecurity(true);
@@ -67,18 +67,18 @@ describe("BiometricService", () => {
     expect(StorageService.setJSON).not.toHaveBeenCalled();
   });
 
-  it("authenticates successfully when secured", async () => {
+  it('authenticates successfully when secured', async () => {
     await BiometricService.toggleSecurity(true);
 
-    const result = await BiometricService.authenticate("Unlock test");
+    const result = await BiometricService.authenticate('Unlock test');
 
     expect(result).toBe(true);
     expect(mockAuthenticateAsync).toHaveBeenCalledWith(
-      expect.objectContaining({ promptMessage: "Unlock test" }),
+      expect.objectContaining({ promptMessage: 'Unlock test' }),
     );
   });
 
-  it("returns true immediately when app is not secured", async () => {
+  it('returns true immediately when app is not secured', async () => {
     await BiometricService.toggleSecurity(false);
 
     const result = await BiometricService.authenticate();

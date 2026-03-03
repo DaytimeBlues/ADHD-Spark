@@ -1,8 +1,8 @@
-import React from "react";
-import { render, screen } from "@testing-library/react-native";
-import AnchorScreen from "../src/screens/AnchorScreen";
+import React from 'react';
+import { render, screen } from '@testing-library/react-native';
+import AnchorScreen from '../src/screens/AnchorScreen';
 
-jest.mock("../src/hooks/useTimer", () => ({
+jest.mock('../src/hooks/useTimer', () => ({
   __esModule: true,
   default: () => ({
     timeLeft: 4,
@@ -12,9 +12,9 @@ jest.mock("../src/hooks/useTimer", () => ({
   }),
 }));
 
-jest.mock("../src/ui/cosmic", () => {
-  const React = require("react");
-  const { Text, View, Pressable } = require("react-native");
+jest.mock('../src/ui/cosmic', () => {
+  const React = require('react');
+  const { Text, View, Pressable } = require('react-native');
 
   return {
     CosmicBackground: ({ children }: { children: React.ReactNode }) => (
@@ -39,13 +39,13 @@ jest.mock("../src/ui/cosmic", () => {
   };
 });
 
-describe("AnchorScreen", () => {
-  it("renders anchor title and breathing pattern options", () => {
+describe('AnchorScreen', () => {
+  it('renders anchor title and breathing pattern options', () => {
     render(<AnchorScreen />);
 
-    expect(screen.getByText("ANCHOR")).toBeTruthy();
-    expect(screen.getByText("4-7-8 RELAX")).toBeTruthy();
-    expect(screen.getByText("BOX BREATHING")).toBeTruthy();
-    expect(screen.getByText("ENERGIZE")).toBeTruthy();
+    expect(screen.getByText('ANCHOR')).toBeTruthy();
+    expect(screen.getByText('4-7-8 RELAX')).toBeTruthy();
+    expect(screen.getByText('BOX BREATHING')).toBeTruthy();
+    expect(screen.getByText('ENERGIZE')).toBeTruthy();
   });
 });

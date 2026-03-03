@@ -1,5 +1,5 @@
-import { createNavigationContainerRef } from "@react-navigation/native";
-import { ROUTES } from "./routes";
+import { createNavigationContainerRef } from '@react-navigation/native';
+import { ROUTES } from './routes';
 
 export type RootStackParamList = {
   [ROUTES.MAIN]: undefined;

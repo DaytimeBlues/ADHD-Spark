@@ -1,34 +1,31 @@
-import React, { Suspense, lazy } from "react";
-import { View, ActivityIndicator, Platform, StyleSheet } from "react-native";
+import React, { Suspense, lazy } from 'react';
+import { View, ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
-} from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Tokens } from "../theme/tokens";
-import { ThemeProvider, useTheme } from "../theme/ThemeProvider";
-import { WebNavBar } from "./WebNavBar";
-import { ROUTES } from "./routes";
-import { CaptureBubble } from "../components/capture";
-import ErrorBoundary from "../components/ErrorBoundary";
+} from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Tokens } from '../theme/tokens';
+import { ThemeProvider, useTheme } from '../theme/ThemeProvider';
+import { WebNavBar } from './WebNavBar';
+import { ROUTES } from './routes';
+import { CaptureBubble } from '../components/capture';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Phase 6: Sync with ADHD CADDI Redesign - Primary tabs use Cosmic screens
-import HomeScreen from "../screens/HomeScreen";
-import IgniteScreen from "../screens/IgniteScreen";
-import BrainDumpScreen from "../screens/BrainDumpScreen";
-import ChatScreen from "../screens/ChatScreen";
+import HomeScreen from '../screens/HomeScreen';
+import IgniteScreen from '../screens/IgniteScreen';
+import BrainDumpScreen from '../screens/BrainDumpScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 // Lazy loaded non-critical screens
-const FogCutterScreen = lazy(() => import("../screens/FogCutterScreen"));
-const PomodoroScreen = lazy(() => import("../screens/PomodoroScreen"));
-const CalendarScreen = lazy(() => import("../screens/CalendarScreen"));
-const AnchorScreen = lazy(() => import("../screens/AnchorScreen"));
-const CheckInScreen = lazy(() => import("../screens/CheckInScreen"));
-const CBTGuideScreen = lazy(() => import("../screens/CBTGuideScreen"));
-const DiagnosticsScreen = lazy(() => import("../screens/DiagnosticsScreen"));
-const InboxScreen = lazy(() => import("../screens/InboxScreen"));
+const FogCutterScreen = lazy(() => import('../screens/FogCutterScreen'));
+const PomodoroScreen = lazy(() => import('../screens/PomodoroScreen'));
+const CalendarScreen = lazy(() => import('../screens/CalendarScreen'));
+const AnchorScreen = lazy(() => import('../screens/AnchorScreen'));
+const InboxScreen = lazy(() => import('../screens/InboxScreen'));
 
 type TabBarIconProps = {
   color: string;
@@ -86,10 +83,6 @@ const LazyFogCutter = withSuspense(FogCutterScreen);
 const LazyPomodoro = withSuspense(PomodoroScreen);
 const LazyCalendar = withSuspense(CalendarScreen);
 const LazyAnchor = withSuspense(AnchorScreen);
-const LazyCheckIn = withSuspense(CheckInScreen);
-const LazyCBTGuide = withSuspense(CBTGuideScreen);
-const LazyDiagnostics = withSuspense(DiagnosticsScreen);
-const LazyChat = withSuspense(ChatScreen);
 const LazyInbox = withSuspense(InboxScreen);
 
 // Phase 6: Wrapped Cosmic screens for primary tabs (with ErrorBoundary)
@@ -102,9 +95,6 @@ const SafeLazyFogCutter = withErrorBoundary(LazyFogCutter);
 const SafeLazyPomodoro = withErrorBoundary(LazyPomodoro);
 const SafeLazyCalendar = withErrorBoundary(LazyCalendar);
 const SafeLazyAnchor = withErrorBoundary(LazyAnchor);
-const SafeLazyCheckIn = withErrorBoundary(LazyCheckIn);
-const SafeLazyCBTGuide = withErrorBoundary(LazyCBTGuide);
-const SafeLazyDiagnostics = withErrorBoundary(LazyDiagnostics);
 const SafeLazyInbox = withErrorBoundary(LazyInbox);
 
 const Stack = createStackNavigator();
@@ -114,19 +104,10 @@ const crossFadeOptions = {
   headerShown: false,
   cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
   transitionSpec: {
-    open: { animation: "timing", config: { duration: 200 } } as any,
-    close: { animation: "timing", config: { duration: 200 } } as any,
+    open: { animation: 'timing', config: { duration: 200 } } as any,
+    close: { animation: 'timing', config: { duration: 200 } } as any,
   },
 };
-
-const HomeStack = () => (
-  <Stack.Navigator screenOptions={crossFadeOptions}>
-    <Stack.Screen name={ROUTES.HOME_MAIN} component={SafeHomeScreen} />
-    <Stack.Screen name={ROUTES.CHECK_IN} component={SafeLazyCheckIn} />
-    <Stack.Screen name={ROUTES.CBT_GUIDE} component={SafeLazyCBTGuide} />
-    <Stack.Screen name={ROUTES.DIAGNOSTICS} component={SafeLazyDiagnostics} />
-  </Stack.Navigator>
-);
 
 const TabNavigator = () => {
   const { isCosmic } = useTheme();
@@ -136,23 +117,23 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      tabBar={Platform.OS === "web" ? renderWebTabBar : undefined}
+      tabBar={Platform.OS === 'web' ? renderWebTabBar : undefined}
       sceneContainerStyle={
-        Platform.OS === "web" ? webSceneContainerStyle : undefined
+        Platform.OS === 'web' ? webSceneContainerStyle : undefined
       }
       screenOptions={{
         tabBarActiveTintColor: isCosmic
-          ? "#8B5CF6"
+          ? '#8B5CF6'
           : Tokens.colors.indigo.primary,
         tabBarInactiveTintColor: isCosmic
-          ? "#B9C2D9"
+          ? '#B9C2D9'
           : Tokens.colors.text.tertiary,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: isCosmic ? "#070712" : Tokens.colors.neutral.darker,
+          backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darker,
           borderTopWidth: 1,
           borderTopColor: isCosmic
-            ? "rgba(42, 53, 82, 0.3)"
+            ? 'rgba(42, 53, 82, 0.3)'
             : Tokens.colors.neutral.borderSubtle,
           height: 60,
           paddingBottom: 8,
@@ -162,9 +143,9 @@ const TabNavigator = () => {
         tabBarLabelStyle: {
           fontFamily: Tokens.type.fontFamily.sans,
           fontSize: 10,
-          fontWeight: "700",
+          fontWeight: '700',
           letterSpacing: 1,
-          textTransform: "uppercase",
+          textTransform: 'uppercase',
         },
       }}
     >
@@ -216,19 +197,19 @@ const TabNavigatorWithBubble = () => (
 const styles = StyleSheet.create({
   suspenseFallback: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Tokens.colors.neutral.darkest,
   },
   webSceneContainerCosmic: {
     paddingTop: 64,
-    backgroundColor: "#070712",
-    height: "100%",
+    backgroundColor: '#070712',
+    height: '100%',
   },
   webSceneContainerLinear: {
     paddingTop: 64,
     backgroundColor: Tokens.colors.neutral.darkest,
-    height: "100%",
+    height: '100%',
   },
   container: {
     flex: 1,
@@ -244,7 +225,7 @@ const AppNavigatorContent = () => (
     <Stack.Screen
       name={ROUTES.INBOX}
       component={SafeLazyInbox}
-      options={{ presentation: "modal" }}
+      options={{ presentation: 'modal' }}
     />
   </Stack.Navigator>
 );

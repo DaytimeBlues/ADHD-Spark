@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { CheckInService } from "../services/CheckInService";
+import { useState, useEffect } from 'react';
+import { CheckInService } from '../services/CheckInService';
 
 /**
  * useCheckIn

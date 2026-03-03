@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useMemo,
   useRef,
-} from "react";
+} from 'react';
 import {
   View,
   Text,
@@ -18,20 +18,20 @@ import {
   Alert,
   AccessibilityInfo,
   Pressable,
-} from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import StorageService from "../services/StorageService";
-import UXMetricsService from "../services/UXMetricsService";
-import RecordingService from "../services/RecordingService";
-import { LoggerService } from "../services/LoggerService";
-import PlaudService, { GoogleTasksSyncService } from "../services/PlaudService";
-import OverlayService from "../services/OverlayService";
-import AISortService, { SortedItem } from "../services/AISortService";
-import { generateId } from "../utils/helpers";
-import { normalizeMicroSteps } from "../utils/fogCutter";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import { CosmicBackground } from "../ui/cosmic";
+} from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import StorageService from '../services/StorageService';
+import UXMetricsService from '../services/UXMetricsService';
+import RecordingService from '../services/RecordingService';
+import { LoggerService } from '../services/LoggerService';
+import PlaudService, { GoogleTasksSyncService } from '../services/PlaudService';
+import OverlayService from '../services/OverlayService';
+import AISortService, { SortedItem } from '../services/AISortService';
+import { generateId } from '../utils/helpers';
+import { normalizeMicroSteps } from '../utils/fogCutter';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import { CosmicBackground } from '../ui/cosmic';
 
 import {
   BrainDumpItem,
@@ -42,19 +42,19 @@ import {
   BrainDumpVoiceRecord,
   DumpItem,
   RecordingState,
-} from "../components/brain-dump";
+} from '../components/brain-dump';
 
 const PERSIST_DEBOUNCE_MS = 300;
 const OVERLAY_COUNT_DEBOUNCE_MS = 250;
 const MAX_SORT_INPUT_ITEMS = 50;
 
-const CATEGORY_ORDER: Array<SortedItem["category"]> = [
-  "task",
-  "event",
-  "reminder",
-  "worry",
-  "thought",
-  "idea",
+const CATEGORY_ORDER: Array<SortedItem['category']> = [
+  'task',
+  'event',
+  'reminder',
+  'worry',
+  'thought',
+  'idea',
 ];
 
 interface StoredFogCutterTask {
@@ -68,21 +68,21 @@ type BrainDumpRouteParams = {
   autoRecord?: boolean;
 };
 
-type BrainDumpRoute = RouteProp<Record<"Tasks", BrainDumpRouteParams>, "Tasks">;
+type BrainDumpRoute = RouteProp<Record<'Tasks', BrainDumpRouteParams>, 'Tasks'>;
 
 const transcriptionToSortItems = (transcription: string): string[] => {
   return transcription
     .split(/\r?\n|[.;]+/)
-    .map((line) => line.replace(/^[-*\d.)\s]+/, "").trim())
+    .map((line) => line.replace(/^[-*\d.)\s]+/, '').trim())
     .filter(Boolean)
     .slice(0, MAX_SORT_INPUT_ITEMS);
 };
 
 const toFogCutterTask = (item: SortedItem): StoredFogCutterTask | null => {
   if (
-    item.category !== "task" &&
-    item.category !== "reminder" &&
-    item.category !== "event"
+    item.category !== 'task' &&
+    item.category !== 'reminder' &&
+    item.category !== 'event'
   ) {
     return null;
   }
@@ -93,7 +93,7 @@ const toFogCutterTask = (item: SortedItem): StoredFogCutterTask | null => {
   }
 
   const stepHints: string[] = [
-    "Open this task and start with a 2-minute first step",
+    'Open this task and start with a 2-minute first step',
   ];
   if (item.dueDate) {
     stepHints.push(`Check due date: ${item.dueDate}`);
@@ -116,7 +116,7 @@ const BrainDumpScreen = () => {
   const route = useRoute<BrainDumpRoute>();
 
   const [items, setItems] = useState<DumpItem[]>([]);
-  const [recordingState, setRecordingState] = useState<RecordingState>("idle");
+  const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const [isSorting, setIsSorting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -152,16 +152,16 @@ const BrainDumpScreen = () => {
         const normalized = storedItems.filter((item) => {
           return Boolean(item?.id && item?.text && item?.createdAt);
         });
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
         setItems(normalized);
       }
     } catch (error) {
       LoggerService.error({
-        service: "BrainDumpScreen",
-        operation: "loadItems",
-        message: "Failed to load items",
+        service: 'BrainDumpScreen',
+        operation: 'loadItems',
+        message: 'Failed to load items',
         error,
       });
     } finally {
@@ -171,7 +171,7 @@ const BrainDumpScreen = () => {
 
   useEffect(() => {
     if (
-      Platform.OS === "android" &&
+      Platform.OS === 'android' &&
       UIManager.setLayoutAnimationEnabledExperimental
     ) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -194,9 +194,9 @@ const BrainDumpScreen = () => {
         items,
       ).catch((error) =>
         LoggerService.error({
-          service: "BrainDumpScreen",
-          operation: "persistItems",
-          message: "Failed to persist brain dump items",
+          service: 'BrainDumpScreen',
+          operation: 'persistItems',
+          message: 'Failed to persist brain dump items',
           error,
           context: { itemCount: items.length },
         }),
@@ -239,19 +239,19 @@ const BrainDumpScreen = () => {
   };
 
   const addItem = (text: string) => {
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     const newItem: DumpItem = {
       id: generateId(),
       text,
       createdAt: new Date().toISOString(),
-      source: "text",
+      source: 'text',
     };
     setItems((prevItems) => {
       const next = [newItem, ...prevItems];
       if (!guideDismissed && !showGuide) {
-        UXMetricsService.track("brain_dump_first_item_added");
+        UXMetricsService.track('brain_dump_first_item_added');
         setShowGuide(true);
       }
       return next;
@@ -313,14 +313,14 @@ const BrainDumpScreen = () => {
 
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
-        if (Platform.OS === "web") {
+        if (Platform.OS === 'web') {
           setSortingError(
-            "Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.",
+            'Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.',
           );
         } else {
           setSortingError(
             exportResult.errorMessage ||
-              "Google sign-in required to sync Tasks and Calendar exports.",
+              'Google sign-in required to sync Tasks and Calendar exports.',
           );
         }
       } else if (exportResult.errorMessage) {
@@ -334,7 +334,7 @@ const BrainDumpScreen = () => {
         setSortingError(null);
         setGoogleAuthRequired(false);
         AccessibilityInfo.announceForAccessibility(
-          "Tasks synced and suggestions saved.",
+          'Tasks synced and suggestions saved.',
         );
       }
     },
@@ -342,8 +342,8 @@ const BrainDumpScreen = () => {
   );
 
   const handleConnectGoogle = useCallback(async () => {
-    if (Platform.OS === "web") {
-      setSortingError("Google sign-in is not available on web yet.");
+    if (Platform.OS === 'web') {
+      setSortingError('Google sign-in is not available on web yet.');
       return;
     }
 
@@ -351,7 +351,7 @@ const BrainDumpScreen = () => {
     try {
       const success = await GoogleTasksSyncService.signInInteractive();
       if (!success) {
-        setSortingError("Google sign-in failed. Please try again.");
+        setSortingError('Google sign-in failed. Please try again.');
         return;
       }
 
@@ -367,7 +367,7 @@ const BrainDumpScreen = () => {
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
         setSortingError(
-          exportResult.errorMessage || "Google sign-in required.",
+          exportResult.errorMessage || 'Google sign-in required.',
         );
         return;
       }
@@ -381,7 +381,7 @@ const BrainDumpScreen = () => {
       setGoogleAuthRequired(false);
       setSortingError(null);
       AccessibilityInfo.announceForAccessibility(
-        "Tasks synced and suggestions saved.",
+        'Tasks synced and suggestions saved.',
       );
     } finally {
       setIsConnectingGoogle(false);
@@ -389,27 +389,27 @@ const BrainDumpScreen = () => {
   }, [sortedItems]);
 
   const handleRecordPress = useCallback(async () => {
-    if (recordingState === "idle") {
+    if (recordingState === 'idle') {
       previousErrorRef.current = !!recordingError;
     }
     setRecordingError(null);
 
-    if (recordingState === "idle") {
+    if (recordingState === 'idle') {
       const started = await RecordingService.startRecording();
       if (started) {
-        setRecordingState("recording");
+        setRecordingState('recording');
       } else {
         setRecordingError(
-          "Could not start recording. Check microphone permissions.",
+          'Could not start recording. Check microphone permissions.',
         );
       }
-    } else if (recordingState === "recording") {
-      setRecordingState("processing");
+    } else if (recordingState === 'recording') {
+      setRecordingState('processing');
       const result = await RecordingService.stopRecording();
 
       if (!result) {
-        setRecordingError("Recording failed.");
-        setRecordingState("idle");
+        setRecordingError('Recording failed.');
+        setRecordingState('idle');
         return;
       }
 
@@ -417,10 +417,10 @@ const BrainDumpScreen = () => {
 
       if (transcription.success && transcription.transcription) {
         if (previousErrorRef.current) {
-          UXMetricsService.track("brain_dump_recovery_after_error");
+          UXMetricsService.track('brain_dump_recovery_after_error');
           previousErrorRef.current = false;
         }
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
 
@@ -428,14 +428,14 @@ const BrainDumpScreen = () => {
           id: generateId(),
           text: transcription.transcription,
           createdAt: new Date().toISOString(),
-          source: "audio",
+          source: 'audio',
           audioPath: result.uri,
         };
 
         setItems((prevItems) => {
           const next = [newItem, ...prevItems];
           if (!guideDismissed && !showGuide) {
-            UXMetricsService.track("brain_dump_first_item_added");
+            UXMetricsService.track('brain_dump_first_item_added');
             setShowGuide(true);
           }
           return next;
@@ -452,30 +452,30 @@ const BrainDumpScreen = () => {
             setSortingError(
               error instanceof Error
                 ? error.message
-                : "Failed to sync transcription suggestions.",
+                : 'Failed to sync transcription suggestions.',
             );
           }
         }
       } else {
         setRecordingError(
-          transcription.error || "Transcription failed. Audio saved locally.",
+          transcription.error || 'Transcription failed. Audio saved locally.',
         );
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
         setItems((prevItems) => [
           {
             id: generateId(),
-            text: "[Voice Note: Transcription Failed]",
+            text: '[Voice Note: Transcription Failed]',
             createdAt: new Date().toISOString(),
-            source: "audio",
+            source: 'audio',
             audioPath: result.uri,
           },
           ...prevItems,
         ]);
       }
 
-      setRecordingState("idle");
+      setRecordingState('idle');
     }
   }, [
     guideDismissed,
@@ -494,7 +494,7 @@ const BrainDumpScreen = () => {
   }, [handleRecordPress, route.params?.autoRecord]);
 
   const deleteItem = (id: string) => {
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -504,15 +504,15 @@ const BrainDumpScreen = () => {
 
   const clearAll = () => {
     Alert.alert(
-      "CLEAR_DATA?",
-      "IRREVERSIBLE_ACTION.",
+      'CLEAR_DATA?',
+      'IRREVERSIBLE_ACTION.',
       [
-        { text: "ABORT", style: "cancel" },
+        { text: 'ABORT', style: 'cancel' },
         {
-          text: "CONFIRM",
-          style: "destructive",
+          text: 'CONFIRM',
+          style: 'destructive',
           onPress: () => {
-            if (Platform.OS !== "web") {
+            if (Platform.OS !== 'web') {
               LayoutAnimation.configureNext(
                 LayoutAnimation.Presets.easeInEaseOut,
               );
@@ -520,7 +520,7 @@ const BrainDumpScreen = () => {
             setItems([]);
             setSortedItems([]);
             setSortingError(null);
-            AccessibilityInfo.announceForAccessibility("All items cleared.");
+            AccessibilityInfo.announceForAccessibility('All items cleared.');
           },
         },
       ],
@@ -534,12 +534,12 @@ const BrainDumpScreen = () => {
 
     try {
       await runSortAndSyncPipeline(items.map((item) => item.text));
-      AccessibilityInfo.announceForAccessibility("AI suggestions updated.");
+      AccessibilityInfo.announceForAccessibility('AI suggestions updated.');
     } catch (error) {
       setSortingError(
         error instanceof Error
           ? error.message
-          : "AI sort is currently unavailable.",
+          : 'AI sort is currently unavailable.',
       );
       setSortedItems([]);
     } finally {
@@ -561,11 +561,11 @@ const BrainDumpScreen = () => {
     })).filter((entry) => entry.items.length > 0);
   }, [sortedItems]);
 
-  const getPriorityStyle = (priority: SortedItem["priority"]) => {
-    if (priority === "high") {
+  const getPriorityStyle = (priority: SortedItem['priority']) => {
+    if (priority === 'high') {
       return styles.priorityHigh;
     }
-    if (priority === "medium") {
+    if (priority === 'medium') {
       return styles.priorityMedium;
     }
     return styles.priorityLow;
@@ -617,7 +617,7 @@ const BrainDumpScreen = () => {
           {sortingError && (
             <View style={styles.errorContainer}>
               <Text style={styles.errorText}>{sortingError}</Text>
-              {googleAuthRequired && Platform.OS !== "web" && (
+              {googleAuthRequired && Platform.OS !== 'web' && (
                 <Pressable
                   onPress={handleConnectGoogle}
                   disabled={isConnectingGoogle}
@@ -628,7 +628,7 @@ const BrainDumpScreen = () => {
                   ]}
                 >
                   <Text style={styles.connectButtonText}>
-                    {isConnectingGoogle ? "CONNECTING..." : "CONNECT GOOGLE"}
+                    {isConnectingGoogle ? 'CONNECTING...' : 'CONNECT GOOGLE'}
                   </Text>
                 </Pressable>
               )}
@@ -660,7 +660,7 @@ const BrainDumpScreen = () => {
                       {catItems.map((item, idx) => (
                         <View key={idx} style={styles.sortedItemRow}>
                           <Text style={styles.sortedItemText}>
-                            {item.duration ? `[${item.duration}] ` : ""}
+                            {item.duration ? `[${item.duration}] ` : ''}
                             {item.text}
                           </Text>
                           <View
@@ -691,62 +691,62 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: isCosmic ? "#070712" : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darkest,
     },
     centerContainer: {
       flex: 1,
-      alignItems: "center",
+      alignItems: 'center',
       zIndex: 1,
     },
     contentWrapper: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       maxWidth: Tokens.layout.maxWidth.content,
       padding: Tokens.spacing[4],
     },
     header: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: isCosmic ? 16 : Tokens.spacing[5],
       marginTop: Tokens.spacing[4],
     },
     title: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      fontWeight: "700",
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontWeight: '700',
       letterSpacing: 2,
     },
     headerLine: {
       flex: 1,
       height: 1,
       backgroundColor: isCosmic
-        ? "rgba(139, 92, 246, 0.3)"
+        ? 'rgba(139, 92, 246, 0.3)'
         : Tokens.colors.neutral.border,
       marginLeft: Tokens.spacing[4],
     },
     loadingContainer: {
       padding: Tokens.spacing[8],
-      alignItems: "center",
+      alignItems: 'center',
       gap: Tokens.spacing[4],
     },
     loadingText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       letterSpacing: 1,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     errorContainer: {
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[4],
-      alignItems: "center",
+      alignItems: 'center',
     },
     errorText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       color: Tokens.colors.brand[500],
-      textAlign: "center",
+      textAlign: 'center',
     },
     connectButton: {
       marginTop: Tokens.spacing[3],
@@ -765,7 +765,7 @@ const getStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       color: Tokens.colors.text.primary,
-      fontWeight: "700",
+      fontWeight: '700',
     },
     emptyState: {
       marginTop: Tokens.spacing[12],
@@ -779,13 +779,13 @@ const getStyles = (isCosmic: boolean) =>
       paddingTop: Tokens.spacing[4],
       borderTopWidth: 1,
       borderTopColor: isCosmic
-        ? "rgba(139, 92, 246, 0.2)"
+        ? 'rgba(139, 92, 246, 0.2)'
         : Tokens.colors.neutral.border,
     },
     sortedHeader: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       marginBottom: Tokens.spacing[4],
       letterSpacing: 1,
     },
@@ -795,22 +795,22 @@ const getStyles = (isCosmic: boolean) =>
     categoryTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      textTransform: "uppercase",
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      textTransform: 'uppercase',
       marginBottom: Tokens.spacing[2],
       backgroundColor: isCosmic
-        ? "rgba(139, 92, 246, 0.1)"
+        ? 'rgba(139, 92, 246, 0.1)'
         : Tokens.colors.neutral.dark,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 4,
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
     },
     sortedItemRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
       paddingVertical: 4,
       marginBottom: 0,
     },
@@ -818,7 +818,7 @@ const getStyles = (isCosmic: boolean) =>
       flex: 1,
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       lineHeight: Tokens.type.sm * 1.5,
       marginRight: Tokens.spacing[3],
     },
@@ -827,18 +827,18 @@ const getStyles = (isCosmic: boolean) =>
       paddingVertical: 0,
       borderRadius: isCosmic ? 4 : Tokens.radii.none,
       minWidth: 40,
-      alignItems: "center",
+      alignItems: 'center',
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(185, 194, 217, 0.12)"
+        ? 'rgba(185, 194, 217, 0.12)'
         : Tokens.colors.neutral.border,
     },
     priorityText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      fontWeight: "700",
-      textTransform: "uppercase",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     },
     priorityHigh: {
       backgroundColor: Tokens.colors.brand[500],

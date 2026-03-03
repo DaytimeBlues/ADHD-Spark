@@ -1,6 +1,6 @@
-import { renderHook, waitFor, act } from "@testing-library/react-native";
+import { renderHook, waitFor, act } from '@testing-library/react-native';
 
-jest.mock("../src/services/NotificationService", () => ({
+jest.mock('../src/services/NotificationService', () => ({
   NotificationService: {
     requestPermissions: jest.fn(),
     scheduleTimerCompletion: jest.fn(),
@@ -8,10 +8,10 @@ jest.mock("../src/services/NotificationService", () => ({
   },
 }));
 
-import { useNotifications } from "../src/hooks/useNotifications";
-import { NotificationService } from "../src/services/NotificationService";
+import { useNotifications } from '../src/hooks/useNotifications';
+import { NotificationService } from '../src/services/NotificationService';
 
-describe("useNotifications", () => {
+describe('useNotifications', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (NotificationService.requestPermissions as jest.Mock).mockResolvedValue(
@@ -19,13 +19,13 @@ describe("useNotifications", () => {
     );
     (
       NotificationService.scheduleTimerCompletion as jest.Mock
-    ).mockResolvedValue("mock-id");
+    ).mockResolvedValue('mock-id');
     (
       NotificationService.cancelTimerNotification as jest.Mock
     ).mockResolvedValue(undefined);
   });
 
-  it("checks permission on mount", async () => {
+  it('checks permission on mount', async () => {
     const { result } = renderHook(() => useNotifications());
 
     await waitFor(() => {
@@ -36,10 +36,10 @@ describe("useNotifications", () => {
     expect(result.current.hasPermission).toBe(true);
   });
 
-  it("returns false when requesting permission fails", async () => {
-    const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  it('returns false when requesting permission fails', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     (NotificationService.requestPermissions as jest.Mock).mockRejectedValue(
-      new Error("boom"),
+      new Error('boom'),
     );
 
     const { result } = renderHook(() => useNotifications());
@@ -58,8 +58,8 @@ describe("useNotifications", () => {
     errorSpy.mockRestore();
   });
 
-  it("does not schedule notifications without permission", async () => {
-    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+  it('does not schedule notifications without permission', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     (NotificationService.requestPermissions as jest.Mock).mockResolvedValue(
       false,
     );
@@ -72,8 +72,8 @@ describe("useNotifications", () => {
 
     await act(async () => {
       const output = await result.current.scheduleNotification(
-        "Done",
-        "Body",
+        'Done',
+        'Body',
         123,
       );
       expect(output).toBeNull();
@@ -84,7 +84,7 @@ describe("useNotifications", () => {
     warnSpy.mockRestore();
   });
 
-  it("schedules notification when permission is granted", async () => {
+  it('schedules notification when permission is granted', async () => {
     const { result } = renderHook(() => useNotifications());
 
     await waitFor(() => {
@@ -92,17 +92,17 @@ describe("useNotifications", () => {
     });
 
     await act(async () => {
-      await result.current.scheduleNotification("Done", "Body", 5000);
+      await result.current.scheduleNotification('Done', 'Body', 5000);
     });
 
     expect(NotificationService.scheduleTimerCompletion).toHaveBeenCalledWith(
-      "Done",
-      "Body",
+      'Done',
+      'Body',
       5000,
     );
   });
 
-  it("cancels scheduled notification", async () => {
+  it('cancels scheduled notification', async () => {
     const { result } = renderHook(() => useNotifications());
 
     await act(async () => {

@@ -5,7 +5,7 @@
  * The primary action component for the cosmic theme.
  */
 
-import React, { memo, useState, useCallback, useMemo } from "react";
+import React, { memo, useState, useCallback, useMemo } from 'react';
 import {
   Pressable,
   Text,
@@ -17,9 +17,9 @@ import {
   Platform,
   NativeSyntheticEvent,
   TargetedEvent,
-} from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { ButtonVariant, ButtonSize, GlowLevel } from "./types";
+} from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { ButtonVariant, ButtonSize, GlowLevel } from './types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -83,8 +83,8 @@ type WebFocusEvent = NativeSyntheticEvent<TargetedEvent & { detail?: number }>;
  */
 export const RuneButton = memo(function RuneButton({
   children,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   disabled = false,
   loading = false,
   glow,
@@ -113,7 +113,7 @@ export const RuneButton = memo(function RuneButton({
   const handleFocus = useCallback((e: WebFocusEvent) => {
     setIsFocused(true);
     // Check if focus came from keyboard (detail === 0)
-    if (Platform.OS === "web" && e?.nativeEvent?.detail === 0) {
+    if (Platform.OS === 'web' && e?.nativeEvent?.detail === 0) {
       setIsKeyboardFocused(true);
     }
   }, []);
@@ -126,11 +126,11 @@ export const RuneButton = memo(function RuneButton({
   // Get height based on size
   const getHeight = useMemo(() => {
     switch (size) {
-      case "sm":
+      case 'sm':
         return 36;
-      case "md":
+      case 'md':
         return 44;
-      case "lg":
+      case 'lg':
         return 56;
       default:
         return 44;
@@ -140,11 +140,11 @@ export const RuneButton = memo(function RuneButton({
   // Get padding based on size
   const getPadding = useMemo(() => {
     switch (size) {
-      case "sm":
+      case 'sm':
         return { paddingHorizontal: 12 };
-      case "md":
+      case 'md':
         return { paddingHorizontal: 16 };
-      case "lg":
+      case 'lg':
         return { paddingHorizontal: 24 };
       default:
         return { paddingHorizontal: 16 };
@@ -161,65 +161,65 @@ export const RuneButton = memo(function RuneButton({
       return {
         container: {
           backgroundColor:
-            variant === "primary" ? t.colors.brand[500] : "transparent",
-          borderWidth: variant === "secondary" ? 1 : 0,
+            variant === 'primary' ? t.colors.brand[500] : 'transparent',
+          borderWidth: variant === 'secondary' ? 1 : 0,
           borderColor: t.colors.brand[500],
         },
         text: {
-          color: variant === "primary" ? "#FFFFFF" : t.colors.brand[500],
+          color: variant === 'primary' ? '#FFFFFF' : t.colors.brand[500],
         },
       };
     }
 
     // Cosmic theme styles
     switch (variant) {
-      case "primary":
+      case 'primary':
         return {
           container: {
-            backgroundColor: "#8B5CF6", // nebulaViolet
+            backgroundColor: '#8B5CF6', // nebulaViolet
             borderWidth: 0,
           },
           text: {
-            color: "#EEF2FF", // starlight
-            fontWeight: "600",
+            color: '#EEF2FF', // starlight
+            fontWeight: '600',
           },
         };
 
-      case "secondary":
+      case 'secondary':
         return {
           container: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderWidth: 1,
-            borderColor: "#8B5CF6", // nebulaViolet
+            borderColor: '#8B5CF6', // nebulaViolet
           },
           text: {
-            color: "#8B5CF6", // nebulaViolet
-            fontWeight: "500",
+            color: '#8B5CF6', // nebulaViolet
+            fontWeight: '500',
           },
         };
 
-      case "ghost":
+      case 'ghost':
         return {
           container: {
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             borderWidth: 0,
           },
           text: {
-            color: "#B9C2D9", // mist
-            fontWeight: "400",
+            color: '#B9C2D9', // mist
+            fontWeight: '400',
           },
         };
 
-      case "danger":
+      case 'danger':
         return {
           container: {
-            backgroundColor: "rgba(251, 113, 133, 0.1)", // cometRose at 10%
+            backgroundColor: 'rgba(251, 113, 133, 0.1)', // cometRose at 10%
             borderWidth: 1,
-            borderColor: "#FB7185", // cometRose
+            borderColor: '#FB7185', // cometRose
           },
           text: {
-            color: "#FB7185", // cometRose
-            fontWeight: "500",
+            color: '#FB7185', // cometRose
+            fontWeight: '500',
           },
         };
 
@@ -234,30 +234,30 @@ export const RuneButton = memo(function RuneButton({
       return {};
     }
 
-    let glowLevel = glow || (variant === "primary" ? "medium" : "none");
-    if (glowLevel === "none") {
+    let glowLevel = glow || (variant === 'primary' ? 'medium' : 'none');
+    if (glowLevel === 'none') {
       return {};
     }
 
     // Reduce glow level when pressed to simulate physical depression
     if (isPressed) {
-      if (glowLevel === "strong") {
-        glowLevel = "medium";
-      } else if (glowLevel === "medium") {
-        glowLevel = "soft";
-      } else if (glowLevel === "soft") {
-        glowLevel = "none";
+      if (glowLevel === 'strong') {
+        glowLevel = 'medium';
+      } else if (glowLevel === 'medium') {
+        glowLevel = 'soft';
+      } else if (glowLevel === 'soft') {
+        glowLevel = 'none';
       }
     }
 
-    if (glowLevel === "none") {
+    if (glowLevel === 'none') {
       return {};
     }
 
-    const glowColor = variant === "danger" ? "#FB7185" : "#8B5CF6";
+    const glowColor = variant === 'danger' ? '#FB7185' : '#8B5CF6';
 
     switch (glowLevel) {
-      case "soft":
+      case 'soft':
         return Platform.select({
           web: { boxShadow: `0 0 16px ${glowColor}40` },
           default: {
@@ -269,7 +269,7 @@ export const RuneButton = memo(function RuneButton({
           },
         }) as ViewStyle;
 
-      case "medium":
+      case 'medium':
         return Platform.select({
           web: {
             boxShadow: `0 0 24px ${glowColor}80, 0 0 48px ${glowColor}40`,
@@ -283,7 +283,7 @@ export const RuneButton = memo(function RuneButton({
           },
         }) as ViewStyle;
 
-      case "strong":
+      case 'strong':
         return Platform.select({
           web: { boxShadow: `0 0 32px ${glowColor}, 0 0 64px ${glowColor}80` },
           default: {
@@ -302,13 +302,13 @@ export const RuneButton = memo(function RuneButton({
 
   // Get focus ring style (web only)
   const getFocusStyle = useMemo((): ViewStyle => {
-    if (Platform.OS !== "web" || !isKeyboardFocused) {
+    if (Platform.OS !== 'web' || !isKeyboardFocused) {
       return {};
     }
 
     return {
-      outline: "none",
-      boxShadow: "0 0 0 2px #2DD4BF, 0 0 0 4px #070712", // auroraTeal focus ring
+      outline: 'none',
+      boxShadow: '0 0 0 2px #2DD4BF, 0 0 0 4px #070712', // auroraTeal focus ring
     } as ViewStyle;
   }, [isKeyboardFocused]);
 
@@ -340,17 +340,17 @@ export const RuneButton = memo(function RuneButton({
       {
         height: getHeight,
         borderRadius: isCosmic ? 24 : 8, // Soft squircural feel per ADHD guidelines
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
         gap: 8,
         borderWidth: 1,
-        borderColor: "rgba(185, 194, 217, 0.12)",
+        borderColor: 'rgba(185, 194, 217, 0.12)',
         ...getPadding,
         ...getVariantStyles.container,
-        ...(variant === "primary" &&
+        ...(variant === 'primary' &&
           isCosmic && {
-            borderTopColor: "rgba(255, 255, 255, 0.25)",
+            borderTopColor: 'rgba(255, 255, 255, 0.25)',
             borderTopWidth: 1.5,
           }),
         ...getGlowStyle,
@@ -377,7 +377,7 @@ export const RuneButton = memo(function RuneButton({
   // Text style
   const textStyle = useMemo(
     (): TextStyle => ({
-      fontSize: size === "sm" ? 14 : size === "lg" ? 18 : 16,
+      fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : 16,
       ...getVariantStyles.text,
     }),
     [size, getVariantStyles.text],
@@ -396,7 +396,7 @@ export const RuneButton = memo(function RuneButton({
       style={containerStyle}
       accessibilityLabel={
         accessibilityLabel ||
-        (typeof children === "string" ? children : undefined)
+        (typeof children === 'string' ? children : undefined)
       }
       accessibilityRole="button"
       accessibilityHint={accessibilityHint}
@@ -410,7 +410,7 @@ export const RuneButton = memo(function RuneButton({
       ) : (
         <>
           {leftIcon}
-          {typeof children === "string" ? (
+          {typeof children === 'string' ? (
             <Text style={textStyle}>{children}</Text>
           ) : (
             children
@@ -432,8 +432,8 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.3)",
-    borderTopColor: "#FFFFFF",
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderTopColor: '#FFFFFF',
   },
 });
 

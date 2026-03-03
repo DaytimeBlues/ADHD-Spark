@@ -1,19 +1,19 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { LayoutAnimation, Platform, UIManager } from "react-native";
-import StorageService from "../services/StorageService";
-import { useBrainDumpItems, DumpItem } from "./useBrainDumpItems";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import StorageService from '../services/StorageService';
+import { useBrainDumpItems, DumpItem } from './useBrainDumpItems';
 import {
   useBrainDumpRecording,
   RecordingState,
   RecordingResult,
-} from "./useBrainDumpRecording";
-import { useBrainDumpSorting } from "./useBrainDumpSorting";
-import type { SortedItem } from "../services/AISortService";
+} from './useBrainDumpRecording';
+import { useBrainDumpSorting } from './useBrainDumpSorting';
+import type { SortedItem } from '../services/AISortService';
 
-export type { DumpItem } from "./useBrainDumpItems";
-export type { RecordingState } from "./useBrainDumpRecording";
-export type { SortedItem } from "../services/AISortService";
-export { CATEGORY_ORDER } from "./useBrainDumpSorting";
+export type { DumpItem } from './useBrainDumpItems';
+export type { RecordingState } from './useBrainDumpRecording';
+export type { SortedItem } from '../services/AISortService';
+export { CATEGORY_ORDER } from './useBrainDumpSorting';
 
 interface UseBrainDumpReturn {
   // State
@@ -38,7 +38,7 @@ interface UseBrainDumpReturn {
   handleAISort: () => Promise<void>;
   handleConnectGoogle: () => Promise<void>;
   dismissGuide: () => Promise<void>;
-  getPriorityStyle: (priority: SortedItem["priority"]) => object;
+  getPriorityStyle: (priority: SortedItem['priority']) => object;
 }
 
 export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
@@ -49,7 +49,7 @@ export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
   // Initialize layout animation on Android
   useEffect(() => {
     if (
-      Platform.OS === "android" &&
+      Platform.OS === 'android' &&
       UIManager.setLayoutAnimationEnabledExperimental
     ) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -107,7 +107,7 @@ export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
     onTranscriptionSuccess: useCallback(
       async ({ text, audioPath, sortItems }: RecordingResult) => {
         // Add the transcribed item
-        addItemBase(text, "audio", audioPath);
+        addItemBase(text, 'audio', audioPath);
 
         // Clear any previous sorted items and errors when new content is added
         clearSortedItems();
@@ -127,7 +127,7 @@ export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
     onTranscriptionError: useCallback(
       (_error: string, audioPath: string) => {
         // Add a placeholder item for failed transcription
-        addItemBase("[Voice Note: Transcription Failed]", "audio", audioPath);
+        addItemBase('[Voice Note: Transcription Failed]', 'audio', audioPath);
       },
       [addItemBase],
     ),
@@ -170,7 +170,7 @@ export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
 
   const addItem = useCallback(
     (text: string) => {
-      addItemBase(text, "text");
+      addItemBase(text, 'text');
     },
     [addItemBase],
   );

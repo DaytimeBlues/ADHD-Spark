@@ -1,10 +1,10 @@
-import { config } from "../config";
-import { generateId } from "../utils/helpers";
-import { LoggerService } from "./LoggerService";
+import { config } from '../config';
+import { generateId } from '../utils/helpers';
+import { LoggerService } from './LoggerService';
 
 export interface ChatMessage {
   id: string;
-  role: "user" | "assistant" | "system";
+  role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: number;
 }
@@ -13,12 +13,12 @@ export type ChatUpdateHandler = (messages: ChatMessage[]) => void;
 
 /** Structured error codes for contextual UI messages. */
 export type ChatErrorCode =
-  | "CHAT_NETWORK"
-  | "CHAT_AUTH"
-  | "CHAT_SERVER_ERROR"
-  | "CHAT_UNKNOWN"
-  | "CHAT_INPUT_TOO_LONG"
-  | "CHAT_TIMEOUT";
+  | 'CHAT_NETWORK'
+  | 'CHAT_AUTH'
+  | 'CHAT_SERVER_ERROR'
+  | 'CHAT_UNKNOWN'
+  | 'CHAT_INPUT_TOO_LONG'
+  | 'CHAT_TIMEOUT';
 
 export class ChatError extends Error {
   constructor(
@@ -26,7 +26,7 @@ export class ChatError extends Error {
     message: string,
   ) {
     super(message);
-    this.name = "ChatError";
+    this.name = 'ChatError';
   }
 }
 
@@ -51,12 +51,12 @@ const MAX_MESSAGE_LENGTH = 2000;
  */
 const sanitizeInput = (input: string): string => {
   return input
-    .replace(/<script[^>]*>.*?<\/script>/gi, "")
+    .replace(/<script[^>]*>.*?<\/script>/gi, '')
     .replace(/<[^>]+\s+on\w+\s*=\s*["'][^"']*["']/gi, (match) => {
       // Remove event handlers from HTML tags
-      return match.replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, "");
+      return match.replace(/\s+on\w+\s*=\s*["'][^"']*["']/gi, '');
     })
-    .replace(/javascript:/gi, "")
+    .replace(/javascript:/gi, '')
     .trim();
 };
 
@@ -81,8 +81,8 @@ class ChatService {
   constructor() {
     this.messages = [
       {
-        id: "initial",
-        role: "system",
+        id: 'initial',
+        role: 'system',
         content: this.systemPrompt,
         timestamp: Date.now(),
       },
@@ -120,14 +120,14 @@ class ChatService {
     if (text.length > MAX_MESSAGE_LENGTH) {
       const errorMsg: ChatMessage = {
         id: `msg_${generateId()}`,
-        role: "assistant",
+        role: 'assistant',
         content: `Message too long. Please keep messages under ${MAX_MESSAGE_LENGTH} characters.`,
         timestamp: Date.now(),
       };
       this.messages.push(errorMsg);
       this.notify();
       throw new ChatError(
-        "CHAT_INPUT_TOO_LONG",
+        'CHAT_INPUT_TOO_LONG',
         `Message exceeds ${MAX_MESSAGE_LENGTH} character limit`,
       );
     }
@@ -137,7 +137,7 @@ class ChatService {
 
     const userMsg: ChatMessage = {
       id: `msg_${generateId()}`,
-      role: "user",
+      role: 'user',
       content: sanitizedText,
       timestamp: Date.now(),
     };
@@ -149,8 +149,8 @@ class ChatService {
     // Prepare AI response object
     const assistantMsg: ChatMessage = {
       id: `msg_${generateId()}`,
-      role: "assistant",
-      content: "",
+      role: 'assistant',
+      content: '',
       timestamp: Date.now(),
     };
     this.messages.push(assistantMsg);
@@ -160,7 +160,7 @@ class ChatService {
     this.abortController = new AbortController();
 
     try {
-      if (config.aiProvider === "kimi-direct") {
+      if (config.aiProvider === 'kimi-direct') {
         await this.callWithRetry(() => this.callKimiDirect(assistantMsg));
       } else {
         await this.callWithRetry(() => this.callVercelBackend(assistantMsg));
@@ -168,9 +168,9 @@ class ChatService {
     } catch (error) {
       const chatError = this.classifyError(error);
       LoggerService.error({
-        service: "ChatService",
-        operation: "sendMessage",
-        message: "Chat failed",
+        service: 'ChatService',
+        operation: 'sendMessage',
+        message: 'Chat failed',
         error: chatError,
         context: { messageCount: this.messages.length },
       });
@@ -196,23 +196,23 @@ class ChatService {
         lastError = error instanceof Error ? error : new Error(String(error));
 
         // Don't retry on client errors (4xx) except 429 (rate limit)
-        if (error instanceof ChatError && error.code === "CHAT_AUTH") {
+        if (error instanceof ChatError && error.code === 'CHAT_AUTH') {
           throw error;
         }
 
         // Check if it's an HTTP 4xx error (except 429)
         if (
-          lastError.message.includes("400") ||
-          lastError.message.includes("401") ||
-          lastError.message.includes("403") ||
-          lastError.message.includes("404")
+          lastError.message.includes('400') ||
+          lastError.message.includes('401') ||
+          lastError.message.includes('403') ||
+          lastError.message.includes('404')
         ) {
           throw error;
         }
 
         // Don't retry if this was an abort
-        if (error instanceof Error && error.name === "AbortError") {
-          throw new ChatError("CHAT_TIMEOUT", "Request was cancelled.");
+        if (error instanceof Error && error.name === 'AbortError') {
+          throw new ChatError('CHAT_TIMEOUT', 'Request was cancelled.');
         }
 
         if (attempt < maxRetries) {
@@ -226,7 +226,7 @@ class ChatService {
       }
     }
 
-    throw lastError || new Error("Max retries exceeded");
+    throw lastError || new Error('Max retries exceeded');
   }
 
   private classifyError(error: unknown): ChatError {
@@ -234,38 +234,38 @@ class ChatService {
       return error;
     }
 
-    const msg = error instanceof Error ? error.message.toLowerCase() : "";
-    if (msg.includes("abort") || msg.includes("cancelled")) {
-      return new ChatError("CHAT_TIMEOUT", "Request was cancelled.");
+    const msg = error instanceof Error ? error.message.toLowerCase() : '';
+    if (msg.includes('abort') || msg.includes('cancelled')) {
+      return new ChatError('CHAT_TIMEOUT', 'Request was cancelled.');
     }
-    if (msg.includes("timeout")) {
+    if (msg.includes('timeout')) {
       return new ChatError(
-        "CHAT_TIMEOUT",
-        "The AI is taking too long to respond. Please try again.",
+        'CHAT_TIMEOUT',
+        'The AI is taking too long to respond. Please try again.',
       );
     }
-    if (msg.includes("network") || msg.includes("failed to fetch")) {
+    if (msg.includes('network') || msg.includes('failed to fetch')) {
       return new ChatError(
-        "CHAT_NETWORK",
-        "Unable to reach AI service. Check your connection.",
+        'CHAT_NETWORK',
+        'Unable to reach AI service. Check your connection.',
       );
     }
-    if (msg.includes("401") || msg.includes("403") || msg.includes("auth")) {
+    if (msg.includes('401') || msg.includes('403') || msg.includes('auth')) {
       return new ChatError(
-        "CHAT_AUTH",
-        "AI authentication failed. Please check configuration.",
+        'CHAT_AUTH',
+        'AI authentication failed. Please check configuration.',
       );
     }
     return new ChatError(
-      "CHAT_UNKNOWN",
-      "I am having trouble connecting to my brain. Please try again.",
+      'CHAT_UNKNOWN',
+      'I am having trouble connecting to my brain. Please try again.',
     );
   }
 
   private async callKimiDirect(assistantMsg: ChatMessage): Promise<void> {
     if (!config.moonshotApiKey) {
       assistantMsg.content =
-        "Moonshot API key is missing. Please set EXPO_PUBLIC_MOONSHOT_API_KEY.";
+        'Moonshot API key is missing. Please set EXPO_PUBLIC_MOONSHOT_API_KEY.';
       this.notify();
       return;
     }
@@ -275,7 +275,7 @@ class ChatService {
     // See implementation_plan.md S1/S2 for the recommended migration path.
     if (__DEV__) {
       console.warn(
-        "ChatService: kimi-direct sends API key from client. Use a server proxy in production.",
+        'ChatService: kimi-direct sends API key from client. Use a server proxy in production.',
       );
     }
 
@@ -286,11 +286,11 @@ class ChatService {
 
     try {
       const response = await fetch(
-        "https://api.moonshot.cn/v1/chat/completions",
+        'https://api.moonshot.cn/v1/chat/completions',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${config.moonshotApiKey}`,
           },
           body: JSON.stringify({
@@ -310,9 +310,9 @@ class ChatService {
       if (!response.ok) {
         const errBody = await response.text();
         LoggerService.error({
-          service: "ChatService",
-          operation: "callKimiDirect",
-          message: "Kimi API Error",
+          service: 'ChatService',
+          operation: 'callKimiDirect',
+          message: 'Kimi API Error',
           error: new Error(`Kimi API error: ${response.status} - ${errBody}`),
           context: { status: response.status },
         });
@@ -322,7 +322,7 @@ class ChatService {
       const data = await response.json();
       const reply = data.choices?.[0]?.message?.content;
 
-      assistantMsg.content = reply || "Kimi returned an empty response.";
+      assistantMsg.content = reply || 'Kimi returned an empty response.';
       this.notify();
     } catch (error) {
       clearTimeout(timeoutId);
@@ -338,11 +338,11 @@ class ChatService {
 
     try {
       const response = await fetch(`${config.apiBaseUrl}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: this.messages
-            .filter((m) => m.role !== "system")
+            .filter((m) => m.role !== 'system')
             .map((m) => ({
               role: m.role,
               content: m.content,
@@ -354,13 +354,13 @@ class ChatService {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error("Chat API error");
+        throw new Error('Chat API error');
       }
 
       const data = await response.json();
       assistantMsg.content =
         data.reply ||
-        "I am having trouble connecting to my brain. Please try again.";
+        'I am having trouble connecting to my brain. Please try again.';
       this.notify();
     } catch (error) {
       clearTimeout(timeoutId);

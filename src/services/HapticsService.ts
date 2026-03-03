@@ -1,10 +1,10 @@
-import { Vibration } from "react-native";
-import { isWeb } from "../utils/PlatformUtils";
+import { Vibration } from 'react-native';
+import { isWeb } from '../utils/PlatformUtils';
 
 // Try to import expo-haptics if available
-let Haptics: typeof import("expo-haptics") | null = null;
+let Haptics: typeof import('expo-haptics') | null = null;
 try {
-  Haptics = require("expo-haptics");
+  Haptics = require('expo-haptics');
 } catch {
   // expo-haptics not available, fall back to Vibration
 }
@@ -25,7 +25,7 @@ type TapOptions = {
   key?: string;
   minIntervalMs?: number;
   durationMs?: number;
-  intensity?: "light" | "medium" | "heavy";
+  intensity?: 'light' | 'medium' | 'heavy';
 };
 
 type SelectionOptions = {
@@ -45,9 +45,9 @@ class HapticsService {
       return;
     }
 
-    const key = options?.key ?? "global";
+    const key = options?.key ?? 'global';
     const minIntervalMs = options?.minIntervalMs ?? MIN_INTERVAL_MS;
-    const intensity = options?.intensity ?? "light";
+    const intensity = options?.intensity ?? 'light';
     const now = Date.now();
     const lastTapAt = this.lastTapByKey[key] ?? 0;
 
@@ -60,9 +60,9 @@ class HapticsService {
     // Use expo-haptics if available (much better on iOS)
     if (hasExpoHaptics && Haptics) {
       const impactStyle =
-        intensity === "heavy"
+        intensity === 'heavy'
           ? Haptics.ImpactFeedbackStyle.Heavy
-          : intensity === "medium"
+          : intensity === 'medium'
             ? Haptics.ImpactFeedbackStyle.Medium
             : Haptics.ImpactFeedbackStyle.Light;
 
@@ -75,11 +75,11 @@ class HapticsService {
     }
   }
 
-  private fallbackVibrate(intensity: "light" | "medium" | "heavy"): void {
+  private fallbackVibrate(intensity: 'light' | 'medium' | 'heavy'): void {
     Vibration.vibrate(
-      intensity === "heavy"
+      intensity === 'heavy'
         ? HEAVY_TAP_MS
-        : intensity === "medium"
+        : intensity === 'medium'
           ? MEDIUM_TAP_MS
           : LIGHT_TAP_MS,
     );
@@ -89,14 +89,14 @@ class HapticsService {
    * Medium tap - for important actions
    */
   mediumTap(options?: TapOptions): void {
-    this.tap({ ...options, intensity: "medium" });
+    this.tap({ ...options, intensity: 'medium' });
   }
 
   /**
    * Heavy tap - for critical actions, completion
    */
   heavyTap(options?: TapOptions): void {
-    this.tap({ ...options, intensity: "heavy" });
+    this.tap({ ...options, intensity: 'heavy' });
   }
 
   /**
@@ -108,7 +108,7 @@ class HapticsService {
       return;
     }
 
-    const key = options?.key ?? "global";
+    const key = options?.key ?? 'global';
     const now = Date.now();
     const lastSelectionAt = this.lastSelectionByKey[key] ?? 0;
 

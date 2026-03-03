@@ -5,18 +5,18 @@
  * Mocking the Zustand store to ensure it correctly delegates actions.
  */
 
-import CaptureService from "../src/services/CaptureService";
-import { useCaptureStore } from "../src/store/useCaptureStore";
+import CaptureService from '../src/services/CaptureService';
+import { useCaptureStore } from '../src/store/useCaptureStore';
 import type {
   CaptureItem,
   NewCaptureInput,
-} from "../src/services/CaptureService";
+} from '../src/services/CaptureService';
 
 // ============================================================================
 // MOCKS
 // ============================================================================
 
-jest.mock("../src/store/useCaptureStore", () => ({
+jest.mock('../src/store/useCaptureStore', () => ({
   useCaptureStore: {
     getState: jest.fn(),
     subscribe: jest.fn(),
@@ -29,10 +29,10 @@ jest.mock("../src/store/useCaptureStore", () => ({
 
 function makeItem(overrides: Partial<CaptureItem> = {}): CaptureItem {
   return {
-    id: "cap_test_1",
-    source: "text",
-    status: "unreviewed",
-    raw: "test capture content",
+    id: 'cap_test_1',
+    source: 'text',
+    status: 'unreviewed',
+    raw: 'test capture content',
     createdAt: Date.now(),
     ...overrides,
   };
@@ -42,7 +42,7 @@ function makeItem(overrides: Partial<CaptureItem> = {}): CaptureItem {
 // TESTS
 // ============================================================================
 
-describe("CaptureService", () => {
+describe('CaptureService', () => {
   let mockState: {
     _hasHydrated: boolean;
     items: CaptureItem[];
@@ -75,21 +75,21 @@ describe("CaptureService", () => {
   // getAll
   // --------------------------------------------------------------------------
 
-  describe("getAll", () => {
-    it("returns all items when no filter is provided", async () => {
-      const items = [makeItem({ id: "a" })];
+  describe('getAll', () => {
+    it('returns all items when no filter is provided', async () => {
+      const items = [makeItem({ id: 'a' })];
       mockState.items = items;
 
       const result = await CaptureService.getAll();
       expect(result).toEqual(items);
     });
 
-    it("filters by status when filter is provided", async () => {
-      const items = [makeItem({ id: "a", status: "unreviewed" })];
+    it('filters by status when filter is provided', async () => {
+      const items = [makeItem({ id: 'a', status: 'unreviewed' })];
       mockState.getItemsByStatus.mockReturnValueOnce(items);
 
-      const result = await CaptureService.getAll({ status: "unreviewed" });
-      expect(mockState.getItemsByStatus).toHaveBeenCalledWith("unreviewed");
+      const result = await CaptureService.getAll({ status: 'unreviewed' });
+      expect(mockState.getItemsByStatus).toHaveBeenCalledWith('unreviewed');
       expect(result).toEqual(items);
     });
   });
@@ -98,8 +98,8 @@ describe("CaptureService", () => {
   // getUnreviewedCount
   // --------------------------------------------------------------------------
 
-  describe("getUnreviewedCount", () => {
-    it("returns count of unreviewed items", async () => {
+  describe('getUnreviewedCount', () => {
+    it('returns count of unreviewed items', async () => {
       mockState.getUnreviewedCount.mockReturnValueOnce(5);
       const count = await CaptureService.getUnreviewedCount();
       expect(count).toBe(5);
@@ -111,18 +111,18 @@ describe("CaptureService", () => {
   // save
   // --------------------------------------------------------------------------
 
-  describe("save", () => {
-    it("creates a new item and calls addItem on store", async () => {
+  describe('save', () => {
+    it('creates a new item and calls addItem on store', async () => {
       const input: NewCaptureInput = {
-        source: "voice",
-        raw: "test voice note",
+        source: 'voice',
+        raw: 'test voice note',
       };
 
       const item = await CaptureService.save(input);
 
       expect(item.id).toMatch(/^cap_/);
-      expect(item.status).toBe("unreviewed");
-      expect(item.raw).toBe("test voice note");
+      expect(item.status).toBe('unreviewed');
+      expect(item.raw).toBe('test voice note');
 
       expect(mockState.addItem).toHaveBeenCalledWith(item);
     });
@@ -132,39 +132,39 @@ describe("CaptureService", () => {
   // update / promote / discard / delete
   // --------------------------------------------------------------------------
 
-  describe("mutations", () => {
-    it("update calls updateItem", async () => {
-      await CaptureService.update("123", { transcript: "hello" });
-      expect(mockState.updateItem).toHaveBeenCalledWith("123", {
-        transcript: "hello",
+  describe('mutations', () => {
+    it('update calls updateItem', async () => {
+      await CaptureService.update('123', { transcript: 'hello' });
+      expect(mockState.updateItem).toHaveBeenCalledWith('123', {
+        transcript: 'hello',
       });
     });
 
-    it("promote calls updateItem with promoted status and timestamp", async () => {
-      await CaptureService.promote("cap_1", "task");
+    it('promote calls updateItem with promoted status and timestamp', async () => {
+      await CaptureService.promote('cap_1', 'task');
       expect(mockState.updateItem).toHaveBeenCalledWith(
-        "cap_1",
+        'cap_1',
         expect.objectContaining({
-          status: "promoted",
-          promotedTo: "task",
+          status: 'promoted',
+          promotedTo: 'task',
           promotedAt: expect.any(Number),
         }),
       );
     });
 
-    it("discard calls updateItem with discarded status", async () => {
-      await CaptureService.discard("cap_3");
-      expect(mockState.updateItem).toHaveBeenCalledWith("cap_3", {
-        status: "discarded",
+    it('discard calls updateItem with discarded status', async () => {
+      await CaptureService.discard('cap_3');
+      expect(mockState.updateItem).toHaveBeenCalledWith('cap_3', {
+        status: 'discarded',
       });
     });
 
-    it("delete calls deleteItem", async () => {
-      await CaptureService.delete("delete_me");
-      expect(mockState.deleteItem).toHaveBeenCalledWith("delete_me");
+    it('delete calls deleteItem', async () => {
+      await CaptureService.delete('delete_me');
+      expect(mockState.deleteItem).toHaveBeenCalledWith('delete_me');
     });
 
-    it("clearDiscarded calls clearDiscarded on store", async () => {
+    it('clearDiscarded calls clearDiscarded on store', async () => {
       await CaptureService.clearDiscarded();
       expect(mockState.clearDiscarded).toHaveBeenCalled();
     });
@@ -174,8 +174,8 @@ describe("CaptureService", () => {
   // subscribe
   // --------------------------------------------------------------------------
 
-  describe("subscribe", () => {
-    it("subscribes to useCaptureStore and passes count", () => {
+  describe('subscribe', () => {
+    it('subscribes to useCaptureStore and passes count', () => {
       const mockUnsub = jest.fn();
       (useCaptureStore.subscribe as jest.Mock).mockReturnValue(mockUnsub);
       mockState.getUnreviewedCount.mockReturnValue(3);

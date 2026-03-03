@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
-import { SortedItem } from "../../services/AISortService";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
+import { SortedItem } from '../../services/AISortService';
 
 interface BrainDumpSortedSectionProps {
   groupedItems: Array<{ category: string; items: SortedItem[] }>;
-  getPriorityStyle: (priority: SortedItem["priority"]) => object;
+  getPriorityStyle: (priority: SortedItem['priority']) => object;
 }
 
 export const BrainDumpSortedSection: React.FC<BrainDumpSortedSectionProps> = ({
@@ -29,7 +29,7 @@ export const BrainDumpSortedSection: React.FC<BrainDumpSortedSectionProps> = ({
           {catItems.map((item, idx) => (
             <View key={idx} style={styles.sortedItemRow}>
               <Text style={styles.sortedItemText}>
-                {item.duration ? `[${item.duration}] ` : ""}
+                {item.duration ? `[${item.duration}] ` : ''}
                 {item.text}
               </Text>
               <View
@@ -52,13 +52,13 @@ const getStyles = (isCosmic: boolean) =>
       paddingTop: Tokens.spacing[4],
       borderTopWidth: 1,
       borderTopColor: isCosmic
-        ? "rgba(139, 92, 246, 0.2)"
+        ? 'rgba(139, 92, 246, 0.2)'
         : Tokens.colors.neutral.border,
     },
     sortedHeader: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       marginBottom: Tokens.spacing[4],
       letterSpacing: 1,
     },
@@ -68,22 +68,22 @@ const getStyles = (isCosmic: boolean) =>
     categoryTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      textTransform: "uppercase",
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      textTransform: 'uppercase',
       marginBottom: Tokens.spacing[2],
       backgroundColor: isCosmic
-        ? "rgba(139, 92, 246, 0.1)"
+        ? 'rgba(139, 92, 246, 0.1)'
         : Tokens.colors.neutral.dark,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 4,
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
     },
     sortedItemRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
       paddingVertical: 4,
       marginBottom: 0,
     },
@@ -91,7 +91,7 @@ const getStyles = (isCosmic: boolean) =>
       flex: 1,
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       lineHeight: Tokens.type.sm * 1.5,
       marginRight: Tokens.spacing[3],
     },
@@ -100,18 +100,18 @@ const getStyles = (isCosmic: boolean) =>
       paddingVertical: 0,
       borderRadius: isCosmic ? 4 : Tokens.radii.none,
       minWidth: 40,
-      alignItems: "center",
+      alignItems: 'center',
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(185, 194, 217, 0.12)"
+        ? 'rgba(185, 194, 217, 0.12)'
         : Tokens.colors.neutral.border,
     },
     priorityText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      fontWeight: "700",
-      textTransform: "uppercase",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     },
   });
 

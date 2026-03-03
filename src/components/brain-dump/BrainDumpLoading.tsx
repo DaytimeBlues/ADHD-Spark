@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface BrainDumpLoadingProps {
   isLoading: boolean;
@@ -29,15 +29,15 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     loadingContainer: {
       padding: Tokens.spacing[8],
-      alignItems: "center",
+      alignItems: 'center',
       gap: Tokens.spacing[4],
     },
     loadingText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       letterSpacing: 1,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
   });
 

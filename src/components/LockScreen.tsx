@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import { CosmicBackground } from "../ui/cosmic/CosmicBackground";
-import { LinearButton } from "./ui/LinearButton";
-import { GlowCard } from "../ui/cosmic/GlowCard";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import { CosmicBackground } from '../ui/cosmic/CosmicBackground';
+import { LinearButton } from './ui/LinearButton';
+import { GlowCard } from '../ui/cosmic/GlowCard';
 
 interface LockScreenProps {
   onUnlock: () => void;
@@ -41,14 +41,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Tokens.colors.neutral.darkest,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     padding: Tokens.spacing[6],
-    alignItems: "center",
+    alignItems: 'center',
     maxWidth: 400,
-    width: "100%",
+    width: '100%',
   },
   icon: {
     fontSize: 48,
@@ -62,14 +62,14 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[8],
   },
   card: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   message: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.secondary,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: Tokens.spacing[8],
     lineHeight: 24,
   },

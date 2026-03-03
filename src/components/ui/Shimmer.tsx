@@ -1,6 +1,6 @@
-import React from "react";
-import { View, StyleSheet, Animated, ViewStyle } from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { View, StyleSheet, Animated, ViewStyle } from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface ShimmerProps {
   children?: React.ReactNode;
@@ -11,7 +11,7 @@ interface ShimmerProps {
 
 export const Shimmer: React.FC<ShimmerProps> = ({
   children,
-  width = "100%",
+  width = '100%',
   height = 20,
   style,
 }) => {
@@ -54,8 +54,8 @@ export const Shimmer: React.FC<ShimmerProps> = ({
           width: width as any, // DimensionValue accepts string|number but RN types don't reflect this for web
           height,
           backgroundColor: isCosmic
-            ? "rgba(139, 92, 246, 0.1)"
-            : "rgba(0, 0, 0, 0.05)",
+            ? 'rgba(139, 92, 246, 0.1)'
+            : 'rgba(0, 0, 0, 0.05)',
         },
         style,
       ]}
@@ -66,8 +66,8 @@ export const Shimmer: React.FC<ShimmerProps> = ({
           {
             transform: [{ translateX }],
             backgroundColor: isCosmic
-              ? "rgba(139, 92, 246, 0.3)"
-              : "rgba(255, 255, 255, 0.5)",
+              ? 'rgba(139, 92, 246, 0.3)'
+              : 'rgba(255, 255, 255, 0.5)',
           },
         ]}
       />
@@ -78,11 +78,11 @@ export const Shimmer: React.FC<ShimmerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: "hidden",
+    overflow: 'hidden',
     borderRadius: 4,
   },
   shimmer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,

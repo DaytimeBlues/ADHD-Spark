@@ -1,5 +1,5 @@
-export type TaskPriority = "urgent" | "important" | "normal";
-export type TaskSource = "manual" | "capture" | "google";
+export type TaskPriority = 'urgent' | 'important' | 'normal';
+export type TaskSource = 'manual' | 'capture' | 'google';
 
 export interface Task {
   id: string;

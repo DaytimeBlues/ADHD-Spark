@@ -1,9 +1,9 @@
-import { renderHook, act } from "@testing-library/react-native";
-import { useUnreviewedCount } from "../src/hooks/useUnreviewedCount";
-import CaptureService from "../src/services/CaptureService";
+import { renderHook, act } from '@testing-library/react-native';
+import { useUnreviewedCount } from '../src/hooks/useUnreviewedCount';
+import CaptureService from '../src/services/CaptureService';
 
 // Mock CaptureService
-jest.mock("../src/services/CaptureService", () => ({
+jest.mock('../src/services/CaptureService', () => ({
   __esModule: true,
   default: {
     getUnreviewedCount: jest.fn().mockReturnValue(0),
@@ -11,12 +11,12 @@ jest.mock("../src/services/CaptureService", () => ({
   },
 }));
 
-describe("useUnreviewedCount", () => {
+describe('useUnreviewedCount', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should initialize with CaptureService count", () => {
+  it('should initialize with CaptureService count', () => {
     (CaptureService.getUnreviewedCount as jest.Mock).mockReturnValue(5);
 
     const { result } = renderHook(() => useUnreviewedCount());
@@ -25,13 +25,13 @@ describe("useUnreviewedCount", () => {
     expect(result.current).toBe(5);
   });
 
-  it("should subscribe to CaptureService on mount", () => {
+  it('should subscribe to CaptureService on mount', () => {
     renderHook(() => useUnreviewedCount());
 
     expect(CaptureService.subscribe).toHaveBeenCalled();
   });
 
-  it("should update count when service notifies", () => {
+  it('should update count when service notifies', () => {
     let subscriberCallback: ((count: number) => void) | null = null;
 
     (CaptureService.getUnreviewedCount as jest.Mock).mockReturnValue(0);
@@ -55,7 +55,7 @@ describe("useUnreviewedCount", () => {
     expect(result.current).toBe(3);
   });
 
-  it("should unsubscribe from CaptureService on unmount", () => {
+  it('should unsubscribe from CaptureService on unmount', () => {
     const unsubscribe = jest.fn();
     (CaptureService.subscribe as jest.Mock).mockReturnValue(unsubscribe);
 

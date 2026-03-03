@@ -1,5 +1,5 @@
-import { AppState } from "react-native";
-import { useDriftStore } from "../store/useDriftStore";
+import { AppState } from 'react-native';
+import { useDriftStore } from '../store/useDriftStore';
 
 class DriftServiceClass {
   private intervalId: ReturnType<typeof setInterval> | null = null;
@@ -12,9 +12,9 @@ class DriftServiceClass {
     }
 
     this.appStateSubscription = AppState.addEventListener(
-      "change",
+      'change',
       (nextState) => {
-        if (nextState === "active") {
+        if (nextState === 'active') {
           this.startCheck();
         } else {
           this.stopCheck();

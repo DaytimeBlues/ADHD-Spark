@@ -14,11 +14,11 @@
 export const SECRETS = {
   // Google OAuth Client ID
   // From: APIs & Services → Credentials → OAuth 2.0 Client IDs
-  GOOGLE_CLIENT_ID: "your-client-id.apps.googleusercontent.com",
+  GOOGLE_CLIENT_ID: 'your-client-id.apps.googleusercontent.com',
 
   // Google API Key
   // From: APIs & Services → Credentials → API Keys
-  GOOGLE_API_KEY: "AIzaSy...",
+  GOOGLE_API_KEY: 'AIzaSy...',
 };
 
 export default SECRETS;

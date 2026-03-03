@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { zustandStorage } from "../services/StorageService";
-import type { Task, TaskPriority, TaskSource } from "../types/task";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { zustandStorage } from '../services/StorageService';
+import type { Task, TaskPriority, TaskSource } from '../types/task';
 
 interface TaskState {
   tasks: Task[];
@@ -39,9 +39,9 @@ export const useTaskStore = create<TaskState>()(
             id: `task_${now}_${Math.random().toString(36).slice(2, 7)}`,
             title: input.title,
             description: input.description,
-            priority: input.priority || "normal",
+            priority: input.priority || 'normal',
             completed: false,
-            source: input.source || "manual",
+            source: input.source || 'manual',
             googleTaskId: input.googleTaskId,
             createdAt: now,
             updatedAt: now,
@@ -89,9 +89,9 @@ export const useTaskStore = create<TaskState>()(
               id: `task_gt_${gt.id}`,
               title: gt.title,
               description: gt.notes,
-              priority: "normal",
-              completed: gt.status === "completed",
-              source: "google",
+              priority: 'normal',
+              completed: gt.status === 'completed',
+              source: 'google',
               googleTaskId: gt.id,
               createdAt: Date.now(),
               updatedAt: Date.now(),
@@ -111,7 +111,7 @@ export const useTaskStore = create<TaskState>()(
       },
     }),
     {
-      name: "taskStore",
+      name: 'taskStore',
       storage: createJSONStorage(() => zustandStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {

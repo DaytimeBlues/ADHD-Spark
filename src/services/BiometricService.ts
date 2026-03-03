@@ -1,5 +1,5 @@
-import { AppState, AppStateStatus } from "react-native";
-import StorageService from "./StorageService";
+import { AppState, AppStateStatus } from 'react-native';
+import StorageService from './StorageService';
 
 type AuthStateSubscriber = (isAuthenticated: boolean) => void;
 
@@ -22,10 +22,10 @@ const getLocalAuthentication = (): LocalAuthenticationLike | null => {
 
   try {
     localAuthenticationModule =
-      require("expo-local-authentication") as LocalAuthenticationLike;
+      require('expo-local-authentication') as LocalAuthenticationLike;
   } catch (error) {
     console.warn(
-      "BiometricService: expo-local-authentication is unavailable; biometric auth is disabled.",
+      'BiometricService: expo-local-authentication is unavailable; biometric auth is disabled.',
       error,
     );
     localAuthenticationModule = null;
@@ -45,7 +45,7 @@ class BiometricServiceClass {
 
   constructor() {
     this.appStateSubscription = AppState.addEventListener(
-      "change",
+      'change',
       this.handleAppStateChange,
     );
   }
@@ -57,7 +57,7 @@ class BiometricServiceClass {
 
   public async init() {
     const isSecured =
-      await StorageService.getJSON<boolean>("isBiometricSecured");
+      await StorageService.getJSON<boolean>('isBiometricSecured');
     this.isSecured = !!isSecured && Boolean(getLocalAuthentication());
     // Assume initialized app is authenticated until otherwise
     this.isAuthenticated = true;
@@ -81,7 +81,7 @@ class BiometricServiceClass {
     }
 
     this.isSecured = enabled && Boolean(localAuthentication);
-    await StorageService.setJSON("isBiometricSecured", this.isSecured);
+    await StorageService.setJSON('isBiometricSecured', this.isSecured);
     return true;
   }
 
@@ -90,7 +90,7 @@ class BiometricServiceClass {
   }
 
   public async authenticate(
-    promptMessage = "Unlock Spark ADHD",
+    promptMessage = 'Unlock Spark ADHD',
   ): Promise<boolean> {
     if (!this.isSecured) {
       return true;
@@ -106,7 +106,7 @@ class BiometricServiceClass {
     try {
       const result = await localAuthentication.authenticateAsync({
         promptMessage,
-        fallbackLabel: "Use Passcode",
+        fallbackLabel: 'Use Passcode',
         disableDeviceFallback: false,
       });
 
@@ -117,7 +117,7 @@ class BiometricServiceClass {
       }
       return false;
     } catch (e) {
-      console.warn("Biometric auth failed", e);
+      console.warn('Biometric auth failed', e);
       return false;
     }
   }
@@ -127,11 +127,11 @@ class BiometricServiceClass {
       return;
     }
 
-    if (nextState === "background" || nextState === "inactive") {
+    if (nextState === 'background' || nextState === 'inactive') {
       if (!this.backgroundedAt) {
         this.backgroundedAt = Date.now();
       }
-    } else if (nextState === "active") {
+    } else if (nextState === 'active') {
       if (
         this.backgroundedAt &&
         Date.now() - this.backgroundedAt > this.REAUTH_THRESHOLD_MS

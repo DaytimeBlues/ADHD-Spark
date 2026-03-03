@@ -1,32 +1,32 @@
-import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react-native";
-import PomodoroScreen from "../src/screens/PomodoroScreen";
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react-native';
+import PomodoroScreen from '../src/screens/PomodoroScreen';
 
 const mockStart = jest.fn();
 const mockPause = jest.fn();
 const mockReset = jest.fn();
 
 const mockStoreState = {
-  activeMode: "pomodoro",
+  activeMode: 'pomodoro',
   isWorking: true,
   sessions: 2,
   incrementSession: jest.fn(),
   completePhase: jest.fn(),
 };
 
-jest.mock("../src/hooks/useTimer", () => ({
+jest.mock('../src/hooks/useTimer', () => ({
   __esModule: true,
   default: () => ({
     timeLeft: 1500,
     isRunning: false,
-    formattedTime: "25:00",
+    formattedTime: '25:00',
     start: mockStart,
     pause: mockPause,
     reset: mockReset,
   }),
 }));
 
-jest.mock("../src/store/useTimerStore", () => {
+jest.mock('../src/store/useTimerStore', () => {
   const mockUseTimerStore = jest.fn(() => mockStoreState) as jest.Mock & {
     getState: () => typeof mockStoreState;
   };
@@ -37,7 +37,7 @@ jest.mock("../src/store/useTimerStore", () => {
   };
 });
 
-jest.mock("../src/services/SoundService", () => ({
+jest.mock('../src/services/SoundService', () => ({
   __esModule: true,
   default: {
     playCompletionSound: jest.fn(),
@@ -45,9 +45,9 @@ jest.mock("../src/services/SoundService", () => ({
   },
 }));
 
-jest.mock("../src/ui/cosmic", () => {
-  const React = require("react");
-  const { Text, View, Pressable } = require("react-native");
+jest.mock('../src/ui/cosmic', () => {
+  const React = require('react');
+  const { Text, View, Pressable } = require('react-native');
   return {
     CosmicBackground: ({ children }: { children: React.ReactNode }) => (
       <View>{children}</View>
@@ -68,18 +68,18 @@ jest.mock("../src/ui/cosmic", () => {
   };
 });
 
-describe("PomodoroScreen", () => {
+describe('PomodoroScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders pomodoro timer and starts when button pressed", () => {
+  it('renders pomodoro timer and starts when button pressed', () => {
     render(<PomodoroScreen />);
 
-    expect(screen.getByText("POMODORO")).toBeTruthy();
-    expect(screen.getByText("25:00")).toBeTruthy();
+    expect(screen.getByText('POMODORO')).toBeTruthy();
+    expect(screen.getByText('25:00')).toBeTruthy();
 
-    fireEvent.press(screen.getByText("Start Timer"));
+    fireEvent.press(screen.getByText('Start Timer'));
     expect(mockStart).toHaveBeenCalled();
   });
 });

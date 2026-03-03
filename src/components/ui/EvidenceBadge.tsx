@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, StyleSheet, ViewStyle } from "react-native";
-import { Tokens } from "../../theme/tokens";
+import React from 'react';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { Tokens } from '../../theme/tokens';
 
-export type EvidenceTier = "rct" | "clinical" | "heuristic";
+export type EvidenceTier = 'rct' | 'clinical' | 'heuristic';
 
 interface EvidenceBadgeProps {
   tier: EvidenceTier;
@@ -11,9 +11,9 @@ interface EvidenceBadgeProps {
 }
 
 const TIER_LABELS: Record<EvidenceTier, string> = {
-  rct: "RCT EVIDENCE",
-  clinical: "CLINICAL BEST PRACTICE",
-  heuristic: "EXPERT CONSENSUS",
+  rct: 'RCT EVIDENCE',
+  clinical: 'CLINICAL BEST PRACTICE',
+  heuristic: 'EXPERT CONSENSUS',
 };
 
 export const EvidenceBadge: React.FC<EvidenceBadgeProps> = ({
@@ -32,9 +32,9 @@ export const EvidenceBadge: React.FC<EvidenceBadgeProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
   },
   text: {
     fontFamily: Tokens.type.fontFamily.mono,

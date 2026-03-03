@@ -1,22 +1,22 @@
 module.exports = {
-  preset: "react-native",
-  testEnvironment: "node",
-  testMatch: ["**/__tests__/**/*.(test|spec).{ts,tsx,js,jsx}"],
+  preset: 'react-native',
+  testEnvironment: 'node',
+  testMatch: ['**/__tests__/**/*.(test|spec).{ts,tsx,js,jsx}'],
   testPathIgnorePatterns: [
-    "/node_modules/",
-    "/detox/",
-    "android\\.e2e\\.test\\.ts$",
+    '/node_modules/',
+    '/detox/',
+    'android\\.e2e\\.test\\.ts$',
   ],
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   moduleNameMapper: {
-    "^react-native-reanimated$":
-      "<rootDir>/__tests__/__mocks__/react-native-reanimated.js",
-    "^@op-engineering/op-sqlite$": "<rootDir>/__tests__/__mocks__/op-sqlite.ts",
-    "^expo-notifications$":
-      "<rootDir>/__tests__/__mocks__/expo-notifications.ts",
+    '^react-native-reanimated$':
+      '<rootDir>/__tests__/__mocks__/react-native-reanimated.js',
+    '^@op-engineering/op-sqlite$': '<rootDir>/__tests__/__mocks__/op-sqlite.ts',
+    '^expo-notifications$':
+      '<rootDir>/__tests__/__mocks__/expo-notifications.ts',
   },
-  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
-  setupFilesAfterEnv: ["<rootDir>/__tests__/setup.ts"],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
   coverageThreshold: {
     global: {
       branches: 60,
@@ -24,19 +24,19 @@ module.exports = {
       lines: 60,
       statements: 60,
     },
-    "./src/utils/helpers.ts": {
+    './src/utils/helpers.ts': {
       branches: 90,
       functions: 90,
       lines: 90,
       statements: 90,
     },
-    "./src/services/StorageService.ts": {
+    './src/services/StorageService.ts': {
       branches: 90,
       functions: 90,
       lines: 90,
       statements: 90,
     },
-    "./src/hooks/useTimer.ts": {
+    './src/hooks/useTimer.ts': {
       branches: 90,
       functions: 90,
       lines: 90,

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,10 +6,10 @@ import {
   Platform,
   useWindowDimensions,
   StyleSheet,
-} from "react-native";
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { Tokens } from "../theme/tokens";
-import HapticsService from "../services/HapticsService";
+} from 'react-native';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { Tokens } from '../theme/tokens';
+import HapticsService from '../services/HapticsService';
 
 export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
@@ -26,7 +26,7 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
             ? Tokens.spacing[3]
             : Tokens.spacing[6],
         },
-        Platform.OS === "web" ? styles.absolute : styles.relative,
+        Platform.OS === 'web' ? styles.absolute : styles.relative,
       ]}
     >
       {/* Logo Area */}
@@ -47,9 +47,9 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
           const isFocused = state.index === index;
 
           const onPress = () => {
-            HapticsService.tap({ key: "navTab", minIntervalMs: 140 });
+            HapticsService.tap({ key: 'navTab', minIntervalMs: 140 });
             const event = navigation.emit({
-              type: "tabPress",
+              type: 'tabPress',
               target: route.key,
               canPreventDefault: true,
             });
@@ -71,11 +71,11 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
                 {
                   borderBottomColor: isFocused
                     ? Tokens.colors.indigo.primary
-                    : "transparent",
+                    : 'transparent',
                   opacity: pressed ? 0.7 : 1,
                   ...Platform.select({
                     web: {
-                      cursor: "pointer",
+                      cursor: 'pointer',
                       transition: Tokens.motion.transitions.fast,
                     },
                   }),
@@ -102,10 +102,10 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     height: 64,
-    alignItems: "center",
-    justifyContent: "space-between",
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: Tokens.colors.neutral.darkest,
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.borderSubtle,
@@ -115,32 +115,32 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   absolute: {
-    position: "absolute",
+    position: 'absolute',
   },
   relative: {
-    position: "relative",
+    position: 'relative',
   },
   logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   logoText: {
     color: Tokens.colors.text.primary,
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.h3,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   navLinksContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   navLink: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: Tokens.spacing[3],
     paddingHorizontal: Tokens.spacing[2],
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderBottomWidth: 2,
   },
   navText: {
@@ -149,10 +149,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   textBold: {
-    fontWeight: "700",
+    fontWeight: '700',
   },
   textMedium: {
-    fontWeight: "500",
+    fontWeight: '500',
   },
   textPrimary: {
     color: Tokens.colors.text.primary,

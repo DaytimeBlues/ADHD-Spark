@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable, StyleProp, ViewStyle, StyleSheet } from "react-native";
+import React from 'react';
+import { Pressable, StyleProp, ViewStyle, StyleSheet } from 'react-native';
 
 interface ScaleButtonProps {
   onPress: () => void;

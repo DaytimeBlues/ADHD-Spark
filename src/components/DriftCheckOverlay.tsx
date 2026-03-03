@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Modal,
   View,
@@ -9,14 +9,14 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import { useTheme } from "../theme/ThemeProvider";
-import { Tokens } from "../theme/tokens";
-import { LinearButton } from "./ui/LinearButton";
-import { RuneButton } from "../ui/cosmic/RuneButton";
-import { CosmicBackground } from "../ui/cosmic/CosmicBackground";
-import { GlowCard } from "../ui/cosmic/GlowCard";
-import CaptureService from "../services/CaptureService";
+} from 'react-native';
+import { useTheme } from '../theme/ThemeProvider';
+import { Tokens } from '../theme/tokens';
+import { LinearButton } from './ui/LinearButton';
+import { RuneButton } from '../ui/cosmic/RuneButton';
+import { CosmicBackground } from '../ui/cosmic/CosmicBackground';
+import { GlowCard } from '../ui/cosmic/GlowCard';
+import CaptureService from '../services/CaptureService';
 
 interface DriftCheckOverlayProps {
   visible: boolean;
@@ -30,8 +30,8 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
   const { isCosmic } = useTheme();
 
   const [step, setStep] = useState<1 | 2>(1);
-  const [doingNow, setDoingNow] = useState("");
-  const [shouldDo, setShouldDo] = useState("");
+  const [doingNow, setDoingNow] = useState('');
+  const [shouldDo, setShouldDo] = useState('');
 
   const handleNext = () => {
     if (doingNow.trim()) {
@@ -41,13 +41,13 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
 
   const handleComplete = async () => {
     if (doingNow.trim() || shouldDo.trim()) {
-      const log = `Drift Check:\n\nDoing: ${doingNow.trim() || "N/A"}\n\nShould be doing: ${shouldDo.trim() || "N/A"}`;
-      await CaptureService.save({ raw: log, source: "checkin" });
+      const log = `Drift Check:\n\nDoing: ${doingNow.trim() || 'N/A'}\n\nShould be doing: ${shouldDo.trim() || 'N/A'}`;
+      await CaptureService.save({ raw: log, source: 'checkin' });
     }
 
     // Reset state and close
-    setDoingNow("");
-    setShouldDo("");
+    setDoingNow('');
+    setShouldDo('');
     setStep(1);
     onClose();
   };
@@ -64,7 +64,7 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.overlay}
         >
           {isCosmic && (
@@ -84,8 +84,8 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
 
               <Text style={styles.question}>
                 {step === 1
-                  ? "What are you doing right now?"
-                  : "What SHOULD you be doing?"}
+                  ? 'What are you doing right now?'
+                  : 'What SHOULD you be doing?'}
               </Text>
 
               <TextInput
@@ -96,7 +96,7 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
                 onChangeText={step === 1 ? setDoingNow : setShouldDo}
                 autoFocus
                 onSubmitEditing={step === 1 ? handleNext : handleComplete}
-                returnKeyType={step === 1 ? "next" : "done"}
+                returnKeyType={step === 1 ? 'next' : 'done'}
                 multiline={false}
               />
 
@@ -109,11 +109,11 @@ export const DriftCheckOverlay: React.FC<DriftCheckOverlayProps> = ({
                     onPress={step === 1 ? handleNext : handleComplete}
                     disabled={step === 1 ? !doingNow.trim() : !shouldDo.trim()}
                   >
-                    {step === 1 ? "LOG_STATE" : "COMMIT_PIVOT"}
+                    {step === 1 ? 'LOG_STATE' : 'COMMIT_PIVOT'}
                   </RuneButton>
                 ) : (
                   <LinearButton
-                    title={step === 1 ? "LOG STATE" : "COMMIT PIVOT"}
+                    title={step === 1 ? 'LOG STATE' : 'COMMIT PIVOT'}
                     onPress={step === 1 ? handleNext : handleComplete}
                     disabled={step === 1 ? !doingNow.trim() : !shouldDo.trim()}
                     size="lg"
@@ -132,12 +132,12 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     overlay: {
       flex: 1,
-      backgroundColor: isCosmic ? "rgba(7, 7, 18, 0.9)" : "rgba(0, 0, 0, 0.85)",
-      justifyContent: "center",
-      alignItems: "center",
+      backgroundColor: isCosmic ? 'rgba(7, 7, 18, 0.9)' : 'rgba(0, 0, 0, 0.85)',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     container: {
-      width: "100%",
+      width: '100%',
       maxWidth: 400,
       padding: Tokens.spacing[4],
     },
@@ -153,21 +153,21 @@ const getStyles = (isCosmic: boolean) =>
       color: isCosmic ? Tokens.colors.brand[400] : Tokens.colors.brand[600],
       letterSpacing: 2,
       marginBottom: Tokens.spacing[4],
-      textAlign: "center",
+      textAlign: 'center',
     },
     question: {
-      fontFamily: isCosmic ? "Space Grotesk" : Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type["2xl"],
-      fontWeight: "700",
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
+      fontSize: Tokens.type['2xl'],
+      fontWeight: '700',
       color: Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[6],
-      textAlign: "center",
+      textAlign: 'center',
     },
     input: {
-      backgroundColor: isCosmic ? "#0B1022" : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.4)"
+        ? 'rgba(139, 92, 246, 0.4)'
         : Tokens.colors.neutral.border,
       borderRadius: isCosmic ? 8 : 4,
       padding: Tokens.spacing[4],
@@ -176,10 +176,10 @@ const getStyles = (isCosmic: boolean) =>
       fontSize: Tokens.type.base,
       marginBottom: Tokens.spacing[8],
       ...Platform.select({
-        web: { outlineStyle: "none" },
+        web: { outlineStyle: 'none' },
       }),
     },
     actions: {
-      alignItems: "center",
+      alignItems: 'center',
     },
   });

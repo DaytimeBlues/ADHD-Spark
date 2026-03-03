@@ -1,13 +1,13 @@
-import { Platform } from "react-native";
-import StorageService from "../services/StorageService";
-import { GoogleTasksSyncService } from "../services/GoogleTasksSyncService";
-import WebMCPService from "../services/WebMCPService";
-import { CheckInService } from "../services/CheckInService";
-import { TimerService } from "../services/TimerService";
-import { DriftService } from "../services/DriftService";
-import { BiometricService } from "../services/BiometricService";
-import { LoggerService } from "../services/LoggerService";
-import { config } from "../config";
+import { Platform } from 'react-native';
+import StorageService from '../services/StorageService';
+import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
+import WebMCPService from '../services/WebMCPService';
+import { CheckInService } from '../services/CheckInService';
+import { TimerService } from '../services/TimerService';
+import { DriftService } from '../services/DriftService';
+import { BiometricService } from '../services/BiometricService';
+import { LoggerService } from '../services/LoggerService';
+import { config } from '../config';
 
 const CRITICAL_INIT_TIMEOUT_MS = 8000;
 
@@ -36,9 +36,9 @@ async function initializeCriticalServices(): Promise<void> {
 function initializeNonBlockingServices(): undefined {
   GoogleTasksSyncService.syncToBrainDump().catch((error) => {
     LoggerService.error({
-      service: "bootstrap",
-      operation: "initializeNonBlockingServices",
-      message: "Initial Google Tasks sync failed",
+      service: 'bootstrap',
+      operation: 'initializeNonBlockingServices',
+      message: 'Initial Google Tasks sync failed',
       error,
     });
   });
@@ -53,14 +53,14 @@ function initializeNonBlockingServices(): undefined {
  */
 function checkGoogleConfig(): boolean {
   const hasGoogleConfig = Boolean(
-    Platform.OS === "web" ||
+    Platform.OS === 'web' ||
       config.googleWebClientId ||
       config.googleIosClientId,
   );
 
-  if (!hasGoogleConfig && Platform.OS !== "web") {
+  if (!hasGoogleConfig && Platform.OS !== 'web') {
     console.warn(
-      "[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.",
+      '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
     );
   }
 
@@ -90,9 +90,9 @@ export async function bootstrapApp(): Promise<BootstrapResult> {
     return { success: true, errors };
   } catch (error) {
     LoggerService.error({
-      service: "bootstrap",
-      operation: "bootstrapApp",
-      message: "App initialization error",
+      service: 'bootstrap',
+      operation: 'bootstrapApp',
+      message: 'App initialization error',
       error,
     });
     errors.push(error instanceof Error ? error : new Error(String(error)));

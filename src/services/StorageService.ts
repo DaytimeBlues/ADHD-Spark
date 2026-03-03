@@ -1,52 +1,52 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { isWeb } from "../utils/PlatformUtils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isWeb } from '../utils/PlatformUtils';
 import type {
   DB,
   QueryResult,
   Scalar,
   Transaction,
-} from "@op-engineering/op-sqlite";
-import { LoggerService } from "./LoggerService";
+} from '@op-engineering/op-sqlite';
+import { LoggerService } from './LoggerService';
 
-type KVDatabase = Pick<DB, "execute" | "transaction">;
+type KVDatabase = Pick<DB, 'execute' | 'transaction'>;
 type KVQueryResult = QueryResult & { rows: Array<Record<string, Scalar>> };
 
 let db: KVDatabase | undefined;
 const isJestRuntime =
-  typeof process !== "undefined" && !!process.env.JEST_WORKER_ID;
+  typeof process !== 'undefined' && !!process.env.JEST_WORKER_ID;
 
 if (!isWeb && !isJestRuntime) {
-  const { open } = require("@op-engineering/op-sqlite");
+  const { open } = require('@op-engineering/op-sqlite');
   db = open({
-    name: "spark_db",
+    name: 'spark_db',
   });
 }
 
 const STORAGE_VERSION = 1;
-const STORAGE_VERSION_KEY = "storageVersion";
+const STORAGE_VERSION_KEY = 'storageVersion';
 
 const STORAGE_KEYS = {
-  streakCount: "streakCount",
-  lastUseDate: "lastUseDate",
-  theme: "theme",
-  tasks: "tasks",
-  brainDump: "brainDump",
-  igniteState: "igniteState",
-  pomodoroState: "pomodoroState",
-  firstSuccessGuideState: "firstSuccessGuideState",
-  uxMetricsEvents: "uxMetricsEvents",
-  activationSessions: "activationSessions",
-  activationPendingStart: "activationPendingStart",
-  lastActiveSession: "lastActiveSession",
-  retentionGraceWindowStart: "retentionGraceWindowStart",
-  retentionGraceDaysUsed: "retentionGraceDaysUsed",
-  googleTasksSyncState: "googleTasksSyncState",
-  googleTasksProcessedIds: "googleTasksProcessedIds",
-  googleTasksLastSyncAt: "googleTasksLastSyncAt",
-  googleTasksExportedFingerprints: "googleTasksExportedFingerprints",
-  backupLastExportAt: "backupLastExportAt",
-  captureInbox: "captureInbox",
-  isBiometricSecured: "isBiometricSecured",
+  streakCount: 'streakCount',
+  lastUseDate: 'lastUseDate',
+  theme: 'theme',
+  tasks: 'tasks',
+  brainDump: 'brainDump',
+  igniteState: 'igniteState',
+  pomodoroState: 'pomodoroState',
+  firstSuccessGuideState: 'firstSuccessGuideState',
+  uxMetricsEvents: 'uxMetricsEvents',
+  activationSessions: 'activationSessions',
+  activationPendingStart: 'activationPendingStart',
+  lastActiveSession: 'lastActiveSession',
+  retentionGraceWindowStart: 'retentionGraceWindowStart',
+  retentionGraceDaysUsed: 'retentionGraceDaysUsed',
+  googleTasksSyncState: 'googleTasksSyncState',
+  googleTasksProcessedIds: 'googleTasksProcessedIds',
+  googleTasksLastSyncAt: 'googleTasksLastSyncAt',
+  googleTasksExportedFingerprints: 'googleTasksExportedFingerprints',
+  backupLastExportAt: 'backupLastExportAt',
+  captureInbox: 'captureInbox',
+  isBiometricSecured: 'isBiometricSecured',
 };
 
 const migrations: Record<number, () => Promise<void>> = {
@@ -69,9 +69,9 @@ const runMigrations = async (): Promise<void> => {
     }
   } catch (error) {
     LoggerService.error({
-      service: "StorageService",
-      operation: "runMigrations",
-      message: "Storage migration error",
+      service: 'StorageService',
+      operation: 'runMigrations',
+      message: 'Storage migration error',
       error,
     });
   }
@@ -89,14 +89,14 @@ const safeJSONParse = <T>(value: string | null): T | null => {
   try {
     return JSON.parse(value) as T;
   } catch (error) {
-    console.warn("Storage: Failed to parse JSON, returning null:", error);
+    console.warn('Storage: Failed to parse JSON, returning null:', error);
     return null;
   }
 };
 
 const getDb = (): KVDatabase => {
   if (!db) {
-    throw new Error("SQLite database is not initialized");
+    throw new Error('SQLite database is not initialized');
   }
   return db;
 };
@@ -108,11 +108,11 @@ const StorageService = {
     }
 
     await getDb().execute(
-      "CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)",
+      'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
     );
 
     // Auto-migrate from AsyncStorage to op-sqlite
-    const isMigrated = await AsyncStorage.getItem("SQLITE_MIGRATED");
+    const isMigrated = await AsyncStorage.getItem('SQLITE_MIGRATED');
     if (!isMigrated) {
       try {
         const keys = await AsyncStorage.getAllKeys();
@@ -123,19 +123,19 @@ const StorageService = {
             for (const [key, value] of pairs) {
               if (value) {
                 await tx.execute(
-                  "INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)",
+                  'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
                   [key, value],
                 );
               }
             }
           });
         }
-        await AsyncStorage.setItem("SQLITE_MIGRATED", "true");
+        await AsyncStorage.setItem('SQLITE_MIGRATED', 'true');
       } catch (e) {
         LoggerService.error({
-          service: "StorageService",
-          operation: "init",
-          message: "Migration to SQLite failed",
+          service: 'StorageService',
+          operation: 'init',
+          message: 'Migration to SQLite failed',
           error: e,
         });
       }
@@ -150,9 +150,9 @@ const StorageService = {
         return await AsyncStorage.getItem(key);
       } catch (error) {
         LoggerService.error({
-          service: "StorageService",
-          operation: "get",
-          message: "Storage get error (AsyncStorage)",
+          service: 'StorageService',
+          operation: 'get',
+          message: 'Storage get error (AsyncStorage)',
           error,
           context: { key },
         });
@@ -162,19 +162,19 @@ const StorageService = {
 
     try {
       const res = (await getDb().execute(
-        "SELECT value FROM kv_store WHERE key = ?",
+        'SELECT value FROM kv_store WHERE key = ?',
         [key],
       )) as KVQueryResult;
       if (res.rows?.length) {
         const rowValue = res.rows[0]?.value;
-        return typeof rowValue === "string" ? rowValue : null;
+        return typeof rowValue === 'string' ? rowValue : null;
       }
       return null;
     } catch (error) {
       LoggerService.error({
-        service: "StorageService",
-        operation: "get",
-        message: "Storage get error (SQLite)",
+        service: 'StorageService',
+        operation: 'get',
+        message: 'Storage get error (SQLite)',
         error,
         context: { key },
       });
@@ -194,15 +194,15 @@ const StorageService = {
 
     try {
       await getDb().execute(
-        "INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)",
+        'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
         [key, value],
       );
       return true;
     } catch (error) {
       LoggerService.error({
-        service: "StorageService",
-        operation: "set",
-        message: "Storage set error",
+        service: 'StorageService',
+        operation: 'set',
+        message: 'Storage set error',
         error,
         context: { key },
       });
@@ -221,13 +221,13 @@ const StorageService = {
     }
 
     try {
-      await getDb().execute("DELETE FROM kv_store WHERE key = ?", [key]);
+      await getDb().execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return true;
     } catch (error) {
       LoggerService.error({
-        service: "StorageService",
-        operation: "remove",
-        message: "Storage remove error",
+        service: 'StorageService',
+        operation: 'remove',
+        message: 'Storage remove error',
         error,
         context: { key },
       });
@@ -245,9 +245,9 @@ const StorageService = {
       return safeJSONParse<T>(value);
     } catch (error) {
       LoggerService.error({
-        service: "StorageService",
-        operation: "getJSON",
-        message: "Storage getJSON error",
+        service: 'StorageService',
+        operation: 'getJSON',
+        message: 'Storage getJSON error',
         error,
         context: { key },
       });
@@ -260,9 +260,9 @@ const StorageService = {
       return await this.set(key, JSON.stringify(value));
     } catch (error) {
       LoggerService.error({
-        service: "StorageService",
-        operation: "setJSON",
-        message: "Storage setJSON error",
+        service: 'StorageService',
+        operation: 'setJSON',
+        message: 'Storage setJSON error',
         error,
         context: { key },
       });

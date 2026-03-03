@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,38 +7,38 @@ import {
   Pressable,
   Platform,
   ScrollView,
-} from "react-native";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import { CosmicBackground, GlowCard } from "../ui/cosmic";
-import { GoogleTasksSyncService } from "../services/PlaudService";
+} from 'react-native';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import { CosmicBackground, GlowCard } from '../ui/cosmic';
+import { GoogleTasksSyncService } from '../services/PlaudService';
 
 type CalendarConnectionStatus =
-  | "checking"
-  | "connected"
-  | "disconnected"
-  | "unsupported";
+  | 'checking'
+  | 'connected'
+  | 'disconnected'
+  | 'unsupported';
 
 const CalendarScreen = () => {
   const { isCosmic } = useTheme();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [connectionStatus, setConnectionStatus] =
-    useState<CalendarConnectionStatus>("checking");
+    useState<CalendarConnectionStatus>('checking');
   const [isConnecting, setIsConnecting] = useState(false);
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const getDaysInMonth = (date: Date) => {
@@ -68,16 +68,16 @@ const CalendarScreen = () => {
     .map((_, i) => i + 1);
 
   const refreshCalendarConnectionStatus = useCallback(async () => {
-    if (Platform.OS === "web") {
-      setConnectionStatus("unsupported");
+    if (Platform.OS === 'web') {
+      setConnectionStatus('unsupported');
       return;
     }
 
     const scopes = await GoogleTasksSyncService.getCurrentUserScopes();
     const hasCalendarScope = Boolean(
-      scopes?.includes("https://www.googleapis.com/auth/calendar.events"),
+      scopes?.includes('https://www.googleapis.com/auth/calendar.events'),
     );
-    setConnectionStatus(hasCalendarScope ? "connected" : "disconnected");
+    setConnectionStatus(hasCalendarScope ? 'connected' : 'disconnected');
   }, []);
 
   useEffect(() => {
@@ -86,8 +86,8 @@ const CalendarScreen = () => {
 
   const handleConnectGoogleCalendar = useCallback(async () => {
     if (
-      connectionStatus === "unsupported" ||
-      connectionStatus === "checking" ||
+      connectionStatus === 'unsupported' ||
+      connectionStatus === 'checking' ||
       isConnecting
     ) {
       return;
@@ -104,24 +104,24 @@ const CalendarScreen = () => {
 
   const statusTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
     {
-      checking: "STATUS: CHECKING...",
-      connected: "STATUS: CONNECTED",
-      disconnected: "STATUS: NOT CONNECTED",
-      unsupported: "STATUS: NOT AVAILABLE ON WEB",
+      checking: 'STATUS: CHECKING...',
+      connected: 'STATUS: CONNECTED',
+      disconnected: 'STATUS: NOT CONNECTED',
+      unsupported: 'STATUS: NOT AVAILABLE ON WEB',
     };
 
   const buttonTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
     {
-      checking: "CHECKING...",
-      connected: "CONNECTED",
-      disconnected: "CONNECT GOOGLE CALENDAR",
-      unsupported: "WEB UNSUPPORTED",
+      checking: 'CHECKING...',
+      connected: 'CONNECTED',
+      disconnected: 'CONNECT GOOGLE CALENDAR',
+      unsupported: 'WEB UNSUPPORTED',
     };
 
   const isConnectButtonDisabled =
-    connectionStatus === "connected" ||
-    connectionStatus === "unsupported" ||
-    connectionStatus === "checking" ||
+    connectionStatus === 'connected' ||
+    connectionStatus === 'unsupported' ||
+    connectionStatus === 'checking' ||
     isConnecting;
 
   return (
@@ -196,7 +196,7 @@ const CalendarScreen = () => {
                 <Text
                   style={[styles.monthText, isCosmic && styles.monthTextCosmic]}
                 >
-                  {months[currentDate.getMonth()].toUpperCase()}{" "}
+                  {months[currentDate.getMonth()].toUpperCase()}{' '}
                   {currentDate.getFullYear()}
                 </Text>
                 <Pressable
@@ -391,9 +391,9 @@ const styles = StyleSheet.create({
   },
   webContainer: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     maxWidth: Tokens.layout.maxWidth.content,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   scrollView: {
     flex: 1,
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.h1,
-    fontWeight: "800",
+    fontWeight: '800',
     color: Tokens.colors.text.primary,
     marginBottom: Tokens.spacing[4],
     letterSpacing: 2,
@@ -423,18 +423,18 @@ const styles = StyleSheet.create({
   rationaleTitle: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Tokens.colors.brand[500],
     letterSpacing: 1,
     marginBottom: Tokens.spacing[2],
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   rationaleText: {
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.sm,
     color: Tokens.colors.text.secondary,
     lineHeight: 22,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   calendarCard: {
     backgroundColor: Tokens.colors.neutral.darker,
@@ -445,24 +445,24 @@ const styles = StyleSheet.create({
     ...Tokens.elevation.none,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: Tokens.spacing[8],
   },
   navButton: {
     width: 44,
     height: 44,
     borderRadius: Tokens.radii.none, // Sharp
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Tokens.colors.neutral.dark,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
       web: {
         transition: Tokens.motion.transitions.base,
-        cursor: "pointer",
+        cursor: 'pointer',
       },
     }),
   },
@@ -479,41 +479,41 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.h2,
     lineHeight: Tokens.type.h2 * 1.2,
-    fontWeight: "300",
+    fontWeight: '300',
     marginTop: -2,
   },
   monthText: {
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.xl,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   weekdays: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: Tokens.spacing[4],
   },
   weekdayText: {
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
     letterSpacing: 1,
   },
   daysGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   dayCell: {
-    width: "14.28%",
+    width: '14.28%',
     aspectRatio: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: Tokens.radii.none, // Sharp
     borderWidth: 1,
-    borderColor: "transparent",
+    borderColor: 'transparent',
     ...Platform.select({
       web: {
         transition: Tokens.motion.transitions.fast,
@@ -525,7 +525,7 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.borderSubtle,
     ...Platform.select({
       web: {
-        cursor: "pointer",
+        cursor: 'pointer',
       },
     }),
   },
@@ -537,29 +537,29 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.secondary,
     fontSize: Tokens.type.base,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   todayCell: {
     backgroundColor: Tokens.colors.brand[600],
     ...Tokens.elevation.none,
     ...Platform.select({
       web: {
-        boxShadow: "0 0 0 0",
+        boxShadow: '0 0 0 0',
       },
     }),
   },
   todayText: {
     color: Tokens.colors.neutral[0],
-    fontWeight: "700",
+    fontWeight: '700',
   },
   legend: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: Tokens.spacing[6],
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   legendDot: {
     width: 8,
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   googleCalendarCard: {
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.sm,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
     marginBottom: Tokens.spacing[3],
   },
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.tertiary,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
     marginBottom: Tokens.spacing[4],
   },
@@ -609,12 +609,12 @@ const styles = StyleSheet.create({
     borderRadius: Tokens.radii.none,
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.borderSubtle,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...Platform.select({
       web: {
         transition: Tokens.motion.transitions.base,
-        cursor: "pointer",
+        cursor: 'pointer',
       },
     }),
   },
@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     ...Platform.select({
       web: {
-        cursor: "not-allowed",
+        cursor: 'not-allowed',
       } as object,
     }),
   },
@@ -640,47 +640,47 @@ const styles = StyleSheet.create({
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.xs,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   // Cosmic theme overrides
   containerCosmic: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   titleCosmic: {
-    color: "#EEF2FF",
-    fontFamily: "Space Grotesk",
+    color: '#EEF2FF',
+    fontFamily: 'Space Grotesk',
     ...Platform.select({
       web: {
-        textShadow: "0 0 20px rgba(139, 92, 246, 0.3)",
+        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
       },
     }),
   },
   rationaleTitleCosmic: {
-    color: "#8B5CF6",
+    color: '#8B5CF6',
   },
   rationaleTextCosmic: {
-    color: "#B9C2D9",
+    color: '#B9C2D9',
   },
   navButtonCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.5)",
-    borderColor: "rgba(139, 92, 246, 0.25)",
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.25)',
     borderRadius: 12,
     ...Platform.select({
       web: {
-        backdropFilter: "blur(16px) saturate(180%)",
+        backdropFilter: 'blur(16px) saturate(180%)',
         boxShadow: `
           0 0 0 1px rgba(139, 92, 246, 0.15),
           0 4px 20px rgba(7, 7, 18, 0.4),
           inset 0 1px 0 rgba(255, 255, 255, 0.06)
         `,
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       },
     }),
   },
   navButtonHoveredCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.7)",
-    borderColor: "rgba(139, 92, 246, 0.5)",
+    backgroundColor: 'rgba(17, 26, 51, 0.7)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
     ...Platform.select({
       web: {
         boxShadow: `
@@ -689,36 +689,36 @@ const styles = StyleSheet.create({
           0 8px 28px rgba(7, 7, 18, 0.5),
           inset 0 1px 0 rgba(255, 255, 255, 0.08)
         `,
-        transform: "translateY(-1px)",
+        transform: 'translateY(-1px)',
       },
     }),
   },
   navButtonPressedCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.9)",
+    backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
   navButtonTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   monthTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   weekdayTextCosmic: {
-    color: "#8B5CF6",
+    color: '#8B5CF6',
   },
   dayCellCosmic: {
-    borderColor: "rgba(139, 92, 246, 0.15)",
-    backgroundColor: "rgba(17, 26, 51, 0.2)",
+    borderColor: 'rgba(139, 92, 246, 0.15)',
+    backgroundColor: 'rgba(17, 26, 51, 0.2)',
     borderRadius: 8,
     ...Platform.select({
       web: {
-        backdropFilter: "blur(8px)",
-        transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+        backdropFilter: 'blur(8px)',
+        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
       },
     }),
   },
   dayCellHoveredCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.5)",
-    borderColor: "rgba(139, 92, 246, 0.5)",
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
     ...Platform.select({
       web: {
         boxShadow: `
@@ -727,55 +727,55 @@ const styles = StyleSheet.create({
           0 8px 24px rgba(7, 7, 18, 0.4),
           inset 0 1px 0 rgba(255, 255, 255, 0.05)
         `,
-        transform: "scale(1.05)",
-        backdropFilter: "blur(12px) saturate(150%)",
+        transform: 'scale(1.05)',
+        backdropFilter: 'blur(12px) saturate(150%)',
       },
     }),
   },
   dayCellPressedCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.8)",
+    backgroundColor: 'rgba(17, 26, 51, 0.8)',
   },
   dayTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   todayCellCosmic: {
-    backgroundColor: "#F6C177",
-    borderColor: "#F6C177",
+    backgroundColor: '#F6C177',
+    borderColor: '#F6C177',
   },
   todayTextCosmic: {
-    color: "#0F172A",
+    color: '#0F172A',
   },
   todayDotCosmic: {
-    backgroundColor: "#F6C177",
+    backgroundColor: '#F6C177',
   },
   legendTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   googleCalendarTitleCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   googleCalendarStatusCosmic: {
-    color: "#8B5CF6",
+    color: '#8B5CF6',
   },
   googleCalendarButtonCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.5)",
-    borderColor: "rgba(139, 92, 246, 0.25)",
+    backgroundColor: 'rgba(17, 26, 51, 0.5)',
+    borderColor: 'rgba(139, 92, 246, 0.25)',
     borderRadius: 12,
     ...Platform.select({
       web: {
-        backdropFilter: "blur(16px) saturate(180%)",
+        backdropFilter: 'blur(16px) saturate(180%)',
         boxShadow: `
           0 0 0 1px rgba(139, 92, 246, 0.15),
           0 4px 20px rgba(7, 7, 18, 0.4),
           inset 0 1px 0 rgba(255, 255, 255, 0.06)
         `,
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       },
     }),
   },
   googleCalendarButtonHoveredCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.7)",
-    borderColor: "rgba(139, 92, 246, 0.5)",
+    backgroundColor: 'rgba(17, 26, 51, 0.7)',
+    borderColor: 'rgba(139, 92, 246, 0.5)',
     ...Platform.select({
       web: {
         boxShadow: `
@@ -784,19 +784,19 @@ const styles = StyleSheet.create({
           0 8px 28px rgba(7, 7, 18, 0.5),
           inset 0 1px 0 rgba(255, 255, 255, 0.08)
         `,
-        transform: "translateY(-1px)",
+        transform: 'translateY(-1px)',
       },
     }),
   },
   googleCalendarButtonPressedCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.9)",
+    backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
   googleCalendarButtonDisabledCosmic: {
-    backgroundColor: "rgba(11, 16, 34, 0.4)",
-    borderColor: "rgba(185, 194, 217, 0.08)",
+    backgroundColor: 'rgba(11, 16, 34, 0.4)',
+    borderColor: 'rgba(185, 194, 217, 0.08)',
   },
   googleCalendarButtonTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
 });
 

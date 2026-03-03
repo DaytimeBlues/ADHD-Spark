@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,24 +7,24 @@ import {
   SafeAreaView,
   Platform,
   ActivityIndicator,
-} from "react-native";
-import SoundService from "../services/SoundService";
-import StorageService from "../services/StorageService";
-import UXMetricsService from "../services/UXMetricsService";
-import ActivationService from "../services/ActivationService";
-import { LoggerService } from "../services/LoggerService";
-import useTimer from "../hooks/useTimer";
-import { useTimerStore } from "../store/useTimerStore";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import { LinearButton } from "../components/ui/LinearButton";
+} from 'react-native';
+import SoundService from '../services/SoundService';
+import StorageService from '../services/StorageService';
+import UXMetricsService from '../services/UXMetricsService';
+import ActivationService from '../services/ActivationService';
+import { LoggerService } from '../services/LoggerService';
+import useTimer from '../hooks/useTimer';
+import { useTimerStore } from '../store/useTimerStore';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import { LinearButton } from '../components/ui/LinearButton';
 import {
   CosmicBackground,
   ChronoDigits,
   RuneButton,
   HaloRing,
   GlowCard,
-} from "../ui/cosmic";
+} from '../ui/cosmic';
 
 const IGNITE_DURATION_SECONDS = 5 * 60;
 
@@ -36,19 +36,19 @@ const IgniteScreen = () => {
 
   const { timeLeft, isRunning, formattedTime, start, pause, reset, setTime } =
     useTimer({
-      id: "ignite",
+      id: 'ignite',
       initialTime: IGNITE_DURATION_SECONDS,
       onComplete: () => {
         SoundService.playCompletionSound();
-        UXMetricsService.track("ignite_timer_completed");
+        UXMetricsService.track('ignite_timer_completed');
         const sessionId = sessionIdRef.current;
         if (sessionId) {
-          ActivationService.updateSessionStatus(sessionId, "completed").catch(
+          ActivationService.updateSessionStatus(sessionId, 'completed').catch(
             (error) => {
               LoggerService.error({
-                service: "IgniteScreen",
-                operation: "onComplete",
-                message: "Failed to mark session completed",
+                service: 'IgniteScreen',
+                operation: 'onComplete',
+                message: 'Failed to mark session completed',
                 error,
                 context: { sessionId },
               });
@@ -72,7 +72,7 @@ const IgniteScreen = () => {
         }>(StorageService.STORAGE_KEYS.igniteState);
 
         if (storedState) {
-          UXMetricsService.track("ignite_session_restored");
+          UXMetricsService.track('ignite_session_restored');
 
           if (storedState.isPlaying) {
             setIsPlaying(true);
@@ -85,12 +85,12 @@ const IgniteScreen = () => {
             if (!useTimerStore.getState().isRunning) {
               ActivationService.updateSessionStatus(
                 storedState.activeSessionId,
-                "resumed",
+                'resumed',
               ).catch((error) => {
                 LoggerService.error({
-                  service: "IgniteScreen",
-                  operation: "loadState",
-                  message: "Failed to mark session resumed",
+                  service: 'IgniteScreen',
+                  operation: 'loadState',
+                  message: 'Failed to mark session resumed',
                   error,
                   context: { sessionId: storedState.activeSessionId },
                 });
@@ -108,16 +108,16 @@ const IgniteScreen = () => {
             status: string;
           }>(StorageService.STORAGE_KEYS.lastActiveSession);
 
-          if (lastActive && lastActive.status === "started") {
+          if (lastActive && lastActive.status === 'started') {
             sessionIdRef.current = lastActive.id;
             ActivationService.updateSessionStatus(
               lastActive.id,
-              "resumed",
+              'resumed',
             ).catch((error) => {
               LoggerService.error({
-                service: "IgniteScreen",
-                operation: "loadState",
-                message: "Failed to resume last session",
+                service: 'IgniteScreen',
+                operation: 'loadState',
+                message: 'Failed to resume last session',
                 error,
                 context: { sessionId: lastActive.id },
               });
@@ -131,13 +131,13 @@ const IgniteScreen = () => {
           );
           sessionIdRef.current = newSessionId;
           start();
-          UXMetricsService.track("ignite_timer_started_from_pending_handoff");
+          UXMetricsService.track('ignite_timer_started_from_pending_handoff');
         }
       } catch (error) {
         LoggerService.error({
-          service: "IgniteScreen",
-          operation: "loadState",
-          message: "Failed to load ignite state",
+          service: 'IgniteScreen',
+          operation: 'loadState',
+          message: 'Failed to load ignite state',
           error,
         });
       } finally {
@@ -163,33 +163,33 @@ const IgniteScreen = () => {
 
   const startTimer = () => {
     if (!sessionIdRef.current) {
-      ActivationService.startSession("ignite")
+      ActivationService.startSession('ignite')
         .then((sessionId) => {
           sessionIdRef.current = sessionId;
         })
         .catch((error) => {
           LoggerService.error({
-            service: "IgniteScreen",
-            operation: "startTimer",
-            message: "Failed to start session",
+            service: 'IgniteScreen',
+            operation: 'startTimer',
+            message: 'Failed to start session',
             error,
           });
         });
     }
     start();
-    UXMetricsService.track("ignite_timer_started");
+    UXMetricsService.track('ignite_timer_started');
   };
 
   const pauseTimer = () => {
     pause();
     const sessionId = sessionIdRef.current;
     if (sessionId) {
-      ActivationService.updateSessionStatus(sessionId, "abandoned").catch(
+      ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
         (error) => {
           LoggerService.error({
-            service: "IgniteScreen",
-            operation: "pauseTimer",
-            message: "Failed to mark session abandoned",
+            service: 'IgniteScreen',
+            operation: 'pauseTimer',
+            message: 'Failed to mark session abandoned',
             error,
             context: { sessionId },
           });
@@ -205,12 +205,12 @@ const IgniteScreen = () => {
     SoundService.pauseBrownNoise();
     const sessionId = sessionIdRef.current;
     if (sessionId) {
-      ActivationService.updateSessionStatus(sessionId, "abandoned").catch(
+      ActivationService.updateSessionStatus(sessionId, 'abandoned').catch(
         (error) => {
           LoggerService.error({
-            service: "IgniteScreen",
-            operation: "resetTimer",
-            message: "Failed to mark session abandoned",
+            service: 'IgniteScreen',
+            operation: 'resetTimer',
+            message: 'Failed to mark session abandoned',
             error,
             context: { sessionId },
           });
@@ -243,7 +243,7 @@ const IgniteScreen = () => {
               <Text style={styles.title}>IGNITE_PROTOCOL</Text>
               <View style={styles.statusBadge}>
                 <Text style={styles.statusText}>
-                  {isRunning ? "RUNNING" : "READY"}
+                  {isRunning ? 'RUNNING' : 'READY'}
                 </Text>
               </View>
             </View>
@@ -267,7 +267,7 @@ const IgniteScreen = () => {
               <View style={styles.timerCard}>
                 <ActivityIndicator
                   size="small"
-                  color={isCosmic ? "#8B5CF6" : Tokens.colors.brand[500]}
+                  color={isCosmic ? '#8B5CF6' : Tokens.colors.brand[500]}
                 />
                 <Text style={styles.restoringText}>RESTORING...</Text>
               </View>
@@ -280,13 +280,13 @@ const IgniteScreen = () => {
                         mode="progress"
                         progress={1 - timeLeft / IGNITE_DURATION_SECONDS}
                         size={280}
-                        glow={isRunning ? "strong" : "medium"}
+                        glow={isRunning ? 'strong' : 'medium'}
                       />
                       <View style={styles.timerOverlay}>
                         <ChronoDigits
                           value={formattedTime}
                           size="hero"
-                          glow={isRunning ? "strong" : "none"}
+                          glow={isRunning ? 'strong' : 'none'}
                         />
                       </View>
                     </>
@@ -367,7 +367,7 @@ const IgniteScreen = () => {
                           isPlaying && styles.textActive,
                         ]}
                       >
-                        {isPlaying ? "NOISE: ON" : "NOISE: OFF"}
+                        {isPlaying ? 'NOISE: ON' : 'NOISE: OFF'}
                       </Text>
                     </Pressable>
                   </View>
@@ -386,194 +386,194 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
     },
     centerWrapper: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     content: {
       flex: 1,
-      width: "100%",
+      width: '100%',
       maxWidth: Tokens.layout.maxWidth.prose,
       padding: Tokens.spacing[6],
-      justifyContent: "space-between",
+      justifyContent: 'space-between',
       paddingVertical: Tokens.spacing[8],
     },
     restoringText: {
       marginTop: Tokens.spacing[4],
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       letterSpacing: 1,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     header: {
-      alignItems: "center",
-      width: "100%",
-      flexDirection: "row",
-      justifyContent: "space-between",
+      alignItems: 'center',
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       borderBottomWidth: 1,
       borderColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.dark,
       paddingBottom: Tokens.spacing[4],
     },
     title: {
-      fontFamily: isCosmic ? "Space Grotesk" : Tokens.type.fontFamily.mono,
+      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.lg,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       letterSpacing: 1,
-      textTransform: "uppercase",
-      ...(isCosmic && Platform.OS === "web"
+      textTransform: 'uppercase',
+      ...(isCosmic && Platform.OS === 'web'
         ? {
-            textShadow: "0 0 20px rgba(139, 92, 246, 0.3)",
+            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
           }
         : {}),
     },
     statusBadge: {
       paddingHorizontal: 8,
       paddingVertical: 4,
-      backgroundColor: isCosmic ? "#111A33" : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.2)"
+        ? 'rgba(139, 92, 246, 0.2)'
         : Tokens.colors.neutral.border,
       borderRadius: isCosmic ? 4 : 0,
-      ...(isCosmic && Platform.OS === "web"
+      ...(isCosmic && Platform.OS === 'web'
         ? {
-            backdropFilter: "blur(8px)",
+            backdropFilter: 'blur(8px)',
             boxShadow:
-              "0 0 0 1px rgba(139, 92, 246, 0.1), 0 4px 12px rgba(7, 7, 18, 0.3)",
+              '0 0 0 1px rgba(139, 92, 246, 0.1), 0 4px 12px rgba(7, 7, 18, 0.3)',
           }
         : {}),
     },
     statusText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       letterSpacing: 1,
     },
     timerCard: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       flex: 1,
     },
     timerSection: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     timerContainer: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     timerOverlay: {
-      position: "absolute",
-      alignItems: "center",
-      justifyContent: "center",
+      position: 'absolute',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     timer: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: 140,
-      fontWeight: "200",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      fontVariant: ["tabular-nums"],
+      fontWeight: '200',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontVariant: ['tabular-nums'],
       letterSpacing: -8,
       includeFontPadding: false,
     },
     controls: {
-      width: "100%",
+      width: '100%',
       maxWidth: 360,
-      alignSelf: "center",
+      alignSelf: 'center',
       gap: Tokens.spacing[3],
     },
     mainButton: {
-      width: "100%",
+      width: '100%',
       borderRadius: isCosmic ? 8 : 0,
       height: 56,
     },
     secondaryControls: {
-      flexDirection: "row",
+      flexDirection: 'row',
       gap: Tokens.spacing[3],
     },
     resetButton: {
       flex: 1,
       height: 44,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(185, 194, 217, 0.12)"
+        ? 'rgba(185, 194, 217, 0.12)'
         : Tokens.colors.neutral.border,
-      backgroundColor: isCosmic ? "rgba(11, 16, 34, 0.5)" : "transparent",
+      backgroundColor: isCosmic ? 'rgba(11, 16, 34, 0.5)' : 'transparent',
       borderRadius: isCosmic ? 4 : 0,
-      ...(isCosmic && Platform.OS === "web"
+      ...(isCosmic && Platform.OS === 'web'
         ? {
-            backdropFilter: "blur(8px)",
-            transition: "all 0.2s ease",
-            cursor: "pointer",
+            backdropFilter: 'blur(8px)',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer',
           }
         : {}),
     },
     resetButtonText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       letterSpacing: 1,
-      fontWeight: "700",
+      fontWeight: '700',
     },
     soundButton: {
       flex: 1,
       height: 44,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(185, 194, 217, 0.12)"
+        ? 'rgba(185, 194, 217, 0.12)'
         : Tokens.colors.neutral.border,
       backgroundColor: isCosmic
-        ? "rgba(11, 16, 34, 0.5)"
+        ? 'rgba(11, 16, 34, 0.5)'
         : Tokens.colors.neutral.darker,
       borderRadius: isCosmic ? 4 : 0,
-      ...(isCosmic && Platform.OS === "web"
+      ...(isCosmic && Platform.OS === 'web'
         ? {
-            backdropFilter: "blur(8px)",
-            transition: "all 0.2s ease",
-            cursor: "pointer",
+            backdropFilter: 'blur(8px)',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer',
           }
         : {}),
     },
     soundButtonActive: {
       backgroundColor: isCosmic
-        ? "rgba(17, 26, 51, 0.8)"
+        ? 'rgba(17, 26, 51, 0.8)'
         : Tokens.colors.neutral.dark,
       borderColor: isCosmic
-        ? "rgba(139, 92, 246, 0.4)"
+        ? 'rgba(139, 92, 246, 0.4)'
         : Tokens.colors.brand[500],
-      ...(isCosmic && Platform.OS === "web"
+      ...(isCosmic && Platform.OS === 'web'
         ? {
             boxShadow:
-              "0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15)",
+              '0 0 0 1px rgba(139, 92, 246, 0.2), 0 0 16px rgba(139, 92, 246, 0.15)',
           }
         : {}),
     },
     soundButtonText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       letterSpacing: 1,
-      fontWeight: "700",
+      fontWeight: '700',
     },
     textActive: {
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     },
     buttonPressed: {
       opacity: 0.8,
-      backgroundColor: isCosmic ? "#111A33" : Tokens.colors.neutral.dark,
+      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
     },
     rationaleCard: {
       marginTop: Tokens.spacing[4],
@@ -582,18 +582,18 @@ const getStyles = (isCosmic: boolean) =>
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: "700",
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      fontWeight: '700',
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: Tokens.spacing[2],
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
     rationaleText: {
       fontFamily: Tokens.type.fontFamily.body,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
+      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
       lineHeight: 22,
-      flexWrap: "wrap",
+      flexWrap: 'wrap',
     },
   });
 

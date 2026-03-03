@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import RetentionService from "../src/services/RetentionService";
-import StorageService from "../src/services/StorageService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RetentionService from '../src/services/RetentionService';
+import StorageService from '../src/services/StorageService';
 
-jest.mock("@react-native-async-storage/async-storage", () => ({
+jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
@@ -10,129 +10,129 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   multiGet: jest.fn(),
 }));
 
-describe("StorageService", () => {
+describe('StorageService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("setJSON stringifies values", async () => {
-    const payload = { count: 2, items: ["a", "b"] };
-    await StorageService.setJSON("test-key", payload);
+  it('setJSON stringifies values', async () => {
+    const payload = { count: 2, items: ['a', 'b'] };
+    await StorageService.setJSON('test-key', payload);
 
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      "test-key",
+      'test-key',
       JSON.stringify(payload),
     );
   });
 
-  it("getJSON parses values", async () => {
+  it('getJSON parses values', async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(
       JSON.stringify({ ok: true }),
     );
 
-    const result = await StorageService.getJSON<{ ok: boolean }>("test-key");
-    expect(AsyncStorage.getItem).toHaveBeenCalledWith("test-key");
+    const result = await StorageService.getJSON<{ ok: boolean }>('test-key');
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith('test-key');
     expect(result).toEqual({ ok: true });
   });
 
-  it("getJSON returns null when storage is empty", async () => {
+  it('getJSON returns null when storage is empty', async () => {
     (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
 
-    const result = await StorageService.getJSON("empty-key");
+    const result = await StorageService.getJSON('empty-key');
     expect(result).toBeNull();
   });
 
-  it("getJSON returns null for invalid JSON", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("{not-json");
+  it('getJSON returns null for invalid JSON', async () => {
+    (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce('{not-json');
 
-    const result = await StorageService.getJSON("test-key");
+    const result = await StorageService.getJSON('test-key');
     expect(result).toBeNull();
   });
 
-  it("get returns null on storage error", async () => {
+  it('get returns null on storage error', async () => {
     (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(
-      new Error("fail"),
+      new Error('fail'),
     );
 
-    const result = await StorageService.get("test-key");
+    const result = await StorageService.get('test-key');
     expect(result).toBeNull();
   });
 
-  it("set returns false on storage error", async () => {
+  it('set returns false on storage error', async () => {
     (AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(
-      new Error("fail"),
+      new Error('fail'),
     );
 
-    const result = await StorageService.set("test-key", "value");
+    const result = await StorageService.set('test-key', 'value');
     expect(result).toBe(false);
   });
 
-  it("remove returns false on storage error", async () => {
+  it('remove returns false on storage error', async () => {
     (AsyncStorage.removeItem as jest.Mock).mockRejectedValueOnce(
-      new Error("fail"),
+      new Error('fail'),
     );
 
-    const result = await StorageService.remove("test-key");
+    const result = await StorageService.remove('test-key');
     expect(result).toBe(false);
   });
 
-  it("remove returns true on success", async () => {
+  it('remove returns true on success', async () => {
     (AsyncStorage.removeItem as jest.Mock).mockResolvedValueOnce(null);
 
-    const result = await StorageService.remove("test-key");
+    const result = await StorageService.remove('test-key');
     expect(result).toBe(true);
   });
 
-  it("setJSON returns false when JSON serialization fails", async () => {
+  it('setJSON returns false when JSON serialization fails', async () => {
     const circular: { self?: unknown } = {};
     circular.self = circular;
 
-    const result = await StorageService.setJSON("test-key", circular);
+    const result = await StorageService.setJSON('test-key', circular);
     expect(result).toBe(false);
   });
 });
 
-describe("RetentionService grace-day behavior", () => {
+describe('RetentionService grace-day behavior', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("preserves streak with one grace day in active window", async () => {
+  it('preserves streak with one grace day in active window', async () => {
     (AsyncStorage.getItem as jest.Mock)
-      .mockResolvedValueOnce("2026-02-14")
-      .mockResolvedValueOnce("4")
-      .mockResolvedValueOnce("2026-02-10")
-      .mockResolvedValueOnce("0");
+      .mockResolvedValueOnce('2026-02-14')
+      .mockResolvedValueOnce('4')
+      .mockResolvedValueOnce('2026-02-10')
+      .mockResolvedValueOnce('0');
 
     const result = await RetentionService.markAppUse(
-      new Date("2026-02-16T00:00:00Z"),
+      new Date('2026-02-16T00:00:00Z'),
     );
 
     expect(result).toBe(5);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith("streakCount", "5");
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith('streakCount', '5');
     expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-      "retentionGraceDaysUsed",
-      "1",
+      'retentionGraceDaysUsed',
+      '1',
     );
   });
 
-  it("resets streak when grace day already used", async () => {
+  it('resets streak when grace day already used', async () => {
     (AsyncStorage.getItem as jest.Mock)
-      .mockResolvedValueOnce("2026-02-14")
-      .mockResolvedValueOnce("7")
-      .mockResolvedValueOnce("2026-02-10")
-      .mockResolvedValueOnce("1");
+      .mockResolvedValueOnce('2026-02-14')
+      .mockResolvedValueOnce('7')
+      .mockResolvedValueOnce('2026-02-10')
+      .mockResolvedValueOnce('1');
 
     const result = await RetentionService.markAppUse(
-      new Date("2026-02-16T00:00:00Z"),
+      new Date('2026-02-16T00:00:00Z'),
     );
 
     expect(result).toBe(1);
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith("streakCount", "1");
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith('streakCount', '1');
   });
 });
 
-describe("StorageService (native SQLite path)", () => {
+describe('StorageService (native SQLite path)', () => {
   const originalJestWorkerId = process.env.JEST_WORKER_ID;
 
   beforeEach(() => {
@@ -153,7 +153,7 @@ describe("StorageService (native SQLite path)", () => {
     },
   ) => {
     jest.resetModules();
-    process.env.JEST_WORKER_ID = "";
+    process.env.JEST_WORKER_ID = '';
 
     const executeMock = jest.fn(async (_sql: string, _params?: unknown[]) => ({
       rows: [],
@@ -164,11 +164,11 @@ describe("StorageService (native SQLite path)", () => {
       },
     );
 
-    jest.doMock("react-native", () => ({
-      Platform: { OS: "android" },
+    jest.doMock('react-native', () => ({
+      Platform: { OS: 'android' },
     }));
 
-    jest.doMock("@op-engineering/op-sqlite", () => {
+    jest.doMock('@op-engineering/op-sqlite', () => {
       return {
         open: jest.fn(
           sqliteOpenImpl ||
@@ -181,7 +181,7 @@ describe("StorageService (native SQLite path)", () => {
     });
 
     const asyncStorageMock =
-      require("@react-native-async-storage/async-storage") as {
+      require('@react-native-async-storage/async-storage') as {
         getItem: jest.Mock;
         setItem: jest.Mock;
         removeItem: jest.Mock;
@@ -191,7 +191,7 @@ describe("StorageService (native SQLite path)", () => {
 
     configureAsyncStorage?.(asyncStorageMock);
 
-    const module = require("../src/services/StorageService") as {
+    const module = require('../src/services/StorageService') as {
       default: typeof StorageService;
       zustandStorage: {
         getItem: (name: string) => Promise<string | null>;
@@ -213,71 +213,71 @@ describe("StorageService (native SQLite path)", () => {
     jest.clearAllMocks();
   });
 
-  it("initializes SQLite table and marks migration complete", async () => {
+  it('initializes SQLite table and marks migration complete', async () => {
     const { StorageService: nativeStorageService, executeMock } =
       loadNativeStorageService((asyncStorageMock) => {
         asyncStorageMock.getItem.mockResolvedValueOnce(null);
-        asyncStorageMock.getAllKeys.mockResolvedValueOnce(["a"]);
-        asyncStorageMock.multiGet.mockResolvedValueOnce([["a", "1"]]);
+        asyncStorageMock.getAllKeys.mockResolvedValueOnce(['a']);
+        asyncStorageMock.multiGet.mockResolvedValueOnce([['a', '1']]);
         asyncStorageMock.setItem.mockResolvedValueOnce(null);
       });
 
     await nativeStorageService.init();
 
     expect(executeMock).toHaveBeenCalledWith(
-      "CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)",
+      'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
     );
   });
 
-  it("reads value from SQLite store", async () => {
+  it('reads value from SQLite store', async () => {
     const { StorageService: nativeStorageService, executeMock } =
       loadNativeStorageService();
-    executeMock.mockResolvedValueOnce({ rows: [{ value: "hello" }] });
+    executeMock.mockResolvedValueOnce({ rows: [{ value: 'hello' }] });
 
-    const value = await nativeStorageService.get("k");
+    const value = await nativeStorageService.get('k');
 
-    expect(value).toBe("hello");
+    expect(value).toBe('hello');
   });
 
-  it("writes and removes values in SQLite store", async () => {
+  it('writes and removes values in SQLite store', async () => {
     const { StorageService: nativeStorageService, executeMock } =
       loadNativeStorageService();
 
-    const setOk = await nativeStorageService.set("k", "v");
-    const removeOk = await nativeStorageService.remove("k");
+    const setOk = await nativeStorageService.set('k', 'v');
+    const removeOk = await nativeStorageService.remove('k');
 
     expect(setOk).toBe(true);
     expect(removeOk).toBe(true);
     expect(executeMock).toHaveBeenCalledWith(
-      "INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)",
-      ["k", "v"],
+      'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
+      ['k', 'v'],
     );
     expect(executeMock).toHaveBeenCalledWith(
-      "DELETE FROM kv_store WHERE key = ?",
-      ["k"],
+      'DELETE FROM kv_store WHERE key = ?',
+      ['k'],
     );
   });
 
-  it("returns null/false when SQLite operations fail", async () => {
+  it('returns null/false when SQLite operations fail', async () => {
     const { StorageService: nativeStorageService, executeMock } =
       loadNativeStorageService();
-    executeMock.mockRejectedValue(new Error("sqlite failed"));
+    executeMock.mockRejectedValue(new Error('sqlite failed'));
 
-    await expect(nativeStorageService.get("k")).resolves.toBeNull();
-    await expect(nativeStorageService.set("k", "v")).resolves.toBe(false);
-    await expect(nativeStorageService.remove("k")).resolves.toBe(false);
+    await expect(nativeStorageService.get('k')).resolves.toBeNull();
+    await expect(nativeStorageService.set('k', 'v')).resolves.toBe(false);
+    await expect(nativeStorageService.remove('k')).resolves.toBe(false);
   });
 
-  it("returns null for getJSON when get throws unexpectedly", async () => {
+  it('returns null for getJSON when get throws unexpectedly', async () => {
     const { StorageService: nativeStorageService } = loadNativeStorageService();
     jest
-      .spyOn(nativeStorageService, "get")
-      .mockRejectedValueOnce(new Error("unexpected"));
+      .spyOn(nativeStorageService, 'get')
+      .mockRejectedValueOnce(new Error('unexpected'));
 
-    await expect(nativeStorageService.getJSON("k")).resolves.toBeNull();
+    await expect(nativeStorageService.getJSON('k')).resolves.toBeNull();
   });
 
-  it("handles missing SQLite db initialization safely", async () => {
+  it('handles missing SQLite db initialization safely', async () => {
     const { StorageService: nativeStorageService } = loadNativeStorageService(
       undefined,
       () => {
@@ -288,26 +288,26 @@ describe("StorageService (native SQLite path)", () => {
       },
     );
 
-    await expect(nativeStorageService.get("k")).resolves.toBeNull();
+    await expect(nativeStorageService.get('k')).resolves.toBeNull();
   });
 
-  it("runs migration path in web/jest init", async () => {
+  it('runs migration path in web/jest init', async () => {
     await StorageService.init();
-    expect(AsyncStorage.getItem).toHaveBeenCalledWith("storageVersion");
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith('storageVersion');
   });
 
-  it("handles migration errors in web/jest init without throwing", async () => {
-    jest.spyOn(StorageService, "get").mockRejectedValueOnce(new Error("boom"));
+  it('handles migration errors in web/jest init without throwing', async () => {
+    jest.spyOn(StorageService, 'get').mockRejectedValueOnce(new Error('boom'));
 
     await expect(StorageService.init()).resolves.toBeUndefined();
   });
 
-  it("handles AsyncStorage->SQLite migration failures gracefully", async () => {
+  it('handles AsyncStorage->SQLite migration failures gracefully', async () => {
     const { StorageService: nativeStorageService } = loadNativeStorageService(
       (asyncStorageMock) => {
         asyncStorageMock.getItem.mockResolvedValueOnce(null);
         asyncStorageMock.getAllKeys.mockRejectedValueOnce(
-          new Error("keys fail"),
+          new Error('keys fail'),
         );
       },
     );
@@ -315,25 +315,25 @@ describe("StorageService (native SQLite path)", () => {
     await expect(nativeStorageService.init()).resolves.toBeUndefined();
   });
 
-  it("zustandStorage delegates to StorageService async APIs", async () => {
+  it('zustandStorage delegates to StorageService async APIs', async () => {
     const { StorageService: nativeStorageService, zustandStorage } =
       loadNativeStorageService();
     const getSpy = jest
-      .spyOn(nativeStorageService, "get")
-      .mockResolvedValueOnce("persisted");
+      .spyOn(nativeStorageService, 'get')
+      .mockResolvedValueOnce('persisted');
     const setSpy = jest
-      .spyOn(nativeStorageService, "set")
+      .spyOn(nativeStorageService, 'set')
       .mockResolvedValueOnce(true);
     const removeSpy = jest
-      .spyOn(nativeStorageService, "remove")
+      .spyOn(nativeStorageService, 'remove')
       .mockResolvedValueOnce(true);
 
-    await expect(zustandStorage.getItem("x")).resolves.toBe("persisted");
-    await expect(zustandStorage.setItem("x", "y")).resolves.toBeUndefined();
-    await expect(zustandStorage.removeItem("x")).resolves.toBeUndefined();
+    await expect(zustandStorage.getItem('x')).resolves.toBe('persisted');
+    await expect(zustandStorage.setItem('x', 'y')).resolves.toBeUndefined();
+    await expect(zustandStorage.removeItem('x')).resolves.toBeUndefined();
 
-    expect(getSpy).toHaveBeenCalledWith("x");
-    expect(setSpy).toHaveBeenCalledWith("x", "y");
-    expect(removeSpy).toHaveBeenCalledWith("x");
+    expect(getSpy).toHaveBeenCalledWith('x');
+    expect(setSpy).toHaveBeenCalledWith('x', 'y');
+    expect(removeSpy).toHaveBeenCalledWith('x');
   });
 });

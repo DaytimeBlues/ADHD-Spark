@@ -11,12 +11,12 @@
 /**
  * Glow intensity levels
  */
-export type GlowLevel = "none" | "soft" | "medium" | "strong";
+export type GlowLevel = 'none' | 'soft' | 'medium' | 'strong';
 
 /**
  * Surface tone variations for cards
  */
-export type SurfaceTone = "base" | "raised" | "sunken";
+export type SurfaceTone = 'base' | 'raised' | 'sunken';
 
 // ============================================================================
 // BACKGROUND VARIANTS
@@ -28,7 +28,7 @@ export type SurfaceTone = "base" | "raised" | "sunken";
  * - nebula: Luminous center, time-flow (Ignite, Pomodoro)
  * - moon: Calm radial halo (Anchor, CheckIn, Calendar, Tasks)
  */
-export type BackgroundVariant = "ridge" | "nebula" | "moon";
+export type BackgroundVariant = 'ridge' | 'nebula' | 'moon';
 
 // ============================================================================
 // BUTTON SYSTEM
@@ -37,12 +37,12 @@ export type BackgroundVariant = "ridge" | "nebula" | "moon";
 /**
  * Button visual variants
  */
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
 /**
  * Button size variants
  */
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 // ============================================================================
 // TIMER SYSTEM
@@ -53,17 +53,17 @@ export type ButtonSize = "sm" | "md" | "lg";
  * - progress: Timer progress ring (Ignite, Pomodoro)
  * - breath: Breathing animation (Anchor)
  */
-export type HaloMode = "progress" | "breath";
+export type HaloMode = 'progress' | 'breath';
 
 /**
  * Timer digit color variants
  */
-export type TimerColor = "default" | "success" | "warning" | "neutral";
+export type TimerColor = 'default' | 'success' | 'warning' | 'neutral';
 
 /**
  * Timer digit size variants
  */
-export type TimerSize = "sm" | "md" | "lg" | "xl" | "hero";
+export type TimerSize = 'sm' | 'md' | 'lg' | 'xl' | 'hero';
 
 // ============================================================================
 // CARD SYSTEM
@@ -72,7 +72,7 @@ export type TimerSize = "sm" | "md" | "lg" | "xl" | "hero";
 /**
  * Card padding presets
  */
-export type CardPadding = "none" | "sm" | "md" | "lg";
+export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 // ============================================================================
 // COMPONENT PROP TYPES
@@ -83,7 +83,7 @@ import {
   TextStyle,
   StyleProp,
   AccessibilityRole,
-} from "react-native";
+} from 'react-native';
 
 /**
  * Base cosmic component props

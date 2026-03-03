@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface BrainDumpEmptyStateProps {
   isVisible: boolean;
@@ -25,8 +25,8 @@ const getStyles = (isCosmic: boolean) =>
     title: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      fontWeight: "700",
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontWeight: '700',
       letterSpacing: 2,
     },
     emptyState: {

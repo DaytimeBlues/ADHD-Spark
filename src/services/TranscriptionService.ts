@@ -1,6 +1,6 @@
-import { Platform } from "react-native";
-import { config } from "../config";
-import { LoggerService } from "./LoggerService";
+import { Platform } from 'react-native';
+import { config } from '../config';
+import { LoggerService } from './LoggerService';
 
 /**
  * TranscriptionService
@@ -44,16 +44,16 @@ class TranscriptionServiceClass {
    */
   async transcribe(audioUri: string): Promise<TranscriptionResult> {
     const globalRecord =
-      typeof globalThis === "undefined"
+      typeof globalThis === 'undefined'
         ? null
         : (globalThis as unknown as Record<string, unknown>);
     if (globalRecord?.__SPARK_E2E_TEST_MODE__ === true) {
       const mockTranscription = globalRecord.__SPARK_E2E_TRANSCRIBE_MOCK__;
-      if (typeof mockTranscription === "string" && mockTranscription.trim()) {
+      if (typeof mockTranscription === 'string' && mockTranscription.trim()) {
         return {
           success: true,
           transcription: mockTranscription,
-          summary: "E2E mock transcription",
+          summary: 'E2E mock transcription',
         };
       }
     }
@@ -63,25 +63,25 @@ class TranscriptionServiceClass {
       const formData = new FormData();
 
       // Handle different platforms
-      if (Platform.OS === "web") {
+      if (Platform.OS === 'web') {
         const response = await fetch(audioUri);
         const blob = await response.blob();
-        formData.append("audio", blob);
+        formData.append('audio', blob);
       } else {
         const file: RNFormDataFile = {
           uri: audioUri,
-          type: "audio/m4a",
-          name: "recording.m4a",
+          type: 'audio/m4a',
+          name: 'recording.m4a',
         };
-        formData.append("audio", file as unknown as Blob);
+        formData.append('audio', file as unknown as Blob);
       }
 
       // Send to middleware
       const response = await fetch(`${this.apiUrl}/api/transcribe`, {
-        method: "POST",
+        method: 'POST',
         body: formData,
         headers: {
-          Accept: "application/json",
+          Accept: 'application/json',
         },
       });
 
@@ -103,15 +103,15 @@ class TranscriptionServiceClass {
       };
     } catch (error) {
       LoggerService.error({
-        service: "TranscriptionService",
-        operation: "transcribe",
-        message: "Transcription error",
+        service: 'TranscriptionService',
+        operation: 'transcribe',
+        message: 'Transcription error',
         error,
         context: { audioUri },
       });
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
@@ -122,7 +122,7 @@ class TranscriptionServiceClass {
   async healthCheck(): Promise<boolean> {
     try {
       const response = await fetch(`${this.apiUrl}/api/auth`, {
-        method: "POST",
+        method: 'POST',
       });
       return response.status !== 0;
     } catch {

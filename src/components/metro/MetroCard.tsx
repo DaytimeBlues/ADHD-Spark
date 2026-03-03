@@ -1,10 +1,10 @@
-import React from "react";
-import { View, Text, StyleSheet, ViewStyle } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import {
   MetroPalette,
   MetroSpacing,
   MetroTypography,
-} from "../../theme/metroTheme";
+} from '../../theme/metroTheme';
 
 interface MetroCardProps {
   children: React.ReactNode;
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: MetroPalette.darkGray, // Subtle contrast against pure black bg
     padding: MetroSpacing.m,
     marginBottom: MetroSpacing.m,
-    width: "100%",
+    width: '100%',
     borderWidth: 0,
     borderRadius: 0,
   },

@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
-import { LayoutAnimation } from "react-native";
-import FogCutterAIService, { MicroStep } from "../services/FogCutterAIService";
-import UXMetricsService from "../services/UXMetricsService";
-import { LoggerService } from "../services/LoggerService";
+import { useState, useCallback } from 'react';
+import { LayoutAnimation } from 'react-native';
+import FogCutterAIService, { MicroStep } from '../services/FogCutterAIService';
+import UXMetricsService from '../services/UXMetricsService';
+import { LoggerService } from '../services/LoggerService';
 
 interface UseFogCutterAIReturn {
   isAiLoading: boolean;
@@ -26,7 +26,7 @@ export const useFogCutterAI = ({
       }
 
       setIsAiLoading(true);
-      UXMetricsService.track("fog_cutter_ai_breakdown_requested", {
+      UXMetricsService.track('fog_cutter_ai_breakdown_requested', {
         taskLength: task.length,
       });
 
@@ -38,15 +38,15 @@ export const useFogCutterAI = ({
         onStepsGenerated?.(stepTexts);
 
         if (steps.length > 0) {
-          UXMetricsService.track("fog_cutter_ai_breakdown_success", {
+          UXMetricsService.track('fog_cutter_ai_breakdown_success', {
             stepCount: steps.length,
           });
         }
       } catch (error) {
         LoggerService.error({
-          service: "FogCutterAI",
-          operation: "generateMicroSteps",
-          message: "AI breakdown failed",
+          service: 'FogCutterAI',
+          operation: 'generateMicroSteps',
+          message: 'AI breakdown failed',
           error,
         });
       } finally {

@@ -11,7 +11,7 @@
  *   </BottomSheet>
  */
 
-import React, { memo, useEffect, useRef, useCallback } from "react";
+import React, { memo, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -23,9 +23,9 @@ import {
   Platform,
   ViewStyle,
   ScrollView,
-} from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
-import { surfaceColors, textColors } from "../../theme/cosmicTokens";
+} from 'react-native';
+import { useTheme } from '../../theme/ThemeProvider';
+import { surfaceColors, textColors } from '../../theme/cosmicTokens';
 
 // ============================================================================
 // TYPES
@@ -124,11 +124,11 @@ export const BottomSheet = memo(function BottomSheet({
 
   const sheetBackground = isCosmic
     ? surfaceColors.raised // rgba(18, 26, 52, 0.96)
-    : "#1A1A2E";
+    : '#1A1A2E';
 
   const borderColor = isCosmic
-    ? "rgba(139, 92, 246, 0.2)" // nebulaViolet 20%
-    : "rgba(255,255,255,0.08)";
+    ? 'rgba(139, 92, 246, 0.2)' // nebulaViolet 20%
+    : 'rgba(255,255,255,0.08)';
 
   const maxHeight = `${Math.round(maxHeightFraction * 100)}%` as `${number}%`;
 
@@ -136,7 +136,7 @@ export const BottomSheet = memo(function BottomSheet({
   const contentProps = scrollable
     ? {
         showsVerticalScrollIndicator: false,
-        keyboardShouldPersistTaps: "handled" as const,
+        keyboardShouldPersistTaps: 'handled' as const,
         contentContainerStyle: styles.scrollContent,
       }
     : {};
@@ -152,7 +152,7 @@ export const BottomSheet = memo(function BottomSheet({
       {/* Backdrop */}
       <Animated.View
         style={[styles.backdrop, { opacity: backdropOpacity }]}
-        pointerEvents={visible ? "auto" : "none"}
+        pointerEvents={visible ? 'auto' : 'none'}
       >
         <Pressable
           style={StyleSheet.absoluteFill}
@@ -175,10 +175,10 @@ export const BottomSheet = memo(function BottomSheet({
               backgroundColor: sheetBackground,
               borderColor,
               maxHeight,
-              ...(Platform.OS === "web" &&
+              ...(Platform.OS === 'web' &&
                 ({
                   boxShadow:
-                    "0 -8px 40px rgba(7, 7, 18, 0.7), 0 0 0 1px rgba(139, 92, 246, 0.15)",
+                    '0 -8px 40px rgba(7, 7, 18, 0.7), 0 0 0 1px rgba(139, 92, 246, 0.15)',
                 } as ViewStyle)),
             },
             style,
@@ -251,26 +251,26 @@ export const BottomSheet = memo(function BottomSheet({
 const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(7, 7, 18, 0.72)",
+    backgroundColor: 'rgba(7, 7, 18, 0.72)',
   },
   sheetWrapper: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   sheet: {
     borderTopLeftRadius: SHEET_BORDER_RADIUS,
     borderTopRightRadius: SHEET_BORDER_RADIUS,
     borderWidth: 1,
     borderBottomWidth: 0,
-    paddingBottom: Platform.OS === "ios" ? 34 : 16, // safe area bottom
+    paddingBottom: Platform.OS === 'ios' ? 34 : 16, // safe area bottom
     minHeight: 200,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   handleContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingTop: 12,
     paddingBottom: 4,
   },
@@ -280,26 +280,26 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(185, 194, 217, 0.08)",
+    borderBottomColor: 'rgba(185, 194, 217, 0.08)',
   },
   headerLeft: {
     flex: 1,
   },
   headerTitle: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1.5,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   closeButton: {
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     fontSize: 16,
-    fontWeight: "400",
+    fontWeight: '400',
   },
   content: {
     flexShrink: 1,
@@ -316,22 +316,22 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   handleCosmic: {
-    backgroundColor: "rgba(185, 194, 217, 0.3)",
+    backgroundColor: 'rgba(185, 194, 217, 0.3)',
   },
   handleLinear: {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
   titleCosmic: {
     color: textColors.secondary,
   },
   titleLinear: {
-    color: "rgba(255, 255, 255, 0.6)",
+    color: 'rgba(255, 255, 255, 0.6)',
   },
   closeIconCosmic: {
     color: textColors.muted,
   },
   closeIconLinear: {
-    color: "rgba(255, 255, 255, 0.4)",
+    color: 'rgba(255, 255, 255, 0.4)',
   },
 });
 

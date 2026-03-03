@@ -5,7 +5,7 @@
  * Includes the persistent FAB and the bottom-sheet drawer.
  */
 
-export { CaptureBubble } from "./CaptureBubble";
+export { CaptureBubble } from './CaptureBubble';
 
-export { CaptureDrawer } from "./CaptureDrawer";
-export type { CaptureDrawerProps } from "./CaptureDrawer";
+export { CaptureDrawer } from './CaptureDrawer';
+export type { CaptureDrawerProps } from './CaptureDrawer';

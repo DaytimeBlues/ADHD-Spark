@@ -1,23 +1,23 @@
-import { useState, useCallback, useMemo } from "react";
-import { LayoutAnimation, Platform, AccessibilityInfo } from "react-native";
+import { useState, useCallback, useMemo } from 'react';
+import { Platform, AccessibilityInfo } from 'react-native';
 import AISortService, {
   SortedItem as AISortServiceSortedItem,
-} from "../services/AISortService";
+} from '../services/AISortService';
 
 export type SortedItem = AISortServiceSortedItem;
-import { GoogleTasksSyncService } from "../services/GoogleTasksSyncService";
-import StorageService from "../services/StorageService";
-import { LoggerService } from "../services/LoggerService";
-import { normalizeMicroSteps } from "../utils/fogCutter";
-import { generateId } from "../utils/helpers";
+import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
+import StorageService from '../services/StorageService';
 
-export const CATEGORY_ORDER: Array<AISortServiceSortedItem["category"]> = [
-  "task",
-  "event",
-  "reminder",
-  "worry",
-  "thought",
-  "idea",
+import { normalizeMicroSteps } from '../utils/fogCutter';
+import { generateId } from '../utils/helpers';
+
+export const CATEGORY_ORDER: Array<AISortServiceSortedItem['category']> = [
+  'task',
+  'event',
+  'reminder',
+  'worry',
+  'thought',
+  'idea',
 ];
 
 export interface StoredFogCutterTask {
@@ -41,16 +41,16 @@ interface UseBrainDumpSortingReturn {
   handleConnectGoogle: () => Promise<void>;
   clearSortedItems: () => void;
   clearSortingError: () => void;
-  getPriorityStyle: (priority: AISortServiceSortedItem["priority"]) => object;
+  getPriorityStyle: (priority: AISortServiceSortedItem['priority']) => object;
 }
 
 const toFogCutterTask = (
   item: AISortServiceSortedItem,
 ): StoredFogCutterTask | null => {
   if (
-    item.category !== "task" &&
-    item.category !== "reminder" &&
-    item.category !== "event"
+    item.category !== 'task' &&
+    item.category !== 'reminder' &&
+    item.category !== 'event'
   ) {
     return null;
   }
@@ -61,7 +61,7 @@ const toFogCutterTask = (
   }
 
   const stepHints: string[] = [
-    "Open this task and start with a 2-minute first step",
+    'Open this task and start with a 2-minute first step',
   ];
   if (item.dueDate) {
     stepHints.push(`Check due date: ${item.dueDate}`);
@@ -146,14 +146,14 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
 
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
-        if (Platform.OS === "web") {
+        if (Platform.OS === 'web') {
           setSortingError(
-            "Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.",
+            'Google sign-in is not available on web yet. Please use the mobile app to sync with Google Tasks.',
           );
         } else {
           setSortingError(
             exportResult.errorMessage ||
-              "Google sign-in required to sync Tasks and Calendar exports.",
+              'Google sign-in required to sync Tasks and Calendar exports.',
           );
         }
       } else if (exportResult.errorMessage) {
@@ -167,7 +167,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
         setSortingError(null);
         setGoogleAuthRequired(false);
         AccessibilityInfo.announceForAccessibility(
-          "Tasks synced and suggestions saved.",
+          'Tasks synced and suggestions saved.',
         );
       }
     },
@@ -175,8 +175,8 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
   );
 
   const handleConnectGoogle = useCallback(async () => {
-    if (Platform.OS === "web") {
-      setSortingError("Google sign-in is not available on web yet.");
+    if (Platform.OS === 'web') {
+      setSortingError('Google sign-in is not available on web yet.');
       return;
     }
 
@@ -184,7 +184,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
     try {
       const success = await GoogleTasksSyncService.signInInteractive();
       if (!success) {
-        setSortingError("Google sign-in failed. Please try again.");
+        setSortingError('Google sign-in failed. Please try again.');
         return;
       }
 
@@ -200,7 +200,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
       if (exportResult.authRequired) {
         setGoogleAuthRequired(true);
         setSortingError(
-          exportResult.errorMessage || "Google sign-in required.",
+          exportResult.errorMessage || 'Google sign-in required.',
         );
         return;
       }
@@ -214,7 +214,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
       setGoogleAuthRequired(false);
       setSortingError(null);
       AccessibilityInfo.announceForAccessibility(
-        "Tasks synced and suggestions saved.",
+        'Tasks synced and suggestions saved.',
       );
     } finally {
       setIsConnectingGoogle(false);
@@ -228,12 +228,12 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
 
       try {
         await runSortAndSyncPipeline(items);
-        AccessibilityInfo.announceForAccessibility("AI suggestions updated.");
+        AccessibilityInfo.announceForAccessibility('AI suggestions updated.');
       } catch (error) {
         setSortingError(
           error instanceof Error
             ? error.message
-            : "AI sort is currently unavailable.",
+            : 'AI sort is currently unavailable.',
         );
         setSortedItems([]);
       } finally {
@@ -258,14 +258,14 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
   }, [sortedItems]);
 
   const getPriorityStyle = useCallback(
-    (priority: AISortServiceSortedItem["priority"]) => {
+    (priority: AISortServiceSortedItem['priority']) => {
       switch (priority) {
-        case "high":
-          return { backgroundColor: "#FF4444", borderColor: "#FF4444" };
-        case "medium":
-          return { backgroundColor: "#666666", borderColor: "#666666" };
+        case 'high':
+          return { backgroundColor: '#FF4444', borderColor: '#FF4444' };
+        case 'medium':
+          return { backgroundColor: '#666666', borderColor: '#666666' };
         default:
-          return { backgroundColor: "#333333", borderColor: "#333333" };
+          return { backgroundColor: '#333333', borderColor: '#333333' };
       }
     },
     [],

@@ -15,7 +15,7 @@ import React, {
   useRef,
   useCallback,
   useMemo,
-} from "react";
+} from 'react';
 import {
   Pressable,
   Text,
@@ -24,28 +24,28 @@ import {
   Easing,
   Platform,
   ViewStyle,
-} from "react-native";
-import CaptureService from "../../services/CaptureService";
-import { CheckInService } from "../../services/CheckInService";
-import { navigationRef } from "../../navigation/navigationRef";
-import { ROUTES } from "../../navigation/routes";
+} from 'react-native';
+import CaptureService from '../../services/CaptureService';
+import { CheckInService } from '../../services/CheckInService';
+import { navigationRef } from '../../navigation/navigationRef';
+import { ROUTES } from '../../navigation/routes';
 
-import { useTaskStore } from "../../store/useTaskStore";
-import OverlayService from "../../services/OverlayService";
-import { CaptureDrawer } from "./CaptureDrawer";
+import { useTaskStore } from '../../store/useTaskStore';
+import OverlayService from '../../services/OverlayService';
+import { CaptureDrawer } from './CaptureDrawer';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export type BubbleState =
-  | "idle"
-  | "recording"
-  | "processing"
-  | "needs-review"
-  | "failed"
-  | "offline"
-  | "needs-checkin";
+  | 'idle'
+  | 'recording'
+  | 'processing'
+  | 'needs-review'
+  | 'failed'
+  | 'offline'
+  | 'needs-checkin';
 
 // ============================================================================
 // CONSTANTS
@@ -58,15 +58,15 @@ const SPIN_DURATION = 1200;
 
 // Cosmic colors (no hex outside tokens in app code — these mirror cosmicTokens)
 const COLORS = {
-  idle: "#8B5CF6", // nebulaViolet
-  recording: "#2DD4BF", // auroraTeal
-  processing: "#8B5CF6", // nebulaViolet
-  failed: "#FB7185", // cometRose
-  offline: "#6B7A9C", // neutral.medium (muted)
-  needsCheckin: "#F6C177", // gold
-  badge: "#FB7185", // cometRose
-  badgeText: "#EEF2FF", // starlight
-  fabText: "#EEF2FF", // starlight
+  idle: '#8B5CF6', // nebulaViolet
+  recording: '#2DD4BF', // auroraTeal
+  processing: '#8B5CF6', // nebulaViolet
+  failed: '#FB7185', // cometRose
+  offline: '#6B7A9C', // neutral.medium (muted)
+  needsCheckin: '#F6C177', // gold
+  badge: '#FB7185', // cometRose
+  badgeText: '#EEF2FF', // starlight
+  fabText: '#EEF2FF', // starlight
 } as const;
 
 // ============================================================================
@@ -75,7 +75,7 @@ const COLORS = {
 
 export const CaptureBubble = memo(function CaptureBubble() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [bubbleState, setBubbleState] = useState<BubbleState>("idle");
+  const [bubbleState, setBubbleState] = useState<BubbleState>('idle');
   const [badgeCount, setBadgeCount] = useState(0);
 
   // Task Store Integration
@@ -98,10 +98,10 @@ export const CaptureBubble = memo(function CaptureBubble() {
   useEffect(() => {
     const unsub = CaptureService.subscribe((count) => {
       setBadgeCount(count);
-      if (count > 0 && bubbleState === "idle") {
-        setBubbleState("needs-review");
-      } else if (count === 0 && bubbleState === "needs-review") {
-        setBubbleState("idle");
+      if (count > 0 && bubbleState === 'idle') {
+        setBubbleState('needs-review');
+      } else if (count === 0 && bubbleState === 'needs-review') {
+        setBubbleState('idle');
       }
     });
     return unsub;
@@ -112,12 +112,12 @@ export const CaptureBubble = memo(function CaptureBubble() {
     const unsub = CheckInService.subscribe((isPending) => {
       if (
         isPending &&
-        bubbleState !== "recording" &&
-        bubbleState !== "processing"
+        bubbleState !== 'recording' &&
+        bubbleState !== 'processing'
       ) {
-        setBubbleState("needs-checkin");
-      } else if (!isPending && bubbleState === "needs-checkin") {
-        setBubbleState(badgeCount > 0 ? "needs-review" : "idle");
+        setBubbleState('needs-checkin');
+      } else if (!isPending && bubbleState === 'needs-checkin') {
+        setBubbleState(badgeCount > 0 ? 'needs-review' : 'idle');
       }
     });
     return unsub;
@@ -125,7 +125,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
   // Pulse animation (recording state)
   useEffect(() => {
-    if (bubbleState === "recording" || bubbleState === "needs-checkin") {
+    if (bubbleState === 'recording' || bubbleState === 'needs-checkin') {
       pulseLoop.current = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
@@ -154,7 +154,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
   // Spin animation (processing state)
   useEffect(() => {
-    if (bubbleState === "processing") {
+    if (bubbleState === 'processing') {
       spinLoop.current = Animated.loop(
         Animated.timing(spinAnim, {
           toValue: 1,
@@ -211,7 +211,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
       // Reset to idle after showing error for 3s
       setTimeout(() => {
         setBubbleState((prev) =>
-          prev === "failed" ? (badgeCount > 0 ? "needs-review" : "idle") : prev,
+          prev === 'failed' ? (badgeCount > 0 ? 'needs-review' : 'idle') : prev,
         );
       }, 3000);
     });
@@ -219,7 +219,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
   // Run shake when entering failed state
   useEffect(() => {
-    if (bubbleState === "failed") {
+    if (bubbleState === 'failed') {
       runShake();
     }
   }, [bubbleState, runShake]);
@@ -227,21 +227,21 @@ export const CaptureBubble = memo(function CaptureBubble() {
   // Spin rotation interpolation
   const spinRotation = spinAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
+    outputRange: ['0deg', '360deg'],
   });
 
   // Derive FAB color from state
   const fabColor = useMemo((): string => {
     switch (bubbleState) {
-      case "recording":
+      case 'recording':
         return COLORS.recording;
-      case "processing":
+      case 'processing':
         return COLORS.processing;
-      case "failed":
+      case 'failed':
         return COLORS.failed;
-      case "offline":
+      case 'offline':
         return COLORS.offline;
-      case "needs-checkin":
+      case 'needs-checkin':
         return COLORS.needsCheckin;
       default:
         return COLORS.idle;
@@ -250,31 +250,31 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
   // Derive FAB glow (web only)
   const fabGlow = useMemo((): ViewStyle => {
-    if (Platform.OS !== "web") {
+    if (Platform.OS !== 'web') {
       return {};
     }
     switch (bubbleState) {
-      case "recording":
+      case 'recording':
         return {
           boxShadow:
-            "0 0 0 3px rgba(45, 212, 191, 0.35), 0 0 28px rgba(45, 212, 191, 0.4), 0 8px 24px rgba(7,7,18,0.6)",
+            '0 0 0 3px rgba(45, 212, 191, 0.35), 0 0 28px rgba(45, 212, 191, 0.4), 0 8px 24px rgba(7,7,18,0.6)',
         } as ViewStyle;
-      case "failed":
+      case 'failed':
         return {
           boxShadow:
-            "0 0 0 2px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.3)",
+            '0 0 0 2px rgba(251, 113, 133, 0.4), 0 0 20px rgba(251, 113, 133, 0.3)',
         } as ViewStyle;
-      case "offline":
-        return { boxShadow: "0 4px 16px rgba(7,7,18,0.5)" } as ViewStyle;
-      case "needs-checkin":
+      case 'offline':
+        return { boxShadow: '0 4px 16px rgba(7,7,18,0.5)' } as ViewStyle;
+      case 'needs-checkin':
         return {
           boxShadow:
-            "0 0 0 3px rgba(246, 193, 119, 0.35), 0 0 28px rgba(246, 193, 119, 0.4), 0 8px 24px rgba(7,7,18,0.6)",
+            '0 0 0 3px rgba(246, 193, 119, 0.35), 0 0 28px rgba(246, 193, 119, 0.4), 0 8px 24px rgba(7,7,18,0.6)',
         } as ViewStyle;
       default:
         return {
           boxShadow:
-            "0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 24px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(7,7,18,0.6)",
+            '0 0 0 2px rgba(139, 92, 246, 0.3), 0 0 24px rgba(139, 92, 246, 0.35), 0 8px 24px rgba(7,7,18,0.6)',
         } as ViewStyle;
     }
   }, [bubbleState]);
@@ -282,34 +282,34 @@ export const CaptureBubble = memo(function CaptureBubble() {
   // Derive FAB icon/label
   const fabIcon = useMemo((): string => {
     switch (bubbleState) {
-      case "recording":
-        return "⏹";
-      case "processing":
-        return "⟳";
-      case "failed":
-        return "✕";
-      case "offline":
-        return "⊗";
-      case "needs-checkin":
-        return "🎯";
+      case 'recording':
+        return '⏹';
+      case 'processing':
+        return '⟳';
+      case 'failed':
+        return '✕';
+      case 'offline':
+        return '⊗';
+      case 'needs-checkin':
+        return '🎯';
       default:
-        return "+";
+        return '+';
     }
   }, [bubbleState]);
 
   const handlePress = useCallback(() => {
-    if (bubbleState === "needs-review" && badgeCount > 0) {
+    if (bubbleState === 'needs-review' && badgeCount > 0) {
       if (navigationRef.isReady()) {
         navigationRef.navigate(ROUTES.INBOX);
       }
       return;
     }
 
-    if (bubbleState === "processing") {
+    if (bubbleState === 'processing') {
       return; // non-interactive
     }
     setDrawerOpen(true);
-    if (bubbleState === "needs-checkin") {
+    if (bubbleState === 'needs-checkin') {
       CheckInService.setPending(false);
     }
   }, [bubbleState, badgeCount]);
@@ -339,7 +339,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
             transform: [
               { scale: pulseAnim },
               { translateX: shakeAnim },
-              ...(bubbleState === "processing"
+              ...(bubbleState === 'processing'
                 ? [{ rotate: spinRotation }]
                 : []),
             ],
@@ -350,13 +350,13 @@ export const CaptureBubble = memo(function CaptureBubble() {
         <Pressable
           testID="capture-bubble"
           onPress={handlePress}
-          disabled={bubbleState === "processing"}
+          disabled={bubbleState === 'processing'}
           accessibilityLabel={
-            bubbleState === "recording"
-              ? "Stop recording"
-              : bubbleState === "needs-review"
-                ? `Capture inbox, ${badgeCount} item${badgeCount !== 1 ? "s" : ""} to review`
-                : "Open capture"
+            bubbleState === 'recording'
+              ? 'Stop recording'
+              : bubbleState === 'needs-review'
+                ? `Capture inbox, ${badgeCount} item${badgeCount !== 1 ? 's' : ''} to review`
+                : 'Open capture'
           }
           accessibilityRole="button"
           style={[styles.fab, { backgroundColor: fabColor }, fabGlow]}
@@ -366,8 +366,8 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
         {/* Badge */}
         {totalBadgeCount > 0 &&
-          bubbleState !== "recording" &&
-          bubbleState !== "processing" && (
+          bubbleState !== 'recording' &&
+          bubbleState !== 'processing' && (
             <Pressable
               style={styles.badge}
               testID="capture-bubble-badge"
@@ -376,7 +376,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
               accessibilityRole="button"
             >
               <Text style={styles.badgeText}>
-                {totalBadgeCount > 99 ? "99+" : totalBadgeCount}
+                {totalBadgeCount > 99 ? '99+' : totalBadgeCount}
               </Text>
             </Pressable>
           )}
@@ -399,7 +399,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
 
 const styles = StyleSheet.create({
   fabContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 88, // above tab bar (60px) + padding
     right: 20,
     zIndex: 999,
@@ -408,33 +408,33 @@ const styles = StyleSheet.create({
     width: FAB_SIZE,
     height: FAB_SIZE,
     borderRadius: FAB_SIZE / 2,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   fabIcon: {
     fontSize: 26,
     color: COLORS.fabText,
-    fontWeight: "300",
+    fontWeight: '300',
     lineHeight: 30,
     includeFontPadding: false,
   },
   badge: {
-    position: "absolute",
+    position: 'absolute',
     top: -4,
     right: -4,
     minWidth: BADGE_SIZE,
     height: BADGE_SIZE,
     borderRadius: BADGE_SIZE / 2,
     backgroundColor: COLORS.badge,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 4,
     borderWidth: 2,
-    borderColor: "#070712", // obsidian border to separate from FAB
+    borderColor: '#070712', // obsidian border to separate from FAB
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: '700',
     color: COLORS.badgeText,
   },
 });

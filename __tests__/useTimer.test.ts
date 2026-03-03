@@ -1,7 +1,7 @@
-import { renderHook, act, waitFor } from "@testing-library/react-native";
-import useTimer from "../src/hooks/useTimer";
-import { useTimerStore } from "../src/store/useTimerStore";
-import { TimerService } from "../src/services/TimerService";
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import useTimer from '../src/hooks/useTimer';
+import { useTimerStore } from '../src/store/useTimerStore';
+import { TimerService } from '../src/services/TimerService';
 
 // Reset timer store state between tests to prevent cross-test leakage
 const resetTimerStore = () => {
@@ -17,7 +17,7 @@ const resetTimerStore = () => {
   });
 };
 
-describe("useTimer", () => {
+describe('useTimer', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     resetTimerStore();
@@ -29,13 +29,13 @@ describe("useTimer", () => {
     jest.useRealTimers();
   });
 
-  it("initializes with correct time", () => {
+  it('initializes with correct time', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 300 }));
     expect(result.current.timeLeft).toBe(300);
-    expect(result.current.formattedTime).toBe("05:00");
+    expect(result.current.formattedTime).toBe('05:00');
   });
 
-  it("starts timer when start is called", () => {
+  it('starts timer when start is called', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
     expect(result.current.isRunning).toBe(false);
 
@@ -46,7 +46,7 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(true);
   });
 
-  it("pauses timer when pause is called", () => {
+  it('pauses timer when pause is called', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
     act(() => {
       result.current.start();
@@ -60,7 +60,7 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(false);
   });
 
-  it("resets timer to initial time", () => {
+  it('resets timer to initial time', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 300 }));
     act(() => {
       result.current.start();
@@ -78,12 +78,12 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(false);
   });
 
-  it("formats time correctly", () => {
+  it('formats time correctly', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 65 }));
-    expect(result.current.formattedTime).toBe("01:05");
+    expect(result.current.formattedTime).toBe('01:05');
   });
 
-  it("supports autoStart and completion state", async () => {
+  it('supports autoStart and completion state', async () => {
     const onComplete = jest.fn();
     const { result } = renderHook(() =>
       useTimer({ initialTime: 1, autoStart: true, onComplete }),
@@ -111,7 +111,7 @@ describe("useTimer", () => {
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
-  it("allows setting time directly when active", () => {
+  it('allows setting time directly when active', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 10 }));
 
     // Start the timer to make it active
@@ -126,7 +126,7 @@ describe("useTimer", () => {
     expect(result.current.timeLeft).toBe(42);
   });
 
-  it("calls onComplete when timer finishes", async () => {
+  it('calls onComplete when timer finishes', async () => {
     const onComplete = jest.fn();
     const { result } = renderHook(() =>
       useTimer({ initialTime: 1, onComplete }),
@@ -148,7 +148,7 @@ describe("useTimer", () => {
     });
   });
 
-  it("resumes when start is called on an active paused timer", () => {
+  it('resumes when start is called on an active paused timer', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
 
     act(() => {
@@ -168,7 +168,7 @@ describe("useTimer", () => {
     expect(result.current.isRunning).toBe(true);
   });
 
-  it("uses resume path when paused mid-session", () => {
+  it('uses resume path when paused mid-session', () => {
     const { result } = renderHook(() => useTimer({ initialTime: 5 }));
 
     act(() => {
@@ -191,12 +191,12 @@ describe("useTimer", () => {
     expect(result.current.timeLeft).toBe(beforePause);
   });
 
-  it("registers and cleans up E2E timer controls for active timer", () => {
+  it('registers and cleans up E2E timer controls for active timer', () => {
     const globalRecord = globalThis as unknown as Record<string, unknown>;
     globalRecord.__SPARK_E2E_TEST_MODE__ = true;
 
     const { result, unmount } = renderHook(() =>
-      useTimer({ id: "pomodoro", initialTime: 10 }),
+      useTimer({ id: 'pomodoro', initialTime: 10 }),
     );
 
     act(() => {
@@ -238,12 +238,12 @@ describe("useTimer", () => {
     delete globalRecord.__SPARK_E2E_TEST_MODE__;
   });
 
-  it("does not set E2E controls when timer is not active", () => {
+  it('does not set E2E controls when timer is not active', () => {
     const globalRecord = globalThis as unknown as Record<string, unknown>;
     globalRecord.__SPARK_E2E_TEST_MODE__ = true;
-    useTimerStore.setState({ activeMode: "ignite", isRunning: true });
+    useTimerStore.setState({ activeMode: 'ignite', isRunning: true });
 
-    renderHook(() => useTimer({ id: "pomodoro", initialTime: 10 }));
+    renderHook(() => useTimer({ id: 'pomodoro', initialTime: 10 }));
 
     expect(globalRecord.__SPARK_E2E_TIMER_CONTROLS__).toBeUndefined();
     delete globalRecord.__SPARK_E2E_TEST_MODE__;

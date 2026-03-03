@@ -5,7 +5,7 @@
  * Deep space neutrals + ethereal accent glows
  */
 
-import { Platform } from "react-native";
+import { Platform } from 'react-native';
 
 // ============================================================================
 // COLOR PALETTE
@@ -13,19 +13,19 @@ import { Platform } from "react-native";
 
 const cosmicColors = {
   // Neutrals - Deep space foundation
-  obsidian: "#070712", // Deepest background
-  midnight: "#0B1022", // Secondary background
-  deepSpace: "#111A33", // Card surfaces
-  slate: "#2A3552", // Borders, dividers
-  mist: "#B9C2D9", // Secondary text
-  starlight: "#EEF2FF", // Primary text
+  obsidian: '#070712', // Deepest background
+  midnight: '#0B1022', // Secondary background
+  deepSpace: '#111A33', // Card surfaces
+  slate: '#2A3552', // Borders, dividers
+  mist: '#B9C2D9', // Secondary text
+  starlight: '#EEF2FF', // Primary text
 
   // Accents - Ethereal glows
-  nebulaViolet: "#8B5CF6", // Primary accent
-  deepIndigo: "#243BFF", // Links, secondary actions
-  auroraTeal: "#2DD4BF", // Success, breathing states, focus
-  starlightGold: "#F6C177", // Warnings, calendar highlights
-  cometRose: "#FB7185", // Errors, destructive actions
+  nebulaViolet: '#8B5CF6', // Primary accent
+  deepIndigo: '#243BFF', // Links, secondary actions
+  auroraTeal: '#2DD4BF', // Success, breathing states, focus
+  starlightGold: '#F6C177', // Warnings, calendar highlights
+  cometRose: '#FB7185', // Errors, destructive actions
 } as const;
 
 // ============================================================================
@@ -33,19 +33,19 @@ const cosmicColors = {
 // Per research spec: multi-layer shadows with border highlights
 // ============================================================================
 
-export type GlowLevel = "none" | "soft" | "medium" | "strong";
+export type GlowLevel = 'none' | 'soft' | 'medium' | 'strong';
 
 /**
  * Web-specific box shadows per research spec
  * Multi-layer composition for depth
  */
 export const webBoxShadows = {
-  none: "none",
-  soft: "0 0 0 1px rgba(139, 92, 246, 0.18), 0 10px 24px rgba(7, 7, 18, 0.55)",
+  none: 'none',
+  soft: '0 0 0 1px rgba(139, 92, 246, 0.18), 0 10px 24px rgba(7, 7, 18, 0.55)',
   medium:
-    "0 0 0 1px rgba(139, 92, 246, 0.28), 0 0 26px rgba(139, 92, 246, 0.22), 0 14px 30px rgba(7, 7, 18, 0.55)",
+    '0 0 0 1px rgba(139, 92, 246, 0.28), 0 0 26px rgba(139, 92, 246, 0.22), 0 14px 30px rgba(7, 7, 18, 0.55)',
   strong:
-    "0 0 0 1px rgba(45, 212, 191, 0.34), 0 0 34px rgba(45, 212, 191, 0.26), 0 0 70px rgba(139, 92, 246, 0.18), 0 18px 44px rgba(7, 7, 18, 0.62)",
+    '0 0 0 1px rgba(45, 212, 191, 0.34), 0 0 34px rgba(45, 212, 191, 0.26), 0 0 70px rgba(139, 92, 246, 0.18), 0 18px 44px rgba(7, 7, 18, 0.62)',
 } as const;
 
 /**
@@ -53,7 +53,7 @@ export const webBoxShadows = {
  */
 export const glowStyles = {
   none: {
-    shadowColor: "transparent",
+    shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
@@ -87,21 +87,21 @@ export const textGlowStyles = {
   none: undefined,
   soft: Platform.select({
     web: {
-      textShadow: "0 0 18px rgba(139, 92, 246, 0.28)",
+      textShadow: '0 0 18px rgba(139, 92, 246, 0.28)',
     },
     default: undefined,
   }),
   medium: Platform.select({
     web: {
       textShadow:
-        "0 0 24px rgba(139, 92, 246, 0.40), 0 0 48px rgba(139, 92, 246, 0.20)",
+        '0 0 24px rgba(139, 92, 246, 0.40), 0 0 48px rgba(139, 92, 246, 0.20)',
     },
     default: undefined,
   }),
   strong: Platform.select({
     web: {
       textShadow:
-        "0 0 32px rgba(45, 212, 191, 0.50), 0 0 64px rgba(139, 92, 246, 0.30)",
+        '0 0 32px rgba(45, 212, 191, 0.50), 0 0 64px rgba(139, 92, 246, 0.30)',
     },
     default: undefined,
   }),
@@ -126,11 +126,11 @@ const semanticColors = {
 
 const neutralScale = {
   lightest: cosmicColors.starlight,
-  lighter: "#D1D9F0",
+  lighter: '#D1D9F0',
   light: cosmicColors.mist,
-  medium: "#6B7A9C",
+  medium: '#6B7A9C',
   dark: cosmicColors.slate,
-  darker: "#1A2540",
+  darker: '#1A2540',
   darkest: cosmicColors.obsidian,
 } as const;
 
@@ -139,16 +139,16 @@ const neutralScale = {
 // ============================================================================
 
 const brandScale = {
-  50: "#F5F3FF",
-  100: "#EDE9FE",
-  200: "#DDD6FE",
-  300: "#C4B5FD",
-  400: "#A78BFA",
+  50: '#F5F3FF',
+  100: '#EDE9FE',
+  200: '#DDD6FE',
+  300: '#C4B5FD',
+  400: '#A78BFA',
   500: cosmicColors.nebulaViolet,
-  600: "#7C3AED",
-  700: "#6D28D9",
-  800: "#5B21B6",
-  900: "#4C1D95",
+  600: '#7C3AED',
+  700: '#6D28D9',
+  800: '#5B21B6',
+  900: '#4C1D95',
 } as const;
 
 // ============================================================================
@@ -156,10 +156,10 @@ const brandScale = {
 // ============================================================================
 
 export const surfaceColors = {
-  base: "rgba(14, 20, 40, 0.78)",
-  raised: "rgba(18, 26, 52, 0.86)",
-  sunken: "rgba(10, 14, 30, 0.82)",
-  border: "rgba(185, 194, 217, 0.16)",
+  base: 'rgba(14, 20, 40, 0.78)',
+  raised: 'rgba(18, 26, 52, 0.86)',
+  sunken: 'rgba(10, 14, 30, 0.82)',
+  border: 'rgba(185, 194, 217, 0.16)',
 } as const;
 
 // ============================================================================
@@ -167,10 +167,10 @@ export const surfaceColors = {
 // ============================================================================
 
 export const textColors = {
-  primary: "#EEF2FF",
-  secondary: "rgba(238, 242, 255, 0.78)",
-  muted: "rgba(238, 242, 255, 0.56)",
-  onAccent: "#070712",
+  primary: '#EEF2FF',
+  secondary: 'rgba(238, 242, 255, 0.78)',
+  muted: 'rgba(238, 242, 255, 0.56)',
+  onAccent: '#070712',
 } as const;
 
 // ============================================================================
@@ -228,7 +228,7 @@ export const cosmicRadii = {
 
 export const cosmicElevation = {
   none: {
-    shadowColor: "transparent",
+    shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
@@ -275,41 +275,41 @@ export const cosmicTypography = {
   heading: {
     fontFamily: Platform.select({
       web: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      ios: "Inter-SemiBold",
-      android: "Inter-SemiBold",
-      default: "sans-serif",
+      ios: 'Inter-SemiBold',
+      android: 'Inter-SemiBold',
+      default: 'sans-serif',
     }),
-    fontWeight: "600" as const,
+    fontWeight: '600' as const,
     letterSpacing: -0.02,
   },
   body: {
     fontFamily: Platform.select({
       web: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      ios: "Inter-Regular",
-      android: "Inter-Regular",
-      default: "sans-serif",
+      ios: 'Inter-Regular',
+      android: 'Inter-Regular',
+      default: 'sans-serif',
     }),
-    fontWeight: "400" as const,
+    fontWeight: '400' as const,
     letterSpacing: 0,
   },
   mono: {
     fontFamily: Platform.select({
-      web: "JetBrains Mono, Fira Code, monospace",
-      ios: "Menlo",
-      android: "monospace",
-      default: "monospace",
+      web: 'JetBrains Mono, Fira Code, monospace',
+      ios: 'Menlo',
+      android: 'monospace',
+      default: 'monospace',
     }),
-    fontWeight: "400" as const,
+    fontWeight: '400' as const,
     letterSpacing: 0,
   },
   timer: {
     fontFamily: Platform.select({
       web: '"Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      ios: "Menlo", // Fallback on iOS
-      android: "monospace", // Fallback on Android
-      default: "monospace",
+      ios: 'Menlo', // Fallback on iOS
+      android: 'monospace', // Fallback on Android
+      default: 'monospace',
     }),
-    fontWeight: "400" as const,
+    fontWeight: '400' as const,
     letterSpacing: 0.8, // Per spec
   },
 } as const;
@@ -356,7 +356,7 @@ export const cosmicMotion = {
 // BACKGROUND VARIANTS
 // ============================================================================
 
-export type BackgroundVariant = "ridge" | "nebula" | "moon";
+export type BackgroundVariant = 'ridge' | 'nebula' | 'moon';
 
 type BackgroundStyle = {
   background?: string;

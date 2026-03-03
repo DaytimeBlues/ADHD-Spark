@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,12 @@ import {
   Pressable,
   Linking,
   Platform,
-} from "react-native";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
-import { CADDI_OVERVIEW, CADDI_SOURCES } from "../config/caddi";
-import { EvidenceBadge } from "../components/ui/EvidenceBadge";
-import { CosmicBackground, GlowCard, RuneButton } from "../ui/cosmic";
+} from 'react-native';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
+import { CADDI_OVERVIEW, CADDI_SOURCES } from '../config/caddi';
+import { EvidenceBadge } from '../components/ui/EvidenceBadge';
+import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 
 type CBTCategory = {
   id: string;
@@ -34,48 +34,48 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
 
   const categories: CBTCategory[] = [
     {
-      id: "activation",
-      title: "BEHAVIORAL ACTIVATION",
-      emoji: "🎯",
-      pillar: "CADDI PILLAR 1",
+      id: 'activation',
+      title: 'BEHAVIORAL ACTIVATION',
+      emoji: '🎯',
+      pillar: 'CADDI PILLAR 1',
       description:
         "Can't start? Feeling stuck? These tools help overcome initiation paralysis by taking small steps.",
       features: [
-        { name: "Ignite Timer", route: "Focus" },
-        { name: "Pomodoro", route: "Pomodoro" },
+        { name: 'Ignite Timer', route: 'Focus' },
+        { name: 'Pomodoro', route: 'Pomodoro' },
       ],
     },
     {
-      id: "organization",
-      title: "ORGANIZATION",
-      emoji: "📋",
-      pillar: "CADDI PILLAR 2",
+      id: 'organization',
+      title: 'ORGANIZATION',
+      emoji: '📋',
+      pillar: 'CADDI PILLAR 2',
       description:
-        "Overwhelmed by chaos? Break tasks down and externalize your working memory to reduce load.",
+        'Overwhelmed by chaos? Break tasks down and externalize your working memory to reduce load.',
       features: [
-        { name: "Fog Cutter", route: "FogCutter" },
-        { name: "Brain Dump", route: "Tasks" },
+        { name: 'Fog Cutter', route: 'FogCutter' },
+        { name: 'Brain Dump', route: 'Tasks' },
       ],
     },
     {
-      id: "mindfulness",
-      title: "MINDFULNESS",
-      emoji: "🧘",
-      pillar: "CADDI PILLAR 3",
+      id: 'mindfulness',
+      title: 'MINDFULNESS',
+      emoji: '🧘',
+      pillar: 'CADDI PILLAR 3',
       description:
-        "Racing thoughts? Impulsive reactions? Build awareness and emotional regulation skills.",
-      features: [{ name: "Anchor Breathing", route: "Anchor" }],
+        'Racing thoughts? Impulsive reactions? Build awareness and emotional regulation skills.',
+      features: [{ name: 'Anchor Breathing', route: 'Anchor' }],
     },
     {
-      id: "tracking",
-      title: "SELF-TRACKING",
-      emoji: "📊",
-      pillar: "CBT STRATEGY",
+      id: 'tracking',
+      title: 'SELF-TRACKING',
+      emoji: '📊',
+      pillar: 'CBT STRATEGY',
       description:
-        "Recognize patterns in your mood, energy, and productivity over time to learn what works.",
+        'Recognize patterns in your mood, energy, and productivity over time to learn what works.',
       features: [
-        { name: "Daily Check In", route: "CheckIn" },
-        { name: "Calendar", route: "Calendar" },
+        { name: 'Daily Check In', route: 'CheckIn' },
+        { name: 'Calendar', route: 'Calendar' },
       ],
     },
   ];
@@ -162,7 +162,7 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                   >
                     <Text style={styles.linkButtonText}>{source.label}</Text>
                     <EvidenceBadge
-                      tier={source.sourceType === "rct" ? "rct" : "clinical"}
+                      tier={source.sourceType === 'rct' ? 'rct' : 'clinical'}
                       style={styles.linkBadge}
                     />
                   </Pressable>
@@ -236,28 +236,28 @@ const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: isCosmic ? "transparent" : Tokens.colors.neutral.darkest,
+      backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darkest,
     },
     scrollContent: {
       flexGrow: 1,
       padding: Tokens.spacing[6],
-      alignItems: "center",
+      alignItems: 'center',
     },
     maxWidthWrapper: {
-      width: "100%",
+      width: '100%',
       maxWidth: Tokens.layout.maxWidth.prose,
     },
     header: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: Tokens.spacing[8],
       paddingTop: Tokens.spacing[2],
     },
     headerTitle: {
       fontFamily: Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type["4xl"],
-      fontWeight: "800",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontSize: Tokens.type['4xl'],
+      fontWeight: '800',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       letterSpacing: 2,
     },
     headerSubtitle: {
@@ -273,54 +273,54 @@ const getStyles = (isCosmic: boolean) =>
       height: 40,
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       backgroundColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.darker,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           transition: Tokens.motion.transitions.base,
-          cursor: "pointer",
+          cursor: 'pointer',
         },
       }),
     },
     backButtonHovered: {
       backgroundColor: isCosmic
-        ? "rgba(42, 53, 82, 0.5)"
+        ? 'rgba(42, 53, 82, 0.5)'
         : Tokens.colors.neutral.dark,
-      borderColor: isCosmic ? "#8B5CF6" : Tokens.colors.text.tertiary,
+      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.text.tertiary,
       transform: [{ scale: Tokens.motion.scales.hover }],
     },
     backButtonPressed: {
       backgroundColor: isCosmic
-        ? "rgba(42, 53, 82, 0.2)"
+        ? 'rgba(42, 53, 82, 0.2)'
         : Tokens.colors.neutral.darkest,
       transform: [{ scale: Tokens.motion.scales.press }],
     },
     backButtonText: {
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       fontSize: Tokens.type.h3,
-      fontWeight: "bold",
+      fontWeight: 'bold',
       marginTop: -2,
     },
     compactCard: {
       marginBottom: Tokens.spacing[6],
     },
     compactHeaderRow: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: Tokens.spacing[2],
       gap: Tokens.spacing[3],
     },
     compactTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       letterSpacing: 1,
     },
     compactDescription: {
@@ -331,47 +331,47 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[3],
     },
     evidenceRow: {
-      flexDirection: "row",
-      flexWrap: "wrap",
+      flexDirection: 'row',
+      flexWrap: 'wrap',
       gap: Tokens.spacing[3],
       marginBottom: Tokens.spacing[3],
     },
     evidenceBullet: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: 10,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[400],
-      textTransform: "uppercase",
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[400],
+      textTransform: 'uppercase',
     },
     linksRow: {
-      flexDirection: "row",
-      flexWrap: "wrap",
+      flexDirection: 'row',
+      flexWrap: 'wrap',
       gap: Tokens.spacing[2],
     },
     linkButton: {
       backgroundColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.dark,
       paddingVertical: 4,
       paddingHorizontal: 8,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.borderSubtle,
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: Tokens.spacing[2],
       borderRadius: isCosmic ? 6 : Tokens.radii.none,
       ...Platform.select({
         web: {
-          cursor: "pointer",
+          cursor: 'pointer',
           transition: Tokens.motion.transitions.base,
         },
       }),
     },
     linkButtonHovered: {
-      borderColor: isCosmic ? "#8B5CF6" : Tokens.colors.text.secondary,
+      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.text.secondary,
       backgroundColor: isCosmic
-        ? "rgba(42, 53, 82, 0.5)"
+        ? 'rgba(42, 53, 82, 0.5)'
         : Tokens.colors.neutral.darkest,
     },
     linkButtonPressed: {
@@ -381,7 +381,7 @@ const getStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: 10,
       color: Tokens.colors.text.secondary,
-      fontWeight: "600",
+      fontWeight: '600',
     },
     linkBadge: {
       marginLeft: -2,
@@ -390,8 +390,8 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[4],
     },
     categoryHeader: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       marginBottom: Tokens.spacing[4],
     },
     categoryEmoji: {
@@ -404,17 +404,17 @@ const getStyles = (isCosmic: boolean) =>
     categoryTitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
-      fontWeight: "700",
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
+      fontWeight: '700',
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
       letterSpacing: 1,
       marginBottom: 2,
     },
     categoryPillar: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[400],
-      fontWeight: "600",
-      textTransform: "uppercase",
+      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[400],
+      fontWeight: '600',
+      textTransform: 'uppercase',
       letterSpacing: 0.5,
     },
     categoryDescription: {
@@ -425,8 +425,8 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: Tokens.spacing[6],
     },
     featuresRow: {
-      flexDirection: "row",
-      flexWrap: "wrap",
+      flexDirection: 'row',
+      flexWrap: 'wrap',
       gap: Tokens.spacing[2],
     },
     featureButton: {
@@ -436,17 +436,17 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       borderWidth: 1,
       borderColor: isCosmic
-        ? "rgba(42, 53, 82, 0.3)"
+        ? 'rgba(42, 53, 82, 0.3)'
         : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
-          cursor: "pointer",
+          cursor: 'pointer',
           transition: Tokens.motion.transitions.base,
         },
       }),
     },
     featureButtonHovered: {
-      borderColor: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
+      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
       transform: [{ translateY: -2 }],
     },
     featureButtonPressed: {
@@ -456,8 +456,8 @@ const getStyles = (isCosmic: boolean) =>
     featureButtonText: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
-      fontWeight: "600",
+      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontWeight: '600',
       letterSpacing: 0.5,
     },
   });

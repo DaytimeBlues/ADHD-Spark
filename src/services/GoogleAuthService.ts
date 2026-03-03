@@ -1,6 +1,6 @@
-import { Platform } from "react-native";
-import { config } from "../config";
-import { LoggerService } from "./LoggerService";
+import { Platform } from 'react-native';
+import { config } from '../config';
+import { LoggerService } from './LoggerService';
 
 interface GoogleSigninLike {
   configure: (config: {
@@ -25,7 +25,7 @@ interface GoogleSigninLike {
 const getGoogleSignin = (): GoogleSigninLike | null => {
   try {
     const googleModule =
-      require("@react-native-google-signin/google-signin") as {
+      require('@react-native-google-signin/google-signin') as {
         GoogleSignin?: GoogleSigninLike;
       };
     return googleModule.GoogleSignin || null;
@@ -67,7 +67,7 @@ export class GoogleAuthService {
   }
 
   async getCurrentUserScopes(): Promise<string[] | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 
@@ -77,7 +77,7 @@ export class GoogleAuthService {
       const user = await googleSignin?.getCurrentUser?.();
       return Array.isArray(user?.scopes)
         ? user.scopes.filter(
-            (scope): scope is string => typeof scope === "string",
+            (scope): scope is string => typeof scope === 'string',
           )
         : null;
     } catch {
@@ -86,7 +86,7 @@ export class GoogleAuthService {
   }
 
   async getCurrentUserEmail(): Promise<string | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 
@@ -94,14 +94,14 @@ export class GoogleAuthService {
     try {
       const googleSignin = getGoogleSignin();
       const user = await googleSignin?.getCurrentUser?.();
-      return typeof user?.user?.email === "string" ? user.user.email : null;
+      return typeof user?.user?.email === 'string' ? user.user.email : null;
     } catch {
       return null;
     }
   }
 
   async signInInteractive(): Promise<boolean> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return false;
     }
 
@@ -119,9 +119,9 @@ export class GoogleAuthService {
       return true;
     } catch (error) {
       LoggerService.error({
-        service: "GoogleAuthService",
-        operation: "signInInteractive",
-        message: "Google sign-in failed",
+        service: 'GoogleAuthService',
+        operation: 'signInInteractive',
+        message: 'Google sign-in failed',
         error,
       });
       return false;
@@ -129,7 +129,7 @@ export class GoogleAuthService {
   }
 
   async getAccessToken(): Promise<string | null> {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       return null;
     }
 

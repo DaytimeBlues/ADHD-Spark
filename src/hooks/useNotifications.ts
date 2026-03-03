@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { NotificationService } from "../services/NotificationService";
-import { LoggerService } from "../services/LoggerService";
+import { useState, useEffect, useCallback } from 'react';
+import { NotificationService } from '../services/NotificationService';
+import { LoggerService } from '../services/LoggerService';
 
 /**
  * useNotifications
@@ -23,9 +23,9 @@ export function useNotifications() {
       setHasPermission(granted);
     } catch (error) {
       LoggerService.error({
-        service: "useNotifications",
-        operation: "checkPermission",
-        message: "Failed to check notification permissions",
+        service: 'useNotifications',
+        operation: 'checkPermission',
+        message: 'Failed to check notification permissions',
         error,
       });
       setHasPermission(false);
@@ -42,9 +42,9 @@ export function useNotifications() {
       return granted;
     } catch (error) {
       LoggerService.error({
-        service: "useNotifications",
-        operation: "requestPermission",
-        message: "Failed to request notification permissions",
+        service: 'useNotifications',
+        operation: 'requestPermission',
+        message: 'Failed to request notification permissions',
         error,
       });
       setHasPermission(false);
@@ -57,7 +57,7 @@ export function useNotifications() {
   const scheduleNotification = useCallback(
     async (title: string, body: string, triggerDateMs: number) => {
       if (!hasPermission) {
-        console.warn("Cannot schedule notification: permission not granted");
+        console.warn('Cannot schedule notification: permission not granted');
         return null;
       }
       return NotificationService.scheduleTimerCompletion(

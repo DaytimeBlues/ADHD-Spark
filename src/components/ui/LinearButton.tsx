@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Pressable,
   Text,
@@ -7,15 +7,15 @@ import {
   TextStyle,
   ActivityIndicator,
   Platform,
-} from "react-native";
-import { Tokens } from "../../theme/tokens";
-import HapticsService from "../../services/HapticsService";
+} from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import HapticsService from '../../services/HapticsService';
 
 interface LinearButtonProps {
   title: string;
   onPress: () => void;
-  variant?: "primary" | "secondary" | "ghost" | "error";
-  size?: "sm" | "md" | "lg";
+  variant?: 'primary' | 'secondary' | 'ghost' | 'error';
+  size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
@@ -26,8 +26,8 @@ interface LinearButtonProps {
 export const LinearButton: React.FC<LinearButtonProps> = ({
   title,
   onPress,
-  variant = "primary",
-  size = "md",
+  variant = 'primary',
+  size = 'md',
   loading = false,
   disabled = false,
   style,
@@ -36,11 +36,11 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 }) => {
   const getVariantStyles = () => {
     switch (variant) {
-      case "secondary":
+      case 'secondary':
         return styles.secondary;
-      case "ghost":
+      case 'ghost':
         return styles.ghost;
-      case "error":
+      case 'error':
         return styles.error;
       default:
         return styles.primary;
@@ -49,11 +49,11 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 
   const getVariantTextStyles = () => {
     switch (variant) {
-      case "secondary":
+      case 'secondary':
         return styles.secondaryText;
-      case "ghost":
+      case 'ghost':
         return styles.ghostText;
-      case "error":
+      case 'error':
         return styles.errorText;
       default:
         return styles.primaryText;
@@ -62,9 +62,9 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 
   const getSizeStyles = () => {
     switch (size) {
-      case "sm":
+      case 'sm':
         return styles.sm;
-      case "lg":
+      case 'lg':
         return styles.lg;
       default:
         return styles.md;
@@ -72,7 +72,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
   };
 
   const handlePress = () => {
-    HapticsService.tap({ key: "primaryAction" });
+    HapticsService.tap({ key: 'primaryAction' });
     onPress();
   };
 
@@ -100,7 +100,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
       {loading ? (
         <ActivityIndicator
           color={
-            variant === "primary"
+            variant === 'primary'
               ? Tokens.colors.text.primary
               : Tokens.colors.brand[500]
           }
@@ -110,7 +110,7 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
           style={[
             styles.text,
             getVariantTextStyles(),
-            size === "sm" && styles.smText,
+            size === 'sm' && styles.smText,
             textStyle,
           ]}
         >
@@ -124,12 +124,12 @@ export const LinearButton: React.FC<LinearButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     borderRadius: Tokens.radii.none, // Sharp corners
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
     ...Platform.select({
       web: {
-        cursor: "pointer",
+        cursor: 'pointer',
         transition: Tokens.motion.transitions.fast,
       },
     }),
@@ -154,13 +154,13 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.brand[500],
   },
   secondary: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: Tokens.colors.neutral.border,
-    borderStyle: "solid", // Changed from dashed to solid for cleaner look
+    borderStyle: 'solid', // Changed from dashed to solid for cleaner look
   },
   ghost: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   error: {
     backgroundColor: Tokens.colors.error.subtle,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: Tokens.type.fontFamily.sans,
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: Tokens.type.sm, // Slightly smaller for uppercase
     letterSpacing: 1.5, // Wider spacing for uppercase
   },

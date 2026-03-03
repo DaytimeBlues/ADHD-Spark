@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { LayoutAnimation, Platform, UIManager } from "react-native";
-import useTimer from "./useTimer";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import useTimer from './useTimer';
 
-export type BreathingPattern = "478" | "box" | "energize";
+export type BreathingPattern = '478' | 'box' | 'energize';
 
 export interface PatternConfig {
   name: string;
@@ -13,12 +13,12 @@ export interface PatternConfig {
 }
 
 export const PATTERNS: Record<BreathingPattern, PatternConfig> = {
-  "478": { name: "4-7-8 RELAX", inhale: 4, hold: 7, exhale: 8, wait: 0 },
-  box: { name: "BOX BREATHING", inhale: 4, hold: 4, exhale: 4, wait: 4 },
-  energize: { name: "ENERGIZE", inhale: 6, hold: 0, exhale: 2, wait: 0 },
+  '478': { name: '4-7-8 RELAX', inhale: 4, hold: 7, exhale: 8, wait: 0 },
+  box: { name: 'BOX BREATHING', inhale: 4, hold: 4, exhale: 4, wait: 4 },
+  energize: { name: 'ENERGIZE', inhale: 6, hold: 0, exhale: 2, wait: 0 },
 };
 
-export type BreathingPhase = "inhale" | "hold" | "exhale" | "wait";
+export type BreathingPhase = 'inhale' | 'hold' | 'exhale' | 'wait';
 
 interface UseAnchorReturn {
   // State
@@ -36,8 +36,8 @@ interface UseAnchorReturn {
 
 export const useAnchor = (): UseAnchorReturn => {
   const [pattern, setPattern] = useState<BreathingPattern | null>(null);
-  const [phase, setPhase] = useState<BreathingPhase>("inhale");
-  const phaseRef = useRef<BreathingPhase>("inhale");
+  const [phase, setPhase] = useState<BreathingPhase>('inhale');
+  const phaseRef = useRef<BreathingPhase>('inhale');
   const patternRef = useRef<BreathingPattern | null>(null);
   const phaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,7 +47,7 @@ export const useAnchor = (): UseAnchorReturn => {
     reset,
     setTime,
   } = useTimer({
-    id: "anchor",
+    id: 'anchor',
     initialTime: 4,
     onComplete: () => {
       if (!patternRef.current) {
@@ -55,10 +55,10 @@ export const useAnchor = (): UseAnchorReturn => {
       }
       const p = PATTERNS[patternRef.current];
       const phases: Record<BreathingPhase, BreathingPhase> = {
-        inhale: p.hold > 0 ? "hold" : "exhale",
-        hold: "exhale",
-        exhale: p.wait > 0 ? "wait" : "inhale",
-        wait: "inhale",
+        inhale: p.hold > 0 ? 'hold' : 'exhale',
+        hold: 'exhale',
+        exhale: p.wait > 0 ? 'wait' : 'inhale',
+        wait: 'inhale',
       };
       const currentPhase = phaseRef.current;
       const nextPhase = phases[currentPhase];
@@ -83,7 +83,7 @@ export const useAnchor = (): UseAnchorReturn => {
 
   // Initialize layout animation on Android
   useEffect(() => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       if (UIManager.setLayoutAnimationEnabledExperimental) {
         UIManager.setLayoutAnimationEnabledExperimental(true);
       }
@@ -95,8 +95,8 @@ export const useAnchor = (): UseAnchorReturn => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setPattern(selectedPattern);
       patternRef.current = selectedPattern;
-      setPhase("inhale");
-      phaseRef.current = "inhale";
+      setPhase('inhale');
+      phaseRef.current = 'inhale';
       setTime(PATTERNS[selectedPattern].inhale);
       start();
     },
@@ -117,28 +117,28 @@ export const useAnchor = (): UseAnchorReturn => {
 
   const getPhaseText = useCallback(() => {
     switch (phase) {
-      case "inhale":
-        return "BREATHE IN";
-      case "hold":
-        return "HOLD";
-      case "exhale":
-        return "BREATHE OUT";
-      case "wait":
-        return "REST";
+      case 'inhale':
+        return 'BREATHE IN';
+      case 'hold':
+        return 'HOLD';
+      case 'exhale':
+        return 'BREATHE OUT';
+      case 'wait':
+        return 'REST';
       default:
-        return "";
+        return '';
     }
   }, [phase]);
 
   const getCircleScale = useCallback(() => {
     switch (phase) {
-      case "inhale":
+      case 'inhale':
         return 1.5;
-      case "hold":
+      case 'hold':
         return 1.5;
-      case "exhale":
+      case 'exhale':
         return 1;
-      case "wait":
+      case 'wait':
         return 1;
       default:
         return 1;

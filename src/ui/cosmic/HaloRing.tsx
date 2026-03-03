@@ -11,8 +11,8 @@
  * - Breathing: Scale animation with Reanimated
  */
 
-import React, { memo, useEffect, useMemo } from "react";
-import { View, StyleSheet, ViewStyle, Platform } from "react-native";
+import React, { memo, useEffect, useMemo } from 'react';
+import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,10 +22,10 @@ import Animated, {
   interpolate,
   Extrapolate,
   ReduceMotion,
-} from "react-native-reanimated";
-import { useTheme } from "../../theme/ThemeProvider";
-import useReducedMotion from "../../hooks/useReducedMotion";
-import { HaloMode, GlowLevel } from "./types";
+} from 'react-native-reanimated';
+import { useTheme } from '../../theme/ThemeProvider';
+import useReducedMotion from '../../hooks/useReducedMotion';
+import { HaloMode, GlowLevel } from './types';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -87,12 +87,12 @@ export const HaloRing = memo(function HaloRing({
   progress = 0,
   size = 280,
   strokeWidth = 8,
-  glow = "medium",
+  glow = 'medium',
   testID,
 }: HaloRingProps) {
   const { isCosmic } = useTheme();
   const reduceMotion = useReducedMotion();
-  const isWeb = Platform.OS === "web";
+  const isWeb = Platform.OS === 'web';
 
   // Animation values
   const breathingProgress = useSharedValue(0);
@@ -101,16 +101,16 @@ export const HaloRing = memo(function HaloRing({
   const colors = useMemo(() => {
     if (!isCosmic) {
       return {
-        track: "rgba(255, 255, 255, 0.1)",
-        progress: "#8B5CF6",
-        glow: "#8B5CF6",
+        track: 'rgba(255, 255, 255, 0.1)',
+        progress: '#8B5CF6',
+        glow: '#8B5CF6',
       };
     }
 
     return {
-      track: "rgba(185, 194, 217, 0.16)", // slate border color per spec
-      progress: "#8B5CF6", // nebulaViolet
-      glow: "#8B5CF6",
+      track: 'rgba(185, 194, 217, 0.16)', // slate border color per spec
+      progress: '#8B5CF6', // nebulaViolet
+      glow: '#8B5CF6',
     };
   }, [isCosmic]);
 
@@ -120,7 +120,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Breathing animation per spec: 4200ms cycle
   useEffect(() => {
-    if (mode !== "breath") {
+    if (mode !== 'breath') {
       return;
     }
 
@@ -145,7 +145,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Breathing animated styles
   const breathingAnimatedStyle = useAnimatedStyle(() => {
-    if (mode !== "breath") {
+    if (mode !== 'breath') {
       return {};
     }
 
@@ -165,7 +165,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Inner ring breathing (inverse phase)
   const innerAnimatedStyle = useAnimatedStyle(() => {
-    if (mode !== "breath") {
+    if (mode !== 'breath') {
       return {};
     }
 
@@ -191,7 +191,7 @@ export const HaloRing = memo(function HaloRing({
 
   // Glow shadow style
   const glowStyle = useMemo((): ViewStyle => {
-    if (!isCosmic || glow === "none") {
+    if (!isCosmic || glow === 'none') {
       return {};
     }
 
@@ -214,7 +214,7 @@ export const HaloRing = memo(function HaloRing({
           glowOpacity * 255,
         )
           .toString(16)
-          .padStart(2, "0")})`,
+          .padStart(2, '0')})`,
       },
       default: {
         shadowColor: glowColor,
@@ -226,7 +226,7 @@ export const HaloRing = memo(function HaloRing({
   }, [isCosmic, glow, colors.glow]);
 
   // Web progress mode: conic-gradient per research spec
-  if (mode === "progress" && isWeb) {
+  if (mode === 'progress' && isWeb) {
     const nebulaViolet = colors.progress;
     const trackColor = colors.track;
 
@@ -271,7 +271,7 @@ export const HaloRing = memo(function HaloRing({
   }
 
   // Native progress mode or breathing mode
-  if (mode === "progress") {
+  if (mode === 'progress') {
     // Native: Use simple border ring
     return (
       <View
@@ -356,26 +356,26 @@ export const HaloRing = memo(function HaloRing({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   ring: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderStyle: "solid",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderStyle: 'solid',
   },
   inner: {
-    borderStyle: "solid",
+    borderStyle: 'solid',
   },
   innerCutout: {
-    backgroundColor: "rgba(7, 7, 18, 0.62)",
+    backgroundColor: 'rgba(7, 7, 18, 0.62)',
   },
   transparentBorders: {
-    borderTopColor: "transparent",
-    borderRightColor: "transparent",
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
   },
   absolutePosition: {
-    position: "absolute",
+    position: 'absolute',
   },
 });
 

@@ -1,16 +1,16 @@
-import StorageService from "./StorageService";
-import { generateId } from "../utils/helpers";
+import StorageService from './StorageService';
+import { generateId } from '../utils/helpers';
 
 export type ActivationSource =
-  | "ignite"
-  | "checkin_prompt"
-  | "fogcutter_handoff";
+  | 'ignite'
+  | 'checkin_prompt'
+  | 'fogcutter_handoff';
 
 export type ActivationSessionStatus =
-  | "started"
-  | "completed"
-  | "abandoned"
-  | "resumed";
+  | 'started'
+  | 'completed'
+  | 'abandoned'
+  | 'resumed';
 
 export type ActivationSession = {
   id: string;
@@ -48,7 +48,7 @@ const PENDING_KEY = StorageService.STORAGE_KEYS.activationPendingStart;
 const LAST_ACTIVE_KEY = StorageService.STORAGE_KEYS.lastActiveSession;
 
 const getSessions = async (): Promise<ActivationSession[]> => {
-  if (typeof StorageService.getJSON !== "function") {
+  if (typeof StorageService.getJSON !== 'function') {
     return [];
   }
 
@@ -93,7 +93,7 @@ const ActivationService = {
     const newSession = {
       id: sessionId,
       startedAt: now,
-      status: "started" as ActivationSessionStatus,
+      status: 'started' as ActivationSessionStatus,
       source,
     };
 
@@ -106,7 +106,7 @@ const ActivationService = {
       id: sessionId,
       source,
       startedAt: now,
-      status: "started" as ActivationSessionStatus,
+      status: 'started' as ActivationSessionStatus,
     };
     await StorageService.setJSON(LAST_ACTIVE_KEY, lastActive);
 
@@ -115,7 +115,7 @@ const ActivationService = {
 
   async updateSessionStatus(
     sessionId: string,
-    status: Exclude<ActivationSessionStatus, "started">,
+    status: Exclude<ActivationSessionStatus, 'started'>,
   ): Promise<void> {
     const sessions = await getSessions();
     const now = new Date().toISOString();
@@ -128,7 +128,7 @@ const ActivationService = {
       return {
         ...session,
         status,
-        endedAt: status === "resumed" ? session.endedAt : now,
+        endedAt: status === 'resumed' ? session.endedAt : now,
       };
     });
 
@@ -144,16 +144,16 @@ const ActivationService = {
     }>(LAST_ACTIVE_KEY);
 
     if (lastActive && lastActive.id === sessionId) {
-      if (status === "completed" || status === "abandoned") {
+      if (status === 'completed' || status === 'abandoned') {
         await StorageService.setJSON(LAST_ACTIVE_KEY, {
           ...lastActive,
           endedAt: now,
           status,
         });
-      } else if (status === "resumed") {
+      } else if (status === 'resumed') {
         await StorageService.setJSON(LAST_ACTIVE_KEY, {
           ...lastActive,
-          status: "resumed",
+          status: 'resumed',
         });
       }
     }
@@ -165,7 +165,7 @@ const ActivationService = {
   },
 
   async requestPendingStart(payload: PendingActivationStart): Promise<void> {
-    if (typeof StorageService.setJSON !== "function") {
+    if (typeof StorageService.setJSON !== 'function') {
       return;
     }
 
@@ -174,8 +174,8 @@ const ActivationService = {
 
   async consumePendingStart(): Promise<PendingActivationStart | null> {
     if (
-      typeof StorageService.getJSON !== "function" ||
-      typeof StorageService.remove !== "function"
+      typeof StorageService.getJSON !== 'function' ||
+      typeof StorageService.remove !== 'function'
     ) {
       return null;
     }
@@ -198,11 +198,11 @@ const ActivationService = {
 
     const summary = filtered.reduce(
       (acc, session) => {
-        if (session.status === "completed") {
+        if (session.status === 'completed') {
           acc.completed += 1;
-        } else if (session.status === "abandoned") {
+        } else if (session.status === 'abandoned') {
           acc.abandoned += 1;
-        } else if (session.status === "resumed") {
+        } else if (session.status === 'resumed') {
           acc.resumed += 1;
         }
 
@@ -245,7 +245,7 @@ const ActivationService = {
       }
 
       bucket.started += 1;
-      if (session.status === "completed") {
+      if (session.status === 'completed') {
         bucket.completed += 1;
       }
     });

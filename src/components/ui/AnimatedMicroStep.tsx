@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Animated, { FadeInUp, Layout } from "react-native-reanimated";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import Animated, { FadeInUp, Layout } from 'react-native-reanimated';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface AnimatedMicroStepProps {
   item: string;
@@ -24,12 +24,12 @@ export const AnimatedMicroStep: React.FC<AnimatedMicroStepProps> = ({
       style={styles.container}
     >
       <Text testID={testID} style={styles.stepNumber}>
-        {(index + 1).toString().padStart(2, "0")}
+        {(index + 1).toString().padStart(2, '0')}
       </Text>
       <Text
         style={[
           styles.stepText,
-          { color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary },
+          { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
         ]}
       >
         {item}
@@ -40,15 +40,15 @@ export const AnimatedMicroStep: React.FC<AnimatedMicroStepProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 2,
   },
   stepNumber: {
     color: Tokens.colors.text.tertiary,
     width: Tokens.spacing[6],
     fontSize: Tokens.type.xs,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginRight: Tokens.spacing[2],
     fontFamily: Tokens.type.fontFamily.mono,
   },

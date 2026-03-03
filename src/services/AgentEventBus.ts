@@ -1,4 +1,4 @@
-import { LoggerService } from "./LoggerService";
+import { LoggerService } from './LoggerService';
 
 /**
  * AgentEventBus
@@ -10,16 +10,16 @@ import { LoggerService } from "./LoggerService";
  */
 
 type AgentEventName =
-  | "timer:start"
-  | "navigate:screen"
-  | "braindump:add"
-  | "fogcutter:create";
+  | 'timer:start'
+  | 'navigate:screen'
+  | 'braindump:add'
+  | 'fogcutter:create';
 
 type AgentEventPayloads = {
-  "timer:start": { timerType: "pomodoro" | "ignite" | "anchor" };
-  "navigate:screen": { screen: string };
-  "braindump:add": { text: string };
-  "fogcutter:create": { taskTitle: string };
+  'timer:start': { timerType: 'pomodoro' | 'ignite' | 'anchor' };
+  'navigate:screen': { screen: string };
+  'braindump:add': { text: string };
+  'fogcutter:create': { taskTitle: string };
 };
 
 type Listener<E extends AgentEventName> = (
@@ -58,8 +58,8 @@ class AgentEventBus {
         listener(payload);
       } catch (err) {
         LoggerService.error({
-          service: "AgentEventBus",
-          operation: "emit",
+          service: 'AgentEventBus',
+          operation: 'emit',
           message: `Error in listener for '${event}'`,
           error: err,
           context: { event },

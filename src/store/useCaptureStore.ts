@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { zustandStorage } from "../services/StorageService";
-import type { CaptureItem, CaptureStatus } from "../types/capture";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { zustandStorage } from '../services/StorageService';
+import type { CaptureItem, CaptureStatus } from '../types/capture';
 
 interface CaptureState {
   items: CaptureItem[];
@@ -28,7 +28,7 @@ export const useCaptureStore = create<CaptureState>()(
       setHasHydrated: (state) => set({ _hasHydrated: state }),
 
       getUnreviewedCount: () => {
-        return get().items.filter((i) => i.status === "unreviewed").length;
+        return get().items.filter((i) => i.status === 'unreviewed').length;
       },
 
       getItemsByStatus: (status: CaptureStatus) => {
@@ -54,7 +54,7 @@ export const useCaptureStore = create<CaptureState>()(
 
       clearDiscarded: () =>
         set((state) => ({
-          items: state.items.filter((item) => item.status !== "discarded"),
+          items: state.items.filter((item) => item.status !== 'discarded'),
         })),
 
       checkBankruptcy: () =>
@@ -63,11 +63,11 @@ export const useCaptureStore = create<CaptureState>()(
           let changed = false;
           const updated = state.items.map((item) => {
             if (
-              item.status === "unreviewed" &&
+              item.status === 'unreviewed' &&
               item.createdAt < fourteenDaysAgo
             ) {
               changed = true;
-              return { ...item, status: "discarded" as const };
+              return { ...item, status: 'discarded' as const };
             }
             return item;
           });
@@ -78,7 +78,7 @@ export const useCaptureStore = create<CaptureState>()(
         }),
     }),
     {
-      name: "captureInbox",
+      name: 'captureInbox',
       storage: createJSONStorage(() => zustandStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {

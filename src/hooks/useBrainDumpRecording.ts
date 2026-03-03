@@ -1,18 +1,18 @@
-import { useState, useCallback, useRef } from "react";
-import { LayoutAnimation, Platform } from "react-native";
-import RecordingService from "../services/RecordingService";
-import { LoggerService } from "../services/LoggerService";
-import PlaudService from "../services/PlaudService";
-import UXMetricsService from "../services/UXMetricsService";
+import { useState, useCallback, useRef } from 'react';
+import { LayoutAnimation, Platform } from 'react-native';
+import RecordingService from '../services/RecordingService';
 
-export type RecordingState = "idle" | "recording" | "processing";
+import PlaudService from '../services/PlaudService';
+import UXMetricsService from '../services/UXMetricsService';
+
+export type RecordingState = 'idle' | 'recording' | 'processing';
 
 const MAX_SORT_INPUT_ITEMS = 50;
 
 const transcriptionToSortItems = (transcription: string): string[] => {
   return transcription
     .split(/\r?\n|[.;]+/)
-    .map((line) => line.replace(/^[-*\d.)\s]+/, "").trim())
+    .map((line) => line.replace(/^[-*\d.)\s]+/, '').trim())
     .filter(Boolean)
     .slice(0, MAX_SORT_INPUT_ITEMS);
 };
@@ -39,7 +39,7 @@ export const useBrainDumpRecording = ({
   onTranscriptionSuccess,
   onTranscriptionError,
 }: UseBrainDumpRecordingOptions): UseBrainDumpRecordingReturn => {
-  const [recordingState, setRecordingState] = useState<RecordingState>("idle");
+  const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const previousErrorRef = useRef(false);
 
@@ -48,27 +48,27 @@ export const useBrainDumpRecording = ({
   }, []);
 
   const handleRecordPress = useCallback(async () => {
-    if (recordingState === "idle") {
+    if (recordingState === 'idle') {
       previousErrorRef.current = !!recordingError;
     }
     setRecordingError(null);
 
-    if (recordingState === "idle") {
+    if (recordingState === 'idle') {
       const started = await RecordingService.startRecording();
       if (started) {
-        setRecordingState("recording");
+        setRecordingState('recording');
       } else {
         setRecordingError(
-          "Could not start recording. Check microphone permissions.",
+          'Could not start recording. Check microphone permissions.',
         );
       }
-    } else if (recordingState === "recording") {
-      setRecordingState("processing");
+    } else if (recordingState === 'recording') {
+      setRecordingState('processing');
       const result = await RecordingService.stopRecording();
 
       if (!result) {
-        setRecordingError("Recording failed.");
-        setRecordingState("idle");
+        setRecordingError('Recording failed.');
+        setRecordingState('idle');
         return;
       }
 
@@ -76,10 +76,10 @@ export const useBrainDumpRecording = ({
 
       if (transcription.success && transcription.transcription) {
         if (previousErrorRef.current) {
-          UXMetricsService.track("brain_dump_recovery_after_error");
+          UXMetricsService.track('brain_dump_recovery_after_error');
           previousErrorRef.current = false;
         }
-        if (Platform.OS !== "web") {
+        if (Platform.OS !== 'web') {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
 
@@ -94,15 +94,15 @@ export const useBrainDumpRecording = ({
         });
       } else {
         setRecordingError(
-          transcription.error || "Transcription failed. Audio saved locally.",
+          transcription.error || 'Transcription failed. Audio saved locally.',
         );
         onTranscriptionError?.(
-          transcription.error || "Transcription failed",
+          transcription.error || 'Transcription failed',
           result.uri,
         );
       }
 
-      setRecordingState("idle");
+      setRecordingState('idle');
     }
   }, [
     recordingError,

@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Tokens } from "../../theme/tokens";
-import { useTheme } from "../../theme/ThemeProvider";
+import React from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { Tokens } from '../../theme/tokens';
+import { useTheme } from '../../theme/ThemeProvider';
 
 interface BrainDumpErrorProps {
   error: string;
@@ -33,7 +33,7 @@ export const BrainDumpError: React.FC<BrainDumpErrorProps> = ({
           ]}
         >
           <Text style={styles.connectButtonText}>
-            {isConnecting ? "CONNECTING..." : "CONNECT GOOGLE"}
+            {isConnecting ? 'CONNECTING...' : 'CONNECT GOOGLE'}
           </Text>
         </Pressable>
       )}
@@ -46,13 +46,13 @@ const getStyles = (_isCosmic: boolean) =>
     errorContainer: {
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[4],
-      alignItems: "center",
+      alignItems: 'center',
     },
     errorText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       color: Tokens.colors.brand[500],
-      textAlign: "center",
+      textAlign: 'center',
     },
     connectButton: {
       marginTop: Tokens.spacing[3],
@@ -71,7 +71,7 @@ const getStyles = (_isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       color: Tokens.colors.text.primary,
-      fontWeight: "700",
+      fontWeight: '700',
     },
   });
 

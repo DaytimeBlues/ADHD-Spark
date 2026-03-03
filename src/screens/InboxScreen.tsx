@@ -6,7 +6,7 @@
  * All | Unreviewed | Promoted | Discarded
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -17,36 +17,36 @@ import {
   Platform,
   Animated,
   Easing,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Tokens } from "../theme/tokens";
-import { useTheme } from "../theme/ThemeProvider";
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Tokens } from '../theme/tokens';
+import { useTheme } from '../theme/ThemeProvider';
 import CaptureService, {
   CaptureItem,
   CaptureStatus,
-} from "../services/CaptureService";
-import { LoggerService } from "../services/LoggerService";
-import { CosmicBackground } from "../ui/cosmic";
+} from '../services/CaptureService';
+import { LoggerService } from '../services/LoggerService';
+import { CosmicBackground } from '../ui/cosmic';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
-type FilterTab = "all" | CaptureStatus;
+type FilterTab = 'all' | CaptureStatus;
 
 const FILTER_TABS: { key: FilterTab; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "unreviewed", label: "Unreviewed" },
-  { key: "promoted", label: "Promoted" },
-  { key: "discarded", label: "Discarded" },
+  { key: 'all', label: 'All' },
+  { key: 'unreviewed', label: 'Unreviewed' },
+  { key: 'promoted', label: 'Promoted' },
+  { key: 'discarded', label: 'Discarded' },
 ];
 
 const SOURCE_LABELS: Record<string, string> = {
-  voice: "🎙 Voice",
-  text: "✏️ Text",
-  photo: "📷 Photo",
-  paste: "📋 Paste",
-  meeting: "📝 Meeting",
+  voice: '🎙 Voice',
+  text: '✏️ Text',
+  photo: '📷 Photo',
+  paste: '📋 Paste',
+  meeting: '📝 Meeting',
 };
 
 // ============================================================================
@@ -126,7 +126,7 @@ function CaptureRow({
   onDiscard,
   isCosmic,
 }: CaptureRowProps): JSX.Element {
-  const isUnreviewed = item.status === "unreviewed";
+  const isUnreviewed = item.status === 'unreviewed';
 
   return (
     <View
@@ -147,7 +147,7 @@ function CaptureRow({
         <Text style={[styles.timestamp, isCosmic && styles.timestampCosmic]}>
           {formatRelativeTime(item.createdAt)}
         </Text>
-        {item.status !== "unreviewed" && (
+        {item.status !== 'unreviewed' && (
           <Text
             style={[
               styles.statusBadge,
@@ -244,7 +244,7 @@ function formatRelativeTime(ts: number): string {
   const diff = Date.now() - ts;
   const mins = Math.floor(diff / 60_000);
   if (mins < 1) {
-    return "just now";
+    return 'just now';
   }
   if (mins < 60) {
     return `${mins}m ago`;
@@ -257,7 +257,7 @@ function formatRelativeTime(ts: number): string {
 }
 
 function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean): object {
-  if (status === "promoted") {
+  if (status === 'promoted') {
     return isCosmic
       ? styles.statusBadgePromotedCosmic
       : styles.statusBadgePromotedLinear;
@@ -276,22 +276,22 @@ const InboxScreen = (): JSX.Element => {
   const { isCosmic } = useTheme();
 
   const [items, setItems] = useState<CaptureItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<FilterTab>("all");
+  const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
   const [isLoading, setIsLoading] = useState(true);
 
   const loadItems = useCallback(async (): Promise<void> => {
     try {
       const filter =
-        activeFilter === "all"
+        activeFilter === 'all'
           ? undefined
           : { status: activeFilter as CaptureStatus };
       const result = await CaptureService.getAll(filter);
       setItems(result);
     } catch (error) {
       LoggerService.error({
-        service: "InboxScreen",
-        operation: "loadItems",
-        message: "Failed to load items",
+        service: 'InboxScreen',
+        operation: 'loadItems',
+        message: 'Failed to load items',
         error,
       });
     } finally {
@@ -303,7 +303,7 @@ const InboxScreen = (): JSX.Element => {
     let isMounted = true;
     setIsLoading(true);
     CaptureService.getAll(
-      activeFilter === "all"
+      activeFilter === 'all'
         ? undefined
         : { status: activeFilter as CaptureStatus },
     )
@@ -315,9 +315,9 @@ const InboxScreen = (): JSX.Element => {
       })
       .catch((error) => {
         LoggerService.error({
-          service: "InboxScreen",
-          operation: "load",
-          message: "Failed to load items",
+          service: 'InboxScreen',
+          operation: 'load',
+          message: 'Failed to load items',
           error,
         });
         if (isMounted) {
@@ -339,12 +339,12 @@ const InboxScreen = (): JSX.Element => {
 
   const handlePromoteTask = useCallback(async (id: string): Promise<void> => {
     try {
-      await CaptureService.promote(id, "task");
+      await CaptureService.promote(id, 'task');
     } catch (error) {
       LoggerService.error({
-        service: "InboxScreen",
-        operation: "handlePromoteTask",
-        message: "Failed to promote task",
+        service: 'InboxScreen',
+        operation: 'handlePromoteTask',
+        message: 'Failed to promote task',
         error,
         context: { id },
       });
@@ -353,12 +353,12 @@ const InboxScreen = (): JSX.Element => {
 
   const handlePromoteNote = useCallback(async (id: string): Promise<void> => {
     try {
-      await CaptureService.promote(id, "note");
+      await CaptureService.promote(id, 'note');
     } catch (error) {
       LoggerService.error({
-        service: "InboxScreen",
-        operation: "handlePromoteNote",
-        message: "Failed to promote note",
+        service: 'InboxScreen',
+        operation: 'handlePromoteNote',
+        message: 'Failed to promote note',
         error,
         context: { id },
       });
@@ -370,9 +370,9 @@ const InboxScreen = (): JSX.Element => {
       await CaptureService.discard(id);
     } catch (error) {
       LoggerService.error({
-        service: "InboxScreen",
-        operation: "handleDiscard",
-        message: "Failed to discard item",
+        service: 'InboxScreen',
+        operation: 'handleDiscard',
+        message: 'Failed to discard item',
         error,
         context: { id },
       });
@@ -467,9 +467,9 @@ const InboxScreen = (): JSX.Element => {
             <Text
               style={[styles.emptyText, isCosmic && styles.emptyTextCosmic]}
             >
-              {activeFilter === "unreviewed"
-                ? "Nothing to review.\nCapture something with the bubble!"
-                : "No items here yet."}
+              {activeFilter === 'unreviewed'
+                ? 'Nothing to review.\nCapture something with the bubble!'
+                : 'No items here yet.'}
             </Text>
           </View>
         ) : (
@@ -501,14 +501,14 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.borderSubtle,
   },
   skeletonBgCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.4)",
-    borderColor: "rgba(185, 194, 217, 0.08)",
+    backgroundColor: 'rgba(17, 26, 51, 0.4)',
+    borderColor: 'rgba(185, 194, 217, 0.08)',
   },
   skeletonBlockLinear: {
     backgroundColor: Tokens.colors.neutral[500],
   },
   skeletonBlockCosmic: {
-    backgroundColor: "rgba(185, 194, 217, 0.2)",
+    backgroundColor: 'rgba(185, 194, 217, 0.2)',
   },
   skeletonBadge: {
     width: 60,
@@ -528,11 +528,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   w90: {
-    width: "90%",
+    width: '90%',
     marginBottom: 8,
   },
   w60: {
-    width: "60%",
+    width: '60%',
   },
   skeletonBtn: {
     width: 70,
@@ -540,29 +540,29 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: Tokens.spacing[4],
     paddingVertical: Tokens.spacing[3],
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.borderSubtle,
   },
   headerCosmic: {
-    borderBottomColor: "rgba(185, 194, 217, 0.12)",
+    borderBottomColor: 'rgba(185, 194, 217, 0.12)',
   },
   closeBtn: {
     width: 36,
     height: 36,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeBtnText: {
     fontSize: 18,
     color: Tokens.colors.text.secondary,
   },
   closeBtnTextCosmic: {
-    color: "#B9C2D9",
+    color: '#B9C2D9',
   },
   closeBtnPlaceholder: {
     width: 36,
@@ -570,37 +570,37 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.base,
-    fontWeight: "700",
+    fontWeight: '700',
     color: Tokens.colors.text.primary,
     letterSpacing: 2,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     ...Platform.select({
-      web: { textShadow: "none" } as object,
+      web: { textShadow: 'none' } as object,
     }),
   },
   titleCosmic: {
-    color: "#EEF2FF",
-    fontFamily: "Space Grotesk",
+    color: '#EEF2FF',
+    fontFamily: 'Space Grotesk',
     ...Platform.select({
       web: {
-        textShadow: "0 0 16px rgba(139, 92, 246, 0.3)",
+        textShadow: '0 0 16px rgba(139, 92, 246, 0.3)',
       } as object,
     }),
   },
   tabs: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: Tokens.colors.neutral.borderSubtle,
     backgroundColor: Tokens.colors.neutral.darker,
   },
   tabsCosmic: {
-    backgroundColor: "#0B1022",
-    borderBottomColor: "rgba(42, 53, 82, 0.3)",
+    backgroundColor: '#0B1022',
+    borderBottomColor: 'rgba(42, 53, 82, 0.3)',
   },
   tab: {
     flex: 1,
     paddingVertical: Tokens.spacing[3],
-    alignItems: "center",
+    alignItems: 'center',
   },
   tabActiveLinear: {
     borderBottomWidth: 2,
@@ -608,23 +608,23 @@ const styles = StyleSheet.create({
   },
   tabActiveCosmic: {
     borderBottomWidth: 2,
-    borderBottomColor: "#8B5CF6",
+    borderBottomColor: '#8B5CF6',
   },
   tabText: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Tokens.colors.text.tertiary,
     letterSpacing: 0.5,
   },
   tabTextCosmic: {
-    color: "#6B7A9C",
+    color: '#6B7A9C',
   },
   tabTextActiveLinear: {
     color: Tokens.colors.indigo.primary,
   },
   tabTextActiveCosmic: {
-    color: "#8B5CF6",
+    color: '#8B5CF6',
   },
   listContent: {
     padding: Tokens.spacing[4],
@@ -632,19 +632,19 @@ const styles = StyleSheet.create({
   },
   centered: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: Tokens.spacing[8],
   },
   emptyText: {
     fontFamily: Tokens.type.fontFamily.body,
     fontSize: Tokens.type.base,
     color: Tokens.colors.text.tertiary,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 24,
   },
   emptyTextCosmic: {
-    color: "#6B7A9C",
+    color: '#6B7A9C',
   },
   // Row
   row: {
@@ -658,13 +658,13 @@ const styles = StyleSheet.create({
     borderColor: Tokens.colors.neutral.borderSubtle,
   },
   rowCosmic: {
-    backgroundColor: "rgba(17, 26, 51, 0.7)",
-    borderColor: "rgba(185, 194, 217, 0.12)",
+    backgroundColor: 'rgba(17, 26, 51, 0.7)',
+    borderColor: 'rgba(185, 194, 217, 0.12)',
     ...Platform.select({
       web: {
-        backdropFilter: "blur(12px)",
+        backdropFilter: 'blur(12px)',
         boxShadow:
-          "0 0 0 1px rgba(139, 92, 246, 0.06), 0 4px 16px rgba(7, 7, 18, 0.3)",
+          '0 0 0 1px rgba(139, 92, 246, 0.06), 0 4px 16px rgba(7, 7, 18, 0.3)',
       } as object,
     }),
   },
@@ -672,25 +672,25 @@ const styles = StyleSheet.create({
     opacity: 0.65,
   },
   rowMeta: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: Tokens.spacing[2],
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   sourceBadge: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.xs,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Tokens.colors.brand[500],
     backgroundColor: Tokens.colors.neutral.dark,
     paddingHorizontal: Tokens.spacing[2],
     paddingVertical: 2,
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   sourceBadgeCosmic: {
-    color: "#8B5CF6",
-    backgroundColor: "rgba(139, 92, 246, 0.12)",
+    color: '#8B5CF6',
+    backgroundColor: 'rgba(139, 92, 246, 0.12)',
   },
   timestamp: {
     fontFamily: Tokens.type.fontFamily.mono,
@@ -698,16 +698,16 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.tertiary,
   },
   timestampCosmic: {
-    color: "#6B7A9C",
+    color: '#6B7A9C',
   },
   statusBadge: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
     paddingHorizontal: Tokens.spacing[2],
     paddingVertical: 2,
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
     letterSpacing: 0.5,
   },
   statusBadgePromotedLinear: {
@@ -715,16 +715,16 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.success.subtle,
   },
   statusBadgePromotedCosmic: {
-    color: "#2DD4BF",
-    backgroundColor: "rgba(45, 212, 191, 0.12)",
+    color: '#2DD4BF',
+    backgroundColor: 'rgba(45, 212, 191, 0.12)',
   },
   statusBadgeDiscardedLinear: {
     color: Tokens.colors.error.main,
     backgroundColor: Tokens.colors.error.subtle,
   },
   statusBadgeDiscardedCosmic: {
-    color: "#FB7185",
-    backgroundColor: "rgba(251, 113, 133, 0.1)",
+    color: '#FB7185',
+    backgroundColor: 'rgba(251, 113, 133, 0.1)',
   },
   rawText: {
     fontFamily: Tokens.type.fontFamily.body,
@@ -733,12 +733,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   rawTextCosmic: {
-    color: "#B9C2D9",
+    color: '#B9C2D9',
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: Tokens.spacing[2],
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   actionBtn: {
     paddingHorizontal: Tokens.spacing[3],
@@ -755,40 +755,40 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.indigo.subtle,
   },
   actionBtnTaskCosmic: {
-    borderColor: "#8B5CF6",
-    backgroundColor: "rgba(139, 92, 246, 0.12)",
+    borderColor: '#8B5CF6',
+    backgroundColor: 'rgba(139, 92, 246, 0.12)',
   },
   actionBtnNoteLinear: {
     borderColor: Tokens.colors.brand[400],
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   actionBtnNoteCosmic: {
-    borderColor: "#B9C2D9",
-    backgroundColor: "rgba(185, 194, 217, 0.08)",
+    borderColor: '#B9C2D9',
+    backgroundColor: 'rgba(185, 194, 217, 0.08)',
   },
   actionBtnDiscardLinear: {
     borderColor: Tokens.colors.error.main,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   actionBtnDiscardCosmic: {
-    borderColor: "rgba(251, 113, 133, 0.4)",
-    backgroundColor: "transparent",
+    borderColor: 'rgba(251, 113, 133, 0.4)',
+    backgroundColor: 'transparent',
   },
   actionBtnText: {
     fontFamily: Tokens.type.fontFamily.sans,
     fontSize: Tokens.type.xs,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Tokens.colors.text.primary,
     letterSpacing: 0.3,
   },
   actionBtnTextCosmic: {
-    color: "#EEF2FF",
+    color: '#EEF2FF',
   },
   actionBtnTextDiscard: {
     color: Tokens.colors.error.main,
   },
   bgCosmic: {
-    backgroundColor: "#070712",
+    backgroundColor: '#070712',
   },
   bgLinear: {
     backgroundColor: Tokens.colors.neutral.darkest,

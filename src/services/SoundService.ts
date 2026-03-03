@@ -1,16 +1,16 @@
-import Sound from "react-native-sound";
-import { LoggerService } from "./LoggerService";
+import Sound from 'react-native-sound';
+import { LoggerService } from './LoggerService';
 
 let brownNoise: Sound | null = null;
 
 const SoundService = {
   async initBrownNoise() {
-    brownNoise = new Sound("brown_noise.mp3", Sound.MAIN_BUNDLE, (error) => {
+    brownNoise = new Sound('brown_noise.mp3', Sound.MAIN_BUNDLE, (error) => {
       if (error) {
         LoggerService.error({
-          service: "SoundService",
-          operation: "initBrownNoise",
-          message: "Failed to load brown noise",
+          service: 'SoundService',
+          operation: 'initBrownNoise',
+          message: 'Failed to load brown noise',
           error,
         });
       }
@@ -24,9 +24,9 @@ const SoundService = {
       brownNoise.play((success) => {
         if (!success) {
           LoggerService.error({
-            service: "SoundService",
-            operation: "playBrownNoise",
-            message: "Brown noise playback failed",
+            service: 'SoundService',
+            operation: 'playBrownNoise',
+            message: 'Brown noise playback failed',
           });
         }
       });
@@ -59,7 +59,7 @@ const SoundService = {
   },
 
   async playNotificationSound() {
-    const notification = new Sound("notification.mp3", Sound.MAIN_BUNDLE);
+    const notification = new Sound('notification.mp3', Sound.MAIN_BUNDLE);
     notification.setVolume(0.7);
     notification.play((success) => {
       if (success) {
@@ -69,7 +69,7 @@ const SoundService = {
   },
 
   async playCompletionSound() {
-    const completion = new Sound("completion.mp3", Sound.MAIN_BUNDLE);
+    const completion = new Sound('completion.mp3', Sound.MAIN_BUNDLE);
     completion.setVolume(0.7);
     completion.play((success) => {
       if (success) {

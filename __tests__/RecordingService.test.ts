@@ -1,14 +1,14 @@
-import { RecordingService } from "../src/services/RecordingService";
-import { Audio } from "expo-av";
+import { RecordingService } from '../src/services/RecordingService';
+import { Audio } from 'expo-av';
 
 // Mock expo-av
 const mockRecording = {
   stopAndUnloadAsync: jest.fn().mockResolvedValue({}),
-  getURI: jest.fn().mockReturnValue("file://audio.m4a"),
+  getURI: jest.fn().mockReturnValue('file://audio.m4a'),
   getStatusAsync: jest.fn().mockResolvedValue({ durationMillis: 5000 }),
 };
 
-jest.mock("expo-av", () => ({
+jest.mock('expo-av', () => ({
   Audio: {
     requestPermissionsAsync: jest.fn(),
     setAudioModeAsync: jest.fn().mockResolvedValue({}),
@@ -21,14 +21,14 @@ jest.mock("expo-av", () => ({
   },
 }));
 
-describe("RecordingService", () => {
+describe('RecordingService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     RecordingService.reset();
 
     // Set default successful mocks
     (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValue({
-      status: "granted",
+      status: 'granted',
       granted: true,
     });
     (Audio.Recording.createAsync as jest.Mock).mockResolvedValue({
@@ -36,15 +36,15 @@ describe("RecordingService", () => {
     });
   });
 
-  describe("requestPermissions", () => {
-    it("should return true when granted", async () => {
+  describe('requestPermissions', () => {
+    it('should return true when granted', async () => {
       const result = await RecordingService.requestPermissions();
       expect(result).toBe(true);
     });
 
-    it("should return false when denied", async () => {
+    it('should return false when denied', async () => {
       (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValueOnce({
-        status: "denied",
+        status: 'denied',
         granted: false,
       });
       const result = await RecordingService.requestPermissions();
@@ -52,17 +52,17 @@ describe("RecordingService", () => {
     });
   });
 
-  describe("startRecording", () => {
-    it("should start recording when permissions are granted", async () => {
+  describe('startRecording', () => {
+    it('should start recording when permissions are granted', async () => {
       const result = await RecordingService.startRecording();
       expect(result).toBe(true);
       expect(RecordingService.getIsRecording()).toBe(true);
       expect(Audio.setAudioModeAsync).toHaveBeenCalled();
     });
 
-    it("should fail to start when permissions are denied", async () => {
+    it('should fail to start when permissions are denied', async () => {
       (Audio.requestPermissionsAsync as jest.Mock).mockResolvedValueOnce({
-        status: "denied",
+        status: 'denied',
       });
       const result = await RecordingService.startRecording();
       expect(result).toBe(false);
@@ -70,26 +70,26 @@ describe("RecordingService", () => {
     });
   });
 
-  describe("stopRecording", () => {
-    it("should return result and reset state", async () => {
+  describe('stopRecording', () => {
+    it('should return result and reset state', async () => {
       await RecordingService.startRecording();
       const result = await RecordingService.stopRecording();
 
       expect(result).toEqual({
-        uri: "file://audio.m4a",
+        uri: 'file://audio.m4a',
         duration: 5000,
       });
       expect(RecordingService.getIsRecording()).toBe(false);
     });
 
-    it("should return null if not recording", async () => {
+    it('should return null if not recording', async () => {
       const result = await RecordingService.stopRecording();
       expect(result).toBeNull();
     });
   });
 
-  describe("cancelRecording", () => {
-    it("should reset state", async () => {
+  describe('cancelRecording', () => {
+    it('should reset state', async () => {
       await RecordingService.startRecording();
       await RecordingService.cancelRecording();
       expect(RecordingService.getIsRecording()).toBe(false);
