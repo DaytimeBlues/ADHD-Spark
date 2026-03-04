@@ -6,3 +6,4 @@ export * from './BrainDumpRationale';
 export * from './BrainDumpGuide';
 export * from './BrainDumpVoiceRecord';
 export type { RecordingState } from './BrainDumpVoiceRecord';
+export * from './IntegrationPanel';

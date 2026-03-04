@@ -42,6 +42,7 @@ import {
   BrainDumpVoiceRecord,
   DumpItem,
   RecordingState,
+  IntegrationPanel,
 } from '../components/brain-dump';
 
 const PERSIST_DEBOUNCE_MS = 300;
@@ -634,6 +635,9 @@ const BrainDumpScreen = () => {
               )}
             </View>
           )}
+
+          {/* Integration Panel */}
+          <IntegrationPanel />
 
           <FlatList
             data={items}

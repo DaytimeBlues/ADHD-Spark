@@ -1,37 +1,37 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 // Fix for Windows Webpack crash (-1073741510 / Access Violation)
 // Standard file watching can trigger memory access errors in some Windows environments.
 // Polling via Chokidar is a reliable workaround.
-process.env.CHOKIDAR_USEPOLLING = "true";
+process.env.CHOKIDAR_USEPOLLING = 'true';
 
 module.exports = (env, argv) => {
-  const isProduction = argv.mode === "production";
+  const isProduction = argv.mode === 'production';
   const disableDevOverlay = Boolean(process.env.CI);
 
   // Filter environment variables to include those starting with EXPO_PUBLIC_
   const envVars = Object.keys(process.env)
-    .filter((key) => key.startsWith("EXPO_PUBLIC_"))
+    .filter((key) => key.startsWith('EXPO_PUBLIC_'))
     .reduce((acc, key) => {
       acc[`process.env.${key}`] = JSON.stringify(process.env[key]);
       return acc;
     }, {});
 
   return {
-    mode: argv.mode || "development",
-    entry: "./index.web.js",
+    mode: argv.mode || 'development',
+    entry: './index.web.js',
     output: {
-      path: path.resolve(__dirname, "dist"),
-      filename: isProduction ? "bundle.[contenthash].js" : "bundle.js",
-      chunkFilename: isProduction ? "[name].[contenthash].js" : "[name].js",
-      publicPath: isProduction ? "./" : "/",
+      path: path.resolve(__dirname, 'dist'),
+      filename: isProduction ? 'bundle.[contenthash].js' : 'bundle.js',
+      chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].js',
+      publicPath: isProduction ? './' : '/',
     },
     optimization: {
-      runtimeChunk: "single",
+      runtimeChunk: 'single',
       splitChunks: {
-        chunks: "all",
+        chunks: 'all',
         maxInitialRequests: Infinity,
         minSize: 20000,
         cacheGroups: {
@@ -41,7 +41,7 @@ module.exports = (env, argv) => {
               const packageName = module.context.match(
                 /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
               )[1];
-              return `vendor.${packageName.replace("@", "")}`;
+              return `vendor.${packageName.replace('@', '')}`;
             },
             priority: 20,
           },
@@ -54,14 +54,14 @@ module.exports = (env, argv) => {
       },
     },
     resolve: {
-      extensions: [".web.tsx", ".web.ts", ".web.js", ".tsx", ".ts", ".js"],
+      extensions: ['.web.tsx', '.web.ts', '.web.js', '.tsx', '.ts', '.js'],
       alias: {
-        "@": path.resolve(__dirname, "src"),
-        "react-native$": "react-native-web",
-        "react-native-vector-icons": "react-native-vector-icons/dist",
-        "react-native-reanimated": path.resolve(
+        '@': path.resolve(__dirname, 'src'),
+        'react-native$': 'react-native-web',
+        'react-native-vector-icons': 'react-native-vector-icons/dist',
+        'react-native-reanimated': path.resolve(
           __dirname,
-          "src/mocks/react-native-reanimated.web.js",
+          'src/mocks/react-native-reanimated.web.js',
         ),
       },
     },
@@ -72,18 +72,18 @@ module.exports = (env, argv) => {
           exclude:
             /node_modules\/(?!(react-native-vector-icons|react-native-reanimated|react-native-gesture-handler|react-native-screens|react-native-safe-area-context|@react-native|@react-navigation|expo|expo-.*|@expo|expo-modules-core)\/).*/,
           use: {
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: {
               presets: [
-                "@babel/preset-env",
-                "@babel/preset-react",
-                "@babel/preset-typescript",
+                '@babel/preset-env',
+                '@babel/preset-react',
+                '@babel/preset-typescript',
               ],
               plugins: [
-                ["@babel/plugin-transform-class-properties", { loose: true }],
-                ["@babel/plugin-transform-private-methods", { loose: true }],
+                ['@babel/plugin-transform-class-properties', { loose: true }],
+                ['@babel/plugin-transform-private-methods', { loose: true }],
                 [
-                  "@babel/plugin-transform-private-property-in-object",
+                  '@babel/plugin-transform-private-property-in-object',
                   { loose: true },
                 ],
                 // NOTE: react-native-reanimated/plugin is intentionally omitted here.
@@ -95,32 +95,32 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(png|jpg|gif|svg)$/,
-          type: "asset/resource",
+          type: 'asset/resource',
         },
         {
           test: /\.ttf$/,
-          type: "asset/resource",
+          type: 'asset/resource',
         },
       ],
     },
     plugins: [
       new webpack.DefinePlugin({
         __DEV__: JSON.stringify(!isProduction),
-        "process.env.NODE_ENV": JSON.stringify(
-          isProduction ? "production" : "development",
+        'process.env.NODE_ENV': JSON.stringify(
+          isProduction ? 'production' : 'development',
         ),
         ...envVars,
       }),
       new HtmlWebpackPlugin({
-        template: "./public/index.html",
+        template: './public/index.html',
       }),
     ],
     devServer: {
       static: {
-        directory: path.join(__dirname, "public"),
+        directory: path.join(__dirname, 'public'),
       },
       headers: {
-        "Cache-Control": "no-store",
+        'Cache-Control': 'no-store',
       },
       client: {
         overlay: !disableDevOverlay,
