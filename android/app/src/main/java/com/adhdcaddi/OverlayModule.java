@@ -1,4 +1,4 @@
-package com.sparkadhd;
+package com.adhdcaddi;
 
 import android.app.Activity;
 import android.content.Context;

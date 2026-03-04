@@ -1,4 +1,4 @@
-package com.sparkadhd;
+package com.adhdcaddi;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
-    return "SparkADHD";
+    return "ADHDCADDI";
   }
 
   @Override

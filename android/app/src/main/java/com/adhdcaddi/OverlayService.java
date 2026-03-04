@@ -1,4 +1,4 @@
-package com.sparkadhd;
+package com.adhdcaddi;
 
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorListenerAdapter;

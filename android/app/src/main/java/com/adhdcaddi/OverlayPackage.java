@@ -1,4 +1,4 @@
-package com.sparkadhd;
+package com.adhdcaddi;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
