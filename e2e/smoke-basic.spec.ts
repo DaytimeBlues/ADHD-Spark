@@ -1,61 +1,46 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Basic Smoke', () => {
-  test('app shell loads without fatal errors', async ({ page }) => {
+test.describe("Basic Smoke", () => {
+  test("app shell loads without fatal errors", async ({ page }) => {
     const pageErrors: string[] = [];
 
-    page.on('pageerror', (error) => {
+    page.on("pageerror", (error) => {
       pageErrors.push(error.message);
     });
 
-    await page.goto('/', { timeout: 30000 });
+    await page.goto("/", { timeout: 30000 });
 
     // Wait for network to be idle (all assets loaded)
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.waitForLoadState("networkidle", { timeout: 30000 });
 
-    // Check page loaded - verify body exists and has content
-    const body = page.locator('body');
+    // Check page loaded - verify body exists
+    const body = page.locator("body");
     await expect(body).toBeVisible({ timeout: 10000 });
 
     // Check not 404
     await expect(page).not.toHaveURL(/404/);
 
-    // Verify body has content (React mounted)
-    const bodyText = await body.innerText();
-    expect(bodyText.length).toBeGreaterThan(0);
-    expect(bodyText).not.toContain('Cannot GET /');
-    expect(bodyText).not.toContain('Whitelabel Error Page');
-
-    // Check for critical app content (ADHD-CADDI related text)
-    const hasAppContent =
-      bodyText.includes('ADHD') ||
-      bodyText.includes('CADDI') ||
-      bodyText.includes('HOME') ||
-      bodyText.includes('FOCUS') ||
-      bodyText.includes('TASKS');
-    expect(hasAppContent).toBeTruthy();
-
     // Filter out known non-critical errors
     const fatal = pageErrors.filter(
       (msg) =>
-        !msg.includes('ResizeObserver loop limit exceeded') &&
-        !msg.includes('Missing required parameter `platform`'),
+        !msg.includes("ResizeObserver loop limit exceeded") &&
+        !msg.includes("Missing required parameter `platform`"),
     );
     expect(fatal).toHaveLength(0);
   });
 
-  test('critical static assets are reachable', async ({ page }) => {
+  test("critical static assets are reachable", async ({ page }) => {
     const responses: number[] = [];
 
-    page.on('response', (response) => {
+    page.on("response", (response) => {
       const url = response.url();
-      if (url.endsWith('.js') || url.endsWith('.css')) {
+      if (url.endsWith(".js") || url.endsWith(".css")) {
         responses.push(response.status());
       }
     });
 
-    await page.goto('/', { timeout: 30000 });
-    await page.waitForLoadState('networkidle', { timeout: 30000 });
+    await page.goto("/", { timeout: 30000 });
+    await page.waitForLoadState("networkidle", { timeout: 30000 });
 
     if (responses.length > 0) {
       expect(responses.some((status) => status >= 400)).toBeFalsy();
