@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useTheme } from '../../theme/ThemeProvider';
-import { Tokens } from '../../theme/tokens';
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useTheme } from "../../theme/ThemeProvider";
+import { Tokens } from "../../theme/tokens";
 import {
   OAuthService,
   GoogleAuthData,
   TodoistAuthData,
-} from '../../services/OAuthService';
-import { LoggerService } from '../../services/LoggerService';
+} from "../../services/OAuthService";
+import { LoggerService } from "../../services/LoggerService";
 
 /**
  * IntegrationPanel
@@ -54,9 +54,9 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
       setTodoistAuth(todoist);
     } catch (error) {
       LoggerService.error({
-        service: 'IntegrationPanel',
-        operation: 'loadAuthStatus',
-        message: 'Failed to load auth status',
+        service: "IntegrationPanel",
+        operation: "loadAuthStatus",
+        message: "Failed to load auth status",
         error,
       });
     }
@@ -66,13 +66,13 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
     if (googleAuth?.connected) {
       // Show disconnect confirmation
       Alert.alert(
-        'Disconnect Google',
-        'Are you sure you want to disconnect your Google account?',
+        "Disconnect Google",
+        "Are you sure you want to disconnect your Google account?",
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: "Cancel", style: "cancel" },
           {
-            text: 'Disconnect',
-            style: 'destructive',
+            text: "Disconnect",
+            style: "destructive",
             onPress: async () => {
               await OAuthService.disconnectGoogle();
               setGoogleAuth(null);
@@ -91,18 +91,18 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
         onGoogleConnect?.();
       } else {
         Alert.alert(
-          'Connection Failed',
-          result.error || 'Failed to connect to Google',
+          "Connection Failed",
+          result.error || "Failed to connect to Google",
         );
       }
     } catch (error) {
       LoggerService.error({
-        service: 'IntegrationPanel',
-        operation: 'handleGoogleConnect',
-        message: 'Google connect failed',
+        service: "IntegrationPanel",
+        operation: "handleGoogleConnect",
+        message: "Google connect failed",
         error,
       });
-      Alert.alert('Error', 'An unexpected error occurred');
+      Alert.alert("Error", "An unexpected error occurred");
     } finally {
       setIsLoadingGoogle(false);
     }
@@ -111,13 +111,13 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
   const handleTodoistConnect = async () => {
     if (todoistAuth?.connected) {
       Alert.alert(
-        'Disconnect Todoist',
-        'Are you sure you want to disconnect your Todoist account?',
+        "Disconnect Todoist",
+        "Are you sure you want to disconnect your Todoist account?",
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: "Cancel", style: "cancel" },
           {
-            text: 'Disconnect',
-            style: 'destructive',
+            text: "Disconnect",
+            style: "destructive",
             onPress: async () => {
               await OAuthService.disconnectTodoist();
               setTodoistAuth(null);
@@ -136,18 +136,18 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
         onTodoistConnect?.();
       } else {
         Alert.alert(
-          'Connection Failed',
-          result.error || 'Failed to connect to Todoist',
+          "Connection Failed",
+          result.error || "Failed to connect to Todoist",
         );
       }
     } catch (error) {
       LoggerService.error({
-        service: 'IntegrationPanel',
-        operation: 'handleTodoistConnect',
-        message: 'Todoist connect failed',
+        service: "IntegrationPanel",
+        operation: "handleTodoistConnect",
+        message: "Todoist connect failed",
         error,
       });
-      Alert.alert('Error', 'An unexpected error occurred');
+      Alert.alert("Error", "An unexpected error occurred");
     } finally {
       setIsLoadingTodoist(false);
     }
@@ -184,18 +184,18 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
           disabled={isLoadingGoogle}
           testID={
             googleAuth?.connected
-              ? 'google-disconnect-btn'
-              : 'google-connect-btn'
+              ? "google-disconnect-btn"
+              : "google-connect-btn"
           }
         >
           {isLoadingGoogle ? (
             <ActivityIndicator
               size="small"
-              color={isCosmic ? '#EEF2FF' : '#FFF'}
+              color={isCosmic ? "#EEF2FF" : "#FFF"}
             />
           ) : (
             <Text style={styles.buttonText}>
-              {googleAuth?.connected ? 'Disconnect' : 'Connect'}
+              {googleAuth?.connected ? "Disconnect" : "Connect"}
             </Text>
           )}
         </TouchableOpacity>
@@ -210,7 +210,7 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
           <Text style={styles.integrationName}>Todoist</Text>
           {todoistAuth?.connected ? (
             <Text style={styles.connectedText} numberOfLines={1}>
-              {todoistAuth.email || 'Connected'}
+              {todoistAuth.email || "Connected"}
             </Text>
           ) : (
             <Text style={styles.disconnectedText}>Not connected</Text>
@@ -226,18 +226,18 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
           disabled={isLoadingTodoist}
           testID={
             todoistAuth?.connected
-              ? 'todoist-disconnect-btn'
-              : 'todoist-connect-btn'
+              ? "todoist-disconnect-btn"
+              : "todoist-connect-btn"
           }
         >
           {isLoadingTodoist ? (
             <ActivityIndicator
               size="small"
-              color={isCosmic ? '#EEF2FF' : '#FFF'}
+              color={isCosmic ? "#EEF2FF" : "#FFF"}
             />
           ) : (
             <Text style={styles.buttonText}>
-              {todoistAuth?.connected ? 'Disconnect' : 'Connect'}
+              {todoistAuth?.connected ? "Disconnect" : "Connect"}
             </Text>
           )}
         </TouchableOpacity>
@@ -255,7 +255,7 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
           testID="google-status-connected"
         >
           <Icon
-            name={googleAuth?.connected ? 'check' : 'close'}
+            name={googleAuth?.connected ? "check" : "close"}
             size={12}
             color="#FFF"
           />
@@ -274,7 +274,7 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
           testID="todoist-status-connected"
         >
           <Icon
-            name={todoistAuth?.connected ? 'check' : 'close'}
+            name={todoistAuth?.connected ? "check" : "close"}
             size={12}
             color="#FFF"
           />
@@ -292,25 +292,25 @@ const getStyles = (isCosmic: boolean) =>
       marginBottom: 8,
       padding: 16,
       backgroundColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.1)'
+        ? "rgba(139, 92, 246, 0.1)"
         : Tokens.colors.neutral.dark,
       borderRadius: 12,
       borderWidth: 1,
       borderColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.3)'
+        ? "rgba(139, 92, 246, 0.3)"
         : Tokens.colors.neutral.border,
     },
     title: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: '700',
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      fontWeight: "700",
+      color: isCosmic ? "#8B5CF6" : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: 12,
     },
     integrationRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginBottom: 12,
     },
     iconContainer: {
@@ -318,10 +318,10 @@ const getStyles = (isCosmic: boolean) =>
       height: 36,
       borderRadius: 18,
       backgroundColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.2)'
+        ? "rgba(139, 92, 246, 0.2)"
         : Tokens.colors.neutral.darker,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       marginRight: 12,
     },
     textContainer: {
@@ -330,19 +330,19 @@ const getStyles = (isCosmic: boolean) =>
     integrationName: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
-      fontWeight: '600',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontWeight: "600",
+      color: isCosmic ? "#EEF2FF" : Tokens.colors.text.primary,
     },
     connectedText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? '#10B981' : Tokens.colors.success,
+      color: isCosmic ? "#10B981" : Tokens.colors.success.main,
       marginTop: 2,
     },
     disconnectedText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.tertiary,
       marginTop: 2,
     },
     button: {
@@ -351,48 +351,48 @@ const getStyles = (isCosmic: boolean) =>
       paddingVertical: 6,
       borderRadius: 6,
       minWidth: 80,
-      alignItems: 'center',
+      alignItems: "center",
     },
     disconnectButton: {
       backgroundColor: isCosmic
-        ? 'rgba(251, 113, 133, 0.2)'
-        : Tokens.colors.error,
+        ? "rgba(251, 113, 133, 0.2)"
+        : Tokens.colors.error.main,
       borderWidth: 1,
-      borderColor: isCosmic ? '#FB7185' : 'transparent',
+      borderColor: isCosmic ? "#FB7185" : "transparent",
     },
     buttonText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      fontWeight: '700',
-      color: '#FFF',
+      fontWeight: "700",
+      color: "#FFF",
     },
     statusRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       marginTop: 8,
       paddingTop: 12,
       borderTopWidth: 1,
       borderTopColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.2)'
+        ? "rgba(139, 92, 246, 0.2)"
         : Tokens.colors.neutral.border,
     },
     statusIndicator: {
       width: 16,
       height: 16,
       borderRadius: 8,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
     },
     statusConnected: {
-      backgroundColor: '#10B981',
+      backgroundColor: "#10B981",
     },
     statusDisconnected: {
-      backgroundColor: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      backgroundColor: isCosmic ? "#B9C2D9" : Tokens.colors.text.tertiary,
     },
     statusText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      color: isCosmic ? "#B9C2D9" : Tokens.colors.text.secondary,
       marginLeft: 4,
       marginRight: 12,
     },

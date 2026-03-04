@@ -1,22 +1,22 @@
-import { render, screen } from '@testing-library/react-native';
-import React from 'react';
+import { render, screen } from "@testing-library/react-native";
+import React from "react";
 
-jest.mock('@react-navigation/native', () => ({
+jest.mock("@react-navigation/native", () => ({
   useRoute: () => ({ params: {} }),
 }));
 
-jest.mock('../src/hooks/useReducedMotion', () => ({
+jest.mock("../src/hooks/useReducedMotion", () => ({
   __esModule: true,
   default: () => false,
 }));
 
-jest.mock('../src/services/StorageService', () => ({
+jest.mock("../src/services/StorageService", () => ({
   __esModule: true,
   default: {
     STORAGE_KEYS: {
-      brainDump: 'brainDump',
-      tasks: 'tasks',
-      igniteState: 'igniteState',
+      brainDump: "brainDump",
+      tasks: "tasks",
+      igniteState: "igniteState",
     },
     getJSON: jest.fn(() => new Promise(() => {})),
     setJSON: jest.fn().mockResolvedValue(true),
@@ -24,7 +24,7 @@ jest.mock('../src/services/StorageService', () => ({
   },
 }));
 
-jest.mock('../src/services/RecordingService', () => ({
+jest.mock("../src/services/RecordingService", () => ({
   __esModule: true,
   default: {
     startRecording: jest.fn().mockResolvedValue(false),
@@ -32,21 +32,21 @@ jest.mock('../src/services/RecordingService', () => ({
   },
 }));
 
-jest.mock('../src/services/PlaudService', () => ({
+jest.mock("../src/services/PlaudService", () => ({
   __esModule: true,
   default: {
     transcribe: jest.fn().mockResolvedValue({ success: false }),
   },
 }));
 
-jest.mock('../src/services/AISortService', () => ({
+jest.mock("../src/services/AISortService", () => ({
   __esModule: true,
   default: {
     sortItems: jest.fn().mockResolvedValue([]),
   },
 }));
 
-jest.mock('../src/services/OverlayService', () => ({
+jest.mock("../src/services/OverlayService", () => ({
   __esModule: true,
   default: {
     updateCount: jest.fn(),
@@ -58,7 +58,7 @@ jest.mock('../src/services/OverlayService', () => ({
   },
 }));
 
-jest.mock('../src/services/SoundService', () => ({
+jest.mock("../src/services/SoundService", () => ({
   __esModule: true,
   default: {
     initBrownNoise: jest.fn(),
@@ -70,12 +70,12 @@ jest.mock('../src/services/SoundService', () => ({
   },
 }));
 
-jest.mock('../src/hooks/useTimer', () => ({
+jest.mock("../src/hooks/useTimer", () => ({
   __esModule: true,
   default: () => ({
     timeLeft: 300,
     isRunning: false,
-    formattedTime: '05:00',
+    formattedTime: "05:00",
     start: jest.fn(),
     pause: jest.fn(),
     reset: jest.fn(),
@@ -83,23 +83,35 @@ jest.mock('../src/hooks/useTimer', () => ({
   }),
 }));
 
-import BrainDumpScreen from '../src/screens/BrainDumpScreen';
-import FogCutterScreen from '../src/screens/FogCutterScreen';
-import IgniteScreen from '../src/screens/IgniteScreen';
+jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "Icon");
 
-describe('Phase B loading states', () => {
-  it('shows loading state for BrainDump initial hydration', () => {
+jest.mock("../src/services/UXMetricsService", () => ({
+  __esModule: true,
+  default: { track: jest.fn().mockResolvedValue(undefined) },
+}));
+
+jest.mock("../src/services/LoggerService", () => ({
+  __esModule: true,
+  LoggerService: { error: jest.fn() },
+}));
+
+import BrainDumpScreen from "../src/screens/BrainDumpScreen";
+import FogCutterScreen from "../src/screens/FogCutterScreen";
+import IgniteScreen from "../src/screens/IgniteScreen";
+
+describe("Phase B loading states", () => {
+  it("shows loading state for BrainDump initial hydration", () => {
     render(<BrainDumpScreen />);
-    expect(screen.getByText('LOADING...')).toBeTruthy();
+    expect(screen.getByText("LOADING...")).toBeTruthy();
   });
 
-  it('shows loading state for FogCutter initial hydration', () => {
+  it("shows loading state for FogCutter initial hydration", () => {
     render(<FogCutterScreen />);
-    expect(screen.getByText('LOADING...')).toBeTruthy();
+    expect(screen.getByText("LOADING...")).toBeTruthy();
   });
 
-  it('shows restoring state for Ignite session restore', () => {
+  it("shows restoring state for Ignite session restore", () => {
     render(<IgniteScreen />);
-    expect(screen.getByText('RESTORING...')).toBeTruthy();
+    expect(screen.getByText("RESTORING...")).toBeTruthy();
   });
 });

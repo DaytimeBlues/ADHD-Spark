@@ -161,7 +161,7 @@ jobs:
         run: npx playwright test e2e/home.spec.ts --project=chromium
         env:
           CI: true
-          PLAYWRIGHT_BASE_URL: https://daytimeblues.github.io/ADHD-CADDI/
+          PLAYWRIGHT_BASE_URL: https://daytimeblues.github.io/ADHD-CADDI-V1/
 
       - name: Upload post-deploy report
         uses: actions/upload-artifact@v4

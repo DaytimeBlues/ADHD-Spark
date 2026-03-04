@@ -1,5 +1,6 @@
-import { Platform } from 'react-native';
-import { LoggerService } from './LoggerService';
+/// <reference lib="dom" />
+import { Platform } from "react-native";
+import { LoggerService } from "./LoggerService";
 
 /**
  * OAuthService
@@ -10,19 +11,19 @@ import { LoggerService } from './LoggerService';
  */
 
 const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL || 'https://spark-adhd-api.vercel.app';
+  process.env.EXPO_PUBLIC_API_BASE_URL || "https://spark-adhd-api.vercel.app";
 
 // Storage keys
 const STORAGE_KEYS = {
-  googleAuth: 'googleAuth',
-  todoistAuth: 'todoistAuth',
-  oauthState: 'oauthState',
-  codeVerifier: 'codeVerifier',
+  googleAuth: "googleAuth",
+  todoistAuth: "todoistAuth",
+  oauthState: "oauthState",
+  codeVerifier: "codeVerifier",
 };
 
 // OAuth state
 interface OAuthState {
-  provider: 'google' | 'todoist';
+  provider: "google" | "todoist";
   state: string;
   redirectUri: string;
   timestamp: number;
@@ -61,48 +62,48 @@ class OAuthServiceClass {
   private async generateCodeChallenge(verifier: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(verifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
+    const digest = await crypto.subtle.digest("SHA-256", data);
     return this.base64URLEncode(new Uint8Array(digest));
   }
 
   private base64URLEncode(buffer: Uint8Array): string {
     return btoa(String.fromCharCode(...buffer))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/[=]/g, '');
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/[=]/g, "");
   }
 
   // ==================== Storage Helpers ====================
 
   private async getStorageItem(key: string): Promise<string | null> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       return localStorage.getItem(key);
     }
     // Native: use AsyncStorage or similar
     const { default: AsyncStorage } = await import(
-      '@react-native-async-storage/async-storage'
+      "@react-native-async-storage/async-storage"
     );
     return AsyncStorage.getItem(key);
   }
 
   private async setStorageItem(key: string, value: string): Promise<void> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       localStorage.setItem(key, value);
       return;
     }
     const { default: AsyncStorage } = await import(
-      '@react-native-async-storage/async-storage'
+      "@react-native-async-storage/async-storage"
     );
     await AsyncStorage.setItem(key, value);
   }
 
   private async removeStorageItem(key: string): Promise<void> {
-    if (Platform.OS === 'web') {
+    if (Platform.OS === "web") {
       localStorage.removeItem(key);
       return;
     }
     const { default: AsyncStorage } = await import(
-      '@react-native-async-storage/async-storage'
+      "@react-native-async-storage/async-storage"
     );
     await AsyncStorage.removeItem(key);
   }
@@ -111,7 +112,7 @@ class OAuthServiceClass {
 
   async initiateGoogleAuth(): Promise<{ success: boolean; error?: string }> {
     try {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         // Native: use Google Sign-In SDK
         return this.initiateGoogleAuthNative();
       }
@@ -126,24 +127,24 @@ class OAuthServiceClass {
 
       // Call backend to get auth URL
       const response = await fetch(`${API_BASE_URL}/api/google-oauth-init`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           redirectUri,
           codeChallenge,
-          codeChallengeMethod: 'S256',
+          codeChallengeMethod: "S256",
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to initiate OAuth');
+        throw new Error("Failed to initiate OAuth");
       }
 
       const { authUrl, state } = await response.json();
 
       // Store OAuth state
       const oauthState: OAuthState = {
-        provider: 'google',
+        provider: "google",
         state,
         redirectUri,
         timestamp: Date.now(),
@@ -154,15 +155,15 @@ class OAuthServiceClass {
       );
 
       // Open popup for OAuth
-      return this.openOAuthPopup(authUrl, state, 'google');
+      return this.openOAuthPopup(authUrl, state, "google");
     } catch (error) {
       LoggerService.error({
-        service: 'OAuthService',
-        operation: 'initiateGoogleAuth',
-        message: 'Failed to initiate Google OAuth',
+        service: "OAuthService",
+        operation: "initiateGoogleAuth",
+        message: "Failed to initiate Google OAuth",
         error,
       });
-      return { success: false, error: 'Failed to initiate authentication' };
+      return { success: false, error: "Failed to initiate authentication" };
     }
   }
 
@@ -172,7 +173,7 @@ class OAuthServiceClass {
   }> {
     try {
       const { GoogleSignin } = await import(
-        '@react-native-google-signin/google-signin'
+        "@react-native-google-signin/google-signin"
       );
 
       await GoogleSignin.hasPlayServices({
@@ -186,8 +187,8 @@ class OAuthServiceClass {
         connected: true,
         accessToken: tokens.accessToken,
         email: userInfo.data?.user.email,
-        name: userInfo.data?.user.name,
-        picture: userInfo.data?.user.photo,
+        name: userInfo.data?.user.name ?? undefined,
+        picture: userInfo.data?.user.photo ?? undefined,
       };
 
       await this.setStorageItem(
@@ -198,12 +199,12 @@ class OAuthServiceClass {
       return { success: true };
     } catch (error) {
       LoggerService.error({
-        service: 'OAuthService',
-        operation: 'initiateGoogleAuthNative',
-        message: 'Native Google auth failed',
+        service: "OAuthService",
+        operation: "initiateGoogleAuthNative",
+        message: "Native Google auth failed",
         error,
       });
-      return { success: false, error: 'Google sign-in failed' };
+      return { success: false, error: "Google sign-in failed" };
     }
   }
 
@@ -212,25 +213,25 @@ class OAuthServiceClass {
   async initiateTodoistAuth(): Promise<{ success: boolean; error?: string }> {
     try {
       const redirectUri =
-        Platform.OS === 'web'
+        Platform.OS === "web"
           ? `${window.location.origin}/ADHD-CADDI/`
-          : 'com.adhdcaddi:/oauth2callback';
+          : "com.adhdcaddi:/oauth2callback";
 
       const response = await fetch(`${API_BASE_URL}/api/todoist-oauth-init`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ redirectUri }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to initiate Todoist OAuth');
+        throw new Error("Failed to initiate Todoist OAuth");
       }
 
       const { authUrl, state } = await response.json();
 
       // Store OAuth state
       const oauthState: OAuthState = {
-        provider: 'todoist',
+        provider: "todoist",
         state,
         redirectUri,
         timestamp: Date.now(),
@@ -241,15 +242,15 @@ class OAuthServiceClass {
       );
 
       // Open popup for OAuth
-      return this.openOAuthPopup(authUrl, state, 'todoist');
+      return this.openOAuthPopup(authUrl, state, "todoist");
     } catch (error) {
       LoggerService.error({
-        service: 'OAuthService',
-        operation: 'initiateTodoistAuth',
-        message: 'Failed to initiate Todoist OAuth',
+        service: "OAuthService",
+        operation: "initiateTodoistAuth",
+        message: "Failed to initiate Todoist OAuth",
         error,
       });
-      return { success: false, error: 'Failed to initiate authentication' };
+      return { success: false, error: "Failed to initiate authentication" };
     }
   }
 
@@ -258,12 +259,12 @@ class OAuthServiceClass {
   private openOAuthPopup(
     authUrl: string,
     state: string,
-    provider: 'google' | 'todoist',
+    provider: "google" | "todoist",
   ): Promise<{ success: boolean; error?: string }> {
     return new Promise((resolve) => {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         // Native: use Linking or WebBrowser
-        resolve({ success: false, error: 'Native OAuth not implemented' });
+        resolve({ success: false, error: "Native OAuth not implemented" });
         return;
       }
 
@@ -275,14 +276,14 @@ class OAuthServiceClass {
 
       this.popupWindow = window.open(
         authUrl,
-        'oauth',
+        "oauth",
         `width=${width},height=${height},left=${left},top=${top}`,
       );
 
       if (!this.popupWindow) {
         resolve({
           success: false,
-          error: 'Popup blocked. Please allow popups for this site.',
+          error: "Popup blocked. Please allow popups for this site.",
         });
         return;
       }
@@ -295,7 +296,7 @@ class OAuthServiceClass {
 
         const { type, code, receivedState, error } = event.data;
 
-        if (type === 'oauth-callback') {
+        if (type === "oauth-callback") {
           this.cleanupPopup();
 
           if (error) {
@@ -304,7 +305,7 @@ class OAuthServiceClass {
           }
 
           if (receivedState !== state) {
-            resolve({ success: false, error: 'Invalid state parameter' });
+            resolve({ success: false, error: "Invalid state parameter" });
             return;
           }
 
@@ -315,13 +316,13 @@ class OAuthServiceClass {
         }
       };
 
-      window.addEventListener('message', this.messageHandler);
+      window.addEventListener("message", this.messageHandler);
 
       // Timeout after 5 minutes
       setTimeout(
         () => {
           this.cleanupPopup();
-          resolve({ success: false, error: 'Authentication timed out' });
+          resolve({ success: false, error: "Authentication timed out" });
         },
         5 * 60 * 1000,
       );
@@ -335,7 +336,7 @@ class OAuthServiceClass {
     this.popupWindow = null;
 
     if (this.messageHandler) {
-      window.removeEventListener('message', this.messageHandler);
+      window.removeEventListener("message", this.messageHandler);
       this.messageHandler = null;
     }
   }
@@ -344,26 +345,26 @@ class OAuthServiceClass {
 
   private async exchangeCodeForTokens(
     code: string,
-    provider: 'google' | 'todoist',
+    provider: "google" | "todoist",
     state: string,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const oauthStateJson = await this.getStorageItem(STORAGE_KEYS.oauthState);
       if (!oauthStateJson) {
-        return { success: false, error: 'OAuth state not found' };
+        return { success: false, error: "OAuth state not found" };
       }
 
       const oauthState: OAuthState = JSON.parse(oauthStateJson);
 
       // Verify state hasn't expired (10 minute window)
       if (Date.now() - oauthState.timestamp > 10 * 60 * 1000) {
-        return { success: false, error: 'Authentication expired' };
+        return { success: false, error: "Authentication expired" };
       }
 
       const endpoint =
-        provider === 'google'
-          ? '/api/google-oauth-callback'
-          : '/api/todoist-oauth-callback';
+        provider === "google"
+          ? "/api/google-oauth-callback"
+          : "/api/todoist-oauth-callback";
 
       const body: Record<string, string> = {
         code,
@@ -373,7 +374,7 @@ class OAuthServiceClass {
       };
 
       // Add PKCE verifier for Google
-      if (provider === 'google') {
+      if (provider === "google") {
         const codeVerifier = await this.getStorageItem(
           STORAGE_KEYS.codeVerifier,
         );
@@ -383,8 +384,8 @@ class OAuthServiceClass {
       }
 
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
@@ -392,14 +393,14 @@ class OAuthServiceClass {
         const errorData = await response.json();
         return {
           success: false,
-          error: errorData.error || 'Token exchange failed',
+          error: errorData.error || "Token exchange failed",
         };
       }
 
       const data = await response.json();
 
       // Store auth data
-      if (provider === 'google') {
+      if (provider === "google") {
         const authData: GoogleAuthData = {
           connected: true,
           accessToken: data.accessToken,
@@ -433,12 +434,12 @@ class OAuthServiceClass {
       return { success: true };
     } catch (error) {
       LoggerService.error({
-        service: 'OAuthService',
-        operation: 'exchangeCodeForTokens',
-        message: 'Token exchange failed',
+        service: "OAuthService",
+        operation: "exchangeCodeForTokens",
+        message: "Token exchange failed",
         error,
       });
-      return { success: false, error: 'Failed to complete authentication' };
+      return { success: false, error: "Failed to complete authentication" };
     }
   }
 
@@ -470,8 +471,8 @@ class OAuthServiceClass {
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/google-refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken: auth.refreshToken }),
       });
 
@@ -496,9 +497,9 @@ class OAuthServiceClass {
       return true;
     } catch (error) {
       LoggerService.error({
-        service: 'OAuthService',
-        operation: 'refreshGoogleToken',
-        message: 'Token refresh failed',
+        service: "OAuthService",
+        operation: "refreshGoogleToken",
+        message: "Token refresh failed",
         error,
       });
       return false;
