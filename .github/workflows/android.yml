@@ -91,12 +91,14 @@ jobs:
           retention-days: 30
 
       - name: Detox E2E Tests
+        if: github.event_name == 'workflow_dispatch'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
           target: google_apis
           arch: x86_64
           profile: pixel_6
+          emulator-boot-timeout: 900
           script: |
             npm run test:e2e:android
         env:
@@ -104,7 +106,7 @@ jobs:
 
       - name: Upload Detox artifacts
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && github.event_name == 'workflow_dispatch'
         with:
           name: detox-artifacts
           path: |
@@ -114,7 +116,7 @@ jobs:
 
       - name: Upload emulator logcat
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && github.event_name == 'workflow_dispatch'
         with:
           name: emulator-logcat
           path: artifacts/logcat.log
