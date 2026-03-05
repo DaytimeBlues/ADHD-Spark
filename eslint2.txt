@@ -1,0 +1,22 @@
+﻿
+C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\__tests__\BrainDumpScreen.test.tsx
+  97:9  warning  'React' is already declared in the upper scope on line 1 column 8  @typescript-eslint/no-shadow
+
+C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\__tests__\useNotifications.test.ts
+  48:77  error  Delete `┬╖`  prettier/prettier
+
+C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\config\index.ts
+  51:7  warning  Expected 'undefined' and instead saw 'void'  no-void
+
+C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\init\bootstrap.ts
+  11:17  error  'isAndroid' is defined but never used                                                     @typescript-eslint/no-unused-vars
+  11:28  error  'isIOS' is defined but never used                                                         @typescript-eslint/no-unused-vars
+  92:13  error  Replace `ΓÉìΓÅÄ┬╖┬╖┬╖┬╖┬╖┬╖config.googleWebClientId┬╖||ΓÉìΓÅÄ┬╖┬╖┬╖┬╖┬╖` with `┬╖config.googleWebClientId┬╖||`  prettier/prettier
+
+C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens\CheckInScreen.tsx
+  20:17  error  'isAndroid' is defined but never used  @typescript-eslint/no-unused-vars
+  20:28  error  'isIOS' is defined but never used      @typescript-eslint/no-unused-vars
+
+Γ£û 8 problems (6 errors, 2 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+
