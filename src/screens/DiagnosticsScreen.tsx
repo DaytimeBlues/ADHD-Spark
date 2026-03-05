@@ -19,7 +19,7 @@ import { config } from '../config';
 import StorageService from '../services/StorageService';
 import { GoogleTasksSyncService } from '../services/PlaudService';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 interface DiagnosticEntry {
   label: string;
@@ -286,7 +286,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     });
 
     // Auth status
-    if (Platform.OS !== 'web') {
+    if (!isWeb) {
       try {
         const canAttemptAuth = hasAnyConfig;
         entries.push({

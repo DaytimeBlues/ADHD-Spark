@@ -1,7 +1,20 @@
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import React from 'react';
-import { Platform } from 'react-native';
 import CalendarScreen from '../src/screens/CalendarScreen';
+
+// Control `isWeb` per test — the screen imports it as a module-scope constant.
+let mockIsWeb = false;
+jest.mock('../src/utils/PlatformUtils', () => ({
+  get isWeb() {
+    return mockIsWeb;
+  },
+  get isAndroid() {
+    return !mockIsWeb;
+  },
+  get isIOS() {
+    return false;
+  },
+}));
 
 const mockSignInInteractive = jest.fn().mockResolvedValue(true);
 const mockGetCurrentUserScopes = jest.fn().mockResolvedValue(null);
@@ -18,13 +31,11 @@ jest.mock('../src/services/PlaudService', () => ({
 describe('CalendarScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockIsWeb = false;
   });
 
   it('shows unsupported status on web and disables connect button', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'web',
-    });
+    mockIsWeb = true;
 
     render(<CalendarScreen />);
 
@@ -39,10 +50,7 @@ describe('CalendarScreen', () => {
   });
 
   it('shows disconnected status on native when calendar scope is missing', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
     mockGetCurrentUserScopes.mockResolvedValueOnce(null);
 
     render(<CalendarScreen />);
@@ -56,10 +64,7 @@ describe('CalendarScreen', () => {
   });
 
   it('shows connected status when calendar scope is present and prevents reconnect', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
     mockGetCurrentUserScopes.mockResolvedValueOnce([
       'https://www.googleapis.com/auth/calendar.events',
     ]);
@@ -78,10 +83,7 @@ describe('CalendarScreen', () => {
   });
 
   it('attempts connect on native when disconnected', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
     mockGetCurrentUserScopes
       .mockResolvedValueOnce(null)
       .mockResolvedValueOnce([

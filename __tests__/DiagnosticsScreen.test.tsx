@@ -6,8 +6,22 @@ import {
   waitFor,
 } from '@testing-library/react-native';
 import React from 'react';
-import { Platform, Share } from 'react-native';
+import { Share } from 'react-native';
 import DiagnosticsScreen from '../src/screens/DiagnosticsScreen';
+
+// Control `isWeb` per test — the screen imports it as a module-scope constant.
+let mockIsWeb = false;
+jest.mock('../src/utils/PlatformUtils', () => ({
+  get isWeb() {
+    return mockIsWeb;
+  },
+  get isAndroid() {
+    return !mockIsWeb;
+  },
+  get isIOS() {
+    return false;
+  },
+}));
 
 const mockGet = jest.fn();
 const mockSet = jest.fn();
@@ -66,10 +80,7 @@ describe('DiagnosticsScreen backup tools', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'web',
-    });
+    mockIsWeb = true;
     mockGet.mockResolvedValue(null);
     mockGetJSON.mockResolvedValue([]);
     mockSet.mockResolvedValue(true);
@@ -81,10 +92,7 @@ describe('DiagnosticsScreen backup tools', () => {
   });
 
   it('shows signed-in diagnostics when google scopes are available on native', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
     mockGetCurrentUserScopes.mockResolvedValueOnce([
       'https://www.googleapis.com/auth/tasks',
       'https://www.googleapis.com/auth/calendar.events',
@@ -103,10 +111,7 @@ describe('DiagnosticsScreen backup tools', () => {
   });
 
   it('shows not signed in when google scopes are unavailable on native', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
     mockGetCurrentUserScopes.mockResolvedValueOnce(null);
 
     render(<DiagnosticsScreen navigation={mockNavigation} />);

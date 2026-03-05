@@ -6,8 +6,23 @@ import {
   waitFor,
 } from '@testing-library/react-native';
 import React from 'react';
-import { Platform, Share } from 'react-native';
+import { Share } from 'react-native';
 import HomeScreen from '../src/screens/HomeScreen';
+
+// Control `isWeb` / `isAndroid` per test — the screen imports these as module-scope constants.
+let mockIsWeb = false;
+let mockIsAndroid = false;
+jest.mock('../src/utils/PlatformUtils', () => ({
+  get isWeb() {
+    return mockIsWeb;
+  },
+  get isAndroid() {
+    return mockIsAndroid;
+  },
+  get isIOS() {
+    return false;
+  },
+}));
 
 const mockGetReentryPromptLevel = jest.fn().mockResolvedValue('none');
 
@@ -102,6 +117,8 @@ describe('HomeScreen', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockIsWeb = false;
+    mockIsAndroid = false;
     mockGetReentryPromptLevel.mockResolvedValue('none');
     jest.spyOn(Share, 'share').mockResolvedValue({
       action: 'sharedAction',
@@ -174,10 +191,7 @@ describe('HomeScreen', () => {
   });
 
   it('renders overlay debug log entries when permission event is received', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsAndroid = true;
 
     await renderHomeScreen();
 
@@ -195,10 +209,7 @@ describe('HomeScreen', () => {
   });
 
   it('syncs overlay toggle from running state and lifecycle events', async () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsAndroid = true;
 
     const overlayService = require('../src/services/OverlayService')
       .default as {
