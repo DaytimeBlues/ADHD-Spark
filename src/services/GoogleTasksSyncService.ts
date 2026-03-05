@@ -1,10 +1,9 @@
-import { Platform } from 'react-native';
 import { SortedItem } from './AISortService';
 import StorageService from './StorageService';
 import OverlayService from './OverlayService';
 import { LoggerService } from './LoggerService';
 import { GoogleAuthService } from './GoogleAuthService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 import {
   googleTasksApiClient,
   GoogleTaskItem,
@@ -44,11 +43,11 @@ export interface GoogleExportResult {
   skippedCount: number;
   authRequired: boolean;
   errorCode?:
-  | 'auth_required'
-  | 'auth_failed'
-  | 'network'
-  | 'rate_limited'
-  | 'api_error';
+    | 'auth_required'
+    | 'auth_failed'
+    | 'network'
+    | 'rate_limited'
+    | 'api_error';
   errorMessage?: string;
 }
 
@@ -193,7 +192,10 @@ class GoogleTasksSyncServiceClass {
       };
     }
 
-    if (error instanceof Error && error.message === 'GOOGLE_SYNC_TOKEN_EXPIRED') {
+    if (
+      error instanceof Error &&
+      error.message === 'GOOGLE_SYNC_TOKEN_EXPIRED'
+    ) {
       return {
         code: 'api_error',
         message: 'Sync session expired. Retrying...',

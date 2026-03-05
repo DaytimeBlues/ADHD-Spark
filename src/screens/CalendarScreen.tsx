@@ -12,7 +12,7 @@ import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
 import { GoogleTasksSyncService } from '../services/PlaudService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 type CalendarConnectionStatus =
   | 'checking'

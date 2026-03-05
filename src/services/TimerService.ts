@@ -37,7 +37,8 @@ class TimerServiceClass {
       const { isRunning, targetEndTime, isWorking, activeMode } = state;
 
       const becameRunning = isRunning && !this.lastIsRunning;
-      const targetChanged = isRunning && targetEndTime !== this.lastTargetEndTime;
+      const targetChanged =
+        isRunning && targetEndTime !== this.lastTargetEndTime;
 
       if ((becameRunning || targetChanged) && targetEndTime) {
         this.scheduleNotification(isWorking, activeMode, targetEndTime);
@@ -57,7 +58,9 @@ class TimerServiceClass {
   ) {
     const title = isWorking ? 'Focus Session Complete' : 'Break Finished';
     const body =
-      mode === 'pomodoro' ? 'Time to switch gears!' : 'Your timer has finished.';
+      mode === 'pomodoro'
+        ? 'Time to switch gears!'
+        : 'Your timer has finished.';
     NotificationService.scheduleTimerCompletion(title, body, targetEndTime);
   }
 

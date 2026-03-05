@@ -26,7 +26,7 @@ import { LoggerService } from '../../services/LoggerService';
 import { RuneButton } from '../../ui/cosmic/RuneButton';
 import { useTaskStore } from '../../store/useTaskStore';
 import type { BubbleState } from './CaptureBubble';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb } from '../../utils/PlatformUtils';
 
 // ============================================================================
 // TYPES

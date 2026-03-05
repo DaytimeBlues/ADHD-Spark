@@ -378,11 +378,13 @@ test.describe('Stability — Console Error Sweep', () => {
 
     // Log all errors for debugging (visible in Playwright report)
     if (criticalErrors.length > 0) {
-      console.error('Critical errors found:');
-      criticalErrors.forEach((e) => console.error(`  - ${e}`));
+      process.stderr.write('Critical errors found:\n');
+      criticalErrors.forEach((e) => process.stderr.write(`  - ${e}\n`));
     }
     if (warnings.length > 0) {
-      console.warn(`${warnings.length} warnings captured (non-blocking)`);
+      process.stdout.write(
+        `${warnings.length} warnings captured (non-blocking)\n`,
+      );
     }
 
     expect(criticalErrors).toHaveLength(0);

@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { ButtonVariant, ButtonSize, GlowLevel } from './types';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb } from '../../utils/PlatformUtils';
 
 // ============================================================================
 // TYPE DEFINITIONS

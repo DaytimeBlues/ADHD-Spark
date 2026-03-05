@@ -17,7 +17,7 @@ import { RuneButton } from '../ui/cosmic/RuneButton';
 import { CosmicBackground } from '../ui/cosmic/CosmicBackground';
 import { GlowCard } from '../ui/cosmic/GlowCard';
 import CaptureService from '../services/CaptureService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isIOS } from '../utils/PlatformUtils';
 
 interface DriftCheckOverlayProps {
   visible: boolean;

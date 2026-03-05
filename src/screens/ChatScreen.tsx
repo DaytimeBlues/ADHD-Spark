@@ -6,13 +6,12 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 import ChatService, { ChatMessage } from '../services/ChatService';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isIOS } from '../utils/PlatformUtils';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);

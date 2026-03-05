@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Platform, AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo } from 'react-native';
 import AISortService, {
   SortedItem as AISortServiceSortedItem,
 } from '../services/AISortService';
@@ -10,7 +10,7 @@ import StorageService from '../services/StorageService';
 
 import { normalizeMicroSteps } from '../utils/fogCutter';
 import { generateId } from '../utils/helpers';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 export const CATEGORY_ORDER: Array<AISortServiceSortedItem['category']> = [
   'task',

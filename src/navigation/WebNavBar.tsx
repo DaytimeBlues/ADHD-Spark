@@ -11,7 +11,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import HapticsService from '../services/HapticsService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();

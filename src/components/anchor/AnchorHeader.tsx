@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb } from '../../utils/PlatformUtils';
 
 export const AnchorHeader: React.FC = () => {
   const { isCosmic } = useTheme();

@@ -42,7 +42,6 @@ jest.mock('../src/services/LoggerService', () => ({
 }));
 
 jest.mock('../src/ui/cosmic', () => {
-  const React = require('react');
   const { View } = require('react-native');
   return {
     CosmicBackground: ({ children }: { children: React.ReactNode }) => (

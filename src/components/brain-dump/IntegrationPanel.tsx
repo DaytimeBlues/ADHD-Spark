@@ -39,11 +39,6 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
   const [isLoadingTodoist, setIsLoadingTodoist] = useState(false);
 
-  // Load auth status on mount
-  useEffect(() => {
-    loadAuthStatus();
-  }, []);
-
   const loadAuthStatus = useCallback(async () => {
     try {
       const [google, todoist] = await Promise.all([
@@ -61,6 +56,11 @@ export const IntegrationPanel: React.FC<IntegrationPanelProps> = ({
       });
     }
   }, []);
+
+  // Load auth status on mount
+  useEffect(() => {
+    loadAuthStatus();
+  }, [loadAuthStatus]);
 
   const handleGoogleConnect = async () => {
     if (googleAuth?.connected) {

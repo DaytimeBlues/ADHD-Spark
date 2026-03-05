@@ -17,7 +17,6 @@ jest.mock('../src/services/ChatService', () => ({
 }));
 
 jest.mock('../src/ui/cosmic', () => {
-  const React = require('react');
   const { Text, View, Pressable } = require('react-native');
   return {
     CosmicBackground: ({ children }: { children: React.ReactNode }) => (

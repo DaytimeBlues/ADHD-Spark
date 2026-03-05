@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppState, AppStateStatus, AccessibilityInfo } from 'react-native';
 import OverlayService from '../services/OverlayService';
 import StorageService from '../services/StorageService';
+import { LoggerService } from '../services/LoggerService';
 import { isAndroid } from '../utils/PlatformUtils';
 
 export type OverlayEvent = {
@@ -36,7 +37,12 @@ export const useOverlayEvents = () => {
         const running = await OverlayService.isRunning();
         setIsOverlayEnabled(running);
       } catch (error) {
-        console.warn('Failed to check overlay state:', error);
+        LoggerService.warn({
+          service: 'useOverlayEvents',
+          operation: 'checkOverlayState',
+          message: 'Failed to check overlay state',
+          error,
+        });
         setIsOverlayEnabled(false);
       }
     }

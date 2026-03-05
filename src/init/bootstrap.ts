@@ -8,9 +8,10 @@ import { DriftService } from '../services/DriftService';
 import { BiometricService } from '../services/BiometricService';
 import { LoggerService } from '../services/LoggerService';
 import { config } from '../config';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 const CRITICAL_INIT_TIMEOUT_MS = 8000;
+let unhandledRejectionHandlerInstalled = false;
 
 const wait = (ms: number): Promise<void> =>
   new Promise((resolve) => {
@@ -20,6 +21,40 @@ const wait = (ms: number): Promise<void> =>
 interface BootstrapResult {
   success: boolean;
   errors: Error[];
+}
+
+function installUnhandledRejectionHandler(): void {
+  if (unhandledRejectionHandlerInstalled) {
+    return;
+  }
+
+  const handleUnhandledRejection = (reason: unknown) => {
+    LoggerService.fatal({
+      service: 'bootstrap',
+      operation: 'unhandledRejection',
+      message: 'Unhandled promise rejection',
+      error: reason,
+    });
+  };
+
+  const processLike = globalThis as typeof globalThis & {
+    process?: {
+      on?: (event: string, listener: (reason: unknown) => void) => void;
+    };
+  };
+  processLike.process?.on?.('unhandledRejection', handleUnhandledRejection);
+
+  const globalWithEvents = globalThis as typeof globalThis & {
+    addEventListener?: (
+      type: string,
+      listener: (event: { reason?: unknown }) => void,
+    ) => void;
+  };
+  globalWithEvents.addEventListener?.('unhandledrejection', (event) => {
+    handleUnhandledRejection(event.reason);
+  });
+
+  unhandledRejectionHandlerInstalled = true;
 }
 
 /**
@@ -54,15 +89,16 @@ function initializeNonBlockingServices(): undefined {
  */
 function checkGoogleConfig(): boolean {
   const hasGoogleConfig = Boolean(
-    isWeb ||
-      config.googleWebClientId ||
-      config.googleIosClientId,
+    isWeb || config.googleWebClientId || config.googleIosClientId,
   );
 
   if (!hasGoogleConfig && Platform.OS !== 'web') {
-    console.warn(
-      '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
-    );
+    LoggerService.warn({
+      service: 'bootstrap',
+      operation: 'checkGoogleConfig',
+      message:
+        '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+    });
   }
 
   return hasGoogleConfig;
@@ -77,12 +113,15 @@ export async function bootstrapApp(): Promise<BootstrapResult> {
   const errors: Error[] = [];
 
   try {
+    installUnhandledRejectionHandler();
     checkGoogleConfig();
 
     const initTimeout = wait(CRITICAL_INIT_TIMEOUT_MS).then(() => {
-      console.warn(
-        `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
-      );
+      LoggerService.warn({
+        service: 'bootstrap',
+        operation: 'bootstrapApp',
+        message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
+      });
     });
 
     await Promise.race([initializeCriticalServices(), initTimeout]);

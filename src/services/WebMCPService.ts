@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import StorageService from './StorageService';
 import { agentEventBus } from './AgentEventBus';
+import { LoggerService } from './LoggerService';
 
 type ToolDefinition = {
   name: string;
@@ -65,10 +66,11 @@ class WebMCPService {
         (globalThis as typeof globalThis & { location?: { hostname?: string } })
           .location?.hostname === '127.0.0.1');
     if (!isDev && !isLocalhost) {
-      // eslint-disable-next-line no-console
-      console.log(
-        'WebMCP: Skipping tool registration (not in dev or localhost)',
-      );
+      LoggerService.info({
+        service: 'WebMCPService',
+        operation: 'init',
+        message: 'WebMCP: Skipping tool registration (not in dev or localhost)',
+      });
       return;
     }
 
@@ -79,13 +81,19 @@ class WebMCPService {
       const modelContext = (globalThis as { navigator?: WebMCPNavigatorLike })
         .navigator?.modelContext;
       if (!modelContext?.registerTool) {
-        // eslint-disable-next-line no-console
-        console.log('WebMCP: API not found, retrying...');
+        LoggerService.info({
+          service: 'WebMCPService',
+          operation: 'registerTools',
+          message: 'WebMCP: API not found, retrying...',
+        });
         return;
       }
 
-      // eslint-disable-next-line no-console
-      console.log('WebMCP: Registering tools...');
+      LoggerService.info({
+        service: 'WebMCPService',
+        operation: 'registerTools',
+        message: 'WebMCP: Registering tools...',
+      });
 
       // ── 1. Start Timer ────────────────────────────────────────────────────
       modelContext.registerTool({
@@ -289,7 +297,11 @@ class WebMCPService {
       this.isInitialized = true;
       this.retryTimeouts.forEach(clearTimeout);
       this.retryTimeouts = [];
-      console.log('WebMCP: Tools registered successfully');
+      LoggerService.info({
+        service: 'WebMCPService',
+        operation: 'registerTools',
+        message: 'WebMCP: Tools registered successfully',
+      });
     };
 
     registerTools();

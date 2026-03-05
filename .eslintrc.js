@@ -11,7 +11,7 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'warn',
-    'no-console': ['warn', { allow: ['warn', 'info'] }],
+    'no-console': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'prettier/prettier': [
       'error',
@@ -21,4 +21,12 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['src/services/LoggerService.ts'],
+      rules: {
+        'no-console': ['error', { allow: ['warn', 'error'] }],
+      },
+    },
+  ],
 };

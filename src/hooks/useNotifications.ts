@@ -57,7 +57,11 @@ export function useNotifications() {
   const scheduleNotification = useCallback(
     async (title: string, body: string, triggerDateMs: number) => {
       if (!hasPermission) {
-        console.warn('Cannot schedule notification: permission not granted');
+        LoggerService.warn({
+          service: 'useNotifications',
+          operation: 'scheduleNotification',
+          message: 'Cannot schedule notification: permission not granted',
+        });
         return null;
       }
       return NotificationService.scheduleTimerCompletion(

@@ -13,7 +13,7 @@ import React, { memo, useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform, StyleProp } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { BackgroundVariant } from './types';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb } from '../../utils/PlatformUtils';
 
 // ============================================================================
 // TYPE DEFINITIONS

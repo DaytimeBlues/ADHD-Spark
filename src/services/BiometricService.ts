@@ -1,5 +1,6 @@
 import { AppState, AppStateStatus } from 'react-native';
 import StorageService from './StorageService';
+import { LoggerService } from './LoggerService';
 
 type AuthStateSubscriber = (isAuthenticated: boolean) => void;
 
@@ -24,10 +25,13 @@ const getLocalAuthentication = (): LocalAuthenticationLike | null => {
     localAuthenticationModule =
       require('expo-local-authentication') as LocalAuthenticationLike;
   } catch (error) {
-    console.warn(
-      'BiometricService: expo-local-authentication is unavailable; biometric auth is disabled.',
+    LoggerService.warn({
+      service: 'BiometricService',
+      operation: 'getLocalAuthentication',
+      message:
+        'expo-local-authentication is unavailable; biometric auth is disabled.',
       error,
-    );
+    });
     localAuthenticationModule = null;
   }
 
@@ -117,7 +121,12 @@ class BiometricServiceClass {
       }
       return false;
     } catch (e) {
-      console.warn('Biometric auth failed', e);
+      LoggerService.warn({
+        service: 'BiometricService',
+        operation: 'authenticate',
+        message: 'Biometric auth failed',
+        error: e,
+      });
       return false;
     }
   }

@@ -1,4 +1,5 @@
 import * as Notifications from 'expo-notifications';
+import { LoggerService } from './LoggerService';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -57,7 +58,12 @@ class NotificationServiceClass {
           },
         });
     } catch (e) {
-      console.warn('Failed to schedule notification', e);
+      LoggerService.warn({
+        service: 'NotificationService',
+        operation: 'scheduleTimerCompletion',
+        message: 'Failed to schedule notification',
+        error: e,
+      });
     }
   }
 
@@ -68,7 +74,12 @@ class NotificationServiceClass {
           this.currentTimerNotificationId,
         );
       } catch (e) {
-        console.warn('Failed to cancel notification', e);
+        LoggerService.warn({
+          service: 'NotificationService',
+          operation: 'cancelTimerNotification',
+          message: 'Failed to cancel notification',
+          error: e,
+        });
       }
       this.currentTimerNotificationId = null;
     }

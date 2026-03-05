@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import { LayoutAnimation, UIManager } from 'react-native';
 import StorageService from '../services/StorageService';
 import { useBrainDumpItems, DumpItem } from './useBrainDumpItems';
 import {
@@ -9,7 +9,7 @@ import {
 } from './useBrainDumpRecording';
 import { useBrainDumpSorting } from './useBrainDumpSorting';
 import type { SortedItem } from '../services/AISortService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isAndroid } from '../utils/PlatformUtils';
 
 export type { DumpItem } from './useBrainDumpItems';
 export type { RecordingState } from './useBrainDumpRecording';
@@ -49,10 +49,7 @@ export const useBrainDump = (autoRecord?: boolean): UseBrainDumpReturn => {
 
   // Initialize layout animation on Android
   useEffect(() => {
-    if (
-      isAndroid &&
-      UIManager.setLayoutAnimationEnabledExperimental
-    ) {
+    if (isAndroid && UIManager.setLayoutAnimationEnabledExperimental) {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }, []);

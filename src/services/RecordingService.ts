@@ -81,7 +81,11 @@ class RecordingServiceClass {
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn('Recording unavailable: expo-av is not installed');
+        LoggerService.warn({
+          service: 'RecordingService',
+          operation: 'requestPermissions',
+          message: 'Recording unavailable: expo-av is not installed',
+        });
         return false;
       }
 
@@ -112,14 +116,22 @@ class RecordingServiceClass {
     }
 
     if (this.isRecording) {
-      console.warn('Already recording');
+      LoggerService.warn({
+        service: 'RecordingService',
+        operation: 'startRecording',
+        message: 'Already recording',
+      });
       return false;
     }
 
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn('Recording unavailable: expo-av is not installed');
+        LoggerService.warn({
+          service: 'RecordingService',
+          operation: 'startRecording',
+          message: 'Recording unavailable: expo-av is not installed',
+        });
         return false;
       }
 
@@ -149,7 +161,11 @@ class RecordingServiceClass {
       this.recording = recording;
       this.isRecording = true;
 
-      console.log('Recording started');
+      LoggerService.info({
+        service: 'RecordingService',
+        operation: 'startRecording',
+        message: 'Recording started',
+      });
       return true;
     } catch (error) {
       LoggerService.error({
@@ -181,14 +197,22 @@ class RecordingServiceClass {
     }
 
     if (!this.recording || !this.isRecording) {
-      console.warn('No active recording');
+      LoggerService.warn({
+        service: 'RecordingService',
+        operation: 'stopRecording',
+        message: 'No active recording',
+      });
       return null;
     }
 
     try {
       const Audio = loadAudioModule();
       if (!Audio) {
-        console.warn('Recording unavailable: expo-av is not installed');
+        LoggerService.warn({
+          service: 'RecordingService',
+          operation: 'stopRecording',
+          message: 'Recording unavailable: expo-av is not installed',
+        });
         this.recording = null;
         this.isRecording = false;
         return null;
@@ -216,7 +240,12 @@ class RecordingServiceClass {
         return null;
       }
 
-      console.log('Recording stopped:', uri);
+      LoggerService.info({
+        service: 'RecordingService',
+        operation: 'stopRecording',
+        message: 'Recording stopped',
+        context: { uri },
+      });
       return {
         uri,
         duration: status.durationMillis || 0,

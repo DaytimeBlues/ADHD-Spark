@@ -1,5 +1,6 @@
 import StorageService from './StorageService';
 import { config } from '../config';
+import { LoggerService } from './LoggerService';
 
 export interface CheckInEntry {
   timestamp: number;
@@ -102,7 +103,12 @@ const CheckInInsightService = {
       return insight;
     } catch (err) {
       clearTimeout(timer);
-      console.warn('CheckInInsight: unavailable', err);
+      LoggerService.warn({
+        service: 'CheckInInsightService',
+        operation: 'generateInsight',
+        message: 'CheckInInsight unavailable',
+        error: err,
+      });
       return null; // Graceful — insight is additive, not critical
     }
   },

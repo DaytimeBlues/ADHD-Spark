@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { LoggerService } from './LoggerService';
 
 export interface MicroStep {
   id: string;
@@ -65,7 +66,11 @@ const FogCutterAIService = {
       clearTimeout(timer);
 
       if (!response.ok) {
-        console.warn('FogCutterAI: API error, using fallback steps');
+        LoggerService.warn({
+          service: 'FogCutterAIService',
+          operation: 'generateMicroSteps',
+          message: 'FogCutterAI API error, using fallback steps',
+        });
         return DEFAULT_FALLBACK_STEPS;
       }
 
@@ -80,7 +85,12 @@ const FogCutterAIService = {
     } catch (err) {
       clearTimeout(timer);
       // Network errors / timeouts / CORS → silent fallback, not a UI crash
-      console.warn('FogCutterAI: unavailable, using fallback steps', err);
+      LoggerService.warn({
+        service: 'FogCutterAIService',
+        operation: 'generateMicroSteps',
+        message: 'FogCutterAI unavailable, using fallback steps',
+        error: err,
+      });
       return DEFAULT_FALLBACK_STEPS;
     }
   },

@@ -16,7 +16,8 @@ import { ROUTES } from '../navigation/routes';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import CheckInInsightService from '../services/CheckInInsightService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { LoggerService } from '../services/LoggerService';
+import { isWeb } from '../utils/PlatformUtils';
 
 const HOVER_SHADOW = '0 0 0 rgba(0,0,0,0)';
 
@@ -192,10 +193,12 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
             },
           });
         } catch (error) {
-          console.warn(
-            'Failed to queue pending ignite start from check-in:',
+          LoggerService.warn({
+            service: 'CheckInScreen',
+            operation: 'handleRecommendationAction',
+            message: 'Failed to queue pending ignite start from check-in',
             error,
-          );
+          });
         }
       }
 

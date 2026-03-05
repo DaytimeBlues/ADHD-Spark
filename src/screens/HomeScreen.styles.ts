@@ -1,6 +1,6 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Tokens } from '../theme/tokens';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 export const getStyles = (isCosmic: boolean) =>
   StyleSheet.create({

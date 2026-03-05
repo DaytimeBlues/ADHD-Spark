@@ -8,8 +8,16 @@ jest.mock('../src/services/NotificationService', () => ({
   },
 }));
 
+jest.mock('../src/services/LoggerService', () => ({
+  LoggerService: {
+    error: jest.fn(),
+    warn: jest.fn(),
+  },
+}));
+
 import { useNotifications } from '../src/hooks/useNotifications';
 import { NotificationService } from '../src/services/NotificationService';
+import { LoggerService } from '../src/services/LoggerService';
 
 describe('useNotifications', () => {
   beforeEach(() => {
@@ -59,7 +67,6 @@ describe('useNotifications', () => {
   });
 
   it('does not schedule notifications without permission', async () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     (NotificationService.requestPermissions as jest.Mock).mockResolvedValue(
       false,
     );
@@ -80,8 +87,7 @@ describe('useNotifications', () => {
     });
 
     expect(NotificationService.scheduleTimerCompletion).not.toHaveBeenCalled();
-    expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
+    expect(LoggerService.warn).toHaveBeenCalled();
   });
 
   it('schedules notification when permission is granted', async () => {

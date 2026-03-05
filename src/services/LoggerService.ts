@@ -156,16 +156,14 @@ class LoggerServiceClass {
   private getConsoleMethod(level: LogLevel): (...args: unknown[]) => void {
     switch (level) {
       case 'debug':
-        return console.log;
       case 'info':
-        return console.info;
       case 'warn':
         return console.warn;
       case 'error':
       case 'fatal':
         return console.error;
       default:
-        return console.log;
+        return console.warn;
     }
   }
 }

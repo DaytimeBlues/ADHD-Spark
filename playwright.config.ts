@@ -31,8 +31,8 @@ export default defineConfig({
         isEnabled: () => true,
         log: (name, severity, message) => {
           if (severity === 'error' || severity === 'warning') {
-            console.log(
-              `[BROWSER ${severity.toUpperCase()}] ${name}: ${message}`,
+            process.stdout.write(
+              `[BROWSER ${severity.toUpperCase()}] ${name}: ${message}\n`,
             );
           }
         },

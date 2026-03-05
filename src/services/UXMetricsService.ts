@@ -1,4 +1,5 @@
 import StorageService from './StorageService';
+import { LoggerService } from './LoggerService';
 
 const MAX_EVENTS = 200;
 
@@ -33,7 +34,12 @@ const UXMetricsService = {
         nextEvents,
       );
     } catch (error) {
-      console.warn('UXMetricsService.track failed:', error);
+      LoggerService.warn({
+        service: 'UXMetricsService',
+        operation: 'track',
+        message: 'UXMetricsService.track failed',
+        error,
+      });
     }
   },
 };

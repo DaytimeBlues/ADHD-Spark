@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Pressable,
   SafeAreaView,
-  Platform,
   ActivityIndicator,
 } from 'react-native';
 import SoundService from '../services/SoundService';
@@ -18,7 +17,7 @@ import { useTimerStore } from '../store/useTimerStore';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { LinearButton } from '../components/ui/LinearButton';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 import {
   CosmicBackground,
   ChronoDigits,

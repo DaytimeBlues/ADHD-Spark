@@ -6,7 +6,7 @@ import { useTimerStore } from '../store/useTimerStore';
 import { LinearButton } from '../components/ui/LinearButton';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 import {
   CosmicBackground,
   ChronoDigits,

@@ -18,6 +18,7 @@ import StorageService from './src/services/StorageService';
 import { GoogleTasksSyncService } from './src/services/GoogleTasksSyncService';
 import OverlayService from './src/services/OverlayService';
 import WebMCPService from './src/services/WebMCPService';
+import { LoggerService } from './src/services/LoggerService';
 import { Tokens } from './src/theme/tokens';
 import { config } from './src/config';
 import {
@@ -46,8 +47,12 @@ if (config.environment === 'production') {
     beforeSend: (event) => {
       // Don't send errors in development
       if (__DEV__) {
-        // eslint-disable-next-line no-console
-        console.log('[Sentry] Would send error:', event);
+        LoggerService.info({
+          service: 'App',
+          operation: 'beforeSend',
+          message: '[Sentry] Would send error',
+          context: { event },
+        });
         return null;
       }
       return event;
@@ -73,9 +78,13 @@ export const useAppBootstrap = () => {
     };
 
     const initializeNonBlockingServices = () => {
-      void GoogleTasksSyncService.syncToBrainDump().catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error('Initial Google Tasks sync failed:', error);
+      GoogleTasksSyncService.syncToBrainDump().catch((error) => {
+        LoggerService.error({
+          service: 'App',
+          operation: 'initializeNonBlockingServices',
+          message: 'Initial Google Tasks sync failed',
+          error,
+        });
       });
       WebMCPService.init();
       CheckInService.start();
@@ -91,21 +100,31 @@ export const useAppBootstrap = () => {
           config.googleIosClientId;
 
         if (!hasGoogleConfig && Platform.OS !== 'web') {
-          console.warn(
-            '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
-          );
+          LoggerService.warn({
+            service: 'App',
+            operation: 'initializeApp',
+            message:
+              '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+          });
         }
 
         const initTimeout = wait(CRITICAL_INIT_TIMEOUT_MS).then(() => {
-          console.warn(
-            `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
-          );
+          LoggerService.warn({
+            service: 'App',
+            operation: 'initializeApp',
+            message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
+          });
         });
 
         await Promise.race([initializeCriticalServices(), initTimeout]);
         initializeNonBlockingServices();
       } catch (error) {
-        console.error('App initialization error:', error);
+        LoggerService.error({
+          service: 'App',
+          operation: 'initializeApp',
+          message: 'App initialization error',
+          error,
+        });
       } finally {
         if (isMounted) {
           setIsReady(true);

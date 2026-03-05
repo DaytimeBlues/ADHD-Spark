@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import { LayoutAnimation, UIManager } from 'react-native';
 import useTimer from './useTimer';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isAndroid } from '../utils/PlatformUtils';
 
 export type BreathingPattern = '478' | 'box' | 'energize';
 

@@ -89,7 +89,12 @@ const safeJSONParse = <T>(value: string | null): T | null => {
   try {
     return JSON.parse(value) as T;
   } catch (error) {
-    console.warn('Storage: Failed to parse JSON, returning null:', error);
+    LoggerService.warn({
+      service: 'StorageService',
+      operation: 'safeJSONParse',
+      message: 'Failed to parse JSON, returning null',
+      error,
+    });
     return null;
   }
 };

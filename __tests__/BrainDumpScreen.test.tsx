@@ -7,6 +7,23 @@ jest.mock('@react-navigation/native', () => ({
   useRoute: () => ({ params: {} }),
 }));
 
+// PlatformUtils — use dynamic getter pattern to allow per-test overrides
+jest.mock('../src/utils/PlatformUtils', () => {
+  const state = { isWeb: false, isAndroid: false, isIOS: false };
+  return {
+    get isWeb() {
+      return state.isWeb;
+    },
+    get isAndroid() {
+      return state.isAndroid;
+    },
+    get isIOS() {
+      return state.isIOS;
+    },
+    _state: state,
+  };
+});
+
 jest.mock('../src/services/StorageService', () => ({
   __esModule: true,
   default: {
@@ -33,6 +50,10 @@ jest.mock('../src/services/PlaudService', () => ({
   default: {
     transcribe: jest.fn().mockResolvedValue({ success: false, error: 'mock' }),
   },
+}));
+
+jest.mock('../src/services/GoogleTasksSyncService', () => ({
+  __esModule: true,
   GoogleTasksSyncService: {
     syncSortedItemsToGoogle: jest.fn().mockResolvedValue({
       createdTasks: 0,
@@ -73,7 +94,6 @@ jest.mock('../src/services/LoggerService', () => ({
 }));
 
 jest.mock('../src/components/brain-dump', () => {
-  const React = require('react');
   const { Text, View, Pressable } = require('react-native');
 
   return {

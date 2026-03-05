@@ -1,7 +1,6 @@
-import { Platform } from 'react-native';
 import { config } from '../config';
 import { LoggerService } from './LoggerService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 /**
  * TranscriptionService

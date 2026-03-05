@@ -8,8 +8,15 @@ jest.mock('../src/services/StorageService', () => ({
     },
   },
 }));
+jest.mock('../src/services/LoggerService', () => ({
+  __esModule: true,
+  LoggerService: {
+    warn: jest.fn(),
+  },
+}));
 
 import StorageService from '../src/services/StorageService';
+import { LoggerService } from '../src/services/LoggerService';
 import UXMetricsService from '../src/services/UXMetricsService';
 
 describe('UXMetricsService', () => {
@@ -50,15 +57,17 @@ describe('UXMetricsService', () => {
   });
 
   it('swallows errors and logs warning when tracking fails', async () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     (StorageService.getJSON as jest.Mock).mockRejectedValue(new Error('fail'));
 
     await UXMetricsService.track('broken_event');
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      'UXMetricsService.track failed:',
-      expect.any(Error),
+    expect(LoggerService.warn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        service: 'UXMetricsService',
+        operation: 'track',
+        message: 'UXMetricsService.track failed',
+        error: expect.any(Error),
+      }),
     );
-    warnSpy.mockRestore();
   });
 });

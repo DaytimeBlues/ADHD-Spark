@@ -218,9 +218,11 @@ class ChatService {
         if (attempt < maxRetries) {
           // Exponential backoff: 1s, 2s, 4s
           const delay = Math.min(1000 * Math.pow(2, attempt), 8000);
-          console.log(
-            `Chat retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`,
-          );
+          LoggerService.info({
+            service: 'ChatService',
+            operation: 'callWithRetry',
+            message: `Chat retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`,
+          });
           await sleep(delay);
         }
       }
@@ -274,9 +276,12 @@ class ChatService {
     // server-side proxy (e.g. /api/chat?provider=kimi) to avoid key exposure.
     // See implementation_plan.md S1/S2 for the recommended migration path.
     if (__DEV__) {
-      console.warn(
-        'ChatService: kimi-direct sends API key from client. Use a server proxy in production.',
-      );
+      LoggerService.warn({
+        service: 'ChatService',
+        operation: 'callKimiDirect',
+        message:
+          'kimi-direct sends API key from client. Use a server proxy in production.',
+      });
     }
 
     const timeoutMs = config.aiTimeout;

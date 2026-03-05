@@ -20,13 +20,12 @@ import {
   StyleSheet,
   Animated,
   Easing,
-  Platform,
   ViewStyle,
   ScrollView,
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 import { surfaceColors, textColors } from '../../theme/cosmicTokens';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb, isIOS } from '../../utils/PlatformUtils';
 
 // ============================================================================
 // TYPES

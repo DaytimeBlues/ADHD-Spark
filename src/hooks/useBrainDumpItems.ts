@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { LayoutAnimation, Platform, AccessibilityInfo } from 'react-native';
+import { LayoutAnimation, AccessibilityInfo } from 'react-native';
+import { isWeb } from '../utils/PlatformUtils';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import { LoggerService } from '../services/LoggerService';
@@ -60,7 +61,7 @@ export const useBrainDumpItems = ({
         const normalized = storedItems.filter((item) => {
           return Boolean(item?.id && item?.text && item?.createdAt);
         });
-        if (Platform.OS !== 'web') {
+        if (!isWeb) {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
         setItems(normalized);
@@ -125,7 +126,7 @@ export const useBrainDumpItems = ({
 
   const addItem = useCallback(
     (text: string, source: 'text' | 'audio' = 'text', audioPath?: string) => {
-      if (Platform.OS !== 'web') {
+      if (!isWeb) {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       }
       const newItem: DumpItem = {
@@ -149,14 +150,14 @@ export const useBrainDumpItems = ({
   );
 
   const deleteItem = useCallback((id: string) => {
-    if (Platform.OS !== 'web') {
+    if (!isWeb) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   }, []);
 
   const clearAll = useCallback(() => {
-    if (Platform.OS !== 'web') {
+    if (!isWeb) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
     setItems([]);

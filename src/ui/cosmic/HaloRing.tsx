@@ -26,7 +26,7 @@ import Animated, {
 import { useTheme } from '../../theme/useTheme';
 import useReducedMotion from '../../hooks/useReducedMotion';
 import { HaloMode, GlowLevel } from './types';
-import { isWeb, isAndroid, isIOS } from '../../utils/PlatformUtils';
+import { isWeb } from '../../utils/PlatformUtils';
 
 // ============================================================================
 // TYPE DEFINITIONS

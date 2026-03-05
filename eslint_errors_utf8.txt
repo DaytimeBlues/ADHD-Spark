@@ -1,7 +1,0 @@
-﻿
-C:\Users\Steve\OneDrive\Desktop\Github Repos\ADHD-CADDI-V1\src\screens\DiagnosticsScreen.tsx
-  22:17  error  'isAndroid' is defined but never used  @typescript-eslint/no-unused-vars
-  22:28  error  'isIOS' is defined but never used      @typescript-eslint/no-unused-vars
-
-Γ£û 2 problems (2 errors, 0 warnings)
-

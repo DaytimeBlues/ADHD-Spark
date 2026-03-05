@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
-import { LayoutAnimation, Platform } from 'react-native';
+import { LayoutAnimation } from 'react-native';
+import { isWeb } from '../utils/PlatformUtils';
 import RecordingService from '../services/RecordingService';
 
 import PlaudService from '../services/PlaudService';
@@ -79,7 +80,7 @@ export const useBrainDumpRecording = ({
           UXMetricsService.track('brain_dump_recovery_after_error');
           previousErrorRef.current = false;
         }
-        if (Platform.OS !== 'web') {
+        if (!isWeb) {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         }
 

@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Tokens } from '../theme/tokens';
 import HapticsService from '../services/HapticsService';
 import { useTheme } from '../theme/useTheme';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 export type ModeCardMode = {
   name: string;

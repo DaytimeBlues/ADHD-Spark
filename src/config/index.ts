@@ -48,10 +48,17 @@ const getConfig = (): Config => {
   // Log warning if direct AI provider is used in production
   const warnDirectProvider = (provider: string) => {
     if (config.environment === 'production') {
-      console.warn(
-        `[SECURITY WARNING] Using '${provider}' AI provider in production exposes API keys in the client bundle. ` +
-          "Consider using 'vercel' provider with a server-side proxy instead.",
-      );
+      import('../services/LoggerService')
+        .then(({ LoggerService }) => {
+          LoggerService.warn({
+            service: 'config',
+            operation: 'warnDirectProvider',
+            message:
+              `[SECURITY WARNING] Using '${provider}' AI provider in production exposes API keys in the client bundle. ` +
+              "Consider using 'vercel' provider with a server-side proxy instead.",
+          });
+        })
+        .catch(() => {});
     }
   };
 

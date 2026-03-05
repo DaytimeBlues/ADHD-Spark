@@ -12,7 +12,7 @@ import { LinearButton } from '../components/ui/LinearButton';
 import useTimer from '../hooks/useTimer';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb, isAndroid } from '../utils/PlatformUtils';
 import {
   ChronoDigits,
   RuneButton,

@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import { LayoutAnimation, UIManager } from 'react-native';
 import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import { LoggerService } from '../services/LoggerService';
 import HapticsService from '../services/HapticsService';
 import { generateId } from '../utils/helpers';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isAndroid } from '../utils/PlatformUtils';
 import {
   MicroStep,
   advanceTaskProgress,

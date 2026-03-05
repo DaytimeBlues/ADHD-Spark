@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { View, ActivityIndicator, Platform, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -19,7 +19,7 @@ import HomeScreen from '../screens/HomeScreen';
 import IgniteScreen from '../screens/IgniteScreen';
 import BrainDumpScreen from '../screens/BrainDumpScreen';
 import ChatScreen from '../screens/ChatScreen';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 // Lazy loaded non-critical screens
 const FogCutterScreen = lazy(() => import('../screens/FogCutterScreen'));
@@ -119,9 +119,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       tabBar={isWeb ? renderWebTabBar : undefined}
-      sceneContainerStyle={
-        isWeb ? webSceneContainerStyle : undefined
-      }
+      sceneContainerStyle={isWeb ? webSceneContainerStyle : undefined}
       screenOptions={{
         tabBarActiveTintColor: isCosmic
           ? '#8B5CF6'

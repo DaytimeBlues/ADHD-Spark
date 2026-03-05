@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { NativeModules, Share, AccessibilityInfo } from 'react-native';
 import { OverlayEvent } from './useOverlayEvents';
+import { LoggerService } from '../services/LoggerService';
 
 interface UseShareActionProps {
   isOverlayEnabled: boolean;
@@ -49,7 +50,12 @@ export const useShareAction = ({
       addOverlayEvent('Diagnostics shared');
       AccessibilityInfo.announceForAccessibility('Overlay diagnostics shared');
     } catch (error) {
-      console.warn('Failed to export diagnostics:', error);
+      LoggerService.warn({
+        service: 'useShareAction',
+        operation: 'handleCopyDiagnostics',
+        message: 'Failed to export diagnostics',
+        error,
+      });
       addOverlayEvent('Diagnostics export failed');
       AccessibilityInfo.announceForAccessibility(
         'Overlay diagnostics export failed',

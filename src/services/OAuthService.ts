@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 import { Platform } from 'react-native';
 import { LoggerService } from './LoggerService';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isWeb } from '../utils/PlatformUtils';
 
 /**
  * OAuthService
@@ -213,10 +213,9 @@ class OAuthServiceClass {
 
   async initiateTodoistAuth(): Promise<{ success: boolean; error?: string }> {
     try {
-      const redirectUri =
-        isWeb
-          ? `${window.location.origin}/ADHD-CADDI/`
-          : 'com.adhdcaddi:/oauth2callback';
+      const redirectUri = isWeb
+        ? `${window.location.origin}/ADHD-CADDI/`
+        : 'com.adhdcaddi:/oauth2callback';
 
       const response = await fetch(`${API_BASE_URL}/api/todoist-oauth-init`, {
         method: 'POST',

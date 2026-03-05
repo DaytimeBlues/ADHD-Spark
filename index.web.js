@@ -2,6 +2,7 @@ import React from 'react';
 import { AppRegistry, Text, View, ScrollView } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
+import { LoggerService } from './src/services/LoggerService';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -14,8 +15,13 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // eslint-disable-next-line no-console
-    console.error('ErrorBoundary caught error:', error, errorInfo);
+    LoggerService.error({
+      service: 'index.web',
+      operation: 'componentDidCatch',
+      message: 'ErrorBoundary caught error',
+      error,
+      context: { errorInfo },
+    });
   }
 
   render() {

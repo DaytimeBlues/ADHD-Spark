@@ -3,6 +3,7 @@
  *
  * Type definitions and migration helpers for theme variants
  */
+import { LoggerService } from '../services/LoggerService';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -84,9 +85,11 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
   }
 
   // Unknown value, default to linear for safety
-  console.warn(
-    `[Theme] Unknown theme value "${value}", defaulting to "${DEFAULT_THEME_VARIANT}"`,
-  );
+  LoggerService.warn({
+    service: 'themeVariant',
+    operation: 'migrateThemeVariant',
+    message: `[Theme] Unknown theme value "${value}", defaulting to "${DEFAULT_THEME_VARIANT}"`,
+  });
   return DEFAULT_THEME_VARIANT;
 }
 
