@@ -16,7 +16,6 @@ import {
   Pressable,
   StyleSheet,
   ActivityIndicator,
-  Platform,
   ScrollView,
 } from 'react-native';
 import { BottomSheet } from '../../ui/cosmic/BottomSheet';
@@ -559,7 +558,7 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           <Text style={[styles.photoPickLabel, { color: C.violet }]}>
             SELECT PHOTO
           </Text>
-          {Platform.OS !== 'web' && (
+          {!isWeb && (
             <Text style={[styles.photoPickHint, { color: C.mutedText }]}>
               Camera/gallery coming in v2
             </Text>

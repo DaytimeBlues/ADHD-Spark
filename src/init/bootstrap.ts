@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import StorageService from '../services/StorageService';
 import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
 import WebMCPService from '../services/WebMCPService';
@@ -92,7 +91,7 @@ function checkGoogleConfig(): boolean {
     isWeb || config.googleWebClientId || config.googleIosClientId,
   );
 
-  if (!hasGoogleConfig && Platform.OS !== 'web') {
+  if (!hasGoogleConfig && !isWeb) {
     LoggerService.warn({
       service: 'bootstrap',
       operation: 'checkGoogleConfig',

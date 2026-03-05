@@ -1,5 +1,4 @@
 /// <reference lib="dom" />
-import { Platform } from 'react-native';
 import { LoggerService } from './LoggerService';
 import { isWeb } from '../utils/PlatformUtils';
 
@@ -113,7 +112,7 @@ class OAuthServiceClass {
 
   async initiateGoogleAuth(): Promise<{ success: boolean; error?: string }> {
     try {
-      if (Platform.OS !== 'web') {
+      if (!isWeb) {
         // Native: use Google Sign-In SDK
         return this.initiateGoogleAuthNative();
       }
@@ -262,7 +261,7 @@ class OAuthServiceClass {
     provider: 'google' | 'todoist',
   ): Promise<{ success: boolean; error?: string }> {
     return new Promise((resolve) => {
-      if (Platform.OS !== 'web') {
+      if (!isWeb) {
         // Native: use Linking or WebBrowser
         resolve({ success: false, error: 'Native OAuth not implemented' });
         return;

@@ -11,7 +11,6 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import { Tokens, THEME_METADATA } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
@@ -19,7 +18,7 @@ import { config } from '../config';
 import StorageService from '../services/StorageService';
 import { GoogleTasksSyncService } from '../services/PlaudService';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
-import { isWeb } from '../utils/PlatformUtils';
+import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
 
 interface DiagnosticEntry {
   label: string;
@@ -264,7 +263,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
     // Platform check
     entries.push({
       label: 'Platform',
-      value: Platform.OS,
+      value: isWeb ? 'web' : isAndroid ? 'android' : isIOS ? 'ios' : 'unknown',
       status: 'info',
     });
 

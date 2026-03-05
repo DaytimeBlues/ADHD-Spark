@@ -303,7 +303,7 @@ export const RuneButton = memo(function RuneButton({
 
   // Get focus ring style (web only)
   const getFocusStyle = useMemo((): ViewStyle => {
-    if (Platform.OS !== 'web' || !isKeyboardFocused) {
+    if (!isWeb || !isKeyboardFocused) {
       return {};
     }
 

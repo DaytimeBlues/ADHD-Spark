@@ -1,7 +1,7 @@
-import { Platform } from 'react-native';
 import StorageService from './StorageService';
 import { agentEventBus } from './AgentEventBus';
 import { LoggerService } from './LoggerService';
+import { isWeb } from '../utils/PlatformUtils';
 
 type ToolDefinition = {
   name: string;
@@ -52,7 +52,7 @@ class WebMCPService {
   }
 
   public init() {
-    if (this.isInitialized || Platform.OS !== 'web') {
+    if (this.isInitialized || !isWeb) {
       return;
     }
 
