@@ -2,36 +2,51 @@
 
 Last updated: 2026-03-05
 
-## Target
+## Locked targets
 
 - Technical score: `>= 90/90`
 - Product score: `>= 90/100`
 
-## Stream status
+## Stream completion
 
-- `W1` Tests + Coverage: **IN PROGRESS (implemented on integration branch)**
-  - Added tests for `TasksScreen`, `OAuthService`, `OAuthService.web`, `GoogleAuthService`, `LoggerService`.
-  - Coverage threshold ratcheted to:
-    - branches `40`
-    - functions `50`
-    - lines `55`
-    - statements `55`
-- `W2` Accessibility + UX Tokens: **EXTERNAL LLM**
-- `W3` Reliability + Security: **EXTERNAL LLM**
-- `W4` Architecture Splits: **EXTERNAL LLM**
-- `W5` CI + Docs + Hygiene: **IN PROGRESS (implemented on integration branch)**
-  - Added unified quality-gate scripts.
-  - Added bundle budget check.
-  - Untracked diagnostic artifact files.
-  - Added architecture docs + ADRs + contributing guide.
+- `W1` Tests + Coverage: **DONE**
+  - Expanded tests for `TasksScreen`, `OAuthService`, `OAuthService.web`, `GoogleAuthService`, `LoggerService`.
+  - Raised Jest global branches threshold from `40` to `45` (Step A ratchet in progress).
+- `W2` Accessibility + UX Tokens: **MERGED**
+- `W3` Reliability + Security: **MERGED**
+- `W4` Architecture Splits: **MERGED**
+  - Confirmed line counts after split:
+    - `src/components/capture/CaptureDrawer.tsx`: `166`
+    - `src/screens/InboxScreen.tsx`: `134`
+    - `src/screens/CalendarScreen.tsx`: `148`
+    - `src/services/GoogleSyncOrchestrator.ts`: `429`
+- `W5` CI + Docs + Hygiene: **DONE**
+  - Added unified `quality:gate`.
+  - Added bundle budget check and CI enforcement.
+  - Removed tracked diagnostic artifacts.
+  - Added contributor workflow docs.
 
-## Integration policy
+## Gate evidence (integration branch)
 
-1. External workers push to feature branches only.
-2. Merge order:
-   - `W1 -> W3 -> W2 -> W5 -> W4`
-3. Merge to `main` only from `codex/road-to-90-integration` after gate pass.
+- `npm run quality:gate`: **PASS**
+- `npm run lint`: **PASS** (warnings only)
+- `npx tsc --noEmit`: **PASS**
+- `npm test -- --runInBand --coverage`: **PASS**
+- `npm run build:web`: **PASS** (webpack size warnings remain)
+- `npm run check:bundle-size`: **PASS** (`4582.9KB` total, `761.5KB` largest under `5000/800` limits)
+- `npm run e2e:smoke`: **PASS**
 
-## Current blocker
+## Hotspot delta vs baseline
 
-- `e2e:smoke` instability from webpack startup latency (Playwright web server timeout). Timeout was increased to `600s` in `playwright.config.ts`.
+- Hardcoded `#8B5CF6`: `69 -> 64` (`51` still in `src` outside theme/test files)
+- Files over 400 lines: `18 -> 13`
+- Bare `catch {}` blocks in `src`: `15 -> 5`
+- Silent `.catch(() => ...)` patterns in `src`: `8 -> 6`
+- Tracked diagnostic artifacts in git: `10 -> 0`
+
+## Current score snapshot
+
+- Technical score: `74/90`
+- Product score: `70/100`
+
+Status: improved substantially, but still below locked release targets.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import TasksScreen from '../src/screens/TasksScreen';
 
 const mockNavigation = { goBack: jest.fn() };
@@ -7,12 +7,13 @@ const mockAddTask = jest.fn();
 const mockToggleTask = jest.fn();
 const mockDeleteTask = jest.fn();
 
-const mockTasks = [
+const createTasks = () => [
   {
     id: 'task-1',
     title: 'Active Task',
     priority: 'urgent' as const,
     completed: false,
+    dueDate: 'Tomorrow',
     source: 'manual' as const,
     createdAt: Date.now(),
     updatedAt: Date.now(),
@@ -28,8 +29,12 @@ const mockTasks = [
   },
 ];
 
+let currentTasks = createTasks();
+
 const mockState = {
-  tasks: mockTasks,
+  get tasks() {
+    return currentTasks;
+  },
   addTask: (...args: unknown[]) => mockAddTask(...args),
   toggleTask: (...args: unknown[]) => mockToggleTask(...args),
   deleteTask: (...args: unknown[]) => mockDeleteTask(...args),
@@ -52,7 +57,6 @@ jest.mock('../src/store/useTaskStore', () => ({
 }));
 
 jest.mock('../src/ui/cosmic', () => {
-  const React = require('react');
   const { View, TouchableOpacity, Text } = require('react-native');
 
   return {
@@ -92,11 +96,12 @@ jest.mock('../src/ui/cosmic', () => {
 });
 
 jest.mock('react-native-reanimated', () => {
-  const React = require('react');
+  const ReactLocal = require('react');
   const { View } = require('react-native');
-  const AnimatedView = React.forwardRef(
+  const AnimatedView = ReactLocal.forwardRef(
     (
       props: React.ComponentProps<typeof View> & { children: React.ReactNode },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref: React.Ref<any>,
     ) => <View ref={ref} {...props} />,
   );
@@ -129,9 +134,11 @@ jest.mock('react-native-reanimated', () => {
 describe('TasksScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
+    currentTasks = createTasks();
   });
 
-  it('adds a task from input', () => {
+  it('adds a task from trimmed input', () => {
     render(<TasksScreen />);
 
     fireEvent.changeText(
@@ -147,17 +154,72 @@ describe('TasksScreen', () => {
     });
   });
 
-  it('deletes task rows', () => {
+  it('does not add a task for blank input', () => {
     render(<TasksScreen />);
 
-    fireEvent.press(screen.getAllByText('✕')[0]);
+    fireEvent.changeText(
+      screen.getByPlaceholderText('New objective...'),
+      '   ',
+    );
+    fireEvent.press(screen.getByText('+'));
+
+    expect(mockAddTask).not.toHaveBeenCalled();
+  });
+
+  it('toggles completion and deletes tasks', () => {
+    render(<TasksScreen />);
+
+    fireEvent.press(screen.getByLabelText('Mark as complete'));
+    expect(mockToggleTask).toHaveBeenCalledWith('task-1');
+
+    fireEvent.press(screen.getAllByLabelText('Delete task')[0]);
     expect(mockDeleteTask).toHaveBeenCalledWith('task-1');
   });
 
-  it('navigates back from header action', () => {
+  it('navigates back from the header action', () => {
     render(<TasksScreen />);
 
-    fireEvent.press(screen.getByText('←'));
+    fireEvent.press(screen.getByLabelText('Go back'));
     expect(mockNavigation.goBack).toHaveBeenCalledTimes(1);
+  });
+
+  it('filters active/done tasks and shows empty state', () => {
+    currentTasks = [
+      {
+        id: 'task-2',
+        title: 'Completed Task',
+        priority: 'normal' as const,
+        completed: true,
+        source: 'manual' as const,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      },
+    ];
+
+    render(<TasksScreen />);
+
+    fireEvent.press(screen.getAllByText('ACTIVE').slice(-1)[0]);
+    expect(screen.getByText('Celestial Clear')).toBeTruthy();
+
+    fireEvent.press(screen.getAllByText('DONE').slice(-1)[0]);
+    expect(screen.getByText('Completed Task')).toBeTruthy();
+  });
+
+  it('shows due date details when present', () => {
+    render(<TasksScreen />);
+    expect(screen.getByText(/Tomorrow/)).toBeTruthy();
+  });
+
+  it('shows syncing state and resets after timer', () => {
+    jest.useFakeTimers();
+    render(<TasksScreen />);
+
+    fireEvent.press(screen.getByText('SYNC'));
+    expect(screen.getByText('SYNCING')).toBeTruthy();
+
+    act(() => {
+      jest.advanceTimersByTime(1500);
+    });
+    expect(screen.getByText('SYNC')).toBeTruthy();
   });
 });

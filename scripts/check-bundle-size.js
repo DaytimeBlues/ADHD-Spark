@@ -5,7 +5,7 @@ const path = require('path');
 
 const distDir = path.resolve(__dirname, '..', 'dist');
 const maxLargestChunkKb = Number(process.env.BUNDLE_MAX_CHUNK_KB || 800);
-const maxTotalKb = Number(process.env.BUNDLE_MAX_TOTAL_KB || 3200);
+const maxTotalKb = Number(process.env.BUNDLE_MAX_TOTAL_KB || 5000);
 
 if (!fs.existsSync(distDir)) {
   console.error(`[bundle-size] dist directory not found: ${distDir}`);

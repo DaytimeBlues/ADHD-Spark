@@ -7,7 +7,12 @@ const createGoogleSigninMock = () => ({
   getCurrentUser: jest.fn(),
 });
 
-const loadGoogleAuthService = (isWeb: boolean) => {
+type GoogleModuleMode = 'normal' | 'missing' | 'throw';
+
+const loadGoogleAuthService = (
+  isWeb: boolean,
+  googleModuleMode: GoogleModuleMode = 'normal',
+) => {
   jest.resetModules();
   const googleSigninMock = createGoogleSigninMock();
   const loggerWarn = jest.fn();
@@ -34,10 +39,21 @@ const loadGoogleAuthService = (isWeb: boolean) => {
     },
   }));
 
-  jest.doMock('@react-native-google-signin/google-signin', () => ({
-    __esModule: true,
-    GoogleSignin: googleSigninMock,
-  }));
+  if (googleModuleMode === 'throw') {
+    jest.doMock('@react-native-google-signin/google-signin', () => {
+      throw new Error('native module unavailable');
+    });
+  } else if (googleModuleMode === 'missing') {
+    jest.doMock('@react-native-google-signin/google-signin', () => ({
+      __esModule: true,
+      GoogleSignin: null,
+    }));
+  } else {
+    jest.doMock('@react-native-google-signin/google-signin', () => ({
+      __esModule: true,
+      GoogleSignin: googleSigninMock,
+    }));
+  }
 
   const { GoogleAuthService } = require('../src/services/GoogleAuthService');
   return { GoogleAuthService, googleSigninMock, loggerWarn, loggerError };
@@ -56,6 +72,19 @@ describe('GoogleAuthService', () => {
     expect(await service.getCurrentUserScopes()).toBeNull();
     expect(await service.getCurrentUserEmail()).toBeNull();
     expect(await service.getAccessToken()).toBeNull();
+  });
+
+  it('handles missing GoogleSignin module gracefully', async () => {
+    const { GoogleAuthService, loggerWarn } = loadGoogleAuthService(
+      false,
+      'throw',
+    );
+    const service = new GoogleAuthService(['email']);
+
+    service.configureGoogleSignIn('web-id', 'ios-id');
+    expect(await service.signInInteractive()).toBe(false);
+    expect(await service.getAccessToken()).toBeNull();
+    expect(loggerWarn).toHaveBeenCalled();
   });
 
   it('configures and signs in interactively on native', async () => {
@@ -99,8 +128,67 @@ describe('GoogleAuthService', () => {
     expect(await service.getCurrentUserEmail()).toBe('person@example.com');
   });
 
-  it('returns null token when silent sign-in fails', async () => {
+  it('returns null when scopes/email are not valid strings', async () => {
     const { GoogleAuthService, googleSigninMock } =
+      loadGoogleAuthService(false);
+    const service = new GoogleAuthService(['email']);
+
+    googleSigninMock.getCurrentUser.mockResolvedValue({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      scopes: 'not-an-array' as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      user: { email: 42 as any },
+    });
+
+    expect(await service.getCurrentUserScopes()).toBeNull();
+    expect(await service.getCurrentUserEmail()).toBeNull();
+  });
+
+  it('logs and returns null when profile reads fail', async () => {
+    const { GoogleAuthService, googleSigninMock, loggerWarn } =
+      loadGoogleAuthService(false);
+    const service = new GoogleAuthService(['email']);
+
+    googleSigninMock.getCurrentUser.mockRejectedValue(
+      new Error('profile unavailable'),
+    );
+    expect(await service.getCurrentUserScopes()).toBeNull();
+    expect(await service.getCurrentUserEmail()).toBeNull();
+    expect(loggerWarn).toHaveBeenCalled();
+  });
+
+  it('returns false when GoogleSignin is missing during sign-in', async () => {
+    const { GoogleAuthService } = loadGoogleAuthService(false, 'missing');
+    const service = new GoogleAuthService(['email']);
+
+    expect(await service.signInInteractive()).toBe(false);
+  });
+
+  it('returns false when interactive sign-in throws', async () => {
+    const { GoogleAuthService, googleSigninMock, loggerError } =
+      loadGoogleAuthService(false);
+    const service = new GoogleAuthService(['email']);
+
+    googleSigninMock.hasPlayServices.mockResolvedValue(true);
+    googleSigninMock.signIn.mockRejectedValue(new Error('signin failed'));
+
+    expect(await service.signInInteractive()).toBe(false);
+    expect(loggerError).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns access token when silent auth succeeds', async () => {
+    const { GoogleAuthService, googleSigninMock } =
+      loadGoogleAuthService(false);
+    const service = new GoogleAuthService(['email']);
+
+    googleSigninMock.signInSilently.mockResolvedValue({});
+    googleSigninMock.getTokens.mockResolvedValue({ accessToken: 'token-123' });
+
+    expect(await service.getAccessToken()).toBe('token-123');
+  });
+
+  it('returns null token when silent sign-in fails', async () => {
+    const { GoogleAuthService, googleSigninMock, loggerWarn } =
       loadGoogleAuthService(false);
     const service = new GoogleAuthService(['email']);
 
@@ -110,5 +198,6 @@ describe('GoogleAuthService', () => {
 
     expect(await service.getAccessToken()).toBeNull();
     expect(googleSigninMock.signInSilently).toHaveBeenCalledTimes(1);
+    expect(loggerWarn).toHaveBeenCalledTimes(1);
   });
 });

@@ -18,8 +18,14 @@ describe('LoggerService', () => {
     jest.clearAllMocks();
   });
 
-  it('logs info entries with context in development', () => {
+  it('logs debug and info entries in development', () => {
     const { LoggerService, warnSpy } = loadLoggerService('development');
+
+    LoggerService.debug({
+      service: 'DebugService',
+      operation: 'debugOp',
+      message: 'debug message',
+    });
 
     LoggerService.info({
       service: 'TestService',
@@ -29,6 +35,10 @@ describe('LoggerService', () => {
     });
 
     expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[DEBUG] [DebugService.debugOp]'),
+      'debug message',
+    );
+    expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('[INFO] [TestService.testOp]'),
       'info message',
       'Context:',
@@ -36,10 +46,15 @@ describe('LoggerService', () => {
     );
   });
 
-  it('suppresses non-error logs in production', () => {
+  it('suppresses debug/info/warn in production', () => {
     const { LoggerService, warnSpy, errorSpy } =
       loadLoggerService('production');
 
+    LoggerService.debug({
+      service: 'DebugService',
+      operation: 'quiet',
+      message: 'no-op',
+    });
     LoggerService.info({
       service: 'TestService',
       operation: 'quiet',
@@ -76,8 +91,15 @@ describe('LoggerService', () => {
     expect(payload.error.message).toBe('token expired');
   });
 
-  it('routes fatal logs to console.error in development', () => {
+  it('logs non-Error payloads and fatal entries in development', () => {
     const { LoggerService, errorSpy } = loadLoggerService('development');
+
+    LoggerService.error({
+      service: 'StorageService',
+      operation: 'setItem',
+      error: { code: 'E_WRITE' },
+      message: 'Write failed',
+    });
 
     LoggerService.fatal({
       service: 'App',
@@ -86,8 +108,43 @@ describe('LoggerService', () => {
     });
 
     expect(errorSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[ERROR] [StorageService.setItem]'),
+      'Write failed',
+      'Error:',
+      { code: 'E_WRITE' },
+    );
+    expect(errorSpy).toHaveBeenCalledWith(
       expect.stringContaining('[FATAL] [App.bootstrap]'),
       'fatal failure',
     );
+  });
+
+  it('includes stack details when logging Error instances in development', () => {
+    const { LoggerService, errorSpy } = loadLoggerService('development');
+    const err = new Error('boom');
+    err.stack = 'custom-stack';
+
+    LoggerService.error({
+      service: 'StackService',
+      operation: 'explode',
+      message: 'with stack',
+      error: err,
+    });
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[ERROR] [StackService.explode]'),
+      'with stack',
+      'Error: boom',
+      'Stack: custom-stack',
+    );
+  });
+
+  it('falls back to console.warn for unknown levels', () => {
+    const { LoggerService, warnSpy } = loadLoggerService('development');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const method = (LoggerService as any).getConsoleMethod('mystery');
+
+    method('unknown');
+    expect(warnSpy).toHaveBeenCalledWith('unknown');
   });
 });
