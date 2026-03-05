@@ -37,7 +37,8 @@ describe('LoggerService', () => {
   });
 
   it('suppresses non-error logs in production', () => {
-    const { LoggerService, warnSpy, errorSpy } = loadLoggerService('production');
+    const { LoggerService, warnSpy, errorSpy } =
+      loadLoggerService('production');
 
     LoggerService.info({
       service: 'TestService',

@@ -131,7 +131,9 @@ const getStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
       fontWeight: '700',
-      color: isCosmic ? CosmicTokens.colors.semantic.primary : Tokens.colors.brand[500],
+      color: isCosmic
+        ? CosmicTokens.colors.semantic.primary
+        : Tokens.colors.brand[500],
       letterSpacing: 2,
     },
     messageList: {
@@ -161,13 +163,17 @@ const getStyles = (isCosmic: boolean) =>
       borderBottomRightRadius: 2,
     },
     assistantBubble: {
-      backgroundColor: isCosmic ? CosmicTokens.colors.cosmic.midnight : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic
+        ? CosmicTokens.colors.cosmic.midnight
+        : Tokens.colors.neutral.darker,
       borderBottomLeftRadius: 2,
     },
     messageText: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? CosmicTokens.colors.cosmic.starlight : Tokens.colors.text.primary,
+      color: isCosmic
+        ? CosmicTokens.colors.cosmic.starlight
+        : Tokens.colors.text.primary,
       lineHeight: 20,
     },
     emptyContainer: {
@@ -177,7 +183,9 @@ const getStyles = (isCosmic: boolean) =>
     emptyText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? CosmicTokens.colors.cosmic.mist : Tokens.colors.text.tertiary,
+      color: isCosmic
+        ? CosmicTokens.colors.cosmic.mist
+        : Tokens.colors.text.tertiary,
       opacity: 0.5,
     },
     inputArea: {
@@ -203,7 +211,9 @@ const getStyles = (isCosmic: boolean) =>
       borderRadius: 22,
       paddingHorizontal: Tokens.spacing[4],
       paddingVertical: Tokens.spacing[3],
-      color: isCosmic ? CosmicTokens.colors.cosmic.starlight : Tokens.colors.text.primary,
+      color: isCosmic
+        ? CosmicTokens.colors.cosmic.starlight
+        : Tokens.colors.text.primary,
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
     },

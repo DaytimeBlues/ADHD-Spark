@@ -59,7 +59,8 @@ describe('GoogleAuthService', () => {
   });
 
   it('configures and signs in interactively on native', async () => {
-    const { GoogleAuthService, googleSigninMock } = loadGoogleAuthService(false);
+    const { GoogleAuthService, googleSigninMock } =
+      loadGoogleAuthService(false);
     const service = new GoogleAuthService(['email', 'profile']);
 
     googleSigninMock.hasPlayServices.mockResolvedValue(true);
@@ -82,7 +83,8 @@ describe('GoogleAuthService', () => {
   });
 
   it('returns filtered current user scopes and email', async () => {
-    const { GoogleAuthService, googleSigninMock } = loadGoogleAuthService(false);
+    const { GoogleAuthService, googleSigninMock } =
+      loadGoogleAuthService(false);
     const service = new GoogleAuthService(['email']);
 
     googleSigninMock.getCurrentUser.mockResolvedValue({
@@ -98,7 +100,8 @@ describe('GoogleAuthService', () => {
   });
 
   it('returns null token when silent sign-in fails', async () => {
-    const { GoogleAuthService, googleSigninMock } = loadGoogleAuthService(false);
+    const { GoogleAuthService, googleSigninMock } =
+      loadGoogleAuthService(false);
     const service = new GoogleAuthService(['email']);
 
     googleSigninMock.signInSilently.mockRejectedValue(

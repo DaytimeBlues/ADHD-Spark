@@ -18,7 +18,10 @@ class GoogleTasksSyncServiceClass {
    * Configures Google Sign-in with the provided client IDs.
    */
   configureGoogleSignIn(webClientId?: string, iosClientId?: string): void {
-    GoogleSyncOrchestrator.getAuthService().configureGoogleSignIn(webClientId, iosClientId);
+    GoogleSyncOrchestrator.getAuthService().configureGoogleSignIn(
+      webClientId,
+      iosClientId,
+    );
   }
 
   /**
@@ -45,7 +48,9 @@ class GoogleTasksSyncServiceClass {
   /**
    * Synchronizes sorted items (tasks/events) to Google Tasks/Calendar.
    */
-  async syncSortedItemsToGoogle(items: SortedItem[]): Promise<GoogleExportResult> {
+  async syncSortedItemsToGoogle(
+    items: SortedItem[],
+  ): Promise<GoogleExportResult> {
     return GoogleSyncOrchestrator.syncSortedItemsToGoogle(items);
   }
 

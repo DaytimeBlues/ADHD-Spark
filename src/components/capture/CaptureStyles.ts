@@ -8,6 +8,7 @@ const C = {
   starlight: '#EEF2FF',
   mist: '#B9C2D9',
   mutedText: 'rgba(238,242,255,0.56)',
+  border: 'rgba(185, 194, 217, 0.3)',
   activeModeTab: 'rgba(139, 92, 246, 0.15)',
 } as const;
 

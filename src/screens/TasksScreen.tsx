@@ -336,7 +336,9 @@ const TaskItem = memo(function TaskItem({
         <TouchableOpacity
           onPress={handleToggle}
           activeOpacity={0.7}
-          accessibilityLabel={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
+          accessibilityLabel={
+            task.completed ? 'Mark as incomplete' : 'Mark as complete'
+          }
           accessibilityRole="checkbox"
           accessibilityState={{ checked: task.completed }}
           accessibilityHint={`Toggle completion status for ${task.title}`}

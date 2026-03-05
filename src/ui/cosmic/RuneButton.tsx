@@ -256,7 +256,10 @@ export const RuneButton = memo(function RuneButton({
       return {};
     }
 
-    const glowColor = variant === 'danger' ? CosmicTokens.colors.semantic.error : CosmicTokens.colors.semantic.primary;
+    const glowColor =
+      variant === 'danger'
+        ? CosmicTokens.colors.semantic.error
+        : CosmicTokens.colors.semantic.primary;
 
     switch (glowLevel) {
       case 'soft':

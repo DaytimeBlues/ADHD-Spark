@@ -14,7 +14,11 @@ import {
   Platform,
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
-import { surfaceColors, webBoxShadows, CosmicTokens } from '../../theme/cosmicTokens';
+import {
+  surfaceColors,
+  webBoxShadows,
+  CosmicTokens,
+} from '../../theme/cosmicTokens';
 import { isWeb } from '../../utils/PlatformUtils';
 import {
   GlowLevel,
