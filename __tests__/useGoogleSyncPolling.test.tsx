@@ -1,7 +1,22 @@
 import { renderHook } from '@testing-library/react-native';
-import { AppState, Platform } from 'react-native';
+import { AppState } from 'react-native';
 import { useGoogleSyncPolling } from '../src/hooks/useGoogleSyncPolling';
 import { GoogleTasksSyncService } from '../src/services/GoogleTasksSyncService';
+
+// Control `isWeb` per test — the hook imports it as a module-scope constant,
+// so we must mock the module, not Platform.OS.
+let mockIsWeb = false;
+jest.mock('../src/utils/PlatformUtils', () => ({
+  get isWeb() {
+    return mockIsWeb;
+  },
+  get isAndroid() {
+    return !mockIsWeb;
+  },
+  get isIOS() {
+    return false;
+  },
+}));
 
 jest.mock('../src/services/GoogleTasksSyncService', () => ({
   GoogleTasksSyncService: {
@@ -13,13 +28,11 @@ jest.mock('../src/services/GoogleTasksSyncService', () => ({
 describe('useGoogleSyncPolling', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockIsWeb = false;
   });
 
   it('starts polling when app is active and stops on inactive + cleanup', () => {
-    Object.defineProperty(Platform, 'OS', {
-      configurable: true,
-      get: () => 'android',
-    });
+    mockIsWeb = false;
 
     Object.defineProperty(AppState, 'currentState', {
       configurable: true,
@@ -61,9 +74,11 @@ describe('useGoogleSyncPolling', () => {
   });
 
   it('is a no-op on web', () => {
-    Object.defineProperty(Platform, 'OS', {
+    mockIsWeb = true;
+
+    Object.defineProperty(AppState, 'currentState', {
       configurable: true,
-      get: () => 'web',
+      get: () => 'active',
     });
 
     const remove = jest.fn();

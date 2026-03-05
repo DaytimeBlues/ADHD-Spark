@@ -1,6 +1,8 @@
 module.exports = {
   preset: 'react-native',
   testEnvironment: 'node',
+  detectOpenHandles: true,
+  forceExit: true,
   testMatch: ['**/__tests__/**/*.(test|spec).{ts,tsx,js,jsx}'],
   testPathIgnorePatterns: [
     '/node_modules/',

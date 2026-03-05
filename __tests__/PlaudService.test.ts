@@ -8,6 +8,21 @@ import PlaudService, {
 // @ts-ignore
 global.fetch = jest.fn();
 
+// Control `isWeb` per test — services import this as a module-scope constant,
+// so we must mock the module, not Platform.OS.
+let mockIsWeb = false;
+jest.mock('../src/utils/PlatformUtils', () => ({
+  get isWeb() {
+    return mockIsWeb;
+  },
+  get isAndroid() {
+    return !mockIsWeb;
+  },
+  get isIOS() {
+    return false;
+  },
+}));
+
 // Mock Platform more deeply
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'ios', // Default
@@ -38,6 +53,7 @@ jest.mock('@react-native-google-signin/google-signin', () => ({
 describe('PlaudService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockIsWeb = false;
     PlaudService.setApiUrl('https://test-api.vercel.app');
     (fetch as jest.Mock).mockReset();
     (AsyncStorage.getItem as jest.Mock).mockReset();
@@ -48,11 +64,8 @@ describe('PlaudService', () => {
 
   describe('transcribe', () => {
     it('should handle successful transcription on Web', async () => {
-      // Mock web platform
-      // @ts-ignore
-      Platform.OS = 'web';
-      // @ts-ignore
-      Platform.select.mockImplementation((dict) => dict.web || dict.default);
+      // Mock web platform via PlatformUtils (isWeb is a module-scope constant)
+      mockIsWeb = true;
 
       // Create a mock Blob that looks like a real one for FormData
       const mockBlob = {
@@ -81,11 +94,8 @@ describe('PlaudService', () => {
     });
 
     it('should handle successful transcription on Native', async () => {
-      // Mock native platform
-      // @ts-ignore
-      Platform.OS = 'ios';
-      // @ts-ignore
-      Platform.select.mockImplementation((dict) => dict.ios || dict.default);
+      // Mock native platform (mockIsWeb already false from beforeEach)
+      mockIsWeb = false;
 
       (fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
@@ -102,8 +112,7 @@ describe('PlaudService', () => {
     });
 
     it('should handle API error responses', async () => {
-      // @ts-ignore
-      Platform.OS = 'ios';
+      mockIsWeb = false;
 
       (fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
@@ -118,8 +127,7 @@ describe('PlaudService', () => {
     });
 
     it('should handle network exceptions', async () => {
-      // @ts-ignore
-      Platform.OS = 'ios';
+      mockIsWeb = false;
       (fetch as jest.Mock).mockRejectedValueOnce(new Error('Network Fail'));
 
       const result = await PlaudService.transcribe('file://test.m4a');
