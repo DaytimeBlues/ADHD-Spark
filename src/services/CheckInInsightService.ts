@@ -81,7 +81,13 @@ const CheckInInsightService = {
       let payload: unknown;
       try {
         payload = await response.json();
-      } catch {
+      } catch (err) {
+        LoggerService.warn({
+          service: 'CheckInInsightService',
+          operation: 'parseResponse',
+          error: err,
+          context: { responseStatus: response.status },
+        });
         return null;
       }
 

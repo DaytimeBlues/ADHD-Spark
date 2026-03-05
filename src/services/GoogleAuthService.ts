@@ -29,7 +29,13 @@ const getGoogleSignin = (): GoogleSigninLike | null => {
         GoogleSignin?: GoogleSigninLike;
       };
     return googleModule.GoogleSignin || null;
-  } catch {
+  } catch (err) {
+    LoggerService.warn({
+      service: 'GoogleAuthService',
+      operation: 'getGoogleSignin',
+      error: err,
+      message: 'GoogleSignin module not available',
+    });
     return null;
   }
 };
@@ -80,7 +86,13 @@ export class GoogleAuthService {
             (scope): scope is string => typeof scope === 'string',
           )
         : null;
-    } catch {
+    } catch (err) {
+      LoggerService.warn({
+        service: 'GoogleAuthService',
+        operation: 'getCurrentUserScopes',
+        error: err,
+        message: 'Failed to get current user scopes',
+      });
       return null;
     }
   }
@@ -95,7 +107,13 @@ export class GoogleAuthService {
       const googleSignin = getGoogleSignin();
       const user = await googleSignin?.getCurrentUser?.();
       return typeof user?.user?.email === 'string' ? user.user.email : null;
-    } catch {
+    } catch (err) {
+      LoggerService.warn({
+        service: 'GoogleAuthService',
+        operation: 'getCurrentUserEmail',
+        error: err,
+        message: 'Failed to get current user email',
+      });
       return null;
     }
   }
@@ -143,7 +161,13 @@ export class GoogleAuthService {
       await googleSignin.signInSilently();
       const tokens = await googleSignin.getTokens();
       return tokens.accessToken;
-    } catch {
+    } catch (err) {
+      LoggerService.warn({
+        service: 'GoogleAuthService',
+        operation: 'getAccessToken',
+        error: err,
+        message: 'Failed to get access token',
+      });
       return null;
     }
   }

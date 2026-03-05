@@ -6,7 +6,7 @@
  * All | Unreviewed | Promoted | Discarded
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -15,257 +15,20 @@ import {
   Pressable,
   SafeAreaView,
   Platform,
-  Animated,
-  Easing,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import CaptureService, {
+import type {
   CaptureItem,
-  CaptureStatus,
 } from '../services/CaptureService';
-import { LoggerService } from '../services/LoggerService';
 import { CosmicBackground } from '../ui/cosmic';
-
-// ============================================================================
-// TYPES
-// ============================================================================
-
-type FilterTab = 'all' | CaptureStatus;
-
-const FILTER_TABS: { key: FilterTab; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'unreviewed', label: 'Unreviewed' },
-  { key: 'promoted', label: 'Promoted' },
-  { key: 'discarded', label: 'Discarded' },
-];
-
-const SOURCE_LABELS: Record<string, string> = {
-  voice: '🎙 Voice',
-  text: '✏️ Text',
-  photo: '📷 Photo',
-  paste: '📋 Paste',
-  meeting: '📝 Meeting',
-};
-
-// ============================================================================
-// SUB-COMPONENTS
-// ============================================================================
-
-function CaptureSkeleton({ isCosmic }: { isCosmic: boolean }) {
-  const opacity = React.useRef(new Animated.Value(0.3)).current;
-
-  React.useEffect(() => {
-    const anim = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, {
-          toValue: 0.7,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0.3,
-          duration: 800,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]),
-    );
-    anim.start();
-    return () => anim.stop();
-  }, [opacity]);
-
-  const bgStyle = isCosmic ? styles.skeletonBgCosmic : styles.skeletonBgLinear;
-  const blockStyle = isCosmic
-    ? styles.skeletonBlockCosmic
-    : styles.skeletonBlockLinear;
-
-  return (
-    <View style={[styles.row, bgStyle]}>
-      {/* Meta */}
-      <View style={styles.rowMeta}>
-        <Animated.View
-          style={[styles.skeletonBadge, blockStyle, { opacity }]}
-        />
-        <Animated.View style={[styles.skeletonTime, blockStyle, { opacity }]} />
-      </View>
-
-      {/* Content */}
-      <View style={styles.skeletonContent}>
-        <Animated.View
-          style={[styles.skeletonText, blockStyle, styles.w90, { opacity }]}
-        />
-        <Animated.View
-          style={[styles.skeletonText, blockStyle, styles.w60, { opacity }]}
-        />
-      </View>
-
-      {/* Actions */}
-      <View style={styles.actions}>
-        <Animated.View style={[styles.skeletonBtn, blockStyle, { opacity }]} />
-        <Animated.View style={[styles.skeletonBtn, blockStyle, { opacity }]} />
-      </View>
-    </View>
-  );
-}
-
-interface CaptureRowProps {
-  item: CaptureItem;
-  onPromoteTask: (id: string) => void;
-  onPromoteNote: (id: string) => void;
-  onDiscard: (id: string) => void;
-  isCosmic: boolean;
-}
-
-function CaptureRow({
-  item,
-  onPromoteTask,
-  onPromoteNote,
-  onDiscard,
-  isCosmic,
-}: CaptureRowProps): JSX.Element {
-  const isUnreviewed = item.status === 'unreviewed';
-
-  return (
-    <View
-      testID={`capture-row-${item.id}`}
-      style={[
-        styles.row,
-        isCosmic ? styles.rowCosmic : styles.rowLinear,
-        !isUnreviewed && styles.rowReviewed,
-      ]}
-    >
-      {/* Source badge + timestamp */}
-      <View style={styles.rowMeta}>
-        <Text
-          style={[styles.sourceBadge, isCosmic && styles.sourceBadgeCosmic]}
-        >
-          {SOURCE_LABELS[item.source] ?? item.source}
-        </Text>
-        <Text style={[styles.timestamp, isCosmic && styles.timestampCosmic]}>
-          {formatRelativeTime(item.createdAt)}
-        </Text>
-        {item.status !== 'unreviewed' && (
-          <Text
-            style={[
-              styles.statusBadge,
-              getStatusBadgeStyle(item.status, isCosmic),
-            ]}
-          >
-            {item.status.toUpperCase()}
-          </Text>
-        )}
-      </View>
-
-      {/* Raw content */}
-      <Text
-        style={[styles.rawText, isCosmic && styles.rawTextCosmic]}
-        numberOfLines={3}
-      >
-        {item.transcript ?? item.raw}
-      </Text>
-
-      {/* Actions (only shown when unreviewed) */}
-      {isUnreviewed && (
-        <View style={styles.actions}>
-          <Pressable
-            testID={`promote-task-${item.id}`}
-            onPress={() => onPromoteTask(item.id)}
-            style={({ pressed }) => [
-              styles.actionBtn,
-              isCosmic
-                ? styles.actionBtnTaskCosmic
-                : styles.actionBtnTaskLinear,
-              pressed && styles.actionBtnPressed,
-            ]}
-            accessibilityLabel="Promote to task"
-          >
-            <Text
-              style={[
-                styles.actionBtnText,
-                isCosmic && styles.actionBtnTextCosmic,
-              ]}
-            >
-              → Task
-            </Text>
-          </Pressable>
-
-          <Pressable
-            testID={`promote-note-${item.id}`}
-            onPress={() => onPromoteNote(item.id)}
-            style={({ pressed }) => [
-              styles.actionBtn,
-              isCosmic
-                ? styles.actionBtnNoteCosmic
-                : styles.actionBtnNoteLinear,
-              pressed && styles.actionBtnPressed,
-            ]}
-            accessibilityLabel="Promote to note"
-          >
-            <Text
-              style={[
-                styles.actionBtnText,
-                isCosmic && styles.actionBtnTextCosmic,
-              ]}
-            >
-              → Note
-            </Text>
-          </Pressable>
-
-          <Pressable
-            testID={`discard-${item.id}`}
-            onPress={() => onDiscard(item.id)}
-            style={({ pressed }) => [
-              styles.actionBtn,
-              isCosmic
-                ? styles.actionBtnDiscardCosmic
-                : styles.actionBtnDiscardLinear,
-              pressed && styles.actionBtnPressed,
-            ]}
-            accessibilityLabel="Discard"
-          >
-            <Text style={[styles.actionBtnText, styles.actionBtnTextDiscard]}>
-              Discard
-            </Text>
-          </Pressable>
-        </View>
-      )}
-    </View>
-  );
-}
-
-// ============================================================================
-// HELPERS
-// ============================================================================
-
-function formatRelativeTime(ts: number): string {
-  const diff = Date.now() - ts;
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) {
-    return 'just now';
-  }
-  if (mins < 60) {
-    return `${mins}m ago`;
-  }
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) {
-    return `${hrs}h ago`;
-  }
-  return `${Math.floor(hrs / 24)}d ago`;
-}
-
-function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean): object {
-  if (status === 'promoted') {
-    return isCosmic
-      ? styles.statusBadgePromotedCosmic
-      : styles.statusBadgePromotedLinear;
-  }
-  return isCosmic
-    ? styles.statusBadgeDiscardedCosmic
-    : styles.statusBadgeDiscardedLinear;
-}
+import { useInbox, FilterTab } from '../hooks/useInbox';
+import {
+  FILTER_TABS,
+  CaptureSkeleton,
+  CaptureRow,
+} from '../components/inbox/InboxComponents';
 
 // ============================================================================
 // SCREEN
@@ -275,109 +38,15 @@ const InboxScreen = (): JSX.Element => {
   const navigation = useNavigation();
   const { isCosmic } = useTheme();
 
-  const [items, setItems] = useState<CaptureItem[]>([]);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
-  const [isLoading, setIsLoading] = useState(true);
 
-  const loadItems = useCallback(async (): Promise<void> => {
-    try {
-      const filter =
-        activeFilter === 'all'
-          ? undefined
-          : { status: activeFilter as CaptureStatus };
-      const result = await CaptureService.getAll(filter);
-      setItems(result);
-    } catch (error) {
-      LoggerService.error({
-        service: 'InboxScreen',
-        operation: 'loadItems',
-        message: 'Failed to load items',
-        error,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [activeFilter]);
-
-  useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-    CaptureService.getAll(
-      activeFilter === 'all'
-        ? undefined
-        : { status: activeFilter as CaptureStatus },
-    )
-      .then((result) => {
-        if (isMounted) {
-          setItems(result);
-          setIsLoading(false);
-        }
-      })
-      .catch((error) => {
-        LoggerService.error({
-          service: 'InboxScreen',
-          operation: 'load',
-          message: 'Failed to load items',
-          error,
-        });
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, [activeFilter]);
-
-  // Subscribe to badge changes to refresh list reactively
-  useEffect(() => {
-    const unsub = CaptureService.subscribe(() => {
-      loadItems();
-    });
-    return unsub;
-  }, [loadItems]);
-
-  const handlePromoteTask = useCallback(async (id: string): Promise<void> => {
-    try {
-      await CaptureService.promote(id, 'task');
-    } catch (error) {
-      LoggerService.error({
-        service: 'InboxScreen',
-        operation: 'handlePromoteTask',
-        message: 'Failed to promote task',
-        error,
-        context: { id },
-      });
-    }
-  }, []);
-
-  const handlePromoteNote = useCallback(async (id: string): Promise<void> => {
-    try {
-      await CaptureService.promote(id, 'note');
-    } catch (error) {
-      LoggerService.error({
-        service: 'InboxScreen',
-        operation: 'handlePromoteNote',
-        message: 'Failed to promote note',
-        error,
-        context: { id },
-      });
-    }
-  }, []);
-
-  const handleDiscard = useCallback(async (id: string): Promise<void> => {
-    try {
-      await CaptureService.discard(id);
-    } catch (error) {
-      LoggerService.error({
-        service: 'InboxScreen',
-        operation: 'handleDiscard',
-        message: 'Failed to discard item',
-        error,
-        context: { id },
-      });
-    }
-  }, []);
+  const {
+    items,
+    isLoading,
+    handlePromoteTask,
+    handlePromoteNote,
+    handleDiscard,
+  } = useInbox(activeFilter);
 
   const renderItem = useCallback(
     ({ item }: { item: CaptureItem }) => (
@@ -387,6 +56,7 @@ const InboxScreen = (): JSX.Element => {
         onPromoteNote={handlePromoteNote}
         onDiscard={handleDiscard}
         isCosmic={isCosmic}
+        styles={styles}
       />
     ),
     [handlePromoteTask, handlePromoteNote, handleDiscard, isCosmic],
@@ -433,7 +103,7 @@ const InboxScreen = (): JSX.Element => {
               style={[
                 styles.tab,
                 activeFilter === tab.key &&
-                  (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
+                (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
               ]}
               testID={`inbox-tab-${tab.key}`}
               accessibilityRole="tab"
@@ -444,9 +114,9 @@ const InboxScreen = (): JSX.Element => {
                   styles.tabText,
                   isCosmic && styles.tabTextCosmic,
                   activeFilter === tab.key &&
-                    (isCosmic
-                      ? styles.tabTextActiveCosmic
-                      : styles.tabTextActiveLinear),
+                  (isCosmic
+                    ? styles.tabTextActiveCosmic
+                    : styles.tabTextActiveLinear),
                 ]}
               >
                 {tab.label}
@@ -459,7 +129,7 @@ const InboxScreen = (): JSX.Element => {
         {isLoading ? (
           <View style={styles.listContent}>
             {[1, 2, 3].map((key) => (
-              <CaptureSkeleton key={key} isCosmic={isCosmic} />
+              <CaptureSkeleton key={key} isCosmic={isCosmic} styles={styles} />
             ))}
           </View>
         ) : items.length === 0 ? (

@@ -1,4 +1,5 @@
 import { config } from '../config';
+import LoggerService from './LoggerService';
 
 export type SortCategory =
   | 'task'
@@ -176,7 +177,13 @@ async function fetchWithRetry(
       let payload: unknown = null;
       try {
         payload = await response.json();
-      } catch {
+      } catch (err) {
+        LoggerService.error({
+          service: 'AISortService',
+          operation: 'parseResponse',
+          error: err,
+          context: { responseStatus: response.status, responseOk: response.ok },
+        });
         if (!response.ok) {
           throw new AiSortError(
             'AI_SERVER_ERROR',

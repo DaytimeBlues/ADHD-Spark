@@ -14,7 +14,7 @@ import {
   Platform,
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
-import { surfaceColors, webBoxShadows } from '../../theme/cosmicTokens';
+import { surfaceColors, webBoxShadows, CosmicTokens } from '../../theme/cosmicTokens';
 import { isWeb } from '../../utils/PlatformUtils';
 import {
   GlowLevel,
@@ -172,7 +172,7 @@ export const GlowCard = memo(function GlowCard({
       return {};
     }
 
-    const glowColor = '#8B5CF6';
+    const glowColor = CosmicTokens.colors.semantic.primary;
 
     switch (glow) {
       case 'soft':
@@ -258,7 +258,7 @@ export const GlowCard = memo(function GlowCard({
 
 const styles = StyleSheet.create({
   bgCosmic: {
-    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    backgroundColor: CosmicTokens.colors.semantic.primary + '1A',
   },
   bgLinear: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',

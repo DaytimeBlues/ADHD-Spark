@@ -65,7 +65,13 @@ const loadAudioModule = (): AudioModule | null => {
   try {
     const module = require('expo-av') as { Audio?: AudioModule };
     return module.Audio ?? null;
-  } catch {
+  } catch (err) {
+    LoggerService.debug({
+      service: 'RecordingService',
+      operation: 'loadAudioModule',
+      error: err,
+      message: 'expo-av not available',
+    });
     return null;
   }
 };
@@ -277,8 +283,13 @@ class RecordingServiceClass {
     if (this.recording) {
       try {
         await this.recording.stopAndUnloadAsync();
-      } catch {
-        // Ignore errors during cancel
+      } catch (err) {
+        LoggerService.debug({
+          service: 'RecordingService',
+          operation: 'cancelRecording',
+          error: err,
+          message: 'Error during recording cancel, ignoring',
+        });
       }
       this.recording = null;
       this.isRecording = false;

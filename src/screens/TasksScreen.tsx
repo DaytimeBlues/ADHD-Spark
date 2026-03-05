@@ -21,12 +21,13 @@ import Animated, {
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 import { useTaskStore } from '../store/useTaskStore';
 import type { Task, TaskPriority } from '../types/task';
+import { CosmicTokens } from '../theme/cosmicTokens';
 
-// Cosmic priority colors
+// Cosmic priority colors - using semantic tokens
 const PRIORITY_COLORS: Record<TaskPriority, string> = {
-  urgent: '#FB7185', // cometRose
-  important: '#F6C177', // starlightGold
-  normal: '#8B5CF6', // nebulaViolet
+  urgent: CosmicTokens.colors.semantic.error,
+  important: CosmicTokens.colors.semantic.warning,
+  normal: CosmicTokens.colors.semantic.primary,
 };
 
 const PRIORITY_LABELS: Record<TaskPriority, string> = {
@@ -120,6 +121,9 @@ export const TasksScreen = memo(function TasksScreen() {
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
+            accessibilityHint="Navigates to the previous screen"
           >
             <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
@@ -329,7 +333,14 @@ const TaskItem = memo(function TaskItem({
     >
       <View style={styles.taskContent}>
         {/* Checkbox */}
-        <TouchableOpacity onPress={handleToggle} activeOpacity={0.7}>
+        <TouchableOpacity
+          onPress={handleToggle}
+          activeOpacity={0.7}
+          accessibilityLabel={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: task.completed }}
+          accessibilityHint={`Toggle completion status for ${task.title}`}
+        >
           <Animated.View
             style={[
               styles.checkbox,
@@ -378,7 +389,13 @@ const TaskItem = memo(function TaskItem({
         </View>
 
         {/* Delete button */}
-        <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+        <TouchableOpacity
+          onPress={onDelete}
+          style={styles.deleteButton}
+          accessibilityLabel="Delete task"
+          accessibilityRole="button"
+          accessibilityHint={`Removes ${task.title} from your task list`}
+        >
           <Text style={styles.deleteIcon}>✕</Text>
         </TouchableOpacity>
       </View>
@@ -407,14 +424,14 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#8B5CF6', // nebulaViolet
+    color: CosmicTokens.colors.semantic.primary,
     letterSpacing: 3,
     marginTop: -2,
   },
   backButton: {
     marginRight: 16,
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -537,8 +554,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   deleteButton: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },

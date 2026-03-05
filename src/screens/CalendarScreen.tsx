@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -11,119 +11,39 @@ import {
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
-import { GoogleTasksSyncService } from '../services/PlaudService';
-import { isWeb } from '../utils/PlatformUtils';
+import { CosmicTokens } from '../theme/cosmicTokens';
+import { useCalendar } from '../hooks/useCalendar';
 
-type CalendarConnectionStatus =
-  | 'checking'
-  | 'connected'
-  | 'disconnected'
-  | 'unsupported';
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 const CalendarScreen = () => {
   const { isCosmic } = useTheme();
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [connectionStatus, setConnectionStatus] =
-    useState<CalendarConnectionStatus>('checking');
-  const [isConnecting, setIsConnecting] = useState(false);
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
-
-  const prevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1),
-    );
-  };
-
-  const nextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1),
-    );
-  };
-
-  const daysInMonth = getDaysInMonth(currentDate);
-  const firstDay = getFirstDayOfMonth(currentDate);
-  const daysArray = Array(daysInMonth)
-    .fill(0)
-    .map((_, i) => i + 1);
-
-  const refreshCalendarConnectionStatus = useCallback(async () => {
-    if (isWeb) {
-      setConnectionStatus('unsupported');
-      return;
-    }
-
-    const scopes = await GoogleTasksSyncService.getCurrentUserScopes();
-    const hasCalendarScope = Boolean(
-      scopes?.includes('https://www.googleapis.com/auth/calendar.events'),
-    );
-    setConnectionStatus(hasCalendarScope ? 'connected' : 'disconnected');
-  }, []);
-
-  useEffect(() => {
-    refreshCalendarConnectionStatus();
-  }, [refreshCalendarConnectionStatus]);
-
-  const handleConnectGoogleCalendar = useCallback(async () => {
-    if (
-      connectionStatus === 'unsupported' ||
-      connectionStatus === 'checking' ||
-      isConnecting
-    ) {
-      return;
-    }
-
-    setIsConnecting(true);
-    try {
-      await GoogleTasksSyncService.signInInteractive();
-    } finally {
-      await refreshCalendarConnectionStatus();
-      setIsConnecting(false);
-    }
-  }, [connectionStatus, isConnecting, refreshCalendarConnectionStatus]);
-
-  const statusTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
-    {
-      checking: 'STATUS: CHECKING...',
-      connected: 'STATUS: CONNECTED',
-      disconnected: 'STATUS: NOT CONNECTED',
-      unsupported: 'STATUS: NOT AVAILABLE ON WEB',
-    };
-
-  const buttonTextByConnectionStatus: Record<CalendarConnectionStatus, string> =
-    {
-      checking: 'CHECKING...',
-      connected: 'CONNECTED',
-      disconnected: 'CONNECT GOOGLE CALENDAR',
-      unsupported: 'WEB UNSUPPORTED',
-    };
-
-  const isConnectButtonDisabled =
-    connectionStatus === 'connected' ||
-    connectionStatus === 'unsupported' ||
-    connectionStatus === 'checking' ||
-    isConnecting;
+  const {
+    currentDate,
+    connectionStatus,
+    daysArray,
+    firstDay,
+    prevMonth,
+    nextMonth,
+    handleConnectGoogleCalendar,
+    statusTextByConnectionStatus,
+    buttonTextByConnectionStatus,
+    isConnectButtonDisabled,
+  } = useCalendar();
 
   return (
     <SafeAreaView
@@ -177,13 +97,13 @@ const CalendarScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                    styles.navButton,
-                    isCosmic && styles.navButtonCosmic,
-                    hovered && styles.navButtonHovered,
-                    hovered && isCosmic && styles.navButtonHoveredCosmic,
-                    pressed && styles.navButtonPressed,
-                    pressed && isCosmic && styles.navButtonPressedCosmic,
-                  ]}
+                      styles.navButton,
+                      isCosmic && styles.navButtonCosmic,
+                      hovered && styles.navButtonHovered,
+                      hovered && isCosmic && styles.navButtonHoveredCosmic,
+                      pressed && styles.navButtonPressed,
+                      pressed && isCosmic && styles.navButtonPressedCosmic,
+                    ]}
                 >
                   <Text
                     style={[
@@ -197,7 +117,7 @@ const CalendarScreen = () => {
                 <Text
                   style={[styles.monthText, isCosmic && styles.monthTextCosmic]}
                 >
-                  {months[currentDate.getMonth()].toUpperCase()}{' '}
+                  {MONTHS[currentDate.getMonth()].toUpperCase()}{' '}
                   {currentDate.getFullYear()}
                 </Text>
                 <Pressable
@@ -209,13 +129,13 @@ const CalendarScreen = () => {
                     pressed: boolean;
                     hovered?: boolean;
                   }) => [
-                    styles.navButton,
-                    isCosmic && styles.navButtonCosmic,
-                    hovered && styles.navButtonHovered,
-                    hovered && isCosmic && styles.navButtonHoveredCosmic,
-                    pressed && styles.navButtonPressed,
-                    pressed && isCosmic && styles.navButtonPressedCosmic,
-                  ]}
+                      styles.navButton,
+                      isCosmic && styles.navButtonCosmic,
+                      hovered && styles.navButtonHovered,
+                      hovered && isCosmic && styles.navButtonHoveredCosmic,
+                      pressed && styles.navButtonPressed,
+                      pressed && isCosmic && styles.navButtonPressedCosmic,
+                    ]}
                 >
                   <Text
                     style={[
@@ -229,7 +149,7 @@ const CalendarScreen = () => {
               </View>
 
               <View style={styles.weekdays}>
-                {days.map((day) => (
+                {DAYS.map((day) => (
                   <Text
                     key={day}
                     style={[
@@ -266,21 +186,21 @@ const CalendarScreen = () => {
                         pressed: boolean;
                         hovered?: boolean;
                       }) => [
-                        styles.dayCell,
-                        isCosmic && styles.dayCellCosmic,
-                        isToday && styles.todayCell,
-                        isToday && isCosmic && styles.todayCellCosmic,
-                        hovered && !isToday && styles.dayCellHovered,
-                        hovered &&
+                          styles.dayCell,
+                          isCosmic && styles.dayCellCosmic,
+                          isToday && styles.todayCell,
+                          isToday && isCosmic && styles.todayCellCosmic,
+                          hovered && !isToday && styles.dayCellHovered,
+                          hovered &&
                           !isToday &&
                           isCosmic &&
                           styles.dayCellHoveredCosmic,
-                        pressed && !isToday && styles.dayCellPressed,
-                        pressed &&
+                          pressed && !isToday && styles.dayCellPressed,
+                          pressed &&
                           !isToday &&
                           isCosmic &&
                           styles.dayCellPressedCosmic,
-                      ]}
+                        ]}
                     >
                       <Text
                         style={[
@@ -345,28 +265,28 @@ const CalendarScreen = () => {
                   pressed: boolean;
                   hovered?: boolean;
                 }) => [
-                  styles.googleCalendarButton,
-                  isCosmic && styles.googleCalendarButtonCosmic,
-                  hovered &&
+                    styles.googleCalendarButton,
+                    isCosmic && styles.googleCalendarButtonCosmic,
+                    hovered &&
                     !isConnectButtonDisabled &&
                     styles.googleCalendarButtonHovered,
-                  hovered &&
+                    hovered &&
                     !isConnectButtonDisabled &&
                     isCosmic &&
                     styles.googleCalendarButtonHoveredCosmic,
-                  pressed &&
+                    pressed &&
                     !isConnectButtonDisabled &&
                     styles.googleCalendarButtonPressed,
-                  pressed &&
+                    pressed &&
                     !isConnectButtonDisabled &&
                     isCosmic &&
                     styles.googleCalendarButtonPressedCosmic,
-                  isConnectButtonDisabled &&
+                    isConnectButtonDisabled &&
                     styles.googleCalendarButtonDisabled,
-                  isConnectButtonDisabled &&
+                    isConnectButtonDisabled &&
                     isCosmic &&
                     styles.googleCalendarButtonDisabledCosmic,
-                ]}
+                  ]}
               >
                 <Text
                   style={[
@@ -479,7 +399,7 @@ const styles = StyleSheet.create({
   navButtonText: {
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.h2,
-    lineHeight: Tokens.type.h2 * 1.2,
+    lineHeight: 1,
     fontWeight: '300',
     marginTop: -2,
   },
@@ -649,30 +569,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   titleCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
     fontFamily: 'Space Grotesk',
     ...Platform.select({
       web: {
-        textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+        textShadow: `0 0 20px ${CosmicTokens.colors.semantic.primary}4D`, // 30% opacity
       },
     }),
   },
   rationaleTitleCosmic: {
-    color: '#8B5CF6',
+    color: CosmicTokens.colors.semantic.primary,
   },
   rationaleTextCosmic: {
-    color: '#B9C2D9',
+    color: CosmicTokens.colors.cosmic.mist,
   },
   navButtonCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.5)',
-    borderColor: 'rgba(139, 92, 246, 0.25)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + '80',
+    borderColor: CosmicTokens.colors.semantic.primary + '40',
     borderRadius: 12,
     ...Platform.select({
       web: {
         backdropFilter: 'blur(16px) saturate(180%)',
         boxShadow: `
-          0 0 0 1px rgba(139, 92, 246, 0.15),
-          0 4px 20px rgba(7, 7, 18, 0.4),
+          0 0 0 1px ${CosmicTokens.colors.semantic.primary}26,
+          0 4px 20px ${CosmicTokens.colors.cosmic.obsidian}66,
           inset 0 1px 0 rgba(255, 255, 255, 0.06)
         `,
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -680,14 +600,14 @@ const styles = StyleSheet.create({
     }),
   },
   navButtonHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.7)',
-    borderColor: 'rgba(139, 92, 246, 0.5)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'B3',
+    borderColor: CosmicTokens.colors.semantic.primary + '80',
     ...Platform.select({
       web: {
         boxShadow: `
-          0 0 0 2px rgba(139, 92, 246, 0.3),
-          0 0 24px rgba(139, 92, 246, 0.2),
-          0 8px 28px rgba(7, 7, 18, 0.5),
+          0 0 0 2px ${CosmicTokens.colors.semantic.primary}4D,
+          0 0 24px ${CosmicTokens.colors.semantic.primary}33,
+          0 8px 28px ${CosmicTokens.colors.cosmic.obsidian}80,
           inset 0 1px 0 rgba(255, 255, 255, 0.08)
         `,
         transform: 'translateY(-1px)',
@@ -695,20 +615,20 @@ const styles = StyleSheet.create({
     }),
   },
   navButtonPressedCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.9)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'E6',
   },
   navButtonTextCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
   monthTextCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
   weekdayTextCosmic: {
-    color: '#8B5CF6',
+    color: CosmicTokens.colors.semantic.primary,
   },
   dayCellCosmic: {
-    borderColor: 'rgba(139, 92, 246, 0.15)',
-    backgroundColor: 'rgba(17, 26, 51, 0.2)',
+    borderColor: CosmicTokens.colors.semantic.primary + '26',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + '33',
     borderRadius: 8,
     ...Platform.select({
       web: {
@@ -718,14 +638,14 @@ const styles = StyleSheet.create({
     }),
   },
   dayCellHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.5)',
-    borderColor: 'rgba(139, 92, 246, 0.5)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + '80',
+    borderColor: CosmicTokens.colors.semantic.primary + '80',
     ...Platform.select({
       web: {
         boxShadow: `
-          0 0 0 2px rgba(139, 92, 246, 0.25),
-          0 0 20px rgba(139, 92, 246, 0.2),
-          0 8px 24px rgba(7, 7, 18, 0.4),
+          0 0 0 2px ${CosmicTokens.colors.semantic.primary}40,
+          0 0 20px ${CosmicTokens.colors.semantic.primary}33,
+          0 8px 24px ${CosmicTokens.colors.cosmic.obsidian}66,
           inset 0 1px 0 rgba(255, 255, 255, 0.05)
         `,
         transform: 'scale(1.05)',
@@ -734,40 +654,40 @@ const styles = StyleSheet.create({
     }),
   },
   dayCellPressedCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.8)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'CC',
   },
   dayTextCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
   todayCellCosmic: {
-    backgroundColor: '#F6C177',
-    borderColor: '#F6C177',
+    backgroundColor: CosmicTokens.colors.semantic.warning,
+    borderColor: CosmicTokens.colors.semantic.warning,
   },
   todayTextCosmic: {
-    color: '#0F172A',
+    color: CosmicTokens.colors.cosmic.obsidian,
   },
   todayDotCosmic: {
-    backgroundColor: '#F6C177',
+    backgroundColor: CosmicTokens.colors.semantic.warning,
   },
   legendTextCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
   googleCalendarTitleCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
   googleCalendarStatusCosmic: {
-    color: '#8B5CF6',
+    color: CosmicTokens.colors.semantic.primary,
   },
   googleCalendarButtonCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.5)',
-    borderColor: 'rgba(139, 92, 246, 0.25)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + '80',
+    borderColor: CosmicTokens.colors.semantic.primary + '40',
     borderRadius: 12,
     ...Platform.select({
       web: {
         backdropFilter: 'blur(16px) saturate(180%)',
         boxShadow: `
-          0 0 0 1px rgba(139, 92, 246, 0.15),
-          0 4px 20px rgba(7, 7, 18, 0.4),
+          0 0 0 1px ${CosmicTokens.colors.semantic.primary}26,
+          0 4px 20px ${CosmicTokens.colors.cosmic.obsidian}66,
           inset 0 1px 0 rgba(255, 255, 255, 0.06)
         `,
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -775,14 +695,14 @@ const styles = StyleSheet.create({
     }),
   },
   googleCalendarButtonHoveredCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.7)',
-    borderColor: 'rgba(139, 92, 246, 0.5)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'B3',
+    borderColor: CosmicTokens.colors.semantic.primary + '80',
     ...Platform.select({
       web: {
         boxShadow: `
-          0 0 0 2px rgba(139, 92, 246, 0.3),
-          0 0 24px rgba(139, 92, 246, 0.2),
-          0 8px 28px rgba(7, 7, 18, 0.5),
+          0 0 0 2px ${CosmicTokens.colors.semantic.primary}4D,
+          0 0 24px ${CosmicTokens.colors.semantic.primary}33,
+          0 8px 28px ${CosmicTokens.colors.cosmic.obsidian}80,
           inset 0 1px 0 rgba(255, 255, 255, 0.08)
         `,
         transform: 'translateY(-1px)',
@@ -790,14 +710,14 @@ const styles = StyleSheet.create({
     }),
   },
   googleCalendarButtonPressedCosmic: {
-    backgroundColor: 'rgba(17, 26, 51, 0.9)',
+    backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'E6',
   },
   googleCalendarButtonDisabledCosmic: {
-    backgroundColor: 'rgba(11, 16, 34, 0.4)',
-    borderColor: 'rgba(185, 194, 217, 0.08)',
+    backgroundColor: CosmicTokens.colors.cosmic.midnight + '66',
+    borderColor: CosmicTokens.colors.cosmic.mist + '14',
   },
   googleCalendarButtonTextCosmic: {
-    color: '#EEF2FF',
+    color: CosmicTokens.colors.cosmic.starlight,
   },
 });
 

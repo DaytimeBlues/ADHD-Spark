@@ -86,7 +86,15 @@ class TranscriptionServiceClass {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData = await response.json().catch((err) => {
+          LoggerService.warn({
+            service: 'TranscriptionService',
+            operation: 'parseErrorResponse',
+            error: err,
+            message: 'Failed to parse error response',
+          });
+          return {};
+        });
         return {
           success: false,
           error:
@@ -125,7 +133,13 @@ class TranscriptionServiceClass {
         method: 'POST',
       });
       return response.status !== 0;
-    } catch {
+    } catch (err) {
+      LoggerService.debug({
+        service: 'TranscriptionService',
+        operation: 'healthCheck',
+        error: err,
+        message: 'Health check failed',
+      });
       return false;
     }
   }

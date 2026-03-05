@@ -7,37 +7,10 @@ on:
     branches: [main]
 
 jobs:
-  quality:
-    name: Quality Gates
+  quality-gate:
+    name: Unified Quality Gate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run linter
-        run: npm run lint
-
-      - name: Run type check
-        run: npx tsc --noEmit
-
-      - name: Run unit tests
-        run: npm test -- --runInBand
-
-  e2e-web:
-    name: E2E Web Tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # BLOCKING: E2E must pass for release
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,11 +27,8 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Build web app
-        run: npm run build:web
-
-      - name: Run Playwright E2E tests
-        run: npm run e2e:smoke
+      - name: Run quality gate
+        run: npm run quality:gate
         env:
           CI: true
 

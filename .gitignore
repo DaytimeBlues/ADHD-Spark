@@ -39,6 +39,11 @@ lint-output*.txt
 *_err.txt
 *_output.txt
 webpack-*.log
+build_log*.txt
+lint_errors*.txt
+tsc_errors*.txt
+test_output*.txt
+playwright-junit.xml
 jest-results.json
 test-results.json
 android/build_*.log

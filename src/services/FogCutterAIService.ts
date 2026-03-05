@@ -77,7 +77,13 @@ const FogCutterAIService = {
       let payload: unknown;
       try {
         payload = await response.json();
-      } catch {
+      } catch (err) {
+        LoggerService.warn({
+          service: 'FogCutterAIService',
+          operation: 'parseResponse',
+          error: err,
+          context: { responseStatus: response.status },
+        });
         return DEFAULT_FALLBACK_STEPS;
       }
 

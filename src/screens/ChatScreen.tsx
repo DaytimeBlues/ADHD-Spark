@@ -12,6 +12,7 @@ import ChatService, { ChatMessage } from '../services/ChatService';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { isIOS } from '../utils/PlatformUtils';
+import { CosmicTokens } from '../theme/cosmicTokens';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -123,14 +124,14 @@ const getStyles = (isCosmic: boolean) =>
       alignItems: 'center',
       borderBottomWidth: 1,
       borderBottomColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.2)'
+        ? CosmicTokens.colors.semantic.primary + '33'
         : Tokens.colors.neutral.borderSubtle,
     },
     title: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.sm,
       fontWeight: '700',
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      color: isCosmic ? CosmicTokens.colors.semantic.primary : Tokens.colors.brand[500],
       letterSpacing: 2,
     },
     messageList: {
@@ -155,18 +156,18 @@ const getStyles = (isCosmic: boolean) =>
     },
     userBubble: {
       backgroundColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.2)'
+        ? CosmicTokens.colors.semantic.primary + '33'
         : Tokens.colors.brand[900],
       borderBottomRightRadius: 2,
     },
     assistantBubble: {
-      backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.neutral.darker,
+      backgroundColor: isCosmic ? CosmicTokens.colors.cosmic.midnight : Tokens.colors.neutral.darker,
       borderBottomLeftRadius: 2,
     },
     messageText: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isCosmic ? CosmicTokens.colors.cosmic.starlight : Tokens.colors.text.primary,
       lineHeight: 20,
     },
     emptyContainer: {
@@ -176,7 +177,7 @@ const getStyles = (isCosmic: boolean) =>
     emptyText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      color: isCosmic ? CosmicTokens.colors.cosmic.mist : Tokens.colors.text.tertiary,
       opacity: 0.5,
     },
     inputArea: {
@@ -184,11 +185,11 @@ const getStyles = (isCosmic: boolean) =>
       alignItems: 'flex-end',
       padding: Tokens.spacing[4],
       backgroundColor: isCosmic
-        ? 'rgba(7, 7, 18, 0.9)'
+        ? CosmicTokens.colors.cosmic.obsidian + 'E6'
         : Tokens.colors.neutral.darkest,
       borderTopWidth: 1,
       borderTopColor: isCosmic
-        ? 'rgba(139, 92, 246, 0.2)'
+        ? CosmicTokens.colors.semantic.primary + '33'
         : Tokens.colors.neutral.borderSubtle,
       gap: Tokens.spacing[3],
     },
@@ -197,12 +198,12 @@ const getStyles = (isCosmic: boolean) =>
       minHeight: 44,
       maxHeight: 120,
       backgroundColor: isCosmic
-        ? 'rgba(11, 16, 34, 0.8)'
+        ? CosmicTokens.colors.cosmic.midnight + 'CC'
         : Tokens.colors.neutral.darker,
       borderRadius: 22,
       paddingHorizontal: Tokens.spacing[4],
       paddingVertical: Tokens.spacing[3],
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isCosmic ? CosmicTokens.colors.cosmic.starlight : Tokens.colors.text.primary,
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
     },

@@ -21,6 +21,7 @@ import {
 import { useTheme } from '../../theme/useTheme';
 import { ButtonVariant, ButtonSize, GlowLevel } from './types';
 import { isWeb } from '../../utils/PlatformUtils';
+import { CosmicTokens } from '../../theme/cosmicTokens';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -177,11 +178,11 @@ export const RuneButton = memo(function RuneButton({
       case 'primary':
         return {
           container: {
-            backgroundColor: '#8B5CF6', // nebulaViolet
+            backgroundColor: CosmicTokens.colors.semantic.primary,
             borderWidth: 0,
           },
           text: {
-            color: '#070712', // obsidian for WCAG AA contrast on nebulaViolet
+            color: CosmicTokens.colors.cosmic.obsidian,
             fontWeight: '600',
           },
         };
@@ -191,10 +192,10 @@ export const RuneButton = memo(function RuneButton({
           container: {
             backgroundColor: 'transparent',
             borderWidth: 1,
-            borderColor: '#8B5CF6', // nebulaViolet
+            borderColor: CosmicTokens.colors.semantic.primary,
           },
           text: {
-            color: '#8B5CF6', // nebulaViolet
+            color: CosmicTokens.colors.semantic.primary,
             fontWeight: '500',
           },
         };
@@ -206,7 +207,7 @@ export const RuneButton = memo(function RuneButton({
             borderWidth: 0,
           },
           text: {
-            color: '#B9C2D9', // mist
+            color: CosmicTokens.colors.cosmic.mist,
             fontWeight: '400',
           },
         };
@@ -214,12 +215,12 @@ export const RuneButton = memo(function RuneButton({
       case 'danger':
         return {
           container: {
-            backgroundColor: 'rgba(251, 113, 133, 0.1)', // cometRose at 10%
+            backgroundColor: CosmicTokens.colors.semantic.error + '1A',
             borderWidth: 1,
-            borderColor: '#FB7185', // cometRose
+            borderColor: CosmicTokens.colors.semantic.error,
           },
           text: {
-            color: '#FB7185', // cometRose
+            color: CosmicTokens.colors.semantic.error,
             fontWeight: '500',
           },
         };
@@ -255,7 +256,7 @@ export const RuneButton = memo(function RuneButton({
       return {};
     }
 
-    const glowColor = variant === 'danger' ? '#FB7185' : '#8B5CF6';
+    const glowColor = variant === 'danger' ? CosmicTokens.colors.semantic.error : CosmicTokens.colors.semantic.primary;
 
     switch (glowLevel) {
       case 'soft':
@@ -309,7 +310,7 @@ export const RuneButton = memo(function RuneButton({
 
     return {
       outline: 'none',
-      boxShadow: '0 0 0 2px #2DD4BF, 0 0 0 4px #070712', // auroraTeal focus ring
+      boxShadow: `0 0 0 2px ${CosmicTokens.colors.semantic.success}, 0 0 0 4px ${CosmicTokens.colors.cosmic.obsidian}`,
     } as ViewStyle;
   }, [isKeyboardFocused]);
 
