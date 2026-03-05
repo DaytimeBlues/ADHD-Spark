@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -12,17 +6,12 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
-  Platform,
   Animated,
-  Easing,
-  AppState,
-  AppStateStatus,
   AccessibilityInfo,
   TouchableOpacity,
-  NativeModules,
-  Share,
 } from 'react-native';
-import OverlayService from '../services/OverlayService';
+import { useOverlayEvents } from '../hooks/useOverlayEvents';
+import { useShareAction } from '../hooks/useShareAction';
 import StorageService from '../services/StorageService';
 import { LoggerService } from '../services/LoggerService';
 import ActivationService, {
@@ -40,7 +29,7 @@ import { ReEntryPrompt } from '../components/ui/ReEntryPrompt';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
 import { getStyles } from './HomeScreen.styles';
-import { isWeb, isAndroid, isIOS } from '../utils/PlatformUtils';
+import { isAndroid } from '../utils/PlatformUtils';
 
 type NavigatorState = {
   routeNames?: string[];
@@ -54,19 +43,27 @@ type NavigationNode = {
   getParent?: () => NavigationNode | undefined;
 };
 
-type OverlayEvent = {
-  id: string;
-  timestamp: number;
-  label: string;
-};
+// Types moved to hooks or handled by consumption
 
 const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const { isCosmic } = useTheme();
   const [streak, setStreak] = useState(0);
-  const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
-  const [isOverlayPermissionRequesting, setIsOverlayPermissionRequesting] =
-    useState(false);
-  const [overlayEvents, setOverlayEvents] = useState<OverlayEvent[]>([]);
+
+  const {
+    isOverlayEnabled,
+    isOverlayPermissionRequesting,
+    overlayEvents,
+    addOverlayEvent,
+    toggleOverlay,
+  } = useOverlayEvents();
+
+  const { handleCopyDiagnostics } = useShareAction({
+    isOverlayEnabled,
+    isOverlayPermissionRequesting,
+    overlayEvents,
+    addOverlayEvent,
+  });
+
   const [activationSummary, setActivationSummary] =
     useState<ActivationSummary | null>(null);
   const [activationTrend, setActivationTrend] = useState<
@@ -103,66 +100,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     };
   }, [activationTrend]);
 
-  const addOverlayEvent = useCallback((label: string) => {
-    if (!__DEV__) {
-      return;
-    }
-    setOverlayEvents((prev) => {
-      const newEvent = {
-        id: Date.now().toString() + Math.random(),
-        timestamp: Date.now(),
-        label,
-      };
-      return [newEvent, ...prev].slice(0, 5);
-    });
-  }, []);
-
-  const handleCopyDiagnostics = useCallback(async () => {
-    if (!__DEV__) {
-      return;
-    }
-
-    const diagnostics = [
-      `overlay_enabled=${isOverlayEnabled ? 'yes' : 'no'}`,
-      `permission_requesting=${isOverlayPermissionRequesting ? 'yes' : 'no'}`,
-      ...overlayEvents.map((event) => {
-        return `${new Date(event.timestamp).toISOString()} ${event.label}`;
-      }),
-    ].join('\n');
-
-    try {
-      const clipboardModule = NativeModules.Clipboard as
-        | { setString?: (value: string) => void }
-        | undefined;
-
-      if (clipboardModule?.setString) {
-        clipboardModule.setString(diagnostics);
-        addOverlayEvent('Diagnostics copied');
-        AccessibilityInfo.announceForAccessibility(
-          'Overlay diagnostics copied to clipboard',
-        );
-        return;
-      }
-
-      await Share.share({
-        title: 'Overlay diagnostics',
-        message: diagnostics,
-      });
-      addOverlayEvent('Diagnostics shared');
-      AccessibilityInfo.announceForAccessibility('Overlay diagnostics shared');
-    } catch (error) {
-      console.warn('Failed to export diagnostics:', error);
-      addOverlayEvent('Diagnostics export failed');
-      AccessibilityInfo.announceForAccessibility(
-        'Overlay diagnostics export failed',
-      );
-    }
-  }, [
-    addOverlayEvent,
-    isOverlayEnabled,
-    isOverlayPermissionRequesting,
-    overlayEvents,
-  ]);
+  // Logic extracted to useOverlayEvents and useShareAction
 
   const cardWidth = '49%';
 
@@ -226,27 +164,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     prefersReducedMotion,
   );
 
-  const checkOverlayState = useCallback(async () => {
-    if (isAndroid) {
-      try {
-        const running = await OverlayService.isRunning();
-        setIsOverlayEnabled(running);
-      } catch (error) {
-        console.warn('Failed to check overlay state:', error);
-        setIsOverlayEnabled(false);
-      }
-    }
-  }, []);
-
-  const startOverlayWithLatestCount = useCallback(async () => {
-    const taskItems =
-      (await StorageService.getJSON<Array<{ id: string }>>(
-        StorageService.STORAGE_KEYS.brainDump,
-      )) || [];
-    OverlayService.updateCount(taskItems.length);
-    OverlayService.startOverlay();
-    setIsOverlayEnabled(true);
-  }, []);
+  // Logic extracted to useOverlayEvents
 
   const loadStreak = useCallback(async () => {
     try {
@@ -284,147 +202,9 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
   useEffect(() => {
     loadStreak();
-    checkOverlayState();
-  }, [loadStreak, checkOverlayState]);
+  }, [loadStreak]);
 
-  useEffect(() => {
-    if (Platform.OS !== 'android') {
-      return;
-    }
-
-    const appStateSubscription = AppState.addEventListener(
-      'change',
-      (nextState: AppStateStatus) => {
-        if (nextState === 'active') {
-          checkOverlayState();
-        }
-      },
-    );
-
-    return () => {
-      appStateSubscription.remove();
-    };
-  }, [checkOverlayState]);
-
-  useEffect(() => {
-    if (Platform.OS !== 'android') {
-      return;
-    }
-
-    const unsubscribePermissionRequested = OverlayService.addEventListener(
-      'overlay_permission_requested',
-      () => {
-        setIsOverlayPermissionRequesting(true);
-        addOverlayEvent('Permission requested');
-        AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request started',
-        );
-      },
-    );
-
-    const unsubscribePermissionResult = OverlayService.addEventListener(
-      'overlay_permission_result',
-      ({ granted }) => {
-        setIsOverlayPermissionRequesting(false);
-        addOverlayEvent(`Permission result: ${granted ? 'GRANTED' : 'DENIED'}`);
-        AccessibilityInfo.announceForAccessibility(
-          granted ? 'Overlay permission granted' : 'Overlay permission denied',
-        );
-      },
-    );
-
-    const unsubscribePermissionTimeout = OverlayService.addEventListener(
-      'overlay_permission_timeout',
-      () => {
-        setIsOverlayPermissionRequesting(false);
-        addOverlayEvent('Permission timeout');
-        AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request timed out',
-        );
-      },
-    );
-
-    const unsubscribePermissionError = OverlayService.addEventListener(
-      'overlay_permission_error',
-      () => {
-        setIsOverlayPermissionRequesting(false);
-        addOverlayEvent('Permission error');
-        AccessibilityInfo.announceForAccessibility(
-          'Overlay permission request failed',
-        );
-      },
-    );
-
-    const unsubscribeOverlayStarted = OverlayService.addEventListener(
-      'overlay_started',
-      () => {
-        setIsOverlayEnabled(true);
-      },
-    );
-
-    const unsubscribeOverlayStopped = OverlayService.addEventListener(
-      'overlay_stopped',
-      () => {
-        setIsOverlayEnabled(false);
-      },
-    );
-
-    return () => {
-      unsubscribePermissionRequested?.();
-      unsubscribePermissionResult?.();
-      unsubscribePermissionTimeout?.();
-      unsubscribePermissionError?.();
-      unsubscribeOverlayStarted?.();
-      unsubscribeOverlayStopped?.();
-    };
-  }, [addOverlayEvent]);
-
-  const toggleOverlay = useCallback(
-    async (value: boolean) => {
-      if (Platform.OS !== 'android') {
-        return;
-      }
-
-      try {
-        if (value) {
-          setIsOverlayPermissionRequesting(true);
-          const hasPermission = await OverlayService.canDrawOverlays();
-          if (hasPermission) {
-            setIsOverlayPermissionRequesting(false);
-            await startOverlayWithLatestCount();
-            return;
-          }
-
-          const granted = await OverlayService.requestOverlayPermission();
-          const hasPermissionAfterRequest =
-            granted || (await OverlayService.canDrawOverlays());
-
-          if (hasPermissionAfterRequest) {
-            setIsOverlayPermissionRequesting(false);
-            await startOverlayWithLatestCount();
-            return;
-          }
-
-          setIsOverlayPermissionRequesting(false);
-          setIsOverlayEnabled(false);
-          return;
-        }
-
-        OverlayService.stopOverlay();
-        setIsOverlayEnabled(false);
-      } catch (error) {
-        LoggerService.error({
-          service: 'HomeScreen',
-          operation: 'toggleOverlay',
-          message: 'Failed to toggle overlay',
-          error,
-        });
-        setIsOverlayPermissionRequesting(false);
-        setIsOverlayEnabled(false);
-      }
-    },
-    [startOverlayWithLatestCount],
-  );
+  // Logic extracted to useOverlayEvents and useShareAction
 
   const navigateByRouteName = useCallback(
     (routeName: string) => {
@@ -564,12 +344,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
                 {(reentryPromptLevel === 'gentle_restart' ||
                   reentryPromptLevel === 'fresh_restart') && (
-                    <ReEntryPrompt
-                      level={reentryPromptLevel}
-                      onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
-                      testID="reentry-prompt"
-                    />
-                  )}
+                  <ReEntryPrompt
+                    level={reentryPromptLevel}
+                    onPrimaryAction={() => navigateByRouteName(ROUTES.FOCUS)}
+                    testID="reentry-prompt"
+                  />
+                )}
               </GlowCard>
             )}
 
