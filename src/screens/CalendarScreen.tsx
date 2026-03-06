@@ -111,7 +111,13 @@ const CalendarScreen = () => {
               <Pressable
                 onPress={handleConnectGoogleCalendar}
                 disabled={isConnectButtonDisabled}
-                style={({ pressed, hovered }: any) => [
+                accessibilityLabel={
+                  buttonTextByConnectionStatus[connectionStatus]
+                }
+                accessibilityHint="Connect or disconnect your Google Calendar for syncing"
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isConnectButtonDisabled }}
+                style={({ pressed, hovered, focused }: any) => [
                   styles.googleCalendarButton,
                   isCosmic && styles.googleCalendarButtonCosmic,
                   hovered &&
@@ -133,7 +139,15 @@ const CalendarScreen = () => {
                   isConnectButtonDisabled &&
                     isCosmic &&
                     styles.googleCalendarButtonDisabledCosmic,
+                  focused &&
+                    !isConnectButtonDisabled &&
+                    styles.googleCalendarButtonFocused,
+                  focused &&
+                    !isConnectButtonDisabled &&
+                    isCosmic &&
+                    styles.googleCalendarButtonFocusedCosmic,
                 ]}
+                testID="google-calendar-connect-button"
               >
                 <Text
                   style={[

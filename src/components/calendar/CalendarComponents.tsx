@@ -66,14 +66,20 @@ export const CalendarHeader = ({
   <View style={styles.header}>
     <Pressable
       onPress={prevMonth}
-      style={({ pressed, hovered }: any) => [
+      accessibilityLabel="Go to previous month"
+      accessibilityHint="Navigates to the previous month"
+      accessibilityRole="button"
+      style={({ pressed, hovered, focused }: any) => [
         styles.navButton,
         isCosmic && styles.navButtonCosmic,
         hovered && styles.navButtonHovered,
         hovered && isCosmic && styles.navButtonHoveredCosmic,
         pressed && styles.navButtonPressed,
         pressed && isCosmic && styles.navButtonPressedCosmic,
+        focused && styles.navButtonFocused,
+        focused && isCosmic && styles.navButtonFocusedCosmic,
       ]}
+      testID="calendar-prev-month"
     >
       <Text
         style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}
@@ -86,14 +92,20 @@ export const CalendarHeader = ({
     </Text>
     <Pressable
       onPress={nextMonth}
-      style={({ pressed, hovered }: any) => [
+      accessibilityLabel="Go to next month"
+      accessibilityHint="Navigates to the next month"
+      accessibilityRole="button"
+      style={({ pressed, hovered, focused }: any) => [
         styles.navButton,
         isCosmic && styles.navButtonCosmic,
         hovered && styles.navButtonHovered,
         hovered && isCosmic && styles.navButtonHoveredCosmic,
         pressed && styles.navButtonPressed,
         pressed && isCosmic && styles.navButtonPressedCosmic,
+        focused && styles.navButtonFocused,
+        focused && isCosmic && styles.navButtonFocusedCosmic,
       ]}
+      testID="calendar-next-month"
     >
       <Text
         style={[styles.navButtonText, isCosmic && styles.navButtonTextCosmic]}
@@ -137,6 +149,7 @@ export const DaysGrid = ({
   styles: any;
 }) => {
   const today = new Date();
+  const monthName = MONTHS[currentDate.getMonth()];
   return (
     <View style={styles.daysGrid}>
       {Array(firstDay)
@@ -152,10 +165,19 @@ export const DaysGrid = ({
           day === today.getDate() &&
           currentDate.getMonth() === today.getMonth() &&
           currentDate.getFullYear() === today.getFullYear();
+        const dateLabel = `${monthName} ${day}, ${currentDate.getFullYear()}`;
         return (
           <Pressable
             key={day}
-            style={({ pressed, hovered }: any) => [
+            accessibilityLabel={`${dateLabel}${isToday ? ', today' : ''}`}
+            accessibilityRole="button"
+            accessibilityState={{
+              selected: false,
+              disabled: false,
+              checked: isToday,
+            }}
+            accessibilityHint="Tap to view or add tasks for this date"
+            style={({ pressed, hovered, focused }: any) => [
               styles.dayCell,
               isCosmic && styles.dayCellCosmic,
               isToday && styles.todayCell,
@@ -164,7 +186,10 @@ export const DaysGrid = ({
               hovered && !isToday && isCosmic && styles.dayCellHoveredCosmic,
               pressed && !isToday && styles.dayCellPressed,
               pressed && !isToday && isCosmic && styles.dayCellPressedCosmic,
+              focused && styles.dayCellFocused,
+              focused && isCosmic && styles.dayCellFocusedCosmic,
             ]}
+            testID={`calendar-day-${day}`}
           >
             <Text
               style={[

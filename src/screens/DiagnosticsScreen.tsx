@@ -1,10 +1,11 @@
-﻿import React from 'react';
+import React from 'react';
 import {
+  Platform,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { Tokens } from '../theme/tokens';
@@ -46,25 +47,36 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <Pressable
               onPress={() => navigation.goBack()}
-              style={styles.backButton}
+              style={(state: any) => [
+                styles.backButton,
+                state.focused && styles.backButtonFocused,
+              ]}
               accessibilityLabel="Go back"
+              accessibilityHint="Returns to previous screen"
               accessibilityRole="button"
             >
               <Text style={styles.backButtonText}>{'< BACK'}</Text>
-            </TouchableOpacity>
+            </Pressable>
 
             <Text style={styles.title}>DIAGNOSTICS</Text>
 
-            <TouchableOpacity
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <Pressable
               onPress={() => {
                 refreshDiagnostics().catch(() => undefined);
               }}
-              style={styles.refreshButton}
+              style={(state: any) => [
+                styles.refreshButton,
+                state.focused && styles.refreshButtonFocused,
+              ]}
               disabled={isRefreshing}
               accessibilityLabel="Refresh diagnostics"
+              accessibilityHint="Reloads the system status information"
               accessibilityRole="button"
+              accessibilityState={{ disabled: isRefreshing }}
             >
               <Text
                 style={[
@@ -74,7 +86,7 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
               >
                 {isRefreshing ? '...' : 'REFRESH'}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <ScrollView
@@ -130,6 +142,14 @@ const styles = StyleSheet.create({
     paddingVertical: Tokens.spacing[1],
     paddingHorizontal: Tokens.spacing[2],
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  backButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   backButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 12,
@@ -145,9 +165,21 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   refreshButton: {
+    minHeight: Tokens.layout.minTapTarget,
+    minWidth: Tokens.layout.minTapTarget,
     paddingVertical: Tokens.spacing[1],
     paddingHorizontal: Tokens.spacing[2],
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  refreshButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   refreshButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 16,

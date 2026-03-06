@@ -93,6 +93,14 @@ export const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
     backgroundColor: Tokens.colors.neutral.darkest,
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  navButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   navButtonText: {
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.h2,
@@ -151,6 +159,14 @@ export const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darkest,
     transform: [{ scale: Tokens.motion.scales.press }],
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayCellFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   dayText: {
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.secondary,
@@ -239,6 +255,14 @@ export const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
     backgroundColor: Tokens.colors.neutral.darkest,
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  googleCalendarButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   googleCalendarButtonDisabled: {
     backgroundColor: Tokens.colors.neutral.darkest,
     borderColor: Tokens.colors.neutral.borderSubtle,
@@ -277,6 +301,14 @@ export const styles = StyleSheet.create({
   navButtonPressedCosmic: {
     backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'E6',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  navButtonFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: CosmicTokens.colors.semantic.primary,
+    },
+  }) as any,
   navButtonTextCosmic: {
     color: CosmicTokens.colors.cosmic.starlight,
   },
@@ -298,6 +330,14 @@ export const styles = StyleSheet.create({
   dayCellPressedCosmic: {
     backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'CC',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayCellFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: CosmicTokens.colors.semantic.primary,
+    },
+  }) as any,
   dayTextCosmic: {
     color: CosmicTokens.colors.cosmic.starlight,
   },
@@ -332,6 +372,14 @@ export const styles = StyleSheet.create({
   googleCalendarButtonPressedCosmic: {
     backgroundColor: CosmicTokens.colors.cosmic.deepSpace + 'E6',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  googleCalendarButtonFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: CosmicTokens.colors.semantic.primary,
+    },
+  }) as any,
   googleCalendarButtonDisabledCosmic: {
     backgroundColor: CosmicTokens.colors.cosmic.midnight + '66',
     borderColor: CosmicTokens.colors.cosmic.mist + '14',
