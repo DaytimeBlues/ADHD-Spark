@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Animated, ViewStyle } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Animated,
+  ViewStyle,
+  DimensionValue,
+} from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
 interface ShimmerProps {
@@ -51,7 +57,7 @@ export const Shimmer: React.FC<ShimmerProps> = ({
       style={[
         styles.container,
         {
-          width: width as any,
+          width: width as DimensionValue,
           height,
           backgroundColor: isCosmic
             ? 'rgba(139, 92, 246, 0.1)'

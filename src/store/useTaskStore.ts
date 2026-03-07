@@ -3,6 +3,14 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { zustandStorage } from '../services/StorageService';
 import type { Task, TaskPriority, TaskSource } from '../types/task';
 
+// Google Tasks API response type
+interface GoogleTask {
+  id: string;
+  title: string;
+  notes?: string;
+  status: 'completed' | 'needsAction';
+}
+
 interface TaskState {
   tasks: Task[];
   _hasHydrated: boolean;
@@ -18,7 +26,7 @@ interface TaskState {
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
   updateTask: (id: string, patch: Partial<Task>) => void;
-  importFromGoogle: (googleTasks: any[]) => void;
+  importFromGoogle: (googleTasks: GoogleTask[]) => void;
   setHasHydrated: (state: boolean) => void;
 
   // Selectors

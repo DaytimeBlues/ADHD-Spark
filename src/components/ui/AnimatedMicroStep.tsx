@@ -29,7 +29,7 @@ export const AnimatedMicroStep: React.FC<AnimatedMicroStepProps> = ({
       <Text
         style={[
           styles.stepText,
-          { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
+          isCosmic ? styles.stepTextCosmic : styles.stepTextLinear,
         ]}
       >
         {item}
@@ -55,6 +55,12 @@ const styles = StyleSheet.create({
   stepText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
+  },
+  stepTextCosmic: {
+    color: '#B9C2D9',
+  },
+  stepTextLinear: {
+    color: Tokens.colors.text.secondary,
   },
 });
 

@@ -26,9 +26,9 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
       textSecondary: '#B9C2D9',
       accent: '#8B5CF6',
       logoGlow: Platform.select({
-        web: { textShadow: '0 0 18px rgba(139, 92, 246, 0.35)' } as any,
+        web: { textShadow: '0 0 18px rgba(139, 92, 246, 0.35)' },
         default: undefined,
-      }),
+      }) as { textShadow?: string } | undefined,
     }),
     [],
   );

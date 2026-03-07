@@ -6,34 +6,27 @@ import { useTheme } from '../../theme/useTheme';
 interface ExampleTaskChipProps {
   label: string;
   onPress: () => void;
+  isCosmic: boolean;
 }
 
 const ExampleTaskChip: React.FC<ExampleTaskChipProps> = ({
   label,
   onPress,
+  isCosmic,
 }) => {
-  const { isCosmic } = useTheme();
-
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.chip,
-        {
-          backgroundColor: isCosmic
-            ? 'rgba(139, 92, 246, 0.2)'
-            : Tokens.colors.neutral.darker,
-          borderColor: isCosmic
-            ? 'rgba(139, 92, 246, 0.4)'
-            : Tokens.colors.neutral.border,
-        },
+        isCosmic ? styles.chipCosmic : styles.chipLinear,
         pressed && styles.chipPressed,
       ]}
     >
       <Text
         style={[
           styles.chipText,
-          { color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary },
+          isCosmic ? styles.chipTextCosmic : styles.chipTextLinear,
         ]}
       >
         {label}
@@ -64,7 +57,7 @@ export const EmptyStateExamples: React.FC<EmptyStateExamplesProps> = ({
       <Text
         style={[
           styles.title,
-          { color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500] },
+          isCosmic ? styles.titleCosmic : styles.titleLinear,
         ]}
       >
         TRY AN EXAMPLE
@@ -75,6 +68,7 @@ export const EmptyStateExamples: React.FC<EmptyStateExamplesProps> = ({
             key={task}
             label={task}
             onPress={() => onExamplePress(task)}
+            isCosmic={isCosmic}
           />
         ))}
       </View>
@@ -95,6 +89,12 @@ const styles = StyleSheet.create({
     marginBottom: Tokens.spacing[3],
     textTransform: 'uppercase',
   },
+  titleCosmic: {
+    color: '#8B5CF6',
+  },
+  titleLinear: {
+    color: Tokens.colors.brand[500],
+  },
   chipContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -107,12 +107,26 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
   },
+  chipCosmic: {
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    borderColor: 'rgba(139, 92, 246, 0.4)',
+  },
+  chipLinear: {
+    backgroundColor: Tokens.colors.neutral.darker,
+    borderColor: Tokens.colors.neutral.border,
+  },
   chipPressed: {
     opacity: 0.7,
   },
   chipText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: Tokens.type.sm,
+  },
+  chipTextCosmic: {
+    color: '#B9C2D9',
+  },
+  chipTextLinear: {
+    color: Tokens.colors.text.secondary,
   },
 });
 

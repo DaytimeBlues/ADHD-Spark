@@ -185,7 +185,7 @@ const BrainDumpScreen = () => {
   );
 };
 
-const getStyles = (isCosmic: boolean, t: any) =>
+const getStyles = (isCosmic: boolean, t: ReturnType<typeof useTheme>['t']) =>
   StyleSheet.create({
     container: {
       flex: 1,

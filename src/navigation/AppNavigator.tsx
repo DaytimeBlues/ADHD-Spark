@@ -105,8 +105,8 @@ const crossFadeOptions = {
   headerShown: false,
   cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
   transitionSpec: {
-    open: { animation: 'timing', config: { duration: 200 } } as any,
-    close: { animation: 'timing', config: { duration: 200 } } as any,
+    open: { animation: 'timing' as const, config: { duration: 200 } },
+    close: { animation: 'timing' as const, config: { duration: 200 } },
   },
 };
 

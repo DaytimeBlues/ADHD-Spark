@@ -174,10 +174,10 @@ export const useFogCutter = (
 
   const toggleTask = useCallback((id: string) => {
     setTasks((prevTasks) => {
-      const task = prevTasks.find((t) => t.id === id);
-      if (task) {
-        const wasCompleted = task.completed;
-        const updatedTask = advanceTaskProgress(task);
+      const targetTask = prevTasks.find((t) => t.id === id);
+      if (targetTask) {
+        const wasCompleted = targetTask.completed;
+        const updatedTask = advanceTaskProgress(targetTask);
 
         // Provide haptic feedback based on progress
         if (!wasCompleted && updatedTask.completed) {

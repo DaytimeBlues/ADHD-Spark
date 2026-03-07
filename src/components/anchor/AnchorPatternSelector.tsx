@@ -49,6 +49,9 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
         <GlowCard
           key={p}
           testID={`anchor-pattern-${p}`}
+          accessibilityLabel={`${patterns[p].name} breathing pattern`}
+          accessibilityHint={`Double tap to select ${patterns[p].name} breathing exercise`}
+          accessibilityRole="button"
           glow="soft"
           tone="base"
           padding="lg"
@@ -56,7 +59,13 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
           style={styles.patternButton}
         >
           <View style={styles.patternIcon}>
-            <Text style={styles.patternEmoji}>{getPatternEmoji(p)}</Text>
+            <Text
+              style={styles.patternEmoji}
+              accessibilityElementsHidden={true}
+              importantForAccessibility="no"
+            >
+              {getPatternEmoji(p)}
+            </Text>
           </View>
           <View style={styles.patternInfo}>
             <Text style={styles.patternButtonText}>{patterns[p].name}</Text>

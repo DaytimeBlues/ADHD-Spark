@@ -15,12 +15,12 @@ class NotificationServiceClass {
   private currentTimerNotificationId: string | null = null;
 
   async requestPermissions() {
-    const permissions = (await Notifications.getPermissionsAsync()) as any;
-    let finalStatus: string = permissions.status;
+    const permissions = await Notifications.getPermissionsAsync();
+    let finalStatus = permissions.status;
 
     if (finalStatus !== 'granted') {
-      const result = (await Notifications.requestPermissionsAsync()) as any;
-      finalStatus = result.status as string;
+      const result = await Notifications.requestPermissionsAsync();
+      finalStatus = result.status;
     }
 
     return finalStatus === 'granted';

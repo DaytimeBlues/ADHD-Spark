@@ -245,6 +245,9 @@ const AnchorScreen = () => {
                 <GlowCard
                   key={p}
                   testID={`anchor-pattern-${p}`}
+                  accessibilityLabel={`${PATTERNS[p].name} breathing pattern`}
+                  accessibilityHint={`Double tap to select ${PATTERNS[p].name} breathing exercise`}
+                  accessibilityRole="button"
                   glow="soft"
                   tone="base"
                   padding="lg"
