@@ -12,7 +12,7 @@ import {
   AppStateStatus,
 } from 'react-native';
 
-import AppNavigator, { ROUTES } from './src/navigation/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 import { GoogleTasksSyncService } from './src/services/GoogleTasksSyncService';
 import OverlayService from './src/services/OverlayService';
 import { LoggerService } from './src/services/LoggerService';
@@ -33,7 +33,7 @@ import { useDriftStore } from './src/store/useDriftStore';
 import { BiometricService } from './src/services/BiometricService';
 import { LockScreen } from './src/components/LockScreen';
 import ErrorBoundary from './src/components/ErrorBoundary';
-import { WEB_LINKING_PREFIXES } from './src/config/paths';
+import { appLinking } from './src/navigation/linking';
 
 // Initialize Sentry for error tracking
 if (config.environment === 'production') {
@@ -171,24 +171,11 @@ const App = () => {
     BiometricService.authenticate();
   };
 
-  const linking = {
-    prefixes: WEB_LINKING_PREFIXES,
-    config: {
-      screens: {
-        Main: '',
-        [ROUTES.FOG_CUTTER]: 'fog-cutter',
-        [ROUTES.POMODORO]: 'pomodoro',
-        [ROUTES.ANCHOR]: 'anchor',
-        [ROUTES.INBOX]: 'inbox',
-      },
-    },
-  };
-
   const content = isAuthenticated ? (
     <ErrorBoundary>
       <NavigationContainer
         ref={navigationRef}
-        linking={linking}
+        linking={appLinking}
         onReady={() => {
           // Flush any overlay intents that were queued before navigation was ready
           flushOverlayIntentQueue();
