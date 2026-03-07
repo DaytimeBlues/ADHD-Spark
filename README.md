@@ -1,24 +1,26 @@
-# ADHD-CADDI - PWA & React Native
+# ADHD-CADDI - PWA and React Native
 
-A behavioral activation tool for ADHD, designed as a high-performance **PWA (Progressive Web App)** with an optional React Native mobile bridge.
+A behavioral activation tool for ADHD, designed as a high-performance PWA with an optional React Native mobile bridge.
 
-> [!IMPORTANT]  
-> **Primary Workflow**: Most developers should use the **Web/PWA** version. It provides the full app experience through any mobile browser and can be "Installed" as a standalone app on your home screen.
+> [!IMPORTANT]
+> Primary workflow: most development should happen in the web/PWA path. It gives the full app experience in a browser and is the main deployment target.
 
 ## Deployment Status
 
-- **Live PWA**: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
+- Live PWA: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
+- Production deploy path: push reviewed changes to `main` and let `.github/workflows/pages.yml` publish GitHub Pages
+- Android verification path: `.github/workflows/android.yml` builds debug and release APK artifacts on CI
 
 ## Features
 
-- **Ignite** - 5-minute focus timer with brown noise
-- **Fog Cutter** - Break overwhelming tasks into micro-steps with AI-powered suggestions
-- **Pomodoro** - Classic Pomodoro technique (25/5)
-- **Anchor** - Breathing exercises (4-7-8, Box, Energize)
-- **Check In** - Mood and energy tracking with AI-powered insights
-- **Brain Dump** - Quick capture for racing thoughts with AI-powered sorting suggestions
-- **Calendar** - Simple monthly view
-- **Cosmic Theme** - Default mystical deep space aesthetic with ethereal glows and smooth animations
+- Ignite: 5-minute focus timer with brown noise
+- Fog Cutter: break overwhelming tasks into micro-steps
+- Pomodoro: classic Pomodoro technique
+- Anchor: breathing exercises
+- Check In: mood and energy tracking
+- Brain Dump: quick capture for racing thoughts
+- Calendar: simple monthly view
+- Cosmic Theme: default deep-space visual treatment
 
 ## Getting Started (Web/PWA)
 
@@ -42,45 +44,55 @@ npm run web
 
 The app will be available at `http://localhost:3000`.
 
-### Running Tests
+### Running Checks
 
 ```bash
-# Verify JavaScript "Brain" logic
+# Unit tests
 npm test
 
-# E2E Browser Testing (Mobile emulation)
-npm run e2e
+# Lint and type-check
+npm run lint
+npx tsc --noEmit
+
+# Browser smoke test
+npm run e2e:smoke
 ```
 
 ### Deploying
 
 ```bash
-npm run deploy  # Pushes to GitHub Pages
+git push origin main
 ```
 
----
+`npm run deploy` still exists as a manual `gh-pages` helper, but the production site now deploys through the GitHub Actions Pages workflow instead of that script.
 
-## 🚀 Advanced: Native Android (Future Option)
+### Branch Workflow
 
-The native Android shell is a secondary wrapper used for platform-specific features like system-wide overlays. **Android Studio is NOT required for general feature development.**
+1. Create a branch from `main`.
+2. Run local checks.
+3. Push the branch for review.
+4. Merge to `main` only when ready for CI and Pages deployment.
+
+If the change is isolated or experimental, do not push directly to `main`.
+
+## Advanced: Native Android
+
+The native Android shell is a secondary wrapper used for platform-specific features like system-wide overlays. Android Studio is not required for general web or shared-feature development.
 
 ### Extras in Native Mode
 
-- **Floating Menu (Android)** - An expandable quick-action chat-head style menu that floats over other apps for rapid access to core features.
+- Floating Menu (Android): an expandable quick-action menu that floats over other apps
 
-### Native Setup (If needed)
+### Native Setup
 
 1. Install JDK 17 and Android Studio.
 2. `npm install`
 3. `npm run android:clean`
 4. `npm run android`
 
-### Android Phone-Only Deployment (No Store)
+### Android Phone-Only Deployment
 
-If you only want to run the app on your own Android phone, use the local profiles below.
-
-1. Connect phone with USB debugging enabled.
-2. Build/install one of the profiles:
+If you only want to run the app on your own Android phone, use these local profiles.
 
 ```bash
 # Development profile (fastest, debuggable)
@@ -101,24 +113,24 @@ Profile package IDs:
 
 ### Backend Options for Personal Use
 
-- Default API endpoint is `https://adhd-caddi-api.vercel.app` (used for AI sorting).
-- If the API is unavailable, core app flows still work; AI sort shows a graceful error.
-- For a zero-cloud personal workflow, avoid AI sort and use local features (timers, notes, check-in, routines).
+- Default API endpoint is `https://adhd-caddi-api.vercel.app`
+- If the API is unavailable, core app flows still work; AI sorting shows a graceful error
+- For a zero-cloud personal workflow, use the local features and avoid AI sort
 
 ### Native Tests
 
 ```bash
-# UI Tests (Requires Emulator)
+# UI tests (requires emulator)
 npm run test:e2e:android
 ```
 
 ## Tech Stack
 
-- **Framework**: React Native Web (allows single codebase for PWA + Native)
-- **Logic**: TypeScript
-- **State/Storage**: AsyncStorage
-- **Testing**: Jest + Playwright (E2E)
-- **Deployment**: GitHub Pages
+- Framework: React Native Web plus React Native
+- Logic: TypeScript
+- State/Storage: AsyncStorage
+- Testing: Jest plus Playwright
+- Deployment: GitHub Pages
 
 ## License
 

@@ -25,7 +25,7 @@
 | **Persistence**   | AsyncStorage on web/tests, `@op-engineering/op-sqlite` on native Android |
 | **Bundler (Web)** | Webpack                                                                  |
 | **Testing**       | Jest + RTL (unit), Playwright (web E2E), Detox (native E2E)              |
-| **CI/CD**         | GitHub Actions → GitHub Pages                                            |
+| **CI/CD**         | GitHub Actions -> GitHub Pages                                           |
 
 > Native Android testing and Android Studio workflows are only required when changing native modules (`android/`, overlay bridge/services, or native permissions/build logic).
 
@@ -322,7 +322,7 @@ npm run e2e          # Playwright E2E (web)
 
 1. **Source of truth**: `main`
 2. **Workflow**: `.github/workflows/pages.yml`
-3. **Build**: `npm run build:web` → outputs to `dist/`
+3. **Build**: `npm run build:web` -> outputs to `dist/`
 4. **Publish**: GitHub Actions uploads `dist/` plus `dist/404.html` to GitHub Pages
 5. **URL**: `https://daytimeblues.github.io/ADHD-CADDI/`
 
@@ -331,6 +331,7 @@ npm run e2e          # Playwright E2E (web)
 - GitHub Pages is configured for `build_type: workflow`
 - The Pages workflow runs lint, typecheck, unit tests, smoke E2E, then deploys
 - Failure logs are uploaded as artifacts to make failed runs diagnosable
+- Android validation runs separately in `.github/workflows/android.yml`
 
 ### Verification Checklist
 
@@ -385,4 +386,4 @@ The project follows OWASP 2025 standards for web and mobile security.
 
 ---
 
-_Last updated: 2026-02-11_
+_Last updated: 2026-03-07_

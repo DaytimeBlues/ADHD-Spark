@@ -30,7 +30,18 @@
 
 **Current source of truth: push to `main`**
 
-1. **Merge to main branch:**
+1. **Prepare and validate the release candidate on a branch first:**
+
+   ```bash
+   git checkout -b fix/my-change
+   npm run lint
+   npx tsc --noEmit
+   npm test -- --runInBand
+   npm run e2e:smoke
+   git push origin fix/my-change
+   ```
+
+2. **Merge to main branch:**
 
    ```bash
    git checkout main
@@ -38,17 +49,19 @@
    git push origin main
    ```
 
-2. **Wait for the Pages workflow to finish:**
+3. **Wait for the Pages workflow to finish:**
 
    - Workflow: `.github/workflows/pages.yml`
    - URL: `https://daytimeblues.github.io/ADHD-CADDI/`
+   - Expected jobs: quality gates, web E2E smoke, build, deploy, post-deploy validation
 
-3. **Confirm the deployed site matches the latest `main` release commit.**
+4. **Confirm the deployed site matches the latest `main` release commit.**
 
 **Validation:**
 
 - Open deployed URL in browser
 - Test core features (Ignite, Fog Cutter, etc.)
+- Test at least one direct route reload, such as `https://daytimeblues.github.io/ADHD-CADDI/tasks`
 - Check browser console for errors
 - Verify service worker updates (if PWA)
 
@@ -79,6 +92,11 @@ git push origin main
   ```
 
 ### Build Sideloadable APKs
+
+GitHub Actions already performs two useful Android checks on `main`:
+
+- `Android Build and E2E Tests`: installs dependencies, runs Jest, assembles debug, uploads debug APK and reports
+- `Android Release Build Check`: assembles a release APK with CI signing disabled and verifies that it launches in an emulator
 
 **Preview APK (recommended for direct install / non-Play-Store testing):**
 
@@ -371,7 +389,7 @@ git checkout -b restore/<date> <last-good-commit-hash>
 
 ## Automation Opportunities
 
-**Current State:** Workflow-driven Pages deploys from `main`; Android artifacts built in GitHub Actions and locally via Gradle/package scripts
+**Current State:** Workflow-driven Pages deploys from `main`; Android artifacts are built in GitHub Actions and locally via Gradle/package scripts
 
 **Future Enhancements:**
 
@@ -382,6 +400,6 @@ git checkout -b restore/<date> <last-good-commit-hash>
 
 ---
 
-**Last Updated:** 2026-02-10  
+**Last Updated:** 2026-03-07  
 **Owner:** Release Manager  
 **Review Cycle:** Update after each major release
