@@ -3,6 +3,12 @@ import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
 
+// Extended pressable state for web hover support
+type PressableState = {
+  pressed: boolean;
+  hovered?: boolean;
+};
+
 export interface BrainDumpActionBarProps {
   itemCount: number;
   isSorting: boolean;
@@ -34,7 +40,7 @@ export const BrainDumpActionBar: React.FC<BrainDumpActionBarProps> = ({
           accessibilityRole="button"
           accessibilityLabel="AI sort"
           accessibilityHint="Sorts and groups items using AI suggestions"
-          style={({ pressed, hovered }: any) => [
+          style={({ pressed, hovered }: PressableState) => [
             styles.actionButton,
             hovered && styles.clearHovered,
             pressed && styles.clearPressed,
@@ -50,7 +56,7 @@ export const BrainDumpActionBar: React.FC<BrainDumpActionBarProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Clear all items"
           accessibilityHint="Opens a confirmation to remove all items"
-          style={({ pressed, hovered }: any) => [
+          style={({ pressed, hovered }: PressableState) => [
             styles.actionButton,
             hovered && styles.clearHovered,
             pressed && styles.clearPressed,

@@ -10,6 +10,12 @@ import {
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
 
+// Extended pressable state for web hover support
+type PressableState = {
+  pressed: boolean;
+  hovered?: boolean;
+};
+
 export type RecordingState = 'idle' | 'recording' | 'processing';
 
 export interface BrainDumpVoiceRecordProps {
@@ -37,7 +43,7 @@ export const BrainDumpVoiceRecord: React.FC<BrainDumpVoiceRecordProps> = ({
           recordingState === 'recording' ? 'Stop recording' : 'Start recording'
         }
         accessibilityHint="Records voice and converts it to a task item"
-        style={({ pressed, hovered }: any) => [
+        style={({ pressed, hovered }: PressableState) => [
           styles.recordButton,
           hovered && styles.recordButtonHovered,
           recordingState === 'recording' && styles.recordButtonActive,

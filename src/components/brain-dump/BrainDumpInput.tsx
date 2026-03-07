@@ -115,7 +115,7 @@ const getStyles = (isCosmic: boolean) =>
       textAlignVertical: 'center',
       paddingVertical: 0,
       ...Platform.select({
-        web: { outlineStyle: 'none' } as any,
+        web: { outlineStyle: 'none' as const },
       }),
     },
     addButton: {

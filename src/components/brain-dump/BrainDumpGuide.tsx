@@ -27,7 +27,7 @@ export const BrainDumpGuide: React.FC<BrainDumpGuideProps> = ({
       </View>
       <Pressable
         onPress={onDismiss}
-        style={({ pressed }: any) => [
+        style={({ pressed }: { pressed: boolean }) => [
           styles.guideButton,
           pressed && styles.guideButtonPressed,
         ]}

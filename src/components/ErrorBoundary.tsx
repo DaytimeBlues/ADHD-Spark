@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { LoggerService } from '../services/LoggerService';
-import { useTheme } from '../theme/useTheme';
+import { useTheme, ThemeContextValue } from '../theme/useTheme';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -21,11 +21,14 @@ interface ErrorBoundaryState {
   errorInfo: React.ErrorInfo | null;
 }
 
+type ErrorBoundaryInternalProps = ErrorBoundaryProps &
+  Pick<ThemeContextValue, 'isCosmic' | 't'>;
+
 class ErrorBoundaryInternal extends Component<
-  ErrorBoundaryProps & { isCosmic: boolean; t: any },
+  ErrorBoundaryInternalProps,
   ErrorBoundaryState
 > {
-  constructor(props: ErrorBoundaryProps & { isCosmic: boolean; t: any }) {
+  constructor(props: ErrorBoundaryInternalProps) {
     super(props);
     this.state = {
       hasError: false,
@@ -129,7 +132,7 @@ const ErrorBoundary = (props: ErrorBoundaryProps) => {
   return <ErrorBoundaryInternal {...props} isCosmic={isCosmic} t={t} />;
 };
 
-const getStyles = (isCosmic: boolean, t: any) =>
+const getStyles = (isCosmic: boolean, t: ThemeContextValue['t']) =>
   StyleSheet.create({
     container: {
       flex: 1,

@@ -3,6 +3,12 @@ import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
 
+// Extended pressable state for web hover support
+type PressableState = {
+  pressed: boolean;
+  hovered?: boolean;
+};
+
 export interface DumpItem {
   id: string;
   text: string;
@@ -39,7 +45,7 @@ export const BrainDumpItem: React.FC<BrainDumpItemProps> = ({
         accessibilityRole="button"
         accessibilityLabel="Delete brain dump item"
         accessibilityHint="Removes this item from the list"
-        style={({ pressed, hovered }: any) => [
+        style={({ pressed, hovered }: PressableState) => [
           styles.deleteButton,
           hovered && styles.deleteButtonHovered,
           pressed && styles.deleteButtonPressed,
