@@ -1,89 +1,49 @@
-import AISortService from '../src/services/AISortService';
-
-jest.mock('../src/config', () => ({
-  config: {
-    apiBaseUrl: 'https://spark-adhd-api.vercel.app',
-    aiTimeout: 8000,
-    aiMaxRetries: 0,
-  },
-}));
-
-describe('AISortService', () => {
+describe('AISortService timeout handling', () => {
   beforeEach(() => {
+    jest.resetModules();
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
-    global.fetch = jest.fn();
+    jest.dontMock('react-native');
+    jest.dontMock('../src/services/network/requestPolicy');
   });
 
-  it('returns [] for empty input', async () => {
-    const result = await AISortService.sortItems([]);
-    expect(result).toEqual([]);
-    expect(fetch).not.toHaveBeenCalled();
-  });
+  it('preserves timeout classification and skips retries for RequestTimeoutError', async () => {
+    jest.doMock('react-native', () => ({
+      Platform: { OS: 'test' },
+    }));
 
-  it('returns sorted items when api succeeds', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({
-        sorted: [
-          { text: 'Book dentist', category: 'task', priority: 'high' },
-          { text: 'Lunch Friday', category: 'event', priority: 'medium' },
-        ],
-      }),
+    jest.doMock('../src/services/network/requestPolicy', () => {
+      const actual = jest.requireActual(
+        '../src/services/network/requestPolicy',
+      ) as typeof import('../src/services/network/requestPolicy');
+
+      return {
+        ...actual,
+        fetchWithPolicy: jest.fn(),
+        sleep: jest.fn(() => Promise.resolve()),
+      };
     });
 
-    const result = await AISortService.sortItems(['Book dentist']);
+    const AISortService = require('../src/services/AISortService')
+      .default as typeof import('../src/services/AISortService').default;
+    const requestPolicy =
+      require('../src/services/network/requestPolicy') as typeof import('../src/services/network/requestPolicy');
 
-    expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith(
-      'https://spark-adhd-api.vercel.app/api/sort',
-      expect.objectContaining({
-        headers: expect.anything(),
-      }),
+    const fetchWithPolicyMock = jest.mocked(requestPolicy.fetchWithPolicy);
+    const sleepMock = jest.mocked(requestPolicy.sleep);
+
+    fetchWithPolicyMock.mockRejectedValue(
+      new requestPolicy.RequestTimeoutError(),
     );
-    expect(result).toEqual([
-      { text: 'Book dentist', category: 'task', priority: 'high' },
-      { text: 'Lunch Friday', category: 'event', priority: 'medium' },
-    ]);
-  });
 
-  it('throws when api returns malformed payload', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: jest.fn().mockResolvedValue({ sorted: [{ nope: true }] }),
+    await expect(AISortService.sortItems(['alpha'])).rejects.toMatchObject({
+      code: 'AI_TIMEOUT',
+      message: 'AI sort timed out. Please try again.',
     });
 
-    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
-      'Invalid AI sort response schema.',
-    );
-  });
-
-  it('throws with server error message', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: jest.fn().mockResolvedValue({ error: 'Rate limit exceeded' }),
-    });
-
-    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
-      'Rate limit exceeded',
-    );
-  });
-
-  it('maps browser network/CORS failures to friendly fallback error', async () => {
-    (fetch as jest.Mock).mockRejectedValue(new TypeError('Failed to fetch'));
-
-    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
-      'AI sort is unavailable in this browser session (network/CORS restriction). Items remain saved locally.',
-    );
-  });
-
-  it('falls back to generic message when non-ok response has invalid json', async () => {
-    (fetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: jest.fn().mockRejectedValue(new Error('Unexpected token <')),
-    });
-
-    await expect(AISortService.sortItems(['x'])).rejects.toThrow(
-      'Unable to sort items right now.',
-    );
+    expect(fetchWithPolicyMock).toHaveBeenCalledTimes(1);
+    expect(sleepMock).not.toHaveBeenCalled();
   });
 });

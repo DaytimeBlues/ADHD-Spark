@@ -26,15 +26,3 @@ export const createOperationContext = (
     platform: input.platform ?? Platform?.OS ?? 'unknown',
   };
 };
-
-export const extendOperationContext = (
-  base: OperationContext,
-  overrides: OperationContextInput = {},
-): OperationContext => {
-  return {
-    ...base,
-    ...overrides,
-    correlationId: overrides.correlationId ?? base.correlationId,
-    platform: overrides.platform ?? base.platform,
-  };
-};

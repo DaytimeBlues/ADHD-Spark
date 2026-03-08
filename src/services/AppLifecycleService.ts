@@ -26,7 +26,9 @@ class AppLifecycleServiceClass {
     }
 
     this.lastState = AppState.currentState;
-    this.startAll();
+    if (this.lastState === 'active') {
+      this.startAll();
+    }
 
     this.appStateSubscription = AppState.addEventListener(
       'change',
@@ -47,6 +49,8 @@ class AppLifecycleServiceClass {
   }
 
   shutdown(): void {
+    this.stopAll();
+
     this.appStateSubscription?.remove();
     this.appStateSubscription = null;
 
@@ -60,7 +64,7 @@ class AppLifecycleServiceClass {
       this.webCleanupHandler = null;
     }
 
-    this.stopAll();
+    this.services.clear();
     this.lastState = null;
   }
 

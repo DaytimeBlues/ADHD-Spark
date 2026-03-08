@@ -1,5 +1,3 @@
-import type { SortedItem } from '../AISortService';
-
 export interface GoogleTasksSyncState {
   listId?: string;
   syncToken?: string;
@@ -33,5 +31,3 @@ export interface GoogleExportResult {
     | 'api_error';
   errorMessage?: string;
 }
-
-export type ExportableSortedItem = SortedItem;

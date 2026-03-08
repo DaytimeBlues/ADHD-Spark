@@ -3,7 +3,11 @@ import {
   createOperationContext,
   type OperationContext,
 } from './OperationContext';
-import { fetchWithPolicy, sleep } from './network/requestPolicy';
+import {
+  fetchWithPolicy,
+  RequestTimeoutError,
+  sleep,
+} from './network/requestPolicy';
 
 export type SortCategory =
   | 'task'
@@ -131,7 +135,11 @@ function classifyError(error: unknown): AiSortError {
 
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
-    if (error.name === 'AbortError') {
+    if (
+      error.name === 'AbortError' ||
+      error instanceof RequestTimeoutError ||
+      error.name === 'RequestTimeoutError'
+    ) {
       return new AiSortError(
         'AI_TIMEOUT',
         'AI sort timed out. Please try again.',
