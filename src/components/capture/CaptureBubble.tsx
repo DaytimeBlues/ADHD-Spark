@@ -22,6 +22,7 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  View,
   ViewStyle,
 } from 'react-native';
 import CaptureService from '../../services/CaptureService';
@@ -54,6 +55,9 @@ const COLORS = {
   badge: '#FB7185', // cometRose
   badgeText: '#EEF2FF', // starlight
   fabText: '#EEF2FF', // starlight
+  hintBg: 'rgba(7, 7, 18, 0.84)',
+  hintBorder: 'rgba(185, 194, 217, 0.18)',
+  hintText: '#EEF2FF',
 } as const;
 
 // ============================================================================
@@ -285,6 +289,31 @@ export const CaptureBubble = memo(function CaptureBubble() {
     }
   }, [bubbleState]);
 
+  const bubbleHint = useMemo((): string | null => {
+    if (
+      drawerOpen ||
+      bubbleState === 'recording' ||
+      bubbleState === 'processing'
+    ) {
+      return null;
+    }
+
+    switch (bubbleState) {
+      case 'needs-review':
+        return totalBadgeCount > 0
+          ? `Review ${totalBadgeCount} item${totalBadgeCount !== 1 ? 's' : ''}`
+          : 'Review inbox';
+      case 'needs-checkin':
+        return 'Quick check-in';
+      case 'offline':
+        return 'Offline capture';
+      case 'failed':
+        return 'Try again';
+      default:
+        return 'Quick capture';
+    }
+  }, [bubbleState, drawerOpen, totalBadgeCount]);
+
   const handlePress = useCallback(() => {
     if (bubbleState === 'needs-review' && badgeCount > 0) {
       if (navigationRef.isReady()) {
@@ -335,6 +364,12 @@ export const CaptureBubble = memo(function CaptureBubble() {
         ]}
         pointerEvents="box-none"
       >
+        {isWeb && bubbleHint && (
+          <View pointerEvents="none" style={styles.hintPill}>
+            <Text style={styles.hintText}>{bubbleHint}</Text>
+          </View>
+        )}
+
         <Pressable
           testID="capture-bubble"
           onPress={handlePress}
@@ -391,6 +426,23 @@ const styles = StyleSheet.create({
     bottom: 88, // above tab bar (60px) + padding
     right: 20,
     zIndex: 999,
+    alignItems: 'flex-end',
+  },
+  hintPill: {
+    marginBottom: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
+    backgroundColor: COLORS.hintBg,
+    borderWidth: 1,
+    borderColor: COLORS.hintBorder,
+    maxWidth: 168,
+  },
+  hintText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.hintText,
+    letterSpacing: 0.3,
   },
   fab: {
     width: FAB_SIZE,
