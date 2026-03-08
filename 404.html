@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ADHD-CADDI</title>
+    <script>
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script takes the current URL and converts the path and query
+      // string into just a query string, and then redirects the browser
+      // to the new URL with only a query string and hash fragment.
+
+      // If you're creating a Project Pages site and NOT using a custom domain,
+      // then set pathPrefix = true.
+      // If you're creating a User or Organization Pages site, then set
+      // pathPrefix = false.
+      var pathPrefix = true;
+
+      var l = window.location;
+      var repoName = '/ADHD-CADDI';
+
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          repoName +
+          '/?/' +
+          l.pathname.slice(repoName.length + 1).replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash,
+      );
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+</html>
