@@ -26,6 +26,7 @@ export const ThemeSection = ({
             }}
             style={styles.themeOption}
             accessibilityLabel={`Select ${option.label} theme`}
+            accessibilityHint={`Switches to the ${option.label} theme`}
             accessibilityRole="button"
             accessibilityState={{ selected: option.selected }}
           >

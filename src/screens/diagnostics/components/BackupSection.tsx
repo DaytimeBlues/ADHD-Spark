@@ -55,6 +55,7 @@ export const BackupSection = ({
           ]}
           accessibilityRole="button"
           accessibilityLabel="Set import mode to overwrite"
+          accessibilityHint="Replaces all existing data with the backup"
           testID="import-mode-overwrite"
         >
           <Text
@@ -75,6 +76,7 @@ export const BackupSection = ({
           ]}
           accessibilityRole="button"
           accessibilityLabel="Set import mode to merge"
+          accessibilityHint="Combines backup data with existing data"
           testID="import-mode-merge"
         >
           <Text
@@ -101,6 +103,7 @@ export const BackupSection = ({
           ]}
           accessibilityRole="button"
           accessibilityLabel="Export backup JSON"
+          accessibilityHint="Downloads your app data as a JSON file"
         >
           <Text style={styles.backupButtonText}>EXPORT JSON</Text>
         </TouchableOpacity>
@@ -117,6 +120,7 @@ export const BackupSection = ({
           ]}
           accessibilityRole="button"
           accessibilityLabel="Import backup JSON"
+          accessibilityHint="Restores your app data from a JSON file"
         >
           <Text style={styles.backupButtonText}>IMPORT JSON</Text>
         </TouchableOpacity>
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
   },
   modeButton: {
     flex: 1,
+    minHeight: Tokens.layout.minTapTarget,
     paddingVertical: Tokens.spacing[1],
     alignItems: 'center',
     justifyContent: 'center',

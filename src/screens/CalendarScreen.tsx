@@ -170,12 +170,17 @@ const CalendarScreen = () => {
               <View style={styles.header}>
                 <Pressable
                   onPress={prevMonth}
+                  accessibilityLabel="Go to previous month"
+                  accessibilityHint="Navigates to the previous month"
+                  accessibilityRole="button"
                   style={({
                     pressed,
                     hovered,
+                    focused,
                   }: {
                     pressed: boolean;
                     hovered?: boolean;
+                    focused?: boolean;
                   }) => [
                     styles.navButton,
                     isCosmic && styles.navButtonCosmic,
@@ -183,6 +188,8 @@ const CalendarScreen = () => {
                     hovered && isCosmic && styles.navButtonHoveredCosmic,
                     pressed && styles.navButtonPressed,
                     pressed && isCosmic && styles.navButtonPressedCosmic,
+                    focused && styles.navButtonFocused,
+                    focused && isCosmic && styles.navButtonFocusedCosmic,
                   ]}
                 >
                   <Text
@@ -202,12 +209,17 @@ const CalendarScreen = () => {
                 </Text>
                 <Pressable
                   onPress={nextMonth}
+                  accessibilityLabel="Go to next month"
+                  accessibilityHint="Navigates to the next month"
+                  accessibilityRole="button"
                   style={({
                     pressed,
                     hovered,
+                    focused,
                   }: {
                     pressed: boolean;
                     hovered?: boolean;
+                    focused?: boolean;
                   }) => [
                     styles.navButton,
                     isCosmic && styles.navButtonCosmic,
@@ -215,6 +227,8 @@ const CalendarScreen = () => {
                     hovered && isCosmic && styles.navButtonHoveredCosmic,
                     pressed && styles.navButtonPressed,
                     pressed && isCosmic && styles.navButtonPressedCosmic,
+                    focused && styles.navButtonFocused,
+                    focused && isCosmic && styles.navButtonFocusedCosmic,
                   ]}
                 >
                   <Text
@@ -256,15 +270,27 @@ const CalendarScreen = () => {
                     day === new Date().getDate() &&
                     currentDate.getMonth() === new Date().getMonth() &&
                     currentDate.getFullYear() === new Date().getFullYear();
+                  const monthName = months[currentDate.getMonth()];
+                  const dateLabel = `${monthName} ${day}, ${currentDate.getFullYear()}`;
                   return (
                     <Pressable
                       key={day}
+                      accessibilityLabel={`${dateLabel}${isToday ? ', today' : ''}`}
+                      accessibilityRole="button"
+                      accessibilityState={{
+                        selected: false,
+                        disabled: false,
+                        checked: isToday,
+                      }}
+                      accessibilityHint="Tap to view or add tasks for this date"
                       style={({
                         pressed,
                         hovered,
+                        focused,
                       }: {
                         pressed: boolean;
                         hovered?: boolean;
+                        focused?: boolean;
                       }) => [
                         styles.dayCell,
                         isCosmic && styles.dayCellCosmic,
@@ -280,6 +306,8 @@ const CalendarScreen = () => {
                           !isToday &&
                           isCosmic &&
                           styles.dayCellPressedCosmic,
+                        focused && styles.dayCellFocused,
+                        focused && isCosmic && styles.dayCellFocusedCosmic,
                       ]}
                     >
                       <Text
@@ -338,12 +366,18 @@ const CalendarScreen = () => {
               <Pressable
                 onPress={handleConnectGoogleCalendar}
                 disabled={isConnectButtonDisabled}
+                accessibilityLabel={buttonTextByConnectionStatus[connectionStatus]}
+                accessibilityHint="Connect or disconnect your Google Calendar for syncing"
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isConnectButtonDisabled }}
                 style={({
                   pressed,
                   hovered,
+                  focused,
                 }: {
                   pressed: boolean;
                   hovered?: boolean;
+                  focused?: boolean;
                 }) => [
                   styles.googleCalendarButton,
                   isCosmic && styles.googleCalendarButtonCosmic,
@@ -366,6 +400,13 @@ const CalendarScreen = () => {
                   isConnectButtonDisabled &&
                     isCosmic &&
                     styles.googleCalendarButtonDisabledCosmic,
+                  focused &&
+                    !isConnectButtonDisabled &&
+                    styles.googleCalendarButtonFocused,
+                  focused &&
+                    !isConnectButtonDisabled &&
+                    isCosmic &&
+                    styles.googleCalendarButtonFocusedCosmic,
                 ]}
               >
                 <Text
@@ -476,6 +517,14 @@ const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
     backgroundColor: Tokens.colors.neutral.darkest,
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  navButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   navButtonText: {
     color: Tokens.colors.text.primary,
     fontSize: Tokens.type.h2,
@@ -534,6 +583,14 @@ const styles = StyleSheet.create({
     backgroundColor: Tokens.colors.neutral.darkest,
     transform: [{ scale: Tokens.motion.scales.press }],
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayCellFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   dayText: {
     fontFamily: Tokens.type.fontFamily.sans,
     color: Tokens.colors.text.secondary,
@@ -627,6 +684,14 @@ const styles = StyleSheet.create({
     transform: [{ scale: Tokens.motion.scales.press }],
     backgroundColor: Tokens.colors.neutral.darkest,
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  googleCalendarButtonFocused: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: Tokens.colors.indigo.primary,
+    },
+  }) as any,
   googleCalendarButtonDisabled: {
     backgroundColor: Tokens.colors.neutral.darkest,
     borderColor: Tokens.colors.neutral.borderSubtle,
@@ -697,6 +762,14 @@ const styles = StyleSheet.create({
   navButtonPressedCosmic: {
     backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  navButtonFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: '#8B5CF6',
+    },
+  }) as any,
   navButtonTextCosmic: {
     color: '#EEF2FF',
   },
@@ -736,6 +809,14 @@ const styles = StyleSheet.create({
   dayCellPressedCosmic: {
     backgroundColor: 'rgba(17, 26, 51, 0.8)',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dayCellFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: '#8B5CF6',
+    },
+  }) as any,
   dayTextCosmic: {
     color: '#EEF2FF',
   },
@@ -792,6 +873,14 @@ const styles = StyleSheet.create({
   googleCalendarButtonPressedCosmic: {
     backgroundColor: 'rgba(17, 26, 51, 0.9)',
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  googleCalendarButtonFocusedCosmic: Platform.select({
+    web: {
+      outlineWidth: 2,
+      outlineStyle: 'solid',
+      outlineColor: '#8B5CF6',
+    },
+  }) as any,
   googleCalendarButtonDisabledCosmic: {
     backgroundColor: 'rgba(11, 16, 34, 0.4)',
     borderColor: 'rgba(185, 194, 217, 0.08)',
