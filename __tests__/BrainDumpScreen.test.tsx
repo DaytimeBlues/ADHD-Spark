@@ -1,6 +1,71 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react-native';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import BrainDumpScreen from '../src/screens/BrainDumpScreen';
+
+type MockTutorialStep = { title: string };
+type MockTutorialFlow = { id: string; steps: MockTutorialStep[] };
+
+const mockBrainDumpFlow: MockTutorialFlow = {
+  id: 'brain-dump-onboarding',
+  steps: [
+    { title: 'Brain Dump: Clear the Noise' },
+    { title: 'Capture Everything' },
+  ],
+};
+
+const tutorialState = {
+  activeFlow: null as MockTutorialFlow | null,
+  currentStepIndex: 0,
+  isVisible: false,
+  onboardingCompleted: false,
+};
+
+const resetTutorialState = () => {
+  tutorialState.activeFlow = null;
+  tutorialState.currentStepIndex = 0;
+  tutorialState.isVisible = false;
+  tutorialState.onboardingCompleted = false;
+};
+
+const startTutorial = (flow: MockTutorialFlow) => {
+  tutorialState.activeFlow = flow;
+  tutorialState.currentStepIndex = 0;
+  tutorialState.isVisible = true;
+};
+
+const nextStep = () => {
+  if (!tutorialState.activeFlow) {
+    return;
+  }
+  const nextIndex = tutorialState.currentStepIndex + 1;
+  if (nextIndex < tutorialState.activeFlow.steps.length) {
+    tutorialState.currentStepIndex = nextIndex;
+    return;
+  }
+  tutorialState.activeFlow = null;
+  tutorialState.currentStepIndex = 0;
+  tutorialState.isVisible = false;
+  tutorialState.onboardingCompleted = true;
+};
+
+const previousStep = () => {
+  tutorialState.currentStepIndex = Math.max(
+    0,
+    tutorialState.currentStepIndex - 1,
+  );
+};
+
+const skipTutorial = () => {
+  tutorialState.activeFlow = null;
+  tutorialState.currentStepIndex = 0;
+  tutorialState.isVisible = false;
+  tutorialState.onboardingCompleted = true;
+};
 
 jest.mock('@react-navigation/native', () => ({
   __esModule: true,
@@ -35,6 +100,38 @@ jest.mock('../src/services/StorageService', () => ({
       tasks: 'tasks',
     },
   },
+  zustandStorage: {
+    getItem: jest.fn().mockResolvedValue(null),
+    setItem: jest.fn().mockResolvedValue(undefined),
+    removeItem: jest.fn().mockResolvedValue(undefined),
+  },
+}));
+
+jest.mock('../src/store/useTutorialStore', () => ({
+  __esModule: true,
+  brainDumpOnboardingFlow: mockBrainDumpFlow,
+  useTutorialStore: (
+    selector: (state: {
+      activeFlow: MockTutorialFlow | null;
+      currentStepIndex: number;
+      isVisible: boolean;
+      onboardingCompleted: boolean;
+      startTutorial: (flow: MockTutorialFlow) => void;
+      nextStep: () => void;
+      previousStep: () => void;
+      skipTutorial: () => void;
+    }) => unknown,
+  ) =>
+    selector({
+      activeFlow: tutorialState.activeFlow,
+      currentStepIndex: tutorialState.currentStepIndex,
+      isVisible: tutorialState.isVisible,
+      onboardingCompleted: tutorialState.onboardingCompleted,
+      startTutorial,
+      nextStep,
+      previousStep,
+      skipTutorial,
+    }),
 }));
 
 jest.mock('../src/services/RecordingService', () => ({
@@ -94,8 +191,7 @@ jest.mock('../src/services/LoggerService', () => ({
 }));
 
 jest.mock('../src/components/brain-dump', () => {
-  const { Text, View, Pressable } = require('react-native');
-
+  const { Pressable, Text, View } = require('react-native');
   return {
     BrainDumpItem: ({ item }: { item: { text: string } }) => (
       <Text>{item.text}</Text>
@@ -115,7 +211,47 @@ jest.mock('../src/components/brain-dump', () => {
   };
 });
 
+jest.mock('../src/components/tutorial/TutorialBubble', () => {
+  const { Pressable, Text, View } = require('react-native');
+  return {
+    TutorialBubble: ({
+      step,
+      isFirstStep,
+      isLastStep,
+      onNext,
+      onPrevious,
+      onSkip,
+    }: {
+      step: { title: string };
+      isFirstStep: boolean;
+      isLastStep: boolean;
+      onNext: () => void;
+      onPrevious: () => void;
+      onSkip: () => void;
+    }) => (
+      <View testID="tutorial-bubble-mock">
+        <Text>{step.title}</Text>
+        {!isFirstStep && (
+          <Pressable testID="tutorial-previous-button" onPress={onPrevious}>
+            <Text>Previous</Text>
+          </Pressable>
+        )}
+        <Pressable testID="tutorial-next-button" onPress={onNext}>
+          <Text>{isLastStep ? 'Finish' : 'Next'}</Text>
+        </Pressable>
+        <Pressable testID="tutorial-skip-button" onPress={onSkip}>
+          <Text>Skip Tutorial</Text>
+        </Pressable>
+      </View>
+    ),
+  };
+});
+
 describe('BrainDumpScreen', () => {
+  beforeEach(() => {
+    resetTutorialState();
+  });
+
   it('renders brain dump shell UI', async () => {
     render(<BrainDumpScreen />);
 
@@ -128,4 +264,22 @@ describe('BrainDumpScreen', () => {
     );
     expect(screen.getByText('_AWAITING_INPUT')).toBeTruthy();
   }, 10000);
+
+  it('renders tutorial state and advances through the mocked flow', () => {
+    startTutorial(mockBrainDumpFlow);
+
+    const view = render(<BrainDumpScreen />);
+    expect(screen.getByTestId('tutorial-overlay')).toBeTruthy();
+    expect(screen.getByText('Brain Dump: Clear the Noise')).toBeTruthy();
+
+    fireEvent.press(screen.getByTestId('tutorial-next-button'));
+    view.rerender(<BrainDumpScreen />);
+
+    expect(screen.getByText('Capture Everything')).toBeTruthy();
+
+    fireEvent.press(screen.getByTestId('tutorial-skip-button'));
+    view.rerender(<BrainDumpScreen />);
+
+    expect(screen.queryByTestId('tutorial-overlay')).toBeNull();
+  });
 });

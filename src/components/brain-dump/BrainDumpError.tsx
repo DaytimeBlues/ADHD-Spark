@@ -74,5 +74,3 @@ const getStyles = (_isCosmic: boolean) =>
       fontWeight: '700',
     },
   });
-
-export default BrainDumpError;

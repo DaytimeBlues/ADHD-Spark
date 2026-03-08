@@ -31,7 +31,8 @@ jest.mock('../src/components/ui/LinearButton', () => ({
   },
 }));
 
-const mockUseTheme = jest.requireMock('../src/theme/useTheme').useTheme as jest.Mock;
+const mockUseTheme = jest.requireMock('../src/theme/useTheme')
+  .useTheme as jest.Mock;
 
 describe('LockScreen', () => {
   beforeEach(() => {
@@ -45,7 +46,9 @@ describe('LockScreen', () => {
 
     expect(screen.getByText('LOCKED')).toBeTruthy();
     expect(
-      screen.getByText('Spark is currently locked to protect your focus and data.'),
+      screen.getByText(
+        'Spark is currently locked to protect your focus and data.',
+      ),
     ).toBeTruthy();
 
     fireEvent.press(screen.getByText('AUTHENTICATE'));

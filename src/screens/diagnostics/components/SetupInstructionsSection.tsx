@@ -57,5 +57,3 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
-
-export default SetupInstructionsSection;

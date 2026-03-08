@@ -70,6 +70,7 @@ export const GlowCard = memo(function GlowCard({
   accessibilityState,
 }: GlowCardProps) {
   const { isCosmic, t } = useTheme();
+  const useNativeDriver = !isWeb;
 
   // Handle press animation
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -105,15 +106,15 @@ export const GlowCard = memo(function GlowCard({
     Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 0.98,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
       Animated.timing(opacityAnim, {
         toValue: 1,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
     ]).start();
-  }, [disabled, onPress, scaleAnim, opacityAnim]);
+  }, [disabled, onPress, opacityAnim, scaleAnim, useNativeDriver]);
 
   const handlePressOut = useCallback(() => {
     if (disabled || !onPress) {
@@ -123,15 +124,15 @@ export const GlowCard = memo(function GlowCard({
     Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 1,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
       Animated.timing(opacityAnim, {
         toValue: 0,
         duration: 200,
-        useNativeDriver: true,
+        useNativeDriver,
       }),
     ]).start();
-  }, [disabled, onPress, scaleAnim, opacityAnim]);
+  }, [disabled, onPress, opacityAnim, scaleAnim, useNativeDriver]);
 
   // Derived styles based on tone and padding
   const resolvedPadding = useMemo(() => {
@@ -214,6 +215,8 @@ export const GlowCard = memo(function GlowCard({
   }, [isCosmic, glow]);
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+  const pressedLinearStyle =
+    isPressedInternal && !isCosmic ? styles.pressedLinear : undefined;
 
   return (
     <AnimatedPressable
@@ -226,7 +229,7 @@ export const GlowCard = memo(function GlowCard({
         containerStyle,
         glowStyle,
         style as ViewStyle,
-        isPressedInternal && !isCosmic && { opacity: 0.8 },
+        pressedLinearStyle,
         { transform: [{ scale: scaleAnim }] },
       ]}
       accessibilityState={{
@@ -262,6 +265,9 @@ const styles = StyleSheet.create({
   },
   bgLinear: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  pressedLinear: {
+    opacity: 0.8,
   },
 });
 

@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { Animated, Easing } from 'react-native';
+import { isWeb } from '../utils/PlatformUtils';
 
 const ANIMATION_DURATION = 300;
 const ANIMATION_STAGGER = 50;
@@ -17,6 +18,7 @@ export const useEntranceAnimation = (
   itemCount: number,
   prefersReducedMotion: boolean,
 ) => {
+  const useNativeDriver = !isWeb;
   // Initialize animation values
   const fadeAnims = useRef(
     [...Array(itemCount)].map(() => new Animated.Value(0)),
@@ -26,7 +28,7 @@ export const useEntranceAnimation = (
   ).current;
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || process.env.NODE_ENV === 'test') {
       fadeAnims.forEach((anim) => anim.setValue(1));
       slideAnims.forEach((anim) => anim.setValue(0));
       return;
@@ -37,13 +39,13 @@ export const useEntranceAnimation = (
         Animated.timing(fadeAnims[i], {
           toValue: 1,
           duration: ANIMATION_DURATION,
-          useNativeDriver: true,
+          useNativeDriver,
           easing: Easing.out(Easing.quad),
         }),
         Animated.timing(slideAnims[i], {
           toValue: 0,
           duration: ANIMATION_DURATION,
-          useNativeDriver: true,
+          useNativeDriver,
           easing: Easing.out(Easing.cubic),
         }),
       ]);

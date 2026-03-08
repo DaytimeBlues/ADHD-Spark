@@ -41,6 +41,13 @@ type WebInteractiveStyle = {
   transition?: string;
 };
 
+type WebCardSurfaceStyle = ViewStyle & {
+  backdropFilter?: string;
+  WebkitBackdropFilter?: string;
+  backgroundImage?: string;
+  pointerEvents?: 'none';
+};
+
 const CARD_MIN_HEIGHT = 100;
 const DOT_SIZE = 4; // Smaller, sharper dots
 const ICON_SIZE = 24;
@@ -123,12 +130,7 @@ function ModeCardComponent({
 
         <View style={styles.cardContent}>
           <Text
-            style={[
-              styles.cardTitle,
-              isHovered && {
-                color: '#FFFFFF',
-              },
-            ]}
+            style={[styles.cardTitle, isHovered && styles.cardTitleHovered]}
           >
             {mode.name.toUpperCase()}
           </Text>
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
         WebkitBackdropFilter: 'blur(24px)',
         boxShadow:
           '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-      } as any,
+      } as WebCardSurfaceStyle,
       default: {
         backgroundColor: '#1E2336', // Reliable, solid but soft color for Native
         elevation: 4, // Gentle drop shadow on Android
@@ -181,11 +183,12 @@ const styles = StyleSheet.create({
   webGradientOverlay: {
     ...StyleSheet.absoluteFillObject,
     opacity: 1,
-    ...(isWeb && {
-      backgroundImage:
-        'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%)',
-      pointerEvents: 'none',
-    }),
+    ...(isWeb &&
+      ({
+        backgroundImage:
+          'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%)',
+        pointerEvents: 'none',
+      } as WebCardSurfaceStyle)),
   },
   cardHeader: {
     flexDirection: 'row',
@@ -213,6 +216,9 @@ const styles = StyleSheet.create({
     color: '#EEF2FF', // Soft starlight white
     marginBottom: Tokens.spacing[1],
     letterSpacing: 1.2,
+  },
+  cardTitleHovered: {
+    color: '#FFFFFF',
   },
   cardDesc: {
     fontFamily: Tokens.type.fontFamily.sans,

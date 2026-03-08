@@ -94,7 +94,6 @@ class GoogleTasksSyncServiceClass {
   private readonly apiClient = googleTasksApiClient;
   private pollTimer: ReturnType<typeof setInterval> | null = null;
   private isSyncing = false;
-  private syncRetryCount = 0;
   private readonly MAX_SYNC_RETRIES = 3;
   private readonly BASE_RETRY_DELAY_MS = 2000;
   private netInfoUnsubscribe: (() => void) | null = null;

@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
 import { ChronoDigits, HaloRing, RuneButton } from '../../ui/cosmic';
 import { LinearButton } from '../ui/LinearButton';
-import { BreathingPattern, PatternConfig } from '../../hooks/useAnchor';
+import { PatternConfig } from '../../hooks/useAnchorSession';
+import { isWeb } from '../../utils/PlatformUtils';
 
 interface AnchorActiveSessionProps {
-  pattern: BreathingPattern;
   patternConfig: PatternConfig;
-  phase: string;
+  phaseText: string;
+  circleScale: number;
   count: number;
   onStop: () => void;
 }
@@ -18,44 +19,14 @@ const BREATHING_CIRCLE_SIZE = 240;
 const INNER_CIRCLE_SIZE = 140;
 
 export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
-  pattern: _pattern,
   patternConfig,
-  phase,
+  phaseText,
+  circleScale,
   count,
   onStop,
 }) => {
   const { isCosmic } = useTheme();
   const styles = getStyles(isCosmic);
-
-  const getPhaseText = () => {
-    switch (phase) {
-      case 'inhale':
-        return 'BREATHE IN';
-      case 'hold':
-        return 'HOLD';
-      case 'exhale':
-        return 'BREATHE OUT';
-      case 'wait':
-        return 'REST';
-      default:
-        return '';
-    }
-  };
-
-  const getCircleScale = () => {
-    switch (phase) {
-      case 'inhale':
-        return 1.5;
-      case 'hold':
-        return 1.5;
-      case 'exhale':
-        return 1;
-      case 'wait':
-        return 1;
-      default:
-        return 1;
-    }
-  };
 
   return (
     <View style={styles.activeContainer}>
@@ -74,14 +45,11 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
           />
         ) : (
           <View
-            style={[
-              styles.circle,
-              { transform: [{ scale: getCircleScale() }] },
-            ]}
+            style={[styles.circle, { transform: [{ scale: circleScale }] }]}
           />
         )}
         <View style={styles.breathingOverlay}>
-          <Text style={styles.phaseText}>{getPhaseText()}</Text>
+          <Text style={styles.phaseText}>{phaseText}</Text>
           {isCosmic ? (
             <ChronoDigits
               value={count.toString().padStart(2, '0')}
@@ -163,6 +131,9 @@ const getStyles = (isCosmic: boolean) =>
       backgroundColor: Tokens.colors.brand[600],
       position: 'absolute',
       opacity: 0.3,
+      ...Platform.select({
+        web: isWeb ? { transition: 'transform 1s ease-in-out' } : undefined,
+      }),
     },
     phaseText: {
       fontFamily: Tokens.type.fontFamily.sans,
@@ -184,5 +155,3 @@ const getStyles = (isCosmic: boolean) =>
       minWidth: 200,
     },
   });
-
-export default AnchorActiveSession;

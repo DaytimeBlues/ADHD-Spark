@@ -145,6 +145,9 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   refreshButton: {
+    minHeight: 44,
+    minWidth: 44,
+    justifyContent: 'center',
     paddingVertical: Tokens.spacing[1],
     paddingHorizontal: Tokens.spacing[2],
   },

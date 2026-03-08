@@ -80,6 +80,7 @@ export const BottomSheet = memo(function BottomSheet({
   const { isCosmic } = useTheme();
   const translateY = useRef(new Animated.Value(600)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const useNativeDriver = !isWeb;
 
   // Slide in when visible
   useEffect(() => {
@@ -89,13 +90,13 @@ export const BottomSheet = memo(function BottomSheet({
           toValue: 0,
           duration: ANIMATION_DURATION,
           easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
+          useNativeDriver,
         }),
         Animated.timing(backdropOpacity, {
           toValue: 1,
           duration: ANIMATION_DURATION,
           easing: Easing.out(Easing.ease),
-          useNativeDriver: true,
+          useNativeDriver,
         }),
       ]).start();
     } else {
@@ -104,17 +105,17 @@ export const BottomSheet = memo(function BottomSheet({
           toValue: 600,
           duration: ANIMATION_DURATION - 40,
           easing: Easing.in(Easing.cubic),
-          useNativeDriver: true,
+          useNativeDriver,
         }),
         Animated.timing(backdropOpacity, {
           toValue: 0,
           duration: ANIMATION_DURATION - 40,
           easing: Easing.in(Easing.ease),
-          useNativeDriver: true,
+          useNativeDriver,
         }),
       ]).start();
     }
-  }, [visible, translateY, backdropOpacity]);
+  }, [backdropOpacity, translateY, useNativeDriver, visible]);
 
   const handleBackdropPress = useCallback(() => {
     if (!disableBackdropDismiss) {

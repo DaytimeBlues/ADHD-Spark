@@ -400,5 +400,3 @@ const getStyles = (isCosmic: boolean) =>
       width: 16,
     },
   });
-
-export default IntegrationPanel;

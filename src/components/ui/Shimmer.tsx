@@ -5,6 +5,7 @@ import {
   Animated,
   ViewStyle,
   DimensionValue,
+  Platform,
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
@@ -23,6 +24,7 @@ export const Shimmer: React.FC<ShimmerProps> = ({
 }) => {
   const { isCosmic } = useTheme();
   const shimmerAnim = React.useRef(new Animated.Value(0)).current;
+  const useNativeDriver = Platform.OS !== 'web';
 
   React.useEffect(() => {
     const animation = Animated.loop(
@@ -30,12 +32,12 @@ export const Shimmer: React.FC<ShimmerProps> = ({
         Animated.timing(shimmerAnim, {
           toValue: 1,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver,
         }),
         Animated.timing(shimmerAnim, {
           toValue: 0,
           duration: 1500,
-          useNativeDriver: true,
+          useNativeDriver,
         }),
       ]),
     );
@@ -45,38 +47,29 @@ export const Shimmer: React.FC<ShimmerProps> = ({
     return () => {
       animation.stop();
     };
-  }, [shimmerAnim]);
+  }, [shimmerAnim, useNativeDriver]);
 
   const translateX = shimmerAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [-200, 200],
   });
+  const containerVisualStyle: ViewStyle = {
+    width: width as DimensionValue,
+    height,
+    backgroundColor: isCosmic
+      ? 'rgba(139, 92, 246, 0.1)'
+      : 'rgba(0, 0, 0, 0.05)',
+  };
+  const shimmerVisualStyle: ViewStyle = {
+    transform: [{ translateX }],
+    backgroundColor: isCosmic
+      ? 'rgba(139, 92, 246, 0.3)'
+      : 'rgba(255, 255, 255, 0.5)',
+  };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          width: width as DimensionValue,
-          height,
-          backgroundColor: isCosmic
-            ? 'rgba(139, 92, 246, 0.1)'
-            : 'rgba(0, 0, 0, 0.05)',
-        } as ViewStyle,
-        style,
-      ]}
-    >
-      <Animated.View
-        style={[
-          styles.shimmer,
-          {
-            transform: [{ translateX }],
-            backgroundColor: isCosmic
-              ? 'rgba(139, 92, 246, 0.3)'
-              : 'rgba(255, 255, 255, 0.5)',
-          },
-        ]}
-      />
+    <View style={[styles.container, containerVisualStyle, style]}>
+      <Animated.View style={[styles.shimmer, shimmerVisualStyle]} />
       {children}
     </View>
   );

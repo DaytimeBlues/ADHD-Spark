@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { LoggerService } from '../services/LoggerService';
+import { Tokens } from '../theme/tokens';
 import { useTheme, ThemeContextValue } from '../theme/useTheme';
 
 interface ErrorBoundaryProps {
@@ -149,13 +150,13 @@ const getStyles = (isCosmic: boolean, t: ThemeContextValue['t']) =>
     title: {
       fontSize: 24,
       fontWeight: '700',
-      color: t.colors.text?.primary || '#ffffff',
+      color: t.colors.text?.primary || Tokens.colors.text.primary,
       marginBottom: 16,
       textAlign: 'center',
     },
     message: {
       fontSize: 16,
-      color: t.colors.text?.secondary || '#a0a0a0',
+      color: t.colors.text?.secondary || Tokens.colors.text.secondary,
       textAlign: 'center',
       marginBottom: 32,
       lineHeight: 24,
@@ -190,7 +191,7 @@ const getStyles = (isCosmic: boolean, t: ThemeContextValue['t']) =>
       alignItems: 'center',
     },
     buttonText: {
-      color: t.colors.text?.primary || '#ffffff',
+      color: t.colors.text?.primary || Tokens.colors.text.primary,
       fontSize: 16,
       fontWeight: '600',
     },

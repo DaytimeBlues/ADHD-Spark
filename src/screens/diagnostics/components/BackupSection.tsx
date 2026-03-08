@@ -237,5 +237,3 @@ const styles = StyleSheet.create({
     color: Tokens.colors.text.secondary,
   },
 });
-
-export default BackupSection;

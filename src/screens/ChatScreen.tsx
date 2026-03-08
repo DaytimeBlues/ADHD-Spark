@@ -48,6 +48,8 @@ const ChatScreen = () => {
         behavior={isIOS ? 'padding' : undefined}
         style={styles.container}
         keyboardVerticalOffset={isIOS ? 90 : 0}
+        accessibilityLabel="Chat screen"
+        accessibilityRole="summary"
       >
         <View style={styles.header}>
           <Text style={styles.title}>CADDI_ASSISTANT</Text>

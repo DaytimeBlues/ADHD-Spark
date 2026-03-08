@@ -103,35 +103,38 @@ const useTimer = ({
     }
   }, [autoStart, id, initialTime, isRunningGlobal, activeMode, storeStart]);
 
-  const start = useCallback(() => {
-    const currentState = useTimerStore.getState();
-    const isThisActive = currentState.activeMode === id;
+  const start = useCallback(
+    (durationOverride?: number, isWorkingOverride?: boolean) => {
+      const currentState = useTimerStore.getState();
+      const isThisActive = currentState.activeMode === id;
 
-    if (
-      isThisActive &&
-      currentState.remainingSeconds > 0 &&
-      !currentState.isRunning
-    ) {
-      if (currentState.remainingSeconds === currentState.durationSeconds) {
-        // It's a fresh start of a phase (e.g. from completePhase setting nextDurationSeconds)
+      if (
+        isThisActive &&
+        currentState.remainingSeconds > 0 &&
+        !currentState.isRunning
+      ) {
+        if (currentState.remainingSeconds === currentState.durationSeconds) {
+          // It's a fresh start of a phase (e.g. from completePhase setting nextDurationSeconds)
+          currentState.start(
+            id as TimerMode,
+            currentState.durationSeconds,
+            currentState.isWorking,
+          );
+        } else {
+          // It's a resume from a paused state
+          currentState.resume();
+        }
+      } else {
+        // It's a first time initialization, restart from 0, or overriding
         currentState.start(
           id as TimerMode,
-          currentState.durationSeconds,
-          currentState.isWorking,
+          durationOverride ?? initialTime,
+          isWorkingOverride ?? (id === 'pomodoro' ? true : undefined),
         );
-      } else {
-        // It's a resume from a paused state
-        currentState.resume();
       }
-    } else {
-      // It's a first time initialization, restart from 0, or overriding
-      currentState.start(
-        id as TimerMode,
-        initialTime,
-        id === 'pomodoro' ? true : undefined,
-      );
-    }
-  }, [id, initialTime]);
+    },
+    [id, initialTime],
+  );
 
   const pause = useCallback(() => {
     if (isActive) {

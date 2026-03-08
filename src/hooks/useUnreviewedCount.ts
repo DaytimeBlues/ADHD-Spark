@@ -18,7 +18,11 @@ export function useUnreviewedCount() {
     const unsubscribe = CaptureService.subscribe((newCount) => {
       setCount(newCount);
     });
-    return () => unsubscribe();
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, []);
 
   return count;

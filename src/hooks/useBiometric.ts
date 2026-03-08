@@ -15,7 +15,9 @@ export function useBiometric() {
       setIsUnlocked(unlocked);
     });
     return () => {
-      unsubscribe();
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
     };
   }, []);
 

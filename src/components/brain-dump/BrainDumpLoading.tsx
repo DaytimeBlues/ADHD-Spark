@@ -40,5 +40,3 @@ const getStyles = (isCosmic: boolean) =>
       textTransform: 'uppercase',
     },
   });
-
-export default BrainDumpLoading;

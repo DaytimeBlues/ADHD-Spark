@@ -46,14 +46,62 @@ type DrawerMode = CaptureSource | 'task';
 // ============================================================================
 
 const MODES: Array<{ id: DrawerMode; icon: string; label: string }> = [
-  { id: 'task', icon: '📝', label: 'TASK' },
-  { id: 'voice', icon: '🎙', label: 'VOICE' },
-  { id: 'text', icon: '⌨', label: 'TEXT' },
-  { id: 'photo', icon: '📷', label: 'PHOTO' },
-  { id: 'paste', icon: '📋', label: 'PASTE' },
-  { id: 'meeting', icon: '👥', label: 'MEETING' },
-  { id: 'checkin', icon: '🎯', label: 'CHECK-IN' },
+  { id: 'task', icon: 'T', label: 'TASK' },
+  { id: 'voice', icon: 'V', label: 'VOICE' },
+  { id: 'text', icon: 'TXT', label: 'TEXT' },
+  { id: 'photo', icon: 'P', label: 'PHOTO' },
+  { id: 'paste', icon: 'PS', label: 'PASTE' },
+  { id: 'meeting', icon: 'M', label: 'MEETING' },
+  { id: 'checkin', icon: 'CI', label: 'CHECK-IN' },
 ];
+
+const MODE_COPY: Record<
+  DrawerMode,
+  { title: string; description: string; outcome: string }
+> = {
+  task: {
+    title: 'Create a task now',
+    description:
+      'Use this when you already know the action and do not need triage.',
+    outcome: 'Saves directly to your active task list.',
+  },
+  voice: {
+    title: 'Talk it out',
+    description:
+      'Record first, review the captured note, then send it to the inbox.',
+    outcome: 'Best for fast capture when typing would slow you down.',
+  },
+  text: {
+    title: 'Type a quick note',
+    description:
+      'Good for thoughts, reminders, and rough tasks that need sorting later.',
+    outcome: 'Saves to the inbox for review.',
+  },
+  photo: {
+    title: 'Save a visual reference',
+    description:
+      'Useful for whiteboards, receipts, notes, or anything easier to snap than type.',
+    outcome: 'Stores the image with an optional caption in the inbox.',
+  },
+  paste: {
+    title: 'Drop copied text',
+    description:
+      'Ideal for messages, links, snippets, or notes you grabbed from somewhere else.',
+    outcome: 'Lets you trim the text before saving it to the inbox.',
+  },
+  meeting: {
+    title: 'Capture meeting notes',
+    description:
+      'Starts with a simple template so you can focus on listening, not formatting.',
+    outcome: 'Saves structured notes to the inbox.',
+  },
+  checkin: {
+    title: 'Reset your focus',
+    description:
+      'A quick prompt to notice what you are doing and what you meant to be doing.',
+    outcome: 'Logs a check-in note to the inbox.',
+  },
+};
 
 const MEETING_TEMPLATE = (now: Date): string => {
   const date = now.toLocaleDateString('en-AU', {
@@ -157,9 +205,9 @@ const VoiceMode = memo(function VoiceMode({
       onStateChange('idle');
       return;
     }
-    // In v1, use uri as raw — transcription is async/future
+    // In v1, use uri as raw - transcription is async/future
     // For now, create a placeholder transcript
-    const rawText = `[Voice note — ${Math.round(result.duration / 1000)}s recording]`;
+    const rawText = `[Voice note - ${Math.round(result.duration / 1000)}s recording]`;
     setTranscript(rawText);
     setPhase('done');
     onStateChange('idle');
@@ -184,7 +232,7 @@ const VoiceMode = memo(function VoiceMode({
         <RuneButton
           variant="primary"
           onPress={handleStartRecording}
-          leftIcon={<Text style={styles.recordBtnIcon}>🎙</Text>}
+          leftIcon={<Text style={styles.recordBtnIcon}>REC</Text>}
           style={styles.recordBtn}
         >
           TAP TO RECORD
@@ -200,7 +248,7 @@ const VoiceMode = memo(function VoiceMode({
             {elapsed}
           </Text>
           <Text style={[styles.recordingHint, { color: C.mutedText }]}>
-            Recording…
+            Recording...
           </Text>
           <RuneButton
             variant="secondary"
@@ -217,7 +265,7 @@ const VoiceMode = memo(function VoiceMode({
         <View style={styles.processingState}>
           <ActivityIndicator size="large" color={C.violet} />
           <Text style={[styles.processingText, { color: C.mutedText }]}>
-            Processing…
+            Processing...
           </Text>
         </View>
       )}
@@ -301,7 +349,7 @@ const TextMode = memo(function TextMode({ onCapture }: TextModeProps) {
         ]}
         value={text}
         onChangeText={setText}
-        placeholder="Type anything — tasks, thoughts, ideas…"
+        placeholder="Type anything - tasks, thoughts, ideas..."
         placeholderTextColor={C.mutedText}
         multiline
         autoFocus
@@ -393,7 +441,7 @@ const PasteMode = memo(function PasteMode({ onCapture }: PasteModeProps) {
             ]}
             value={text}
             onChangeText={setText}
-            placeholder="Paste text here…"
+            placeholder="Paste text here..."
             placeholderTextColor={C.mutedText}
             multiline
             numberOfLines={4}
@@ -525,7 +573,7 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
       {selectedUri ? (
         <View style={styles.photoPreview}>
           <Text style={[styles.photoPreviewLabel, { color: C.mutedText }]}>
-            📷 Photo selected
+            Photo selected
           </Text>
           <TextInput
             testID="capture-text-input"
@@ -535,7 +583,7 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
             ]}
             value={caption}
             onChangeText={setCaption}
-            placeholder="Add a caption (optional)…"
+            placeholder="Add a caption (optional)..."
             placeholderTextColor={C.mutedText}
             accessibilityLabel="Photo caption input"
           />
@@ -554,7 +602,7 @@ const PhotoMode = memo(function PhotoMode({ onCapture }: PhotoModeProps) {
           accessibilityLabel="Select a photo"
           accessibilityRole="button"
         >
-          <Text style={styles.photoPickIcon}>📷</Text>
+          <Text style={styles.photoPickIcon}>IMG</Text>
           <Text style={[styles.photoPickLabel, { color: C.violet }]}>
             SELECT PHOTO
           </Text>
@@ -741,7 +789,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
           transcript: extra?.transcript,
           attachmentUri: extra?.attachmentUri,
         });
-        showSuccess('Saved to inbox ✓');
+        showSuccess('Saved to inbox');
       } catch (err) {
         LoggerService.error({
           service: 'CaptureDrawer',
@@ -784,6 +832,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       handleCapture('photo', raw, { attachmentUri }),
     [handleCapture],
   );
+  const currentModeCopy = MODE_COPY[activeMode];
 
   return (
     <BottomSheet
@@ -794,6 +843,21 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       maxHeightFraction={0.85}
       scrollable={false}
     >
+      <View style={styles.introCard}>
+        <Text style={[styles.introEyebrow, { color: C.violet }]}>
+          QUICK CAPTURE
+        </Text>
+        <Text style={[styles.introTitle, { color: C.starlight }]}>
+          {currentModeCopy.title}
+        </Text>
+        <Text style={[styles.introDescription, { color: C.mutedText }]}>
+          {currentModeCopy.description}
+        </Text>
+        <Text style={[styles.introOutcome, { color: C.starlight }]}>
+          {currentModeCopy.outcome}
+        </Text>
+      </View>
+
       {/* Success flash */}
       {successMsg !== '' && (
         <View style={styles.successBanner}>
@@ -861,7 +925,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       {/* Active mode content */}
       <View style={styles.modePanel}>
         {activeMode === 'task' && (
-          <TaskMode onSuccess={() => showSuccess('Task added ✓')} />
+          <TaskMode onSuccess={() => showSuccess('Task added')} />
         )}
         {activeMode === 'voice' && (
           <VoiceMode
@@ -884,7 +948,7 @@ export const CaptureDrawer = memo(function CaptureDrawer({
       {currentBubbleState === 'offline' && (
         <View style={styles.offlineBanner}>
           <Text style={[styles.offlineText, { color: C.gold }]}>
-            ⊗ Offline — captures will sync when reconnected
+            Offline - captures will sync when reconnected
           </Text>
         </View>
       )}
@@ -900,6 +964,37 @@ const styles = StyleSheet.create({
   // Common spacers
   marginTop12: {
     marginTop: 12,
+  },
+  introCard: {
+    marginHorizontal: 16,
+    marginTop: 4,
+    marginBottom: 2,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: 'rgba(17, 26, 51, 0.72)',
+    borderWidth: 1,
+    borderColor: 'rgba(185, 194, 217, 0.12)',
+    gap: 4,
+  },
+  introEyebrow: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+  },
+  introTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  introDescription: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  introOutcome: {
+    fontSize: 12,
+    lineHeight: 17,
+    fontWeight: '600',
   },
 
   // Mode tabs

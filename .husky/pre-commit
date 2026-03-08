@@ -1,2 +1,4 @@
-# Run lint-staged to check and fix staged files
-npx lint-staged
+# This repo's git state repeatedly fails lint-staged's backup stash step on
+# Windows with "Needed a single revision". Skip stashing and run the staged-file
+# checks directly so commits still exercise eslint/prettier/jest.
+npx lint-staged --no-stash

@@ -114,5 +114,3 @@ const getStyles = (isCosmic: boolean) =>
       color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
     },
   });
-
-export default BrainDumpSortedSection;

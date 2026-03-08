@@ -92,7 +92,11 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
 
   return (
     <CosmicBackground variant="ridge">
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        accessibilityLabel="CBT guide screen"
+        accessibilityRole="summary"
+      >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.maxWidthWrapper}>
             <View style={styles.header}>
@@ -109,6 +113,8 @@ const CBTGuideScreen = ({ navigation }: { navigation: ScreenNavigation }) => {
                   hovered && styles.backButtonHovered,
                   pressed && styles.backButtonPressed,
                 ]}
+                accessibilityLabel="Go back"
+                accessibilityRole="button"
               >
                 <Text style={styles.backButtonText}>←</Text>
               </Pressable>
@@ -269,8 +275,8 @@ const getStyles = (isCosmic: boolean) =>
     },
     backButton: {
       marginRight: Tokens.spacing[4],
-      width: 40,
-      height: 40,
+      width: 44,
+      height: 44,
       borderRadius: isCosmic ? 8 : Tokens.radii.none,
       backgroundColor: isCosmic
         ? 'rgba(42, 53, 82, 0.3)'

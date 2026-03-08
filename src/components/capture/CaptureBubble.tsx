@@ -22,6 +22,7 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  View,
   ViewStyle,
 } from 'react-native';
 import CaptureService from '../../services/CaptureService';
@@ -43,7 +44,7 @@ const BADGE_SIZE = 22;
 const PULSE_DURATION = 900;
 const SPIN_DURATION = 1200;
 
-// Cosmic colors (no hex outside tokens in app code — these mirror cosmicTokens)
+// Cosmic colors (no hex outside tokens in app code - these mirror cosmicTokens)
 const COLORS = {
   idle: '#8B5CF6', // nebulaViolet
   recording: '#2DD4BF', // auroraTeal
@@ -54,6 +55,9 @@ const COLORS = {
   badge: '#FB7185', // cometRose
   badgeText: '#EEF2FF', // starlight
   fabText: '#EEF2FF', // starlight
+  hintBg: 'rgba(7, 7, 18, 0.84)',
+  hintBorder: 'rgba(185, 194, 217, 0.18)',
+  hintText: '#EEF2FF',
 } as const;
 
 // ============================================================================
@@ -80,6 +84,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
   const shakeAnim = useRef(new Animated.Value(0)).current;
   const pulseLoop = useRef<Animated.CompositeAnimation | null>(null);
   const spinLoop = useRef<Animated.CompositeAnimation | null>(null);
+  const useNativeDriver = !isWeb;
 
   // Subscribe to badge count updates from CaptureService
   useEffect(() => {
@@ -119,13 +124,13 @@ export const CaptureBubble = memo(function CaptureBubble() {
             toValue: 1.15,
             duration: PULSE_DURATION / 2,
             easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
+            useNativeDriver,
           }),
           Animated.timing(pulseAnim, {
             toValue: 1,
             duration: PULSE_DURATION / 2,
             easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
+            useNativeDriver,
           }),
         ]),
       );
@@ -137,7 +142,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
     return () => {
       pulseLoop.current?.stop();
     };
-  }, [bubbleState, pulseAnim]);
+  }, [bubbleState, pulseAnim, useNativeDriver]);
 
   // Spin animation (processing state)
   useEffect(() => {
@@ -147,7 +152,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
           toValue: 1,
           duration: SPIN_DURATION,
           easing: Easing.linear,
-          useNativeDriver: true,
+          useNativeDriver,
         }),
       );
       spinLoop.current.start();
@@ -158,40 +163,40 @@ export const CaptureBubble = memo(function CaptureBubble() {
     return () => {
       spinLoop.current?.stop();
     };
-  }, [bubbleState, spinAnim]);
+  }, [bubbleState, spinAnim, useNativeDriver]);
 
-  // Shake animation (failed state — plays once)
+  // Shake animation (failed state - plays once)
   const runShake = useCallback(() => {
     shakeAnim.setValue(0);
     Animated.sequence([
       Animated.timing(shakeAnim, {
         toValue: 8,
         duration: 60,
-        useNativeDriver: true,
+        useNativeDriver,
         easing: Easing.linear,
       }),
       Animated.timing(shakeAnim, {
         toValue: -8,
         duration: 60,
-        useNativeDriver: true,
+        useNativeDriver,
         easing: Easing.linear,
       }),
       Animated.timing(shakeAnim, {
         toValue: 6,
         duration: 60,
-        useNativeDriver: true,
+        useNativeDriver,
         easing: Easing.linear,
       }),
       Animated.timing(shakeAnim, {
         toValue: -6,
         duration: 60,
-        useNativeDriver: true,
+        useNativeDriver,
         easing: Easing.linear,
       }),
       Animated.timing(shakeAnim, {
         toValue: 0,
         duration: 60,
-        useNativeDriver: true,
+        useNativeDriver,
         easing: Easing.linear,
       }),
     ]).start(() => {
@@ -202,7 +207,7 @@ export const CaptureBubble = memo(function CaptureBubble() {
         );
       }, 3000);
     });
-  }, [shakeAnim, badgeCount]);
+  }, [badgeCount, shakeAnim, useNativeDriver]);
 
   // Run shake when entering failed state
   useEffect(() => {
@@ -270,19 +275,44 @@ export const CaptureBubble = memo(function CaptureBubble() {
   const fabIcon = useMemo((): string => {
     switch (bubbleState) {
       case 'recording':
-        return '⏹';
+        return 'STOP';
       case 'processing':
-        return '⟳';
+        return '...';
       case 'failed':
-        return '✕';
+        return 'X';
       case 'offline':
-        return '⊗';
+        return 'OFF';
       case 'needs-checkin':
-        return '🎯';
+        return 'CHK';
       default:
         return '+';
     }
   }, [bubbleState]);
+
+  const bubbleHint = useMemo((): string | null => {
+    if (
+      drawerOpen ||
+      bubbleState === 'recording' ||
+      bubbleState === 'processing'
+    ) {
+      return null;
+    }
+
+    switch (bubbleState) {
+      case 'needs-review':
+        return totalBadgeCount > 0
+          ? `Review ${totalBadgeCount} item${totalBadgeCount !== 1 ? 's' : ''}`
+          : 'Review inbox';
+      case 'needs-checkin':
+        return 'Quick check-in';
+      case 'offline':
+        return 'Offline capture';
+      case 'failed':
+        return 'Try again';
+      default:
+        return 'Quick capture';
+    }
+  }, [bubbleState, drawerOpen, totalBadgeCount]);
 
   const handlePress = useCallback(() => {
     if (bubbleState === 'needs-review' && badgeCount > 0) {
@@ -334,6 +364,12 @@ export const CaptureBubble = memo(function CaptureBubble() {
         ]}
         pointerEvents="box-none"
       >
+        {isWeb && bubbleHint && (
+          <View pointerEvents="none" style={styles.hintPill}>
+            <Text style={styles.hintText}>{bubbleHint}</Text>
+          </View>
+        )}
+
         <Pressable
           testID="capture-bubble"
           onPress={handlePress}
@@ -390,6 +426,23 @@ const styles = StyleSheet.create({
     bottom: 88, // above tab bar (60px) + padding
     right: 20,
     zIndex: 999,
+    alignItems: 'flex-end',
+  },
+  hintPill: {
+    marginBottom: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
+    backgroundColor: COLORS.hintBg,
+    borderWidth: 1,
+    borderColor: COLORS.hintBorder,
+    maxWidth: 168,
+  },
+  hintText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.hintText,
+    letterSpacing: 0.3,
   },
   fab: {
     width: FAB_SIZE,

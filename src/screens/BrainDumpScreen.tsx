@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -21,8 +21,13 @@ import {
   BrainDumpVoiceRecord,
   IntegrationPanel,
 } from '../components/brain-dump';
+import { TutorialBubble } from '../components/tutorial/TutorialBubble';
 import useBrainDump from '../hooks/useBrainDump';
 import type { SortedItem } from '../services/AISortService';
+import {
+  brainDumpOnboardingFlow,
+  useTutorialStore,
+} from '../store/useTutorialStore';
 
 // --- Constants ---
 const LIST_PADDING_BOTTOM = 120;
@@ -46,6 +51,17 @@ const BrainDumpScreen = () => {
   const { isCosmic, t } = useTheme();
   const styles = getStyles(isCosmic, t);
   const route = useRoute<BrainDumpRoute>();
+  const hasAutoStartedTutorial = useRef(false);
+  const activeFlow = useTutorialStore((state) => state.activeFlow);
+  const currentStepIndex = useTutorialStore((state) => state.currentStepIndex);
+  const isTutorialVisible = useTutorialStore((state) => state.isVisible);
+  const onboardingCompleted = useTutorialStore(
+    (state) => state.onboardingCompleted,
+  );
+  const startTutorial = useTutorialStore((state) => state.startTutorial);
+  const nextStep = useTutorialStore((state) => state.nextStep);
+  const previousStep = useTutorialStore((state) => state.previousStep);
+  const skipTutorial = useTutorialStore((state) => state.skipTutorial);
 
   const {
     items,
@@ -69,8 +85,28 @@ const BrainDumpScreen = () => {
     getPriorityStyle,
   } = useBrainDump(route.params?.autoRecord);
 
+  useEffect(() => {
+    if (hasAutoStartedTutorial.current || onboardingCompleted) {
+      return;
+    }
+
+    if (!isTutorialVisible && activeFlow === null) {
+      hasAutoStartedTutorial.current = true;
+      startTutorial(brainDumpOnboardingFlow);
+    }
+  }, [activeFlow, isTutorialVisible, onboardingCompleted, startTutorial]);
+
+  const currentTutorialStep =
+    isTutorialVisible && activeFlow
+      ? activeFlow.steps[currentStepIndex] ?? null
+      : null;
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      accessibilityLabel="Brain dump screen"
+      accessibilityRole="summary"
+    >
       {isCosmic && (
         <CosmicBackground variant="nebula">
           <View style={StyleSheet.absoluteFill} />
@@ -81,7 +117,36 @@ const BrainDumpScreen = () => {
           <View style={styles.header}>
             <Text style={styles.title}>BRAIN_DUMP</Text>
             <View style={styles.headerLine} />
+            <Pressable
+              onPress={() => startTutorial(brainDumpOnboardingFlow)}
+              accessibilityRole="button"
+              accessibilityLabel="Start brain dump tutorial"
+              testID="brain-dump-tour-button"
+              style={({ pressed }) => [
+                styles.tourButton,
+                pressed && styles.tourButtonPressed,
+              ]}
+            >
+              <Text style={styles.tourButtonText}>TOUR</Text>
+            </Pressable>
           </View>
+
+          {currentTutorialStep && (
+            <View style={styles.tutorialOverlay} testID="tutorial-overlay">
+              <TutorialBubble
+                step={currentTutorialStep}
+                stepIndex={currentStepIndex}
+                totalSteps={activeFlow?.steps.length ?? 0}
+                isFirstStep={currentStepIndex === 0}
+                isLastStep={
+                  currentStepIndex === (activeFlow?.steps.length ?? 1) - 1
+                }
+                onNext={nextStep}
+                onPrevious={previousStep}
+                onSkip={skipTutorial}
+              />
+            </View>
+          )}
 
           <BrainDumpRationale />
 
@@ -229,6 +294,38 @@ const getStyles = (isCosmic: boolean, t: ReturnType<typeof useTheme>['t']) =>
         ? 'rgba(139, 92, 246, 0.3)'
         : t.colors.neutral.border,
       marginLeft: t.spacing[4],
+    },
+    tourButton: {
+      borderWidth: 1,
+      borderColor: isCosmic
+        ? 'rgba(139, 92, 246, 0.45)'
+        : t.colors.neutral.border,
+      backgroundColor: isCosmic
+        ? 'rgba(17, 26, 51, 0.72)'
+        : t.colors.neutral.dark,
+      paddingHorizontal: t.spacing[3],
+      paddingVertical: t.spacing[2],
+      borderRadius: isCosmic ? 999 : t.radii.md,
+      marginLeft: t.spacing[3],
+    },
+    tourButtonPressed: {
+      opacity: 0.82,
+    },
+    tourButtonText: {
+      fontFamily:
+        t.type?.fontFamily?.mono ||
+        t.typography?.mono?.fontFamily ||
+        'monospace',
+      fontSize: t.type?.xs || t.fontSizes?.[12] || 12,
+      color: isCosmic
+        ? t.colors.cosmic?.nebulaViolet || '#8B5CF6'
+        : t.colors.text?.primary || '#ffffff',
+      fontWeight: '700',
+      letterSpacing: SUBHEADER_LETTER_SPACING,
+    },
+    tutorialOverlay: {
+      marginBottom: t.spacing[4],
+      zIndex: 2,
     },
     loadingContainer: {
       padding: t.spacing[8],

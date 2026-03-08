@@ -49,5 +49,3 @@ const getStyles = (isCosmic: boolean) =>
       letterSpacing: 1,
     },
   });
-
-export default AnchorHeader;

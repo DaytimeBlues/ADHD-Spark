@@ -35,6 +35,9 @@ const PRIORITY_LABELS: Record<TaskPriority, string> = {
   normal: 'STABLE',
 };
 
+const DONE_STAT_COLOR = '#EEF2FF';
+const CHECKBOX_BORDER_COLOR = 'rgba(185, 194, 217, 0.3)';
+
 /**
  * TasksScreen
  *
@@ -115,11 +118,17 @@ export const TasksScreen = memo(function TasksScreen() {
   return (
     <CosmicBackground variant="ridge">
       {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
+      <View
+        style={[styles.header, { paddingTop: insets.top + 16 }]}
+        accessibilityLabel="Tasks screen"
+        accessibilityRole="summary"
+      >
         <View style={styles.headerRow}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={styles.backButton}
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
           >
             <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
@@ -185,7 +194,7 @@ export const TasksScreen = memo(function TasksScreen() {
               padding="sm"
               style={styles.statCard}
             >
-              <Text style={[styles.statValue, { color: '#EEF2FF' }]}>
+              <Text style={[styles.statValue, styles.statValueDone]}>
                 {stats.completed}
               </Text>
               <Text style={styles.statLabel}>DONE</Text>
@@ -337,7 +346,7 @@ const TaskItem = memo(function TaskItem({
                 backgroundColor: PRIORITY_COLORS[task.priority],
                 borderColor: PRIORITY_COLORS[task.priority],
               },
-              { borderColor: 'rgba(185, 194, 217, 0.3)' },
+              styles.checkboxDefaultBorder,
               animatedCheckboxStyle,
             ]}
           >
@@ -378,7 +387,12 @@ const TaskItem = memo(function TaskItem({
         </View>
 
         {/* Delete button */}
-        <TouchableOpacity onPress={onDelete} style={styles.deleteButton}>
+        <TouchableOpacity
+          onPress={onDelete}
+          style={styles.deleteButton}
+          accessibilityLabel="Delete task"
+          accessibilityRole="button"
+        >
           <Text style={styles.deleteIcon}>✕</Text>
         </TouchableOpacity>
       </View>
@@ -413,8 +427,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 16,
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -443,6 +457,9 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 28,
     fontWeight: '700',
+  },
+  statValueDone: {
+    color: DONE_STAT_COLOR,
   },
   statLabel: {
     fontSize: 9,
@@ -498,6 +515,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
   },
+  checkboxDefaultBorder: {
+    borderColor: CHECKBOX_BORDER_COLOR,
+  },
   checkmark: {
     color: '#FFFFFF',
     fontWeight: '900',
@@ -537,8 +557,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   deleteButton: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },

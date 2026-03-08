@@ -14,14 +14,13 @@ import { ROUTES } from './routes';
 import { CaptureBubble } from '../components/capture';
 import ErrorBoundary from '../components/ErrorBoundary';
 
-// Phase 6: Sync with ADHD CADDI Redesign - Primary tabs use Cosmic screens
-import HomeScreen from '../screens/HomeScreen';
-import IgniteScreen from '../screens/IgniteScreen';
-import BrainDumpScreen from '../screens/BrainDumpScreen';
-import ChatScreen from '../screens/ChatScreen';
 import { isWeb } from '../utils/PlatformUtils';
 
-// Lazy loaded non-critical screens
+// Lazy loaded screens keep the first web bundle smaller.
+const HomeScreen = lazy(() => import('../screens/HomeScreen'));
+const IgniteScreen = lazy(() => import('../screens/IgniteScreen'));
+const BrainDumpScreen = lazy(() => import('../screens/BrainDumpScreen'));
+const ChatScreen = lazy(() => import('../screens/ChatScreen'));
 const FogCutterScreen = lazy(() => import('../screens/FogCutterScreen'));
 const PomodoroScreen = lazy(() => import('../screens/PomodoroScreen'));
 const CalendarScreen = lazy(() => import('../screens/CalendarScreen'));
@@ -86,12 +85,16 @@ const LazyCalendar = withSuspense(CalendarScreen);
 const LazyAnchor = withSuspense(AnchorScreen);
 const LazyInbox = withSuspense(InboxScreen);
 
-// Phase 6: Wrapped Cosmic screens for primary tabs (with ErrorBoundary)
-const SafeHomeScreen = withErrorBoundary(HomeScreen);
-const SafeIgniteScreen = withErrorBoundary(IgniteScreen);
-const SafeBrainDumpScreen = withErrorBoundary(BrainDumpScreen);
-const SafeChatScreen = withErrorBoundary(ChatScreen);
+const LazyHome = withSuspense(HomeScreen);
+const LazyIgnite = withSuspense(IgniteScreen);
+const LazyBrainDump = withSuspense(BrainDumpScreen);
+const LazyChat = withSuspense(ChatScreen);
 
+// Phase 6: Wrapped Cosmic screens for primary tabs (with ErrorBoundary)
+const SafeHomeScreen = withErrorBoundary(LazyHome);
+const SafeIgniteScreen = withErrorBoundary(LazyIgnite);
+const SafeBrainDumpScreen = withErrorBoundary(LazyBrainDump);
+const SafeChatScreen = withErrorBoundary(LazyChat);
 const SafeLazyFogCutter = withErrorBoundary(LazyFogCutter);
 const SafeLazyPomodoro = withErrorBoundary(LazyPomodoro);
 const SafeLazyCalendar = withErrorBoundary(LazyCalendar);

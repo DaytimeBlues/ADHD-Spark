@@ -177,7 +177,11 @@ const FogCutterScreen = ({ navigation }: FogCutterScreenProps) => {
 
   return (
     <CosmicBackground variant="ridge" dimmer>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        accessibilityLabel="Fog cutter screen"
+        accessibilityRole="summary"
+      >
         <View style={styles.scrollContent}>
           <View style={styles.content}>
             <View style={styles.header}>

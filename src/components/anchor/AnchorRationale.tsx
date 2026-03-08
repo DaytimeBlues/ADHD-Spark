@@ -44,5 +44,3 @@ const getStyles = (isCosmic: boolean) =>
       flexWrap: 'wrap',
     },
   });
-
-export default AnchorRationale;

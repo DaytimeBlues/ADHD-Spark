@@ -1,14 +1,39 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { BreathingPattern, PatternConfig } from '../../hooks/useAnchorSession';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
 import { GlowCard } from '../../ui/cosmic';
-import { BreathingPattern, PatternConfig } from '../../hooks/useAnchor';
 
 interface AnchorPatternSelectorProps {
   patterns: Record<BreathingPattern, PatternConfig>;
   onSelectPattern: (pattern: BreathingPattern) => void;
 }
+
+const getPatternEmoji = (pattern: BreathingPattern) => {
+  switch (pattern) {
+    case '478':
+      return '🌙';
+    case 'box':
+      return '📦';
+    case 'energize':
+      return '⚡';
+    default:
+      return '';
+  }
+};
+
+const formatPatternDetails = (config: PatternConfig) => {
+  return [
+    { label: 'In', val: config.inhale },
+    { label: 'Hold', val: config.hold },
+    { label: 'Out', val: config.exhale },
+    { label: 'Wait', val: config.wait },
+  ]
+    .filter((step) => step.val > 0)
+    .map((step) => `${step.label} ${step.val}`)
+    .join(' | ');
+};
 
 export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
   patterns,
@@ -17,60 +42,36 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
   const { isCosmic } = useTheme();
   const styles = getStyles(isCosmic);
 
-  const getPatternEmoji = (pattern: BreathingPattern) => {
-    switch (pattern) {
-      case '478':
-        return '🌙';
-      case 'box':
-        return '📦';
-      case 'energize':
-        return '⚡';
-      default:
-        return '';
-    }
-  };
-
-  const formatPatternDetails = (config: PatternConfig) => {
-    const steps = [
-      { label: 'In', val: config.inhale },
-      { label: 'Hold', val: config.hold },
-      { label: 'Out', val: config.exhale },
-      { label: 'Wait', val: config.wait },
-    ]
-      .filter((s) => s.val > 0)
-      .map((s) => `${s.label} ${s.val}`)
-      .join(' • ');
-    return steps;
-  };
-
   return (
     <View style={styles.patternsContainer}>
-      {(Object.keys(patterns) as BreathingPattern[]).map((p) => (
+      {(Object.keys(patterns) as BreathingPattern[]).map((pattern) => (
         <GlowCard
-          key={p}
-          testID={`anchor-pattern-${p}`}
-          accessibilityLabel={`${patterns[p].name} breathing pattern`}
-          accessibilityHint={`Double tap to select ${patterns[p].name} breathing exercise`}
+          key={pattern}
+          testID={`anchor-pattern-${pattern}`}
+          accessibilityLabel={`${patterns[pattern].name} breathing pattern`}
+          accessibilityHint={`Double tap to select ${patterns[pattern].name} breathing exercise`}
           accessibilityRole="button"
           glow="soft"
           tone="base"
           padding="lg"
-          onPress={() => onSelectPattern(p)}
+          onPress={() => onSelectPattern(pattern)}
           style={styles.patternButton}
         >
           <View style={styles.patternIcon}>
             <Text
               style={styles.patternEmoji}
-              accessibilityElementsHidden={true}
+              accessibilityElementsHidden
               importantForAccessibility="no"
             >
-              {getPatternEmoji(p)}
+              {getPatternEmoji(pattern)}
             </Text>
           </View>
           <View style={styles.patternInfo}>
-            <Text style={styles.patternButtonText}>{patterns[p].name}</Text>
+            <Text style={styles.patternButtonText}>
+              {patterns[pattern].name}
+            </Text>
             <Text style={styles.patternDetails}>
-              {formatPatternDetails(patterns[p])}
+              {formatPatternDetails(patterns[pattern])}
             </Text>
           </View>
         </GlowCard>
@@ -121,5 +122,3 @@ const getStyles = (isCosmic: boolean) =>
       fontSize: Tokens.type.sm,
     },
   });
-
-export default AnchorPatternSelector;

@@ -111,5 +111,3 @@ const styles = StyleSheet.create({
     maxWidth: '50%',
   },
 });
-
-export default DiagnosticsStatusSection;

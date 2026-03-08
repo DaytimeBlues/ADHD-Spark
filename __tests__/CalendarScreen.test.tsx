@@ -19,7 +19,7 @@ jest.mock('../src/utils/PlatformUtils', () => ({
 const mockSignInInteractive = jest.fn().mockResolvedValue(true);
 const mockGetCurrentUserScopes = jest.fn().mockResolvedValue(null);
 
-jest.mock('../src/services/PlaudService', () => ({
+jest.mock('../src/services/GoogleTasksSyncService', () => ({
   __esModule: true,
   GoogleTasksSyncService: {
     signInInteractive: (...args: unknown[]) => mockSignInInteractive(...args),

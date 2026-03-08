@@ -1,223 +1,62 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Platform } from 'react-native';
-import SoundService from '../services/SoundService';
-import useTimer from '../hooks/useTimer';
-import { useTimerStore } from '../store/useTimerStore';
-import { LinearButton } from '../components/ui/LinearButton';
+import React from 'react';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { usePomodoroSession } from '../hooks/usePomodoroSession';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
-import { isWeb } from '../utils/PlatformUtils';
-import {
-  CosmicBackground,
-  ChronoDigits,
-  RuneButton,
-  HaloRing,
-} from '../ui/cosmic';
-
-const SESSION_BADGE_SIZE = 28;
-const TIMER_CARD_SIZE = 280;
-const FOCUS_DURATION_SECONDS = 25 * 60;
-const BREAK_DURATION_SECONDS = 5 * 60;
+import { CosmicBackground } from '../ui/cosmic';
+import { PomodoroControls } from './pomodoro/PomodoroControls';
+import { PomodoroHeader } from './pomodoro/PomodoroHeader';
+import { PomodoroSessionCounter } from './pomodoro/PomodoroSessionCounter';
+import { PomodoroTimerCard } from './pomodoro/PomodoroTimerCard';
 
 const PomodoroScreen = () => {
   const { isCosmic } = useTheme();
-  // We sync isWorking and sessions to the store, but keep local state for the UI if needed
-  // Alternatively, just pull them directly from useTimerStore
-  const store = useTimerStore();
-  const isWorking = store.activeMode === 'pomodoro' ? store.isWorking : true;
-  const sessions = store.activeMode === 'pomodoro' ? store.sessions : 0;
-  const isWorkingRef = useRef(isWorking);
-
-  const { timeLeft, isRunning, formattedTime, start, pause, reset } = useTimer({
-    id: 'pomodoro',
-    initialTime: FOCUS_DURATION_SECONDS,
-    onComplete: () => {
-      if (isWorkingRef.current) {
-        useTimerStore.getState().incrementSession();
-        useTimerStore.getState().completePhase(BREAK_DURATION_SECONDS, false);
-        isWorkingRef.current = false;
-        SoundService.playCompletionSound();
-      } else {
-        useTimerStore.getState().completePhase(FOCUS_DURATION_SECONDS, true);
-        isWorkingRef.current = true;
-        SoundService.playNotificationSound();
-      }
-      // Re-start for the next phase
-      setTimeout(() => start(), 0);
-    },
-  });
-
-  useEffect(() => {
-    isWorkingRef.current = isWorking;
-  }, [isWorking]);
-
-  const startTimer = () => {
-    start();
-  };
-
-  const pauseTimer = () => {
-    pause();
-  };
-
-  const resetTimer = () => {
-    reset();
-    useTimerStore.getState().completePhase(FOCUS_DURATION_SECONDS, true);
-    isWorkingRef.current = true;
-  };
-
-  const getTotalDuration = () => {
-    return isWorking ? FOCUS_DURATION_SECONDS : BREAK_DURATION_SECONDS;
-  };
-
-  const styles = getStyles(isCosmic);
+  const styles = getStyles();
+  const {
+    timeLeft,
+    isRunning,
+    formattedTime,
+    isWorking,
+    sessions,
+    start,
+    pause,
+    reset,
+    getTotalDuration,
+  } = usePomodoroSession();
 
   return (
     <CosmicBackground variant="nebula" style={StyleSheet.absoluteFill}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        accessibilityLabel="Pomodoro screen"
+        accessibilityRole="summary"
+      >
         <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>POMODORO</Text>
-            <Text style={styles.subtitle}>
-              {isWorking ? 'FOCUS BLOCK' : 'RECOVERY BREAK'}
-            </Text>
-          </View>
-
-          <View style={styles.rationaleCard}>
-            <Text style={styles.rationaleTitle}>WHY THIS WORKS</Text>
-            <Text style={styles.rationaleText}>
-              Structured work/break cycles align with ADHD dopamine regulation.
-              Short bursts (25 min) prevent hyperfocus burnout, while mandatory
-              breaks restore attention. Evidence-based from CBT time-management
-              protocols for sustained task persistence.
-            </Text>
-          </View>
-
-          <View style={styles.timerCard}>
-            {isCosmic ? (
-              <>
-                <HaloRing
-                  mode="progress"
-                  progress={1 - timeLeft / getTotalDuration()}
-                  size={TIMER_CARD_SIZE}
-                  glow={isRunning ? 'strong' : 'medium'}
-                />
-                <View style={styles.timerOverlay}>
-                  <ChronoDigits
-                    testID="timer-display"
-                    value={formattedTime}
-                    size="hero"
-                    glow={isRunning ? 'strong' : 'none'}
-                    color={isWorking ? 'default' : 'success'}
-                  />
-                  <Text
-                    testID="pomodoro-phase"
-                    style={[
-                      styles.phaseText,
-                      isWorking ? styles.phaseTextFocus : styles.phaseTextBreak,
-                    ]}
-                  >
-                    {isWorking ? '🔥 FOCUS' : '🌿 REST'}
-                  </Text>
-                </View>
-              </>
-            ) : (
-              <>
-                <View
-                  style={[
-                    styles.phaseIndicator,
-                    isWorking
-                      ? styles.phaseIndicatorFocus
-                      : styles.phaseIndicatorBreak,
-                  ]}
-                />
-                <Text testID="timer-display" style={styles.timer}>
-                  {formattedTime}
-                </Text>
-                <Text
-                  testID="pomodoro-phase"
-                  style={[
-                    styles.phaseText,
-                    isWorking ? styles.phaseTextFocus : styles.phaseTextBreak,
-                  ]}
-                >
-                  {isWorking ? '🔥 FOCUS' : '🌿 REST'}
-                </Text>
-              </>
-            )}
-          </View>
-
-          <View style={styles.sessionCounter}>
-            <View style={styles.sessionBadge}>
-              <Text style={styles.sessionCount}>{sessions}</Text>
-            </View>
-            <Text style={styles.sessionLabel}>COMPLETED SESSIONS</Text>
-          </View>
-
-          <View style={styles.controls}>
-            {!isRunning ? (
-              isCosmic ? (
-                <RuneButton
-                  variant="primary"
-                  size="lg"
-                  glow="medium"
-                  onPress={startTimer}
-                  style={styles.controlBtn}
-                >
-                  Start Timer
-                </RuneButton>
-              ) : (
-                <LinearButton
-                  title="Start Timer"
-                  onPress={startTimer}
-                  variant={isWorking ? 'primary' : 'secondary'}
-                  size="lg"
-                  style={styles.controlBtn}
-                />
-              )
-            ) : isCosmic ? (
-              <RuneButton
-                variant="secondary"
-                size="lg"
-                onPress={pauseTimer}
-                style={styles.controlBtn}
-              >
-                Pause
-              </RuneButton>
-            ) : (
-              <LinearButton
-                title="Pause"
-                onPress={pauseTimer}
-                variant="secondary"
-                size="lg"
-                style={styles.controlBtn}
-              />
-            )}
-            {isCosmic ? (
-              <RuneButton
-                variant="ghost"
-                size="md"
-                onPress={resetTimer}
-                style={styles.controlBtn}
-              >
-                Reset
-              </RuneButton>
-            ) : (
-              <LinearButton
-                title="Reset"
-                onPress={resetTimer}
-                variant="ghost"
-                size="md"
-              />
-            )}
-          </View>
+          <PomodoroHeader isCosmic={isCosmic} isWorking={isWorking} />
+          <PomodoroTimerCard
+            isCosmic={isCosmic}
+            isWorking={isWorking}
+            isRunning={isRunning}
+            timeLeft={timeLeft}
+            formattedTime={formattedTime}
+            totalDuration={getTotalDuration()}
+          />
+          <PomodoroSessionCounter isCosmic={isCosmic} sessions={sessions} />
+          <PomodoroControls
+            isCosmic={isCosmic}
+            isRunning={isRunning}
+            isWorking={isWorking}
+            onStart={start}
+            onPause={pause}
+            onReset={reset}
+          />
         </View>
       </SafeAreaView>
     </CosmicBackground>
   );
 };
 
-// Theme-aware styles
-const getStyles = (isCosmic: boolean) =>
+const getStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -230,190 +69,6 @@ const getStyles = (isCosmic: boolean) =>
       justifyContent: 'center',
       width: '100%',
       maxWidth: Tokens.layout.maxWidth.prose,
-    },
-    header: {
-      alignItems: 'center',
-      marginBottom: Tokens.spacing[10],
-    },
-    title: {
-      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type['4xl'],
-      fontWeight: '800',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      marginBottom: Tokens.spacing[2],
-      letterSpacing: 2,
-      textAlign: 'center',
-      ...(isCosmic && isWeb
-        ? {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
-          }
-        : {}),
-    },
-    subtitle: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type.base,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
-      textAlign: 'center',
-      letterSpacing: 1,
-      ...Platform.select({
-        web: { transition: Tokens.motion.transitions.base },
-      }),
-    },
-    rationaleCard: {
-      backgroundColor: isCosmic
-        ? 'rgba(17, 26, 51, 0.6)'
-        : Tokens.colors.neutral.darker,
-      borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.borderSubtle,
-      padding: Tokens.spacing[4],
-      marginBottom: Tokens.spacing[6],
-      borderRadius: isCosmic ? 12 : 0,
-      ...(isCosmic && isWeb
-        ? {
-            backdropFilter: 'blur(12px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-          }
-        : {}),
-    },
-    rationaleTitle: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.xs,
-      fontWeight: '700',
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
-      letterSpacing: 1,
-      marginBottom: Tokens.spacing[2],
-      textTransform: 'uppercase',
-    },
-    rationaleText: {
-      fontFamily: Tokens.type.fontFamily.body,
-      fontSize: Tokens.type.sm,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
-      lineHeight: 22,
-      flexWrap: 'wrap',
-    },
-    sessionCounter: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: Tokens.spacing[8],
-      backgroundColor: isCosmic
-        ? 'rgba(17, 26, 51, 0.6)'
-        : Tokens.colors.neutral.darker,
-      paddingHorizontal: Tokens.spacing[4],
-      paddingVertical: Tokens.spacing[2],
-      borderRadius: isCosmic ? 8 : Tokens.radii.none,
-      borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.borderSubtle,
-      gap: Tokens.spacing[3],
-      ...(isCosmic && isWeb
-        ? {
-            backdropFilter: 'blur(8px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
-          }
-        : {}),
-    },
-    sessionBadge: {
-      backgroundColor: isCosmic ? '#0B1022' : Tokens.colors.brand[900],
-      width: SESSION_BADGE_SIZE,
-      height: SESSION_BADGE_SIZE,
-      borderRadius: isCosmic ? 6 : 0,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[700],
-    },
-    sessionCount: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.brand[100],
-      fontSize: Tokens.type.sm,
-      fontWeight: '700',
-    },
-    sessionLabel: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
-      fontSize: Tokens.type.sm,
-      letterSpacing: 0.5,
-    },
-    timerCard: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: Tokens.spacing[12],
-      width: TIMER_CARD_SIZE,
-      height: TIMER_CARD_SIZE,
-      position: 'relative',
-      borderRadius: Tokens.radii.full,
-      backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darker,
-      borderWidth: isCosmic ? 0 : 1,
-      borderColor: isCosmic
-        ? 'transparent'
-        : Tokens.colors.neutral.borderSubtle,
-    },
-    timerOverlay: {
-      position: 'absolute',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    phaseIndicator: {
-      position: 'absolute',
-      top: -1,
-      left: -1,
-      right: -1,
-      bottom: -1,
-      borderRadius: Tokens.radii.full,
-      borderWidth: 2,
-      opacity: 1,
-      ...Platform.select({
-        web: { transition: Tokens.motion.transitions.slow },
-      }),
-    },
-    phaseIndicatorFocus: {
-      borderColor: Tokens.colors.error.main,
-      backgroundColor: 'transparent',
-    },
-    phaseIndicatorBreak: {
-      borderColor: Tokens.colors.success.main,
-      backgroundColor: 'transparent',
-    },
-    timer: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      fontSize: Tokens.type.giga,
-      fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      fontVariant: ['tabular-nums'],
-      textAlign: 'center',
-      letterSpacing: -2,
-    },
-    phaseText: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      fontSize: Tokens.type.xl,
-      fontWeight: '600',
-      marginTop: Tokens.spacing[2],
-      textTransform: 'uppercase',
-      letterSpacing: 2,
-      ...Platform.select({
-        web: { transition: Tokens.motion.transitions.base },
-      }),
-    },
-    phaseTextFocus: {
-      color: isCosmic ? '#EF4444' : Tokens.colors.error.main,
-    },
-    phaseTextBreak: {
-      color: isCosmic ? '#22C55E' : Tokens.colors.success.main,
-    },
-    controls: {
-      width: '100%',
-      maxWidth: 320,
-      gap: Tokens.spacing[4],
-      marginTop: Tokens.spacing[8],
-    },
-    controlBtn: {
-      width: '100%',
-      borderRadius: isCosmic ? 8 : 0,
     },
   });
 

@@ -212,7 +212,11 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
 
   return (
     <CosmicBackground variant="moon">
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        accessibilityLabel="Check-in screen"
+        accessibilityRole="summary"
+      >
         <View style={styles.webContainer}>
           <View style={styles.content}>
             <Text style={styles.title}>CHECK IN</Text>

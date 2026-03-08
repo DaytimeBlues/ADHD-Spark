@@ -130,5 +130,3 @@ const styles = StyleSheet.create({
     marginLeft: Tokens.spacing[2],
   },
 });
-
-export default ThemeSection;

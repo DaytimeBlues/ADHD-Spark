@@ -22,6 +22,43 @@ jest.mock('../src/services/StorageService', () => ({
     setJSON: jest.fn().mockResolvedValue(true),
     get: jest.fn().mockResolvedValue(null),
   },
+  zustandStorage: {
+    getItem: jest.fn().mockResolvedValue(null),
+    setItem: jest.fn().mockResolvedValue(undefined),
+    removeItem: jest.fn().mockResolvedValue(undefined),
+  },
+}));
+
+jest.mock('../src/store/useTutorialStore', () => ({
+  __esModule: true,
+  brainDumpOnboardingFlow: { id: 'brain-dump-onboarding', steps: [] },
+  useTutorialStore: (
+    selector: (state: {
+      activeFlow: null;
+      currentStepIndex: number;
+      isVisible: boolean;
+      onboardingCompleted: boolean;
+      startTutorial: jest.Mock;
+      nextStep: jest.Mock;
+      previousStep: jest.Mock;
+      skipTutorial: jest.Mock;
+    }) => unknown,
+  ) =>
+    selector({
+      activeFlow: null,
+      currentStepIndex: 0,
+      isVisible: false,
+      onboardingCompleted: true,
+      startTutorial: jest.fn(),
+      nextStep: jest.fn(),
+      previousStep: jest.fn(),
+      skipTutorial: jest.fn(),
+    }),
+}));
+
+jest.mock('../src/components/tutorial/TutorialBubble', () => ({
+  __esModule: true,
+  TutorialBubble: () => null,
 }));
 
 jest.mock('../src/services/RecordingService', () => ({

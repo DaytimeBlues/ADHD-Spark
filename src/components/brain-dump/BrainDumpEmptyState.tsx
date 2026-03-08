@@ -34,5 +34,3 @@ const getStyles = (isCosmic: boolean) =>
       opacity: 0.3,
     },
   });
-
-export default BrainDumpEmptyState;

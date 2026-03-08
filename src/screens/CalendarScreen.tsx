@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
-import { GoogleTasksSyncService } from '../services/PlaudService';
+import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
 import { isWeb } from '../utils/PlatformUtils';
 
 type CalendarConnectionStatus =
@@ -128,6 +128,8 @@ const CalendarScreen = () => {
   return (
     <SafeAreaView
       style={[styles.container, isCosmic && styles.containerCosmic]}
+      accessibilityLabel="Calendar screen"
+      accessibilityRole="summary"
     >
       <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>
         {null}
@@ -184,6 +186,8 @@ const CalendarScreen = () => {
                     pressed && styles.navButtonPressed,
                     pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
+                  accessibilityLabel="Previous month"
+                  accessibilityRole="button"
                 >
                   <Text
                     style={[
@@ -191,7 +195,7 @@ const CalendarScreen = () => {
                       isCosmic && styles.navButtonTextCosmic,
                     ]}
                   >
-                    ‹
+                    {'<'}
                   </Text>
                 </Pressable>
                 <Text
@@ -216,6 +220,8 @@ const CalendarScreen = () => {
                     pressed && styles.navButtonPressed,
                     pressed && isCosmic && styles.navButtonPressedCosmic,
                   ]}
+                  accessibilityLabel="Next month"
+                  accessibilityRole="button"
                 >
                   <Text
                     style={[
@@ -223,7 +229,7 @@ const CalendarScreen = () => {
                       isCosmic && styles.navButtonTextCosmic,
                     ]}
                   >
-                    ›
+                    {'>'}
                   </Text>
                 </Pressable>
               </View>

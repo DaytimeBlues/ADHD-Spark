@@ -236,7 +236,11 @@ const IgniteScreen = () => {
 
   return (
     <CosmicBackground variant="nebula" dimmer style={StyleSheet.absoluteFill}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+        accessibilityLabel="Ignite screen"
+        accessibilityRole="summary"
+      >
         <View style={styles.centerWrapper}>
           <View style={styles.content}>
             <View style={styles.header}>

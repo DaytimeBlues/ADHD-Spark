@@ -24,6 +24,7 @@ export interface ThemeTokens {
       info: string;
     };
     utility?: Record<string, string>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
   spacing: Record<number | string, number>;
@@ -37,9 +38,12 @@ export interface ThemeTokens {
     [key: string]: number;
   };
   elevation: Record<string, ViewStyle>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   typography?: any;
   fontSizes?: Record<number | string, number>;
   lineHeights?: Record<string, number>;
-  motion?: Record<string, number>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  motion?: Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }

@@ -7,7 +7,8 @@ jest.mock('../src/theme/useTheme', () => ({
   useTheme: jest.fn(),
 }));
 
-const mockUseTheme = jest.requireMock('../src/theme/useTheme').useTheme as jest.Mock;
+const mockUseTheme = jest.requireMock('../src/theme/useTheme')
+  .useTheme as jest.Mock;
 
 describe('Brain dump feedback components', () => {
   beforeEach(() => {
@@ -52,11 +53,7 @@ describe('Brain dump feedback components', () => {
 
     it('shows the connecting label while a connection is in progress', () => {
       render(
-        <BrainDumpError
-          error="Connecting..."
-          showConnectButton
-          isConnecting
-        />,
+        <BrainDumpError error="Connecting..." showConnectButton isConnecting />,
       );
 
       expect(screen.getByText('CONNECTING...')).toBeTruthy();
