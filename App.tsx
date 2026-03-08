@@ -6,14 +6,13 @@ import {
   ActivityIndicator,
   DeviceEventEmitter,
   StyleSheet,
-  AppState,
-  AppStateStatus,
 } from 'react-native';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import { GoogleTasksSyncService } from './src/services/GoogleTasksSyncService';
 import OverlayService from './src/services/OverlayService';
 import { LoggerService } from './src/services/LoggerService';
+import { TimerService } from './src/services/TimerService';
 import { Tokens } from './src/theme/tokens';
 import { config } from './src/config';
 import {
@@ -33,12 +32,13 @@ import { LockScreen } from './src/components/LockScreen';
 import ErrorBoundary from './src/components/ErrorBoundary';
 import { appLinking } from './src/navigation/linking';
 import { WEB_APP_BASE_PATH } from './src/config/paths';
+import { AppLifecycleService } from './src/services/AppLifecycleService';
 
 if (config.environment === 'production') {
-  void import('@sentry/react-native')
+  import('@sentry/react-native')
     .then((Sentry) => {
       Sentry.init({
-        dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
+        dsn: config.sentryDsn || '',
         environment: config.environment,
         release: 'adhd-caddi@1.0.0',
         beforeSend: (event) => {
@@ -127,7 +127,7 @@ const App = () => {
   const isDriftVisible = useDriftStore((state) => state.isVisible);
   const hideDrift = useDriftStore((state) => state.hideOverlay);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const pollingStartedRef = useRef(false);
+  const lifecycleRegisteredRef = useRef(false);
 
   useEffect(() => {
     const unsub = BiometricService.subscribe((auth) =>
@@ -139,35 +139,32 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const syncPollingForState = (nextState: AppStateStatus) => {
-      if (isWeb) {
-        return;
-      }
+    if (!isReady || lifecycleRegisteredRef.current) {
+      return;
+    }
 
-      if (nextState === 'active') {
-        if (!pollingStartedRef.current) {
-          GoogleTasksSyncService.startForegroundPolling();
-          pollingStartedRef.current = true;
-        }
-        return;
-      }
-
-      GoogleTasksSyncService.stopForegroundPolling();
-      pollingStartedRef.current = false;
-    };
-
-    syncPollingForState(AppState.currentState);
-    const appStateSubscription = AppState.addEventListener(
-      'change',
-      syncPollingForState,
-    );
+    AppLifecycleService.register({
+      name: 'google-sync-polling',
+      start: () => GoogleTasksSyncService.startForegroundPolling(),
+      resume: () => GoogleTasksSyncService.startForegroundPolling(),
+      pause: () => GoogleTasksSyncService.stopForegroundPolling(),
+      stop: () => GoogleTasksSyncService.stopForegroundPolling(),
+    });
+    AppLifecycleService.register({
+      name: 'timer-service',
+      start: () => TimerService.start(),
+      resume: () => TimerService.start(),
+      pause: () => TimerService.stop(),
+      stop: () => TimerService.stop(),
+    });
+    AppLifecycleService.initialize();
+    lifecycleRegisteredRef.current = true;
 
     return () => {
-      appStateSubscription.remove();
-      GoogleTasksSyncService.stopForegroundPolling();
-      pollingStartedRef.current = false;
+      AppLifecycleService.shutdown();
+      lifecycleRegisteredRef.current = false;
     };
-  }, []);
+  }, [isReady]);
 
   useEffect(() => {
     const subscription = DeviceEventEmitter.addListener(

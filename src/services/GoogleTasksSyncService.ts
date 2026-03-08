@@ -10,6 +10,8 @@ import {
   GoogleApiError,
 } from './GoogleTasksApiClient';
 import NetInfo from '@react-native-community/netinfo';
+import { createOperationContext } from './OperationContext';
+import { withOperationContext } from './LoggerService';
 
 /**
  * GoogleTasksSyncService
@@ -275,6 +277,9 @@ class GoogleTasksSyncServiceClass {
 
   async syncSortedItemsToGoogle(
     items: SortedItem[],
+    operationContext = createOperationContext({
+      feature: 'google-sync-export',
+    }),
   ): Promise<GoogleExportResult> {
     const result: GoogleExportResult = {
       createdTasks: 0,
@@ -291,9 +296,14 @@ class GoogleTasksSyncServiceClass {
     const networkState = await NetInfo.fetch();
     if (!networkState.isConnected) {
       LoggerService.info({
-        service: 'GoogleTasksSyncService',
-        operation: 'syncSortedItemsToGoogle',
-        message: 'Device offline. Queuing items for export.',
+        ...withOperationContext(
+          {
+            service: 'GoogleTasksSyncService',
+            operation: 'syncSortedItemsToGoogle',
+            message: 'Device offline. Queuing items for export.',
+          },
+          operationContext,
+        ),
       });
       this.offlineQueue.push(...items);
       result.skippedCount = items.length;
@@ -405,7 +415,12 @@ class GoogleTasksSyncServiceClass {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async syncToBrainDump(retryCount = 0): Promise<GoogleTasksSyncResult> {
+  async syncToBrainDump(
+    retryCount = 0,
+    operationContext = createOperationContext({
+      feature: 'google-sync-import',
+    }),
+  ): Promise<GoogleTasksSyncResult> {
     const result: GoogleTasksSyncResult = {
       importedCount: 0,
       skippedCount: 0,
@@ -420,9 +435,14 @@ class GoogleTasksSyncServiceClass {
     const networkState = await NetInfo.fetch();
     if (!networkState.isConnected) {
       LoggerService.info({
-        service: 'GoogleTasksSyncService',
-        operation: 'syncToBrainDump',
-        message: 'Sync skipped: device is offline',
+        ...withOperationContext(
+          {
+            service: 'GoogleTasksSyncService',
+            operation: 'syncToBrainDump',
+            message: 'Sync skipped: device is offline',
+          },
+          operationContext,
+        ),
       });
       return result;
     }
@@ -544,16 +564,21 @@ class GoogleTasksSyncServiceClass {
       return result;
     } catch (error) {
       LoggerService.error({
-        service: 'GoogleTasksSyncService',
-        operation: 'syncToBrainDump',
-        message: `Sync failed (attempt ${retryCount + 1})`,
-        error,
+        ...withOperationContext(
+          {
+            service: 'GoogleTasksSyncService',
+            operation: 'syncToBrainDump',
+            message: `Sync failed (attempt ${retryCount + 1})`,
+            error,
+          },
+          operationContext,
+        ),
       });
 
       if (retryCount < this.MAX_SYNC_RETRIES) {
         const backoffDelay = this.BASE_RETRY_DELAY_MS * Math.pow(2, retryCount);
         await this.delay(backoffDelay);
-        return this.syncToBrainDump(retryCount + 1);
+        return this.syncToBrainDump(retryCount + 1, operationContext);
       }
       throw error;
     } finally {
@@ -571,12 +596,20 @@ class GoogleTasksSyncServiceClass {
     }
 
     this.pollTimer = setInterval(() => {
-      this.syncToBrainDump().catch((error) => {
+      const operationContext = createOperationContext({
+        feature: 'google-sync-polling',
+      });
+      this.syncToBrainDump(0, operationContext).catch((error) => {
         LoggerService.error({
-          service: 'GoogleTasksSyncService',
-          operation: 'startForegroundPolling',
-          message: 'Foreground Google Tasks poll failed',
-          error,
+          ...withOperationContext(
+            {
+              service: 'GoogleTasksSyncService',
+              operation: 'startForegroundPolling',
+              message: 'Foreground Google Tasks poll failed',
+              error,
+            },
+            operationContext,
+          ),
         });
       });
     }, intervalMs);
@@ -588,26 +621,45 @@ class GoogleTasksSyncServiceClass {
 
     this.netInfoUnsubscribe = NetInfo.addEventListener((state) => {
       if (state.isConnected) {
-        LoggerService.info({
-          service: 'GoogleTasksSyncService',
-          operation: 'NetInfoListener',
-          message: 'Connection restored. Triggering sync and processing queue.',
+        const operationContext = createOperationContext({
+          feature: 'google-sync-polling',
         });
-        this.syncToBrainDump().catch((error) => {
+        LoggerService.info({
+          ...withOperationContext(
+            {
+              service: 'GoogleTasksSyncService',
+              operation: 'NetInfoListener',
+              message:
+                'Connection restored. Triggering sync and processing queue.',
+            },
+            operationContext,
+          ),
+        });
+        this.syncToBrainDump(0, operationContext).catch((error) => {
           LoggerService.warn({
-            service: 'GoogleTasksSyncService',
-            operation: 'NetInfoListener',
-            message: 'Sync retry failed after connection restore.',
-            error,
+            ...withOperationContext(
+              {
+                service: 'GoogleTasksSyncService',
+                operation: 'NetInfoListener',
+                message: 'Sync retry failed after connection restore.',
+                error,
+              },
+              operationContext,
+            ),
           });
         });
-        this.processOfflineQueue().catch((error) => {
+        this.processOfflineQueue(operationContext).catch((error) => {
           LoggerService.warn({
-            service: 'GoogleTasksSyncService',
-            operation: 'NetInfoListener',
-            message:
-              'Offline queue processing failed after connection restore.',
-            error,
+            ...withOperationContext(
+              {
+                service: 'GoogleTasksSyncService',
+                operation: 'NetInfoListener',
+                message:
+                  'Offline queue processing failed after connection restore.',
+                error,
+              },
+              operationContext,
+            ),
           });
         });
       }
@@ -617,27 +669,47 @@ class GoogleTasksSyncServiceClass {
     NetInfo.fetch()
       .then((state) => {
         if (state.isConnected) {
-          this.processOfflineQueue().catch((error) => {
+          const operationContext = createOperationContext({
+            feature: 'google-sync-polling',
+          });
+          this.processOfflineQueue(operationContext).catch((error) => {
             LoggerService.warn({
-              service: 'GoogleTasksSyncService',
-              operation: 'startForegroundPolling',
-              message: 'Startup offline queue processing failed.',
-              error,
+              ...withOperationContext(
+                {
+                  service: 'GoogleTasksSyncService',
+                  operation: 'startForegroundPolling',
+                  message: 'Startup offline queue processing failed.',
+                  error,
+                },
+                operationContext,
+              ),
             });
           });
         }
       })
       .catch((error) => {
+        const operationContext = createOperationContext({
+          feature: 'google-sync-polling',
+        });
         LoggerService.warn({
-          service: 'GoogleTasksSyncService',
-          operation: 'startForegroundPolling',
-          message: 'NetInfo fetch failed during polling startup.',
-          error,
+          ...withOperationContext(
+            {
+              service: 'GoogleTasksSyncService',
+              operation: 'startForegroundPolling',
+              message: 'NetInfo fetch failed during polling startup.',
+              error,
+            },
+            operationContext,
+          ),
         });
       });
   }
 
-  private async processOfflineQueue(): Promise<void> {
+  private async processOfflineQueue(
+    operationContext = createOperationContext({
+      feature: 'google-sync-export',
+    }),
+  ): Promise<void> {
     if (this.offlineQueue.length === 0 || isWeb) {
       return;
     }
@@ -645,11 +717,16 @@ class GoogleTasksSyncServiceClass {
     const items = [...this.offlineQueue];
     this.offlineQueue = [];
     LoggerService.info({
-      service: 'GoogleTasksSyncService',
-      operation: 'processOfflineQueue',
-      message: `Processing ${items.length} queued items.`,
+      ...withOperationContext(
+        {
+          service: 'GoogleTasksSyncService',
+          operation: 'processOfflineQueue',
+          message: `Processing ${items.length} queued items.`,
+        },
+        operationContext,
+      ),
     });
-    await this.syncSortedItemsToGoogle(items);
+    await this.syncSortedItemsToGoogle(items, operationContext);
   }
 
   stopForegroundPolling(): void {

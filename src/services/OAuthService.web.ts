@@ -1,4 +1,5 @@
 /// <reference lib="dom" />
+import { config } from '../config';
 import { LoggerService } from './LoggerService';
 import { getWebRedirectUri } from '../config/paths';
 
@@ -9,8 +10,7 @@ import { getWebRedirectUri } from '../config/paths';
  * Uses backend-assisted flow with PKCE for security.
  */
 
-const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL || 'https://spark-adhd-api.vercel.app';
+const API_BASE_URL = config.apiBaseUrl;
 
 // Storage keys
 const STORAGE_KEYS = {

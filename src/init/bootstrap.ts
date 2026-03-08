@@ -2,12 +2,12 @@ import StorageService from '../services/StorageService';
 import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
 import WebMCPService from '../services/WebMCPService';
 import { CheckInService } from '../services/CheckInService';
-import { TimerService } from '../services/TimerService';
 import { DriftService } from '../services/DriftService';
 import { BiometricService } from '../services/BiometricService';
 import { LoggerService } from '../services/LoggerService';
 import { config } from '../config';
-import { isWeb } from '../utils/PlatformUtils';
+import { createOperationContext } from '../services/OperationContext';
+import { withOperationContext } from '../services/LoggerService';
 
 const CRITICAL_INIT_TIMEOUT_MS = 8000;
 let unhandledRejectionHandlerInstalled = false;
@@ -27,12 +27,18 @@ function installUnhandledRejectionHandler(): void {
     return;
   }
 
+  const operationContext = createOperationContext({ feature: 'bootstrap' });
   const handleUnhandledRejection = (reason: unknown) => {
     LoggerService.fatal({
-      service: 'bootstrap',
-      operation: 'unhandledRejection',
-      message: 'Unhandled promise rejection',
-      error: reason,
+      ...withOperationContext(
+        {
+          service: 'bootstrap',
+          operation: 'unhandledRejection',
+          message: 'Unhandled promise rejection',
+          error: reason,
+        },
+        operationContext,
+      ),
     });
   };
 
@@ -69,38 +75,63 @@ async function initializeCriticalServices(): Promise<void> {
  * These don't block app readiness.
  */
 function initializeNonBlockingServices(): undefined {
-  GoogleTasksSyncService.syncToBrainDump().catch((error) => {
+  const operationContext = createOperationContext({ feature: 'bootstrap' });
+  GoogleTasksSyncService.syncToBrainDump(0, operationContext).catch((error) => {
     LoggerService.error({
-      service: 'bootstrap',
-      operation: 'initializeNonBlockingServices',
-      message: 'Initial Google Tasks sync failed',
-      error,
+      ...withOperationContext(
+        {
+          service: 'bootstrap',
+          operation: 'initializeNonBlockingServices',
+          message: 'Initial Google Tasks sync failed',
+          error,
+        },
+        operationContext,
+      ),
     });
   });
   WebMCPService.init();
   CheckInService.start();
   DriftService.init();
-  TimerService.start();
 }
 
-/**
- * Check if Google configuration is present for sync features.
- */
-function checkGoogleConfig(): boolean {
-  const hasGoogleConfig = Boolean(
-    isWeb || config.googleWebClientId || config.googleIosClientId,
-  );
+function logStartupDiagnostics(): void {
+  const operationContext = createOperationContext({ feature: 'bootstrap' });
 
-  if (!hasGoogleConfig && !isWeb) {
+  config.startupWarnings.forEach((diagnostic) => {
     LoggerService.warn({
-      service: 'bootstrap',
-      operation: 'checkGoogleConfig',
-      message:
-        '[Google Config] Missing EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID or EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID. Google Tasks/Calendar sync will be disabled. See android/app/google-services.json setup instructions.',
+      ...withOperationContext(
+        {
+          service: 'bootstrap',
+          operation: 'logStartupDiagnostics',
+          message: diagnostic.message,
+          context: {
+            code: diagnostic.code,
+            envVar: diagnostic.envVar,
+            feature: diagnostic.feature,
+          },
+        },
+        operationContext,
+      ),
     });
-  }
+  });
 
-  return hasGoogleConfig;
+  config.startupErrors.forEach((diagnostic) => {
+    LoggerService.error({
+      ...withOperationContext(
+        {
+          service: 'bootstrap',
+          operation: 'logStartupDiagnostics',
+          message: diagnostic.message,
+          context: {
+            code: diagnostic.code,
+            envVar: diagnostic.envVar,
+            feature: diagnostic.feature,
+          },
+        },
+        operationContext,
+      ),
+    });
+  });
 }
 
 /**
@@ -110,16 +141,22 @@ function checkGoogleConfig(): boolean {
  */
 export async function bootstrapApp(): Promise<BootstrapResult> {
   const errors: Error[] = [];
+  const operationContext = createOperationContext({ feature: 'bootstrap' });
 
   try {
     installUnhandledRejectionHandler();
-    checkGoogleConfig();
+    logStartupDiagnostics();
 
     const initTimeout = wait(CRITICAL_INIT_TIMEOUT_MS).then(() => {
       LoggerService.warn({
-        service: 'bootstrap',
-        operation: 'bootstrapApp',
-        message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
+        ...withOperationContext(
+          {
+            service: 'bootstrap',
+            operation: 'bootstrapApp',
+            message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
+          },
+          operationContext,
+        ),
       });
     });
 
@@ -129,10 +166,15 @@ export async function bootstrapApp(): Promise<BootstrapResult> {
     return { success: true, errors };
   } catch (error) {
     LoggerService.error({
-      service: 'bootstrap',
-      operation: 'bootstrapApp',
-      message: 'App initialization error',
-      error,
+      ...withOperationContext(
+        {
+          service: 'bootstrap',
+          operation: 'bootstrapApp',
+          message: 'App initialization error',
+          error,
+        },
+        operationContext,
+      ),
     });
     errors.push(error instanceof Error ? error : new Error(String(error)));
     return { success: false, errors };

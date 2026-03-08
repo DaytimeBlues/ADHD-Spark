@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, Alert, NativeModules, Share } from 'react-native';
 import StorageService from '../../../services/StorageService';
+import {
+  LoggerService,
+  withOperationContext,
+} from '../../../services/LoggerService';
+import { createOperationContext } from '../../../services/OperationContext';
 import { isWeb } from '../../../utils/PlatformUtils';
 import type { BackupImportMode, BackupPayload } from '../types';
 
@@ -109,6 +114,7 @@ export const useBackupManager = (
 
   const applyImportedBackup = useCallback(
     async (payload: BackupPayload) => {
+      const operationContext = createOperationContext({ feature: 'backup' });
       setIsBackupBusy(true);
       try {
         if (importMode === 'overwrite') {
@@ -140,7 +146,33 @@ export const useBackupManager = (
         if (onImported) {
           await onImported();
         }
+        LoggerService.info({
+          ...withOperationContext(
+            {
+              service: 'useBackupManager',
+              operation: 'applyImportedBackup',
+              message: 'Backup import completed',
+              context: {
+                importMode,
+                keyCount: Object.keys(payload.data).length,
+              },
+            },
+            operationContext,
+          ),
+        });
       } catch (error) {
+        LoggerService.warn({
+          ...withOperationContext(
+            {
+              service: 'useBackupManager',
+              operation: 'applyImportedBackup',
+              message: 'Backup import failed',
+              error,
+              context: { importMode },
+            },
+            operationContext,
+          ),
+        });
         announceBackupStatus(
           error instanceof Error
             ? error.message
@@ -154,6 +186,7 @@ export const useBackupManager = (
   );
 
   const exportBackup = useCallback(async () => {
+    const operationContext = createOperationContext({ feature: 'backup' });
     setIsBackupBusy(true);
     try {
       const entries = await Promise.all(
@@ -192,7 +225,32 @@ export const useBackupManager = (
         });
         announceBackupStatus('Backup exported. Shared via system dialog.');
       }
+      LoggerService.info({
+        ...withOperationContext(
+          {
+            service: 'useBackupManager',
+            operation: 'exportBackup',
+            message: 'Backup export completed',
+            context: {
+              keyCount: entries.length,
+              exportedAt: payload.exportedAt,
+            },
+          },
+          operationContext,
+        ),
+      });
     } catch (error) {
+      LoggerService.warn({
+        ...withOperationContext(
+          {
+            service: 'useBackupManager',
+            operation: 'exportBackup',
+            message: 'Backup export failed',
+            error,
+          },
+          operationContext,
+        ),
+      });
       announceBackupStatus(
         error instanceof Error ? error.message : 'Export failed unexpectedly.',
       );

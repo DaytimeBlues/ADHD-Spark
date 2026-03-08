@@ -31,7 +31,13 @@
     "deploy": "gh-pages -d dist",
     "deploy:firebase": "npm run build:web && firebase deploy --only hosting",
     "android:dev": "react-native run-android",
-    "android:clean": "cd android && gradlew.bat --stop 2>nul || true && gradlew.bat :app:clean --no-daemon"
+    "android:clean": "cd android && gradlew.bat --stop 2>nul || true && gradlew.bat :app:clean --no-daemon",
+    "admin:config-check": "node scripts/admin/check-config.js",
+    "admin:storage-status": "node scripts/admin/storage-status.js",
+    "admin:backup-check": "node scripts/admin/backup-check.js",
+    "admin:web-health": "node scripts/admin/web-health.js",
+    "admin:android-health": "node scripts/admin/android-health.js",
+    "admin:check": "npm run admin:config-check && npm run admin:storage-status && npm run admin:backup-check && npm run admin:web-health && npm run admin:android-health"
   },
   "dependencies": {
     "@op-engineering/op-sqlite": "^14.1.4",

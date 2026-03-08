@@ -56,6 +56,9 @@ npx tsc --noEmit
 
 # Browser smoke test
 npm run e2e:smoke
+
+# Lightweight admin checks
+npm run admin:check
 ```
 
 ### Deploying
@@ -131,6 +134,16 @@ npm run test:e2e:android
 - State/Storage: AsyncStorage
 - Testing: Jest plus Playwright
 - Deployment: GitHub Pages
+
+## Config and Operations
+
+- Public client config lives in `EXPO_PUBLIC_*` variables.
+- Real secrets must stay on the server side.
+- Admin checks are documented in [docs/ops-admin.md](docs/ops-admin.md).
+
+## Dependency Policy
+
+This repo does not fully pin every dependency version yet. The lockfile is the main reproducibility control, and some packages intentionally use semver ranges such as `^`.
 
 ## License
 

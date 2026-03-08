@@ -1,6 +1,10 @@
 import { config } from '../config';
 import { generateId } from '../utils/helpers';
-import { LoggerService } from './LoggerService';
+import { LoggerService, withOperationContext } from './LoggerService';
+import {
+  createOperationContext,
+  type OperationContext,
+} from './OperationContext';
 
 export interface ChatMessage {
   id: string;
@@ -112,6 +116,8 @@ class ChatService {
   }
 
   async sendMessage(text: string): Promise<void> {
+    const operationContext = createOperationContext({ feature: 'chat' });
+
     // Input validation: message length
     if (!text || text.trim().length === 0) {
       return;
@@ -161,18 +167,29 @@ class ChatService {
 
     try {
       if (config.aiProvider === 'kimi-direct') {
-        await this.callWithRetry(() => this.callKimiDirect(assistantMsg));
+        await this.callWithRetry(
+          () => this.callKimiDirect(assistantMsg, operationContext),
+          operationContext,
+        );
       } else {
-        await this.callWithRetry(() => this.callVercelBackend(assistantMsg));
+        await this.callWithRetry(
+          () => this.callVercelBackend(assistantMsg, operationContext),
+          operationContext,
+        );
       }
     } catch (error) {
       const chatError = this.classifyError(error);
       LoggerService.error({
-        service: 'ChatService',
-        operation: 'sendMessage',
-        message: 'Chat failed',
-        error: chatError,
-        context: { messageCount: this.messages.length },
+        ...withOperationContext(
+          {
+            service: 'ChatService',
+            operation: 'sendMessage',
+            message: 'Chat failed',
+            error: chatError,
+            context: { messageCount: this.messages.length },
+          },
+          operationContext,
+        ),
       });
       assistantMsg.content = chatError.message;
       this.notify();
@@ -184,7 +201,10 @@ class ChatService {
   /**
    * Retry wrapper with exponential backoff
    */
-  private async callWithRetry(operation: () => Promise<void>): Promise<void> {
+  private async callWithRetry(
+    operation: () => Promise<void>,
+    operationContext: OperationContext,
+  ): Promise<void> {
     const maxRetries = config.aiMaxRetries;
     let lastError: Error | null = null;
 
@@ -219,9 +239,14 @@ class ChatService {
           // Exponential backoff: 1s, 2s, 4s
           const delay = Math.min(1000 * Math.pow(2, attempt), 8000);
           LoggerService.info({
-            service: 'ChatService',
-            operation: 'callWithRetry',
-            message: `Chat retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`,
+            ...withOperationContext(
+              {
+                service: 'ChatService',
+                operation: 'callWithRetry',
+                message: `Chat retry attempt ${attempt + 1}/${maxRetries} after ${delay}ms`,
+              },
+              operationContext,
+            ),
           });
           await sleep(delay);
         }
@@ -264,7 +289,10 @@ class ChatService {
     );
   }
 
-  private async callKimiDirect(assistantMsg: ChatMessage): Promise<void> {
+  private async callKimiDirect(
+    assistantMsg: ChatMessage,
+    operationContext: OperationContext,
+  ): Promise<void> {
     if (!config.moonshotApiKey) {
       assistantMsg.content =
         'Moonshot API key is missing. Please set EXPO_PUBLIC_MOONSHOT_API_KEY.';
@@ -277,10 +305,15 @@ class ChatService {
     // See implementation_plan.md S1/S2 for the recommended migration path.
     if (__DEV__) {
       LoggerService.warn({
-        service: 'ChatService',
-        operation: 'callKimiDirect',
-        message:
-          'kimi-direct sends API key from client. Use a server proxy in production.',
+        ...withOperationContext(
+          {
+            service: 'ChatService',
+            operation: 'callKimiDirect',
+            message:
+              'kimi-direct sends API key from client. Use a server proxy in production.',
+          },
+          operationContext,
+        ),
       });
     }
 
@@ -315,11 +348,18 @@ class ChatService {
       if (!response.ok) {
         const errBody = await response.text();
         LoggerService.error({
-          service: 'ChatService',
-          operation: 'callKimiDirect',
-          message: 'Kimi API Error',
-          error: new Error(`Kimi API error: ${response.status} - ${errBody}`),
-          context: { status: response.status },
+          ...withOperationContext(
+            {
+              service: 'ChatService',
+              operation: 'callKimiDirect',
+              message: 'Kimi API Error',
+              error: new Error(
+                `Kimi API error: ${response.status} - ${errBody}`,
+              ),
+              context: { status: response.status },
+            },
+            operationContext,
+          ),
         });
         throw new Error(`Kimi API error: ${response.status}`);
       }
@@ -335,7 +375,10 @@ class ChatService {
     }
   }
 
-  private async callVercelBackend(assistantMsg: ChatMessage): Promise<void> {
+  private async callVercelBackend(
+    assistantMsg: ChatMessage,
+    operationContext: OperationContext,
+  ): Promise<void> {
     const timeoutMs = config.aiTimeout;
     const timeoutId = setTimeout(() => {
       this.abortController?.abort();
@@ -344,7 +387,10 @@ class ChatService {
     try {
       const response = await fetch(`${config.apiBaseUrl}/api/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Correlation-ID': operationContext.correlationId,
+        },
         body: JSON.stringify({
           messages: this.messages
             .filter((m) => m.role !== 'system')

@@ -14,6 +14,7 @@
  */
 
 import { config } from '../config';
+import type { OperationContext } from './OperationContext';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
 
@@ -28,6 +29,10 @@ export interface LogEntry {
   message?: string;
   error?: Error | unknown;
   context?: LogContext;
+  correlationId?: string;
+  sessionId?: string;
+  feature?: string;
+  platform?: string;
   timestamp: string;
 }
 
@@ -88,8 +93,19 @@ class LoggerServiceClass {
   }
 
   private logToConsole(entry: LogEntry): void {
-    const { level, service, operation, message, error, context, timestamp } =
-      entry;
+    const {
+      level,
+      service,
+      operation,
+      message,
+      error,
+      context,
+      timestamp,
+      correlationId,
+      sessionId,
+      feature,
+      platform,
+    } = entry;
 
     const prefix = `[${timestamp}] [${level.toUpperCase()}] [${service}.${operation}]`;
 
@@ -118,39 +134,53 @@ class LoggerServiceClass {
       args.push('Context:', context);
     }
 
+    const traceFields = {
+      correlationId,
+      sessionId,
+      feature,
+      platform,
+    };
+
+    if (Object.values(traceFields).some((value) => value !== undefined)) {
+      args.push('Trace:', traceFields);
+    }
+
     consoleMethod(...args);
   }
 
   private logToProduction(entry: LogEntry): void {
-    // In production, we could send to Sentry, LogRocket, or other services
-    // For now, use console.error for errors/fatals so they're captured by crash reporters
-
-    if (entry.level === 'error' || entry.level === 'fatal') {
-      // Structured logging for production error tracking
-      const errorPayload = {
-        timestamp: entry.timestamp,
-        level: entry.level,
-        service: entry.service,
-        operation: entry.operation,
-        message: entry.message,
-        context: entry.context,
-        // Include error details if present
-        error:
-          entry.error instanceof Error
-            ? {
-                message: entry.error.message,
-                stack: entry.error.stack,
-                name: entry.error.name,
-              }
-            : entry.error,
-      };
-
-      // Use console.error so Sentry or other crash reporters can capture it
-      console.error(JSON.stringify(errorPayload));
+    if (entry.level === 'debug') {
+      return;
     }
 
-    // For non-error levels in production, we could send to a logging service
-    // or simply suppress them depending on requirements
+    const payload = {
+      timestamp: entry.timestamp,
+      level: entry.level,
+      service: entry.service,
+      operation: entry.operation,
+      message: entry.message,
+      context: entry.context,
+      correlationId: entry.correlationId,
+      sessionId: entry.sessionId,
+      feature: entry.feature,
+      platform: entry.platform,
+      error:
+        entry.error instanceof Error
+          ? {
+              message: entry.error.message,
+              stack: entry.error.stack,
+              name: entry.error.name,
+            }
+          : entry.error,
+    };
+
+    const serialized = JSON.stringify(payload);
+    if (entry.level === 'error' || entry.level === 'fatal') {
+      console.error(serialized);
+      return;
+    }
+
+    console.warn(serialized);
   }
 
   private getConsoleMethod(level: LogLevel): (...args: unknown[]) => void {
@@ -170,3 +200,20 @@ class LoggerServiceClass {
 
 export const LoggerService = new LoggerServiceClass();
 export default LoggerService;
+
+export const withOperationContext = (
+  entry: Omit<LogEntry, 'level' | 'timestamp'>,
+  operationContext?: OperationContext,
+): Omit<LogEntry, 'level' | 'timestamp'> => {
+  if (!operationContext) {
+    return entry;
+  }
+
+  return {
+    ...entry,
+    correlationId: operationContext.correlationId,
+    sessionId: operationContext.sessionId,
+    feature: operationContext.feature,
+    platform: operationContext.platform,
+  };
+};
