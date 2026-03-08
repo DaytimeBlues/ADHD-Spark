@@ -6,6 +6,7 @@ import {
   Platform,
   useWindowDimensions,
   StyleSheet,
+  TextStyle,
 } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Tokens } from '../theme/tokens';
@@ -25,10 +26,11 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
       textPrimary: '#EEF2FF',
       textSecondary: '#B9C2D9',
       accent: '#8B5CF6',
-      logoGlow: Platform.select({
-        web: { textShadow: '0 0 18px rgba(139, 92, 246, 0.35)' } as any,
-        default: undefined,
-      }),
+      logoGlow: isWeb
+        ? ({
+            textShadow: '0 0 18px rgba(139, 92, 246, 0.35)',
+          } as unknown as TextStyle)
+        : undefined,
     }),
     [],
   );

@@ -1,6 +1,15 @@
 jest.mock('react-native-sound', () => {
+  type MockSoundInstance = {
+    setNumberOfLoops: jest.Mock;
+    setVolume: jest.Mock;
+    play: jest.Mock;
+    pause: jest.Mock;
+    stop: jest.Mock;
+    release: jest.Mock;
+  };
+
   const MockSound = function (
-    this: any,
+    this: MockSoundInstance,
     _file: string,
     _bundle: string,
     callback?: (error: unknown) => void,
@@ -16,8 +25,7 @@ jest.mock('react-native-sound', () => {
     }
   };
 
-  (MockSound as any).MAIN_BUNDLE = 'main';
-  return MockSound;
+  return Object.assign(MockSound, { MAIN_BUNDLE: 'main' });
 });
 
 jest.mock('../src/services/LoggerService', () => ({

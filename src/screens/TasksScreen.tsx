@@ -35,6 +35,9 @@ const PRIORITY_LABELS: Record<TaskPriority, string> = {
   normal: 'STABLE',
 };
 
+const DONE_STAT_COLOR = '#EEF2FF';
+const CHECKBOX_BORDER_COLOR = 'rgba(185, 194, 217, 0.3)';
+
 /**
  * TasksScreen
  *
@@ -191,7 +194,7 @@ export const TasksScreen = memo(function TasksScreen() {
               padding="sm"
               style={styles.statCard}
             >
-              <Text style={[styles.statValue, { color: '#EEF2FF' }]}>
+              <Text style={[styles.statValue, styles.statValueDone]}>
                 {stats.completed}
               </Text>
               <Text style={styles.statLabel}>DONE</Text>
@@ -343,7 +346,7 @@ const TaskItem = memo(function TaskItem({
                 backgroundColor: PRIORITY_COLORS[task.priority],
                 borderColor: PRIORITY_COLORS[task.priority],
               },
-              { borderColor: 'rgba(185, 194, 217, 0.3)' },
+              styles.checkboxDefaultBorder,
               animatedCheckboxStyle,
             ]}
           >
@@ -455,6 +458,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '700',
   },
+  statValueDone: {
+    color: DONE_STAT_COLOR,
+  },
   statLabel: {
     fontSize: 9,
     fontWeight: '700',
@@ -508,6 +514,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
+  },
+  checkboxDefaultBorder: {
+    borderColor: CHECKBOX_BORDER_COLOR,
   },
   checkmark: {
     color: '#FFFFFF',

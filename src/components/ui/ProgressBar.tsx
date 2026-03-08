@@ -45,32 +45,24 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   const height = getHeight();
   const barColor = getColor();
+  const backgroundStyle: ViewStyle = {
+    height,
+    backgroundColor: isCosmic
+      ? 'rgba(185, 194, 217, 0.2)'
+      : t.colors.neutral.dark,
+    borderRadius: height / 2,
+  };
+  const fillStyle: ViewStyle = {
+    width: `${percentage}%`,
+    height,
+    backgroundColor: barColor,
+    borderRadius: height / 2,
+  };
 
   return (
     <View style={[styles.container, style]}>
-      <View
-        style={[
-          styles.background,
-          {
-            height,
-            backgroundColor: isCosmic
-              ? 'rgba(185, 194, 217, 0.2)'
-              : t.colors.neutral.dark,
-            borderRadius: height / 2,
-          },
-        ]}
-      >
-        <View
-          style={[
-            styles.fill,
-            {
-              width: `${percentage}%`,
-              height,
-              backgroundColor: barColor,
-              borderRadius: height / 2,
-            },
-          ]}
-        />
+      <View style={[styles.background, backgroundStyle]}>
+        <View style={[styles.fill, fillStyle]} />
       </View>
     </View>
   );

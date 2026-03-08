@@ -221,9 +221,10 @@ describe('Android Full Usability', () => {
   describe('Offline Behavior', () => {
     it('should work without network', async () => {
       // Enable airplane mode
-      await device.setStatusBar({
-        dataNetwork: 'none',
-      } as any);
+      const offlineStatusBar: Parameters<typeof device.setStatusBar>[0] = {
+        dataNetwork: 'hide',
+      };
+      await device.setStatusBar(offlineStatusBar);
 
       await element(by.id('nav-tasks')).tap();
 
@@ -234,9 +235,10 @@ describe('Android Full Usability', () => {
       await expect(element(by.text('Offline task'))).toBeVisible();
 
       // Restore network
-      await device.setStatusBar({
+      const onlineStatusBar: Parameters<typeof device.setStatusBar>[0] = {
         dataNetwork: 'wifi',
-      } as any);
+      };
+      await device.setStatusBar(onlineStatusBar);
     });
   });
 

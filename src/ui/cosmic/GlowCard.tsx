@@ -215,6 +215,8 @@ export const GlowCard = memo(function GlowCard({
   }, [isCosmic, glow]);
 
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+  const pressedLinearStyle =
+    isPressedInternal && !isCosmic ? styles.pressedLinear : undefined;
 
   return (
     <AnimatedPressable
@@ -227,7 +229,7 @@ export const GlowCard = memo(function GlowCard({
         containerStyle,
         glowStyle,
         style as ViewStyle,
-        isPressedInternal && !isCosmic && { opacity: 0.8 },
+        pressedLinearStyle,
         { transform: [{ scale: scaleAnim }] },
       ]}
       accessibilityState={{
@@ -263,6 +265,9 @@ const styles = StyleSheet.create({
   },
   bgLinear: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  pressedLinear: {
+    opacity: 0.8,
   },
 });
 

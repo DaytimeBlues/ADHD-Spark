@@ -33,6 +33,7 @@ Thumbs.db
 # Test artifacts
 test-results/
 playwright-report/
+playwright-junit.xml
 coverage/
 pw-log*.txt
 lint-output*.txt
@@ -46,6 +47,8 @@ android/build_*.log
 # Debug utilities
 dump_console.cjs
 jest_full_log.txt
+.desloppify/
+scorecard.png
 
 # Local scratch / restore files
 temp_tokens.ts
