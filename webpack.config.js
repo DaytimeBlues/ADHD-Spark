@@ -82,6 +82,14 @@ module.exports = (env, argv) => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
         'react-native$': 'react-native-web',
+        '@sentry/react-native': path.resolve(
+          __dirname,
+          'src/mocks/sentry.web.js',
+        ),
+        'react-native-gesture-handler': path.resolve(
+          __dirname,
+          'src/mocks/react-native-gesture-handler.web.js',
+        ),
         'react-native-vector-icons': 'react-native-vector-icons/dist',
         'react-native-reanimated': path.resolve(
           __dirname,

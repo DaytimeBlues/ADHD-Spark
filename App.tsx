@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import * as Sentry from '@sentry/react-native';
 import {
   StatusBar,
   View,
@@ -36,26 +34,35 @@ import ErrorBoundary from './src/components/ErrorBoundary';
 import { appLinking } from './src/navigation/linking';
 import { WEB_APP_BASE_PATH } from './src/config/paths';
 
-// Initialize Sentry for error tracking
 if (config.environment === 'production') {
-  Sentry.init({
-    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
-    environment: config.environment,
-    release: 'adhd-caddi@1.0.0',
-    beforeSend: (event) => {
-      // Don't send errors in development
-      if (__DEV__) {
-        LoggerService.info({
-          service: 'App',
-          operation: 'beforeSend',
-          message: '[Sentry] Would send error',
-          context: { event },
-        });
-        return null;
-      }
-      return event;
-    },
-  });
+  void import('@sentry/react-native')
+    .then((Sentry) => {
+      Sentry.init({
+        dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
+        environment: config.environment,
+        release: 'adhd-caddi@1.0.0',
+        beforeSend: (event) => {
+          if (__DEV__) {
+            LoggerService.info({
+              service: 'App',
+              operation: 'beforeSend',
+              message: '[Sentry] Would send error',
+              context: { event },
+            });
+            return null;
+          }
+          return event;
+        },
+      });
+    })
+    .catch((error) => {
+      LoggerService.error({
+        service: 'App',
+        operation: 'initializeSentry',
+        message: 'Failed to initialize Sentry',
+        error,
+      });
+    });
 }
 
 export const useAppBootstrap = () => {
@@ -230,6 +237,9 @@ const App = () => {
   if (isWeb) {
     return <View style={styles.flex}>{content}</View>;
   }
+
+  const { GestureHandlerRootView } =
+    require('react-native-gesture-handler') as typeof import('react-native-gesture-handler');
 
   return (
     <GestureHandlerRootView style={styles.flex}>
