@@ -26,6 +26,21 @@ type NavigationNode = {
   goBack: () => void;
 };
 
+type DiagnosticsPressableState = {
+  focused?: boolean;
+  hovered?: boolean;
+  pressed: boolean;
+};
+
+const webFocusOutline: object =
+  Platform.OS === 'web'
+    ? {
+        outlineWidth: 2,
+        outlineStyle: 'solid',
+        outlineColor: Tokens.colors.indigo.primary,
+      }
+    : {};
+
 const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
   const { diagnostics, isRefreshing, refreshDiagnostics } =
     useDiagnosticsData();
@@ -47,10 +62,9 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <Pressable
               onPress={() => navigation.goBack()}
-              style={(state: any) => [
+              style={(state: DiagnosticsPressableState) => [
                 styles.backButton,
                 state.focused && styles.backButtonFocused,
               ]}
@@ -63,12 +77,11 @@ const DiagnosticsScreen = ({ navigation }: { navigation: NavigationNode }) => {
 
             <Text style={styles.title}>DIAGNOSTICS</Text>
 
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <Pressable
               onPress={() => {
                 refreshDiagnostics().catch(() => undefined);
               }}
-              style={(state: any) => [
+              style={(state: DiagnosticsPressableState) => [
                 styles.refreshButton,
                 state.focused && styles.refreshButtonFocused,
               ]}
@@ -142,14 +155,9 @@ const styles = StyleSheet.create({
     paddingVertical: Tokens.spacing[1],
     paddingHorizontal: Tokens.spacing[2],
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  backButtonFocused: Platform.select({
-    web: {
-      outlineWidth: 2,
-      outlineStyle: 'solid',
-      outlineColor: Tokens.colors.indigo.primary,
-    },
-  }) as any,
+  backButtonFocused: {
+    ...webFocusOutline,
+  },
   backButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 12,
@@ -172,14 +180,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  refreshButtonFocused: Platform.select({
-    web: {
-      outlineWidth: 2,
-      outlineStyle: 'solid',
-      outlineColor: Tokens.colors.indigo.primary,
-    },
-  }) as any,
+  refreshButtonFocused: {
+    ...webFocusOutline,
+  },
   refreshButtonText: {
     fontFamily: Tokens.type.fontFamily.mono,
     fontSize: 16,
