@@ -143,6 +143,17 @@
 
 ## Test Tags
 
+## Android APK-Ready Acceptance
+
+- [ ] Clean install launch
+- [ ] Returning-user local data launch
+- [ ] Offline startup
+- [ ] Tutorial visibility
+- [ ] Capture entry
+- [ ] Tab navigation survivability
+- [ ] Denied optional permissions do not crash launch
+- [ ] Disconnected optional integrations do not block launch
+
 ### @critical (must pass for release)
 - All navigation flows
 - Task CRUD operations

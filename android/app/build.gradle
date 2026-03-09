@@ -53,7 +53,8 @@ android {
             versionNameSuffix "-preview"
         }
         release {
-            // CI release checks can disable signing and use debug key for packaging.
+            // CI smoke signing uses the debug key only.
+            // Real sideload releases require the keystore environment.
             signingConfig useReleaseSigning ? signingConfigs.release : signingConfigs.debug
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"

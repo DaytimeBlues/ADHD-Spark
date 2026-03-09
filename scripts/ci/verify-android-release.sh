@@ -57,6 +57,34 @@ wait_for_package_manager() {
   return 1
 }
 
+wait_for_app_ready() {
+  echo "Waiting for app-ready signal..."
+
+  for i in $(seq 1 24); do
+    if adb_device logcat -d | grep -q "APP_READY"; then
+      echo "App-ready signal detected."
+      return 0
+    fi
+
+    echo "App-ready signal not observed yet (attempt $i)."
+    sleep 5
+  done
+
+  echo "App-ready signal was not observed in time."
+  return 1
+}
+
+verify_process_survives() {
+  echo "Checking that the app process is still alive..."
+
+  if ! adb_device shell pidof com.adhdcaddi >/dev/null; then
+    echo "com.adhdcaddi process is not running after readiness."
+    return 1
+  fi
+
+  echo "App process is still running."
+}
+
 echo "Waiting for emulator to be available..."
 adb wait-for-device
 
@@ -88,8 +116,12 @@ if [ "$installed" -ne 1 ]; then
   exit 1
 fi
 
+adb_device logcat -c || true
 adb_device shell am start -n com.adhdcaddi/.MainActivity
 sleep 10
+
+wait_for_app_ready
+verify_process_survives
 
 if ! adb_device shell dumpsys window windows | grep -i "com.adhdcaddi"; then
   echo "com.adhdcaddi was not found in the active window dump."

@@ -79,6 +79,18 @@ git push origin main
 
 ## Android Native Release (Secondary)
 
+### Android Release Status
+
+`CI release smoke`
+
+- Means the CI-built release APK uses CI smoke signing, launches successfully, reports `APP_READY`, and remains alive in the emulator.
+- It is not a production-signed artifact.
+
+`sideload release`
+
+- Means a keystore-signed APK can be built with the documented sideload path.
+- The output is a keystore-signed APK intended for tester handoff, not Play Store publishing.
+
 ### Prerequisites
 
 - JDK 17 installed and `JAVA_HOME` set (see `docs/ANDROID_BUILD_BLOCKERS.md`)
@@ -96,7 +108,7 @@ git push origin main
 GitHub Actions already performs two useful Android checks on `main`:
 
 - `Android Build and E2E Tests`: installs dependencies, runs Jest, assembles debug, uploads debug APK and reports
-- `Android Release Build Check`: assembles a release APK with CI signing disabled and verifies that it launches in an emulator
+- `Android Release Build Check`: assembles a release APK with CI smoke signing and verifies that it launches in an emulator, reports `APP_READY`, and remains alive long enough to count as app-shell-ready
 
 **Preview APK (recommended for direct install / non-Play-Store testing):**
 
@@ -106,14 +118,16 @@ npm run build:android:preview
 # Output: android/app/build/outputs/apk/preview/
 ```
 
-**Release APK (signed, production-intent):**
+**Release APK (signed sideload release):**
 
 ```bash
-cd android
-./gradlew :app:assembleRelease
+npm run build:android:sideload
 
-# Output: android/app/build/outputs/apk/release/app-release.apk
+# Output: android/app/build/outputs/apk/sideload/adhd-caddi-<versionName>+<versionCode>-<buildTag>.apk
 ```
+
+This path produces a keystore-signed APK when the required keystore environment variables are present.
+It is the documented sideload release path.
 
 ### Build Release AAB (Google Play)
 
@@ -152,7 +166,7 @@ cd android
 **Direct install / sideload:**
 
 - USB install from local machine
-- Share CI-generated APK artifacts
+- Share keystore-signed APK artifacts from the sideload path for tester installs
 - Use the `preview` build for easiest install without release keystore distribution
 
 **Internal Testing:**
@@ -165,6 +179,22 @@ cd android
 1. Upload AAB to Play Console
 2. Create release in "Internal Testing" track
 3. Promote to "Production" after validation
+
+### Android Release Checklist
+
+Future agents and engineers should follow this order:
+
+1. read current Android audit
+2. inspect latest Android CI run
+3. run local health checks if touching native code
+4. update the audit after changes
+
+### Phase 2: Non-APK Work
+
+- Google Play publishing
+- Play Console rollout steps
+- automated signed-release distribution
+- expanded device certification matrix
 
 **Rollback (Google Play):**
 

@@ -25,6 +25,7 @@
     "build:android:dev": "cd android && gradlew.bat assembleDebug",
     "build:android:preview": "cd android && gradlew.bat assemblePreview",
     "build:android:prod": "cd android && gradlew.bat assembleRelease",
+    "build:android:sideload": "node scripts/android/build-sideload-release.js",
     "build:release": "cd android && gradlew.bat assembleRelease",
     "install:android:dev": "cd android && gradlew.bat installDebug",
     "install:android:preview": "cd android && gradlew.bat installPreview",

@@ -14,6 +14,20 @@
 | **Secondary Platforms** | Native Android bridge (optional, feature-gated) |
 | **Deployment**          | GitHub Pages (responsive PWA)                   |
 
+### Android Release Scope
+
+Android release scope is `APK-ready`.
+
+- `CI release smoke` proves the CI-built release APK launches correctly, reaches app-shell-ready state, and is not a production-signed artifact.
+- `sideload release` means the documented keystore-signed APK path succeeds and produces a tester-facing artifact.
+- Play Store work is intentionally outside this phase.
+
+Current Android release source of truth:
+
+- [`.github/workflows/android.yml`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/.github/workflows/android.yml)
+- [`docs/RELEASE_PROCESS.md`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/docs/RELEASE_PROCESS.md)
+- [`docs/ANDROID_AUDIT_2026-03-09.md`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/docs/ANDROID_AUDIT_2026-03-09.md)
+
 ### Tech Stack
 
 | Layer             | Technology                                                               |
@@ -332,6 +346,8 @@ npm run e2e          # Playwright E2E (web)
 - The Pages workflow runs lint, typecheck, unit tests, smoke E2E, then deploys
 - Failure logs are uploaded as artifacts to make failed runs diagnosable
 - Android validation runs separately in `.github/workflows/android.yml`
+- Android `CI release smoke` is the automated contract for APK-ready status
+- Android `sideload release` is the keystore-signed manual packaging path for testers
 
 ### Verification Checklist
 

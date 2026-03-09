@@ -5,6 +5,7 @@ import {
   View,
   ActivityIndicator,
   DeviceEventEmitter,
+  Platform,
   StyleSheet,
 } from 'react-native';
 
@@ -213,6 +214,14 @@ const App = () => {
           // Flush any overlay intents that were queued before navigation was ready
           flushOverlayIntentQueue();
           syncWebUrlFromNavigation();
+          if (Platform.OS === 'android') {
+            LoggerService.info({
+              service: 'AndroidReleaseSmoke',
+              operation: 'reportAppReady',
+              message: 'APP_READY',
+              platform: 'android',
+            });
+          }
         }}
         onStateChange={syncWebUrlFromNavigation}
       >

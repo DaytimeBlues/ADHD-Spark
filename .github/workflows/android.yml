@@ -166,13 +166,14 @@ jobs:
         run: ./gradlew assembleRelease
         working-directory: android
         env:
-          # Use debug signing for CI check (real release needs keystore)
+          # CI smoke only: this build proves release packaging can launch.
+          # It is not a production-signed artifact and must not be treated as one.
           ANDROID_SIGNING_ENABLED: false
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-release-apk
+          name: android-release-ci-smoke-${{ github.run_number }}-${{ github.sha }}
           path: android/app/build/outputs/apk/release/*.apk
           retention-days: 30
 
