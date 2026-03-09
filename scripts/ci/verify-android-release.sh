@@ -33,10 +33,35 @@ wait_for_boot() {
   return 1
 }
 
+wait_for_package_manager() {
+  echo "Waiting for Android package manager service..."
+
+  for i in $(seq 1 60); do
+    PACKAGE_STATUS="$(adb_device shell service check package 2>/dev/null || echo "offline")"
+    if echo "$PACKAGE_STATUS" | grep -q "Service package: found"; then
+      echo "Package manager is ready."
+      return 0
+    fi
+
+    echo "Package manager not ready yet (attempt $i)."
+    if [ "$PACKAGE_STATUS" = "offline" ]; then
+      adb kill-server || true
+      adb start-server || true
+      adb wait-for-device || true
+      wait_for_boot || true
+    fi
+    sleep 5
+  done
+
+  echo "Android package manager was not ready in time."
+  return 1
+}
+
 echo "Waiting for emulator to be available..."
 adb wait-for-device
 
 wait_for_boot
+wait_for_package_manager
 
 adb devices
 
@@ -55,6 +80,7 @@ for attempt in 1 2 3; do
   adb start-server || true
   adb wait-for-device || true
   wait_for_boot || true
+  wait_for_package_manager || true
 done
 
 if [ "$installed" -ne 1 ]; then
