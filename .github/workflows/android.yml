@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [main, "feat/**", "fix/**"]
+    branches: [main, 'feat/**', 'fix/**']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.internal.http.connectionTimeout=120000 -Dorg.gradle.internal.http.socketTimeout=120000"
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.internal.http.connectionTimeout=120000 -Dorg.gradle.internal.http.socketTimeout=120000'
 
     steps:
       - name: Checkout
@@ -22,13 +22,13 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         run: |
@@ -128,7 +128,7 @@ jobs:
     timeout-minutes: 30
     needs: android-build-and-test
     env:
-      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs=-Xmx4g'
 
     steps:
       - name: Checkout
@@ -137,13 +137,13 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci
@@ -179,10 +179,12 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
-          target: google_apis
+          # A smaller image is enough for launch smoke and is materially more stable
+          # than the API 34 Google APIs profile on GitHub's hosted runners.
+          api-level: 30
+          target: default
           arch: x86_64
-          profile: pixel_6
+          profile: Nexus 6
           emulator-boot-timeout: 1200
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
