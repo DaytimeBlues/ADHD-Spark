@@ -116,14 +116,43 @@ if [ "$installed" -ne 1 ]; then
   exit 1
 fi
 
+# Wait for activity resolution
+echo "Waiting for .MainActivity to be resolvable..."
+for i in $(seq 1 30); do
+  if adb_device shell cmd package resolve-activity -c android.intent.category.LAUNCHER com.adhdcaddi | grep -q ".MainActivity"; then
+    echo "Activity .MainActivity is resolvable."
+    break
+  fi
+  if [ "$i" -eq 30 ]; then
+    echo "ERROR: Timeout waiting for activity resolution."
+    adb_device shell dumpsys package com.adhdcaddi
+    exit 1
+  fi
+  sleep 2
+done
+
 adb_device logcat -c || true
-adb_device shell am start -n com.adhdcaddi/.MainActivity
-sleep 10
+echo "Launching com.adhdcaddi/.MainActivity..."
+if ! adb_device shell am start -n com.adhdcaddi/.MainActivity; then
+  echo "ERROR: Failed to start activity."
+  echo "--- DIAGNOSTICS ---"
+  adb_device shell dumpsys package com.adhdcaddi | grep -A 20 "Package [com.adhdcaddi]"
+  adb_device logcat -d -t 100 *:E
+  exit 1
+fi
 
 wait_for_app_ready
 verify_process_survives
 
-if ! adb_device shell dumpsys window windows | grep -i "com.adhdcaddi"; then
-  echo "com.adhdcaddi was not found in the active window dump."
-  exit 1
-fi
+echo "App launched. Waiting for focus..."
+for i in $(seq 1 10); do
+  if adb_device shell dumpsys window windows | grep -i "com.adhdcaddi" | grep -q "mCurrentFocus"; then
+    echo "com.adhdcaddi is in focus."
+    exit 0
+  fi
+  sleep 2
+done
+
+echo "ERROR: com.adhdcaddi never gained focus."
+adb_device shell dumpsys window windows | grep -i "com.adhdcaddi"
+exit 1
