@@ -1,6 +1,10 @@
 /// <reference lib="dom" />
 import { getWebRedirectUri } from '../../config/paths';
-import { STORAGE_KEYS, type OAuthProvider } from './OAuthShared';
+import {
+  STORAGE_KEYS,
+  type OAuthProvider,
+  type OAuthStorageMode,
+} from './OAuthShared';
 import { OAuthBase } from './OAuthBase';
 
 const base64UrlEncode = (buffer: Uint8Array): string =>
@@ -12,6 +16,26 @@ const base64UrlEncode = (buffer: Uint8Array): string =>
 export class OAuthWebAdapter extends OAuthBase {
   private popupWindow: Window | null = null;
   private messageHandler: ((event: MessageEvent) => void) | null = null;
+
+  protected getStorageMode(): OAuthStorageMode {
+    return 'metadata-only';
+  }
+
+  async initiateGoogleAuth(): Promise<{ success: boolean; error?: string }> {
+    return {
+      success: false,
+      error:
+        'Google connect on web is disabled until session-backed web sync is available.',
+    };
+  }
+
+  async initiateTodoistAuth(): Promise<{ success: boolean; error?: string }> {
+    return {
+      success: false,
+      error:
+        'Todoist connect on web is disabled until session-backed web sync is available.',
+    };
+  }
 
   protected getRedirectUri(): string {
     return getWebRedirectUri(window.location.origin);

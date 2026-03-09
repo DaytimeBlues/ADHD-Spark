@@ -6,8 +6,11 @@ import {
   getOAuthInitEndpoint,
   isOAuthStateExpired,
   sanitizeGoogleAuthData,
+  sanitizeGoogleAuthForStorage,
+  sanitizeTodoistAuthForStorage,
   STORAGE_KEYS,
   type GoogleAuthData,
+  type OAuthStorageMode,
   type OAuthProvider,
   type OAuthState,
   type OAuthStorageAdapter,
@@ -31,6 +34,10 @@ export abstract class OAuthBase {
       state: string,
     ) => Promise<{ success: boolean; error?: string }>,
   ): Promise<{ success: boolean; error?: string }>;
+
+  protected getStorageMode(): OAuthStorageMode {
+    return 'full';
+  }
 
   async initiateGoogleAuth(): Promise<{ success: boolean; error?: string }> {
     return this.initiateBackendOAuth('google');
@@ -161,6 +168,8 @@ export abstract class OAuthBase {
     provider: OAuthProvider,
     data: Record<string, unknown>,
   ): Promise<void> {
+    const storageMode = this.getStorageMode();
+
     if (provider === 'google') {
       const authData: GoogleAuthData = {
         connected: true,
@@ -175,7 +184,7 @@ export abstract class OAuthBase {
       };
       await this.storage.setItem(
         STORAGE_KEYS.googleAuth,
-        JSON.stringify(authData),
+        JSON.stringify(sanitizeGoogleAuthForStorage(authData, storageMode)),
       );
       return;
     }
@@ -188,7 +197,7 @@ export abstract class OAuthBase {
     };
     await this.storage.setItem(
       STORAGE_KEYS.todoistAuth,
-      JSON.stringify(authData),
+      JSON.stringify(sanitizeTodoistAuthForStorage(authData, storageMode)),
     );
   }
 
@@ -240,7 +249,9 @@ export abstract class OAuthBase {
 
       await this.storage.setItem(
         STORAGE_KEYS.googleAuth,
-        JSON.stringify(newAuth),
+        JSON.stringify(
+          sanitizeGoogleAuthForStorage(newAuth, this.getStorageMode()),
+        ),
       );
       return true;
     } catch (error) {

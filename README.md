@@ -1,13 +1,13 @@
-# ADHD-CADDI - PWA and React Native
+# ADHD-CADDI - Web App and React Native
 
-A behavioral activation tool for ADHD, designed as a high-performance PWA with an optional React Native mobile bridge.
+A behavioral activation tool for ADHD, designed primarily for the browser with an optional React Native mobile bridge.
 
 > [!IMPORTANT]
-> Primary workflow: most development should happen in the web/PWA path. It gives the full app experience in a browser and is the main deployment target.
+> Primary workflow: most development should happen in the web path. It gives the full app experience in a browser and is the main deployment target.
 
 ## Deployment Status
 
-- Live PWA: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
+- Live web app: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
 - Production deploy path: push reviewed changes to `main` and let `.github/workflows/pages.yml` publish GitHub Pages
 - Android verification path: `.github/workflows/android.yml` builds debug and release APK artifacts on CI
 
@@ -22,9 +22,11 @@ A behavioral activation tool for ADHD, designed as a high-performance PWA with a
 - Calendar: simple monthly view
 - Cosmic Theme: default deep-space visual treatment
 
-## Getting Started (Web/PWA)
+## Getting Started (Web)
 
 This is the recommended way to run and test the app.
+
+Offline/PWA status: service worker registration is intentionally disabled right now. Treat the deployed site as an online web app until a dedicated offline verification pass is completed.
 
 ### Prerequisites
 

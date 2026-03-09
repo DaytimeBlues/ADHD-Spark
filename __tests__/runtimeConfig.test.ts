@@ -59,6 +59,23 @@ describe('runtime config', () => {
     );
   });
 
+  it('never activates gemini direct in production even when a public key is present', () => {
+    const config = createConfig({
+      EXPO_PUBLIC_ENV: 'production',
+      EXPO_PUBLIC_AI_PROVIDER: 'gemini-direct',
+      EXPO_PUBLIC_GEMINI_API_KEY: 'public-gemini-key',
+    });
+
+    expect(config.aiProvider).toBe('vercel');
+    expect(config.geminiApiKey).toBeUndefined();
+    expect(config.startupWarnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'PUBLIC_DIRECT_AI_KEY' }),
+        expect.objectContaining({ code: 'UNSAFE_DIRECT_AI_ENABLED' }),
+      ]),
+    );
+  });
+
   it('falls back safely when AI timeout and retry values are out of range', () => {
     const config = createConfig({
       EXPO_PUBLIC_ENV: 'development',

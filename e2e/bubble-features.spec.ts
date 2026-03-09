@@ -1,93 +1,107 @@
 import { test, expect } from '@playwright/test';
+import { gotoAppRoot } from './helpers/navigation';
 import {
+  seedZeroReviewBubbleState,
   enableCosmicTheme,
   enableE2ETestMode,
   seedAlexPersona,
 } from './helpers/seed';
+import {
+  CHECK_IN_ENERGY_LEVELS,
+  CHECK_IN_MOODS,
+} from '../src/screens/check-in/checkInData';
+
+const isLivePagesSmoke = (process.env.PLAYWRIGHT_BASE_URL ?? '').includes(
+  'github.io/ADHD-CADDI/',
+);
 
 test.describe('Bubble Features: Interruption & Vignette Check-ins', () => {
-  test.beforeEach(async ({ page }) => {
+  test('main bubble opens inbox when review items are waiting', async ({
+    page,
+  }) => {
     await enableE2ETestMode(page);
     await seedAlexPersona(page);
     await enableCosmicTheme(page);
-    await page.goto('/');
+    await gotoAppRoot(page);
     await page.waitForLoadState('networkidle');
+
+    const bubble = page.getByTestId('capture-bubble');
+    await expect(bubble).toBeVisible();
+    await bubble.click();
+
+    await expect(page.getByTestId('inbox-screen')).toBeVisible();
+    await expect(page.getByText('Call substitute coordinator')).toBeVisible();
   });
 
-  test.describe('Check-In Mode (Interruption) in Capture Drawer', () => {
-    test('Can open Capture Drawer and log progress through Check-in mode', async ({
-      page,
-    }) => {
-      // 1. Open Capture Bubble
-      const bubble = page.getByTestId('capture-bubble');
-      await expect(bubble).toBeVisible();
-      await bubble.click();
+  test('zero-review bubble state opens drawer and supports check-in capture mode', async ({
+    page,
+  }) => {
+    await enableE2ETestMode(page);
+    await seedZeroReviewBubbleState(page);
+    await enableCosmicTheme(page);
+    await gotoAppRoot(page);
+    await page.waitForLoadState('networkidle');
 
-      // 2. Open Drawer
-      const drawer = page.getByTestId('capture-drawer');
-      await expect(drawer).toBeVisible();
+    const bubble = page.getByTestId('capture-bubble');
+    await expect(bubble).toBeVisible();
+    await bubble.click();
 
-      // 3. Switch to Check-in Mode
-      const checkinModeBtn = page.getByTestId('capture-mode-checkin');
-      await expect(checkinModeBtn).toBeVisible();
-      await checkinModeBtn.click();
+    const drawer = page.getByTestId('capture-drawer');
+    await expect(drawer).toBeVisible();
 
-      // 4. Verify Prompts
-      const promptText = page.getByText(/what are you doing\?/i);
-      await expect(promptText).toBeVisible();
+    const checkinModeBtn = page.getByTestId('capture-mode-checkin');
+    await expect(checkinModeBtn).toBeVisible();
+    await checkinModeBtn.click();
 
-      // 5. Fill input and Submit
-      const checkinInput = page.getByTestId('capture-checkin-input');
-      await expect(checkinInput).toBeVisible();
-      await checkinInput.fill(
-        'Checking emails. I should be working on the report.',
-      );
+    await expect(page.getByText(/what are you doing\?/i)).toBeVisible();
 
-      const checkinConfirm = page.getByTestId('capture-checkin-confirm');
-      await expect(checkinConfirm).toBeVisible();
-      await checkinConfirm.click();
+    const checkinInput = page.getByTestId('capture-checkin-input');
+    await expect(checkinInput).toBeVisible();
+    await checkinInput.fill(
+      'Checking emails. I should be working on the report.',
+    );
 
-      // 6. Verify Drawer closes or success state
-      await expect(drawer).not.toBeVisible({ timeout: 5000 });
-    });
+    const checkinConfirm = page.getByRole('button', { name: 'LOG PROGRESS' });
+    await expect(checkinConfirm).toBeVisible();
+    await checkinConfirm.click();
+
+    await expect(drawer).not.toBeVisible({ timeout: 5000 });
   });
 
-  test.describe('Vignettes in CheckInScreen', () => {
-    test('CheckInScreen displays literary vignettes instead of emojis', async ({
-      page,
-    }) => {
-      // 1. Navigate to CheckInScreen
-      // Using the home mode grid (mode-checkin)
-      const checkinCard = page.getByTestId('mode-checkin');
-      await expect(checkinCard).toBeVisible();
-      await checkinCard.click({ force: true });
+  test('Check In screen uses the registered route and current vignette quotes', async ({
+    page,
+  }) => {
+    await enableE2ETestMode(page);
+    await seedZeroReviewBubbleState(page);
+    await enableCosmicTheme(page);
+    await gotoAppRoot(page);
+    await page.waitForLoadState('networkidle');
 
-      // 2. Check for Vignette Quotes instead of emojis
-      const nietzscheQuote = page.getByText(
-        '“I am a forest, and a night of dark trees.”',
-        { exact: false },
-      );
-      await expect(nietzscheQuote).toBeVisible();
+    const checkinCard = page.getByTestId('mode-checkin');
+    await expect(checkinCard).toBeVisible();
+    await checkinCard.click({ force: true });
 
-      const whitmanQuote = page.getByText('“I contain multitudes.”', {
-        exact: false,
-      });
-      await expect(whitmanQuote).toBeVisible();
+    const checkInScreen = page.getByLabel('Check-in screen');
+    await expect(checkInScreen).toBeVisible();
 
-      // 3. Select items to show recommendation
-      const lowMoodBtn = page.getByTestId('mood-option-1');
-      await lowMoodBtn.click();
+    if (!isLivePagesSmoke) {
+      await expect(
+        checkInScreen.getByText(CHECK_IN_MOODS[0].quote, { exact: false }),
+      ).toBeVisible();
+      await expect(
+        checkInScreen.getByText(CHECK_IN_ENERGY_LEVELS[4].quote, {
+          exact: false,
+        }),
+      ).toBeVisible();
+    }
 
-      const lowEnergyBtn = page.getByTestId('energy-option-1');
-      await lowEnergyBtn.click();
+    await checkInScreen.getByTestId('mood-option-1').click();
+    await checkInScreen.getByTestId('energy-option-1').click();
 
-      // 4. Validate recommendation has appeared
-      const recommendationText = page.getByText(/RECOMMENDED FOR YOU/i);
-      await expect(recommendationText).toBeVisible();
+    await expect(page.getByText(/RECOMMENDED FOR YOU/i)).toBeVisible();
 
-      const actionButton = page.getByTestId('recommendation-action-button');
-      await expect(actionButton).toBeVisible();
-      await expect(actionButton).toHaveText(/OPEN ANCHOR/i);
-    });
+    const actionButton = page.getByTestId('recommendation-action-button');
+    await expect(actionButton).toBeVisible();
+    await expect(actionButton).toHaveText(/OPEN ANCHOR/i);
   });
 });

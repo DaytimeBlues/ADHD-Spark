@@ -38,9 +38,11 @@ export interface LogEntry {
 
 class LoggerServiceClass {
   private isDev: boolean;
+  private isTest: boolean;
 
   constructor() {
     this.isDev = config.environment === 'development';
+    this.isTest = process.env.NODE_ENV === 'test';
   }
 
   /**
@@ -82,6 +84,10 @@ class LoggerServiceClass {
   }
 
   private log(entry: Omit<LogEntry, 'timestamp'>): void {
+    if (this.isTest && process.env.SHOW_TEST_LOGS !== 'true') {
+      return;
+    }
+
     const timestamp = new Date().toISOString();
     const fullEntry: LogEntry = { ...entry, timestamp };
 

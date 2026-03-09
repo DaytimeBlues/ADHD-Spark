@@ -16,6 +16,8 @@ module.exports = {
     '^@op-engineering/op-sqlite$': '<rootDir>/__tests__/__mocks__/op-sqlite.ts',
     '^expo-notifications$':
       '<rootDir>/__tests__/__mocks__/expo-notifications.ts',
+    '\\.(png|jpg|jpeg|gif|webp|svg)$':
+      '<rootDir>/__tests__/__mocks__/fileMock.js',
   },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],

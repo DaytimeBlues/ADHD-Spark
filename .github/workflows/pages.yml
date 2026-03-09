@@ -189,7 +189,9 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run smoke tests against production
-        run: npx playwright test e2e/smoke-basic.spec.ts --project=chromium
+        run: |
+          npx playwright test e2e/smoke-basic.spec.ts --project=chromium
+          npm run e2e:core
         env:
           CI: true
           PLAYWRIGHT_BASE_URL: https://daytimeblues.github.io/ADHD-CADDI/

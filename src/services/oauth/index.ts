@@ -5,12 +5,15 @@ export {
   buildOAuthState,
   isOAuthStateExpired,
   sanitizeGoogleAuthData,
+  sanitizeGoogleAuthForStorage,
+  sanitizeTodoistAuthForStorage,
   STORAGE_KEYS,
 } from './OAuthShared';
 export type {
   GoogleAuthData,
   OAuthProvider,
   OAuthState,
+  OAuthStorageMode,
   OAuthStorageAdapter,
   TodoistAuthData,
 } from './OAuthShared';

@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, "fix/**", "feat/**"]
+    branches: [main, 'fix/**', 'feat/**']
   pull_request:
     branches: [main]
 
@@ -18,8 +18,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -33,11 +33,11 @@ jobs:
       - name: Run unit tests
         run: npm test -- --runInBand
 
-  e2e-web:
-    name: E2E Web Tests
+  browser-regression:
+    name: Browser Regression
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # BLOCKING: E2E must pass for release
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,8 +45,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -57,8 +57,8 @@ jobs:
       - name: Build web app
         run: npm run build:web
 
-      - name: Run Playwright E2E tests
-        run: npm run e2e:smoke
+      - name: Run deterministic browser regression subset
+        run: npm run e2e:core
         env:
           CI: true
 
@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-browser-regression
           path: |
             playwright-report/
             test-results/

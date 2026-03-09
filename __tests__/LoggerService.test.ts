@@ -5,11 +5,13 @@ describe('LoggerService', () => {
 
   beforeEach(() => {
     jest.resetModules();
+    process.env.SHOW_TEST_LOGS = 'true';
     console.warn = jest.fn();
     console.error = jest.fn();
   });
 
   afterEach(() => {
+    delete process.env.SHOW_TEST_LOGS;
     console.warn = originalConsoleWarn;
     console.error = originalConsoleError;
   });

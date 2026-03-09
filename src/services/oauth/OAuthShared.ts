@@ -31,6 +31,8 @@ export interface OAuthStorageAdapter {
   removeItem: (key: string) => Promise<void>;
 }
 
+export type OAuthStorageMode = 'full' | 'metadata-only';
+
 export const OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
 
 export const STORAGE_KEYS = {
@@ -62,6 +64,32 @@ export const sanitizeGoogleAuthData = (
 ): Omit<GoogleAuthData, 'refreshToken'> => {
   const safeAuth = { ...auth };
   delete safeAuth.refreshToken;
+  return safeAuth;
+};
+
+export const sanitizeGoogleAuthForStorage = (
+  auth: GoogleAuthData,
+  storageMode: OAuthStorageMode,
+): Omit<GoogleAuthData, 'refreshToken'> => {
+  const safeAuth = sanitizeGoogleAuthData(auth);
+
+  if (storageMode === 'metadata-only') {
+    delete safeAuth.accessToken;
+  }
+
+  return safeAuth;
+};
+
+export const sanitizeTodoistAuthForStorage = (
+  auth: TodoistAuthData,
+  storageMode: OAuthStorageMode,
+): TodoistAuthData => {
+  const safeAuth = { ...auth };
+
+  if (storageMode === 'metadata-only') {
+    delete safeAuth.accessToken;
+  }
+
   return safeAuth;
 };
 

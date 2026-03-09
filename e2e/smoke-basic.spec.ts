@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoAppRoot } from './helpers/navigation';
 
 test.describe('Basic Smoke', () => {
   test('app shell loads without fatal errors', async ({ page }) => {
@@ -8,7 +9,7 @@ test.describe('Basic Smoke', () => {
       pageErrors.push(error.message);
     });
 
-    await page.goto('/', { timeout: 30000 });
+    await gotoAppRoot(page);
 
     // Wait for network to be idle (all assets loaded)
     await page.waitForLoadState('networkidle', { timeout: 30000 });
@@ -39,7 +40,7 @@ test.describe('Basic Smoke', () => {
       }
     });
 
-    await page.goto('/', { timeout: 30000 });
+    await gotoAppRoot(page);
     await page.waitForLoadState('networkidle', { timeout: 30000 });
 
     if (responses.length > 0) {

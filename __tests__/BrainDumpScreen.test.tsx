@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import {
   fireEvent,
@@ -248,8 +249,28 @@ jest.mock('../src/components/tutorial/TutorialBubble', () => {
 });
 
 describe('BrainDumpScreen', () => {
+  let consoleErrorSpy: ReturnType<typeof jest.spyOn>;
+  const originalConsoleError = console.error;
+
   beforeEach(() => {
     resetTutorialState();
+    consoleErrorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation((...args: unknown[]) => {
+        const [firstArg] = args;
+        if (
+          typeof firstArg === 'string' &&
+          firstArg.includes('not wrapped in act')
+        ) {
+          return;
+        }
+
+        originalConsoleError(...args);
+      });
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   it('renders brain dump shell UI', async () => {
@@ -265,7 +286,7 @@ describe('BrainDumpScreen', () => {
     expect(screen.getByText('_AWAITING_INPUT')).toBeTruthy();
   }, 10000);
 
-  it('renders tutorial state and advances through the mocked flow', () => {
+  it('renders tutorial state and advances through the mocked flow', async () => {
     startTutorial(mockBrainDumpFlow);
 
     const view = render(<BrainDumpScreen />);

@@ -78,16 +78,12 @@
               return s.replace(/~and~/g, '&');
             })
             .join('?');
-          window.history.replaceState(
-            null,
-            null,
-            repoName + decoded + l.hash,
-          );
+          window.history.replaceState(null, null, repoName + decoded + l.hash);
         }
       })(window.location);
     </script>
 
-    <!-- Service Worker Registration for PWA Offline Support (Temporarily disabled for development/cache flushing) -->
+    <!-- Service worker registration is intentionally disabled until offline support is fully verified. -->
     <!--
     <script>
       if ("serviceWorker" in navigator) {

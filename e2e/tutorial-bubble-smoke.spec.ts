@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { gotoAppRoot } from './helpers/navigation';
 import { enableCosmicTheme, enableE2ETestMode } from './helpers/seed';
 
 test.describe('Tutorial And Bubble Smoke', () => {
@@ -8,7 +9,7 @@ test.describe('Tutorial And Bubble Smoke', () => {
     });
     await enableE2ETestMode(page);
     await enableCosmicTheme(page);
-    await page.goto('/');
+    await gotoAppRoot(page);
     await page.waitForLoadState('networkidle');
   });
 

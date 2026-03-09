@@ -16,16 +16,68 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 import { isWeb } from '../utils/PlatformUtils';
 
+const loadScreen = <P extends object>(
+  modulePath: string,
+  lazyFactory: () => Promise<{ default: React.ComponentType<P> }>,
+): React.ComponentType<P> => {
+  if (process.env.NODE_ENV === 'test') {
+    // Jest does not support these lazy dynamic imports without extra VM flags.
+    // Using require in tests keeps the production bundle lazy-loaded.
+    return require(modulePath).default as React.ComponentType<P>;
+  }
+
+  return lazy(lazyFactory) as unknown as React.ComponentType<P>;
+};
+
 // Lazy loaded screens keep the first web bundle smaller.
-const HomeScreen = lazy(() => import('../screens/HomeScreen'));
-const IgniteScreen = lazy(() => import('../screens/IgniteScreen'));
-const BrainDumpScreen = lazy(() => import('../screens/BrainDumpScreen'));
-const ChatScreen = lazy(() => import('../screens/ChatScreen'));
-const FogCutterScreen = lazy(() => import('../screens/FogCutterScreen'));
-const PomodoroScreen = lazy(() => import('../screens/PomodoroScreen'));
-const CalendarScreen = lazy(() => import('../screens/CalendarScreen'));
-const AnchorScreen = lazy(() => import('../screens/AnchorScreen'));
-const InboxScreen = lazy(() => import('../screens/InboxScreen'));
+const HomeScreen = loadScreen(
+  '../screens/HomeScreen',
+  () => import('../screens/HomeScreen'),
+);
+const IgniteScreen = loadScreen(
+  '../screens/IgniteScreen',
+  () => import('../screens/IgniteScreen'),
+);
+const BrainDumpScreen = loadScreen(
+  '../screens/BrainDumpScreen',
+  () => import('../screens/BrainDumpScreen'),
+);
+const ChatScreen = loadScreen(
+  '../screens/ChatScreen',
+  () => import('../screens/ChatScreen'),
+);
+const FogCutterScreen = loadScreen(
+  '../screens/FogCutterScreen',
+  () => import('../screens/FogCutterScreen'),
+);
+const PomodoroScreen = loadScreen(
+  '../screens/PomodoroScreen',
+  () => import('../screens/PomodoroScreen'),
+);
+const CalendarScreen = loadScreen(
+  '../screens/CalendarScreen',
+  () => import('../screens/CalendarScreen'),
+);
+const AnchorScreen = loadScreen(
+  '../screens/AnchorScreen',
+  () => import('../screens/AnchorScreen'),
+);
+const InboxScreen = loadScreen(
+  '../screens/InboxScreen',
+  () => import('../screens/InboxScreen'),
+);
+const CheckInScreen = loadScreen(
+  '../screens/CheckInScreen',
+  () => import('../screens/CheckInScreen'),
+);
+const CBTGuideScreen = loadScreen(
+  '../screens/CBTGuideScreen',
+  () => import('../screens/CBTGuideScreen'),
+);
+const DiagnosticsScreen = loadScreen(
+  '../screens/DiagnosticsScreen',
+  () => import('../screens/DiagnosticsScreen'),
+);
 
 type TabBarIconProps = {
   color: string;
@@ -84,6 +136,9 @@ const LazyPomodoro = withSuspense(PomodoroScreen);
 const LazyCalendar = withSuspense(CalendarScreen);
 const LazyAnchor = withSuspense(AnchorScreen);
 const LazyInbox = withSuspense(InboxScreen);
+const LazyCheckIn = withSuspense(CheckInScreen);
+const LazyCBTGuide = withSuspense(CBTGuideScreen);
+const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 
 const LazyHome = withSuspense(HomeScreen);
 const LazyIgnite = withSuspense(IgniteScreen);
@@ -100,6 +155,9 @@ const SafeLazyPomodoro = withErrorBoundary(LazyPomodoro);
 const SafeLazyCalendar = withErrorBoundary(LazyCalendar);
 const SafeLazyAnchor = withErrorBoundary(LazyAnchor);
 const SafeLazyInbox = withErrorBoundary(LazyInbox);
+const SafeLazyCheckIn = withErrorBoundary(LazyCheckIn);
+const SafeLazyCBTGuide = withErrorBoundary(LazyCBTGuide);
+const SafeLazyDiagnostics = withErrorBoundary(LazyDiagnostics);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -221,6 +279,9 @@ const styles = StyleSheet.create({
 const AppNavigatorContent = () => (
   <Stack.Navigator screenOptions={crossFadeOptions}>
     <Stack.Screen name={ROUTES.MAIN} component={TabNavigatorWithBubble} />
+    <Stack.Screen name={ROUTES.CHECK_IN} component={SafeLazyCheckIn} />
+    <Stack.Screen name={ROUTES.CBT_GUIDE} component={SafeLazyCBTGuide} />
+    <Stack.Screen name={ROUTES.DIAGNOSTICS} component={SafeLazyDiagnostics} />
     <Stack.Screen name={ROUTES.FOG_CUTTER} component={SafeLazyFogCutter} />
     <Stack.Screen name={ROUTES.POMODORO} component={SafeLazyPomodoro} />
     <Stack.Screen name={ROUTES.ANCHOR} component={SafeLazyAnchor} />

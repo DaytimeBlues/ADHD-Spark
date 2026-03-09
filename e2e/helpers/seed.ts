@@ -4,7 +4,57 @@ const daysAgoIso = (days: number): string => {
   return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 };
 
-export const seedAlexPersona = async (page: Page): Promise<void> => {
+type CaptureInboxSeedItem = {
+  id: string;
+  source: string;
+  status: string;
+  raw: string;
+  createdAt: number;
+};
+
+type AlexPersonaOptions = {
+  captureInboxItems?: CaptureInboxSeedItem[];
+};
+
+const defaultCaptureInboxItems = (): CaptureInboxSeedItem[] => [
+  {
+    id: 'cap_a',
+    source: 'text',
+    status: 'unreviewed',
+    raw: 'Call substitute coordinator',
+    createdAt: Date.now(),
+  },
+  {
+    id: 'cap_b',
+    source: 'paste',
+    status: 'unreviewed',
+    raw: 'Period 3 room change note',
+    createdAt: Date.now() - 60_000,
+  },
+];
+
+export const seedCaptureInbox = async (
+  page: Page,
+  captureInboxItems: CaptureInboxSeedItem[],
+): Promise<void> => {
+  await page.addInitScript((items) => {
+    window.localStorage.setItem(
+      'captureInbox',
+      JSON.stringify({
+        state: {
+          items,
+          _hasHydrated: true,
+        },
+        version: 0,
+      }),
+    );
+  }, captureInboxItems);
+};
+
+export const seedAlexPersona = async (
+  page: Page,
+  options: AlexPersonaOptions = {},
+): Promise<void> => {
   const activationSessions = [
     {
       id: 'session-alex-1',
@@ -55,23 +105,8 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
     },
   ];
 
-  // Capture inbox items for Zustand store (wrapped in store state format)
-  const captureInboxItems = [
-    {
-      id: 'cap_a',
-      source: 'text',
-      status: 'unreviewed',
-      raw: 'Call substitute coordinator',
-      createdAt: Date.now(),
-    },
-    {
-      id: 'cap_b',
-      source: 'paste',
-      status: 'unreviewed',
-      raw: 'Period 3 room change note',
-      createdAt: Date.now() - 60_000,
-    },
-  ];
+  const captureInboxItems =
+    options.captureInboxItems ?? defaultCaptureInboxItems();
 
   await page.addInitScript(
     (seed) => {
@@ -106,6 +141,10 @@ export const seedAlexPersona = async (page: Page): Promise<void> => {
       captureInboxItems,
     },
   );
+};
+
+export const seedZeroReviewBubbleState = async (page: Page): Promise<void> => {
+  await seedAlexPersona(page, { captureInboxItems: [] });
 };
 
 export const enableE2ETestMode = async (page: Page): Promise<void> => {
