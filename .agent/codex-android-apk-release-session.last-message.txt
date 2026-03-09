@@ -1,0 +1,12 @@
+A blocker came up before any implementation:
+
+- The repo is on `main`, and the required `executing-plans` workflow says not to start implementation there.
+- The required `using-git-worktrees` workflow also says to create an isolated worktree first.
+- This repo does not currently have `.worktrees/`, `worktrees/`, or a repo instruction naming a preferred worktree location.
+
+I need one decision from you before I can continue:
+
+1. Use `C:\dev\ADHD-CADDI-V1\.worktrees\...` inside the repo
+2. Use a global worktree location outside the repo
+
+Once you choose, I’ll create the worktree, verify the baseline, then review the plan for any critical gaps and start Task 1 with the required red-green verification cycle.
