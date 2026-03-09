@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Animated, Easing } from 'react-native';
 import { isWeb } from '../utils/PlatformUtils';
 
@@ -20,12 +20,15 @@ export const useEntranceAnimation = (
 ) => {
   const useNativeDriver = !isWeb;
   // Initialize animation values
-  const fadeAnims = useRef(
-    [...Array(itemCount)].map(() => new Animated.Value(0)),
-  ).current;
-  const slideAnims = useRef(
-    [...Array(itemCount)].map(() => new Animated.Value(ENTRANCE_OFFSET_Y)),
-  ).current;
+  const fadeAnims = useMemo(
+    () => [...Array(itemCount)].map(() => new Animated.Value(0)),
+    [itemCount],
+  );
+  const slideAnims = useMemo(
+    () =>
+      [...Array(itemCount)].map(() => new Animated.Value(ENTRANCE_OFFSET_Y)),
+    [itemCount],
+  );
 
   useEffect(() => {
     if (prefersReducedMotion || process.env.NODE_ENV === 'test') {
@@ -52,8 +55,7 @@ export const useEntranceAnimation = (
     });
 
     Animated.stagger(ANIMATION_STAGGER, animations).start();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefersReducedMotion]); // Re-run only if prefersReducedMotion changes
+  }, [fadeAnims, prefersReducedMotion, slideAnims, useNativeDriver]);
 
   return { fadeAnims, slideAnims };
 };
