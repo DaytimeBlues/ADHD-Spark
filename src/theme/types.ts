@@ -1,5 +1,53 @@
 import { ViewStyle } from 'react-native';
 
+type ThemeStringScale = Record<string, string | undefined>;
+type ThemeNumberScale = Record<string | number, number>;
+type ThemeUnknownRecord = Record<string, unknown>;
+
+interface ThemeSemanticColors {
+  primary: string;
+  secondary?: string;
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+  [key: string]: string | undefined;
+}
+
+interface ThemeTypography extends ThemeUnknownRecord {
+  fontFamily?: Record<string, string>;
+  mono?: {
+    fontFamily?: string;
+  };
+  h1?: number;
+  h2?: number;
+  h3?: number;
+  h4?: number;
+  base?: number;
+  sm?: number;
+  xs?: number;
+  lg?: number;
+  xl?: number;
+  timerHero?: number;
+}
+
+interface ThemeLayout extends ThemeUnknownRecord {
+  maxWidth?: ThemeNumberScale;
+  minTapTarget?: number;
+  minTapTargetComfortable?: number;
+}
+
+interface ThemeMotion extends ThemeUnknownRecord {
+  scales?: Record<string, number>;
+  transitions?: Record<string, string>;
+}
+
+type ThemeColorValue =
+  | ThemeStringScale
+  | Record<number | string, string>
+  | ThemeSemanticColors
+  | undefined;
+
 export interface ThemeTokens {
   colors: {
     neutral: {
@@ -15,17 +63,16 @@ export interface ThemeTokens {
       [key: string]: string | undefined;
     };
     brand: Record<number | string, string>;
-    semantic: {
-      primary: string;
-      secondary?: string;
-      success: string;
-      warning: string;
-      error: string;
-      info: string;
-    };
+    semantic: ThemeSemanticColors;
     utility?: Record<string, string>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
+    cosmic?: ThemeStringScale;
+    text?: ThemeStringScale;
+    indigo?: ThemeStringScale;
+    success: ThemeStringScale;
+    warning: ThemeStringScale;
+    error: ThemeStringScale;
+    info: ThemeStringScale;
+    [key: string]: ThemeColorValue;
   };
   spacing: Record<number | string, number>;
   radii: {
@@ -38,12 +85,11 @@ export interface ThemeTokens {
     [key: string]: number;
   };
   elevation: Record<string, ViewStyle>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  typography?: any;
+  type?: ThemeTypography;
+  typography?: ThemeTypography;
   fontSizes?: Record<number | string, number>;
   lineHeights?: Record<string, number>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  motion?: Record<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+  layout?: ThemeLayout;
+  motion?: ThemeMotion;
+  [key: string]: unknown;
 }

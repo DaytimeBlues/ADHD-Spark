@@ -9,6 +9,7 @@ import React, { memo, useMemo, useRef, useState, useCallback } from 'react';
 import {
   Pressable,
   StyleSheet,
+  StyleProp,
   ViewStyle,
   Animated,
   Platform,
@@ -44,6 +45,17 @@ export interface GlowCardProps extends CosmicPressableProps {
 type WebInteractiveStyle = ViewStyle & {
   cursor?: 'pointer';
   transition?: string;
+};
+
+type WebFocusStyle = ViewStyle & {
+  outlineWidth?: number;
+  outlineStyle?: 'solid';
+  outlineColor?: string;
+};
+
+type GlowCardPressableState = {
+  focused?: boolean;
+  pressed: boolean;
 };
 
 // ============================================================================
@@ -218,9 +230,10 @@ export const GlowCard = memo(function GlowCard({
   const pressedLinearStyle =
     isPressedInternal && !isCosmic ? styles.pressedLinear : undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getStyleWithFocus = (state: any) => {
-    const baseStyle = [
+  const getStyleWithFocus = (
+    state: GlowCardPressableState,
+  ): StyleProp<ViewStyle> => {
+    const baseStyle: Array<StyleProp<ViewStyle>> = [
       containerStyle,
       glowStyle,
       style as ViewStyle,
@@ -229,15 +242,16 @@ export const GlowCard = memo(function GlowCard({
     ];
 
     if (state?.focused && onPress) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const focusStyle = Platform.select({
+      const focusStyle = Platform.select<WebFocusStyle>({
         web: {
           outlineWidth: 2,
           outlineStyle: 'solid',
           outlineColor: isCosmic ? '#8B5CF6' : '#7C3AED',
         },
-      }) as ViewStyle;
-      baseStyle.push(focusStyle);
+      });
+      if (focusStyle) {
+        baseStyle.push(focusStyle);
+      }
     }
 
     return baseStyle;

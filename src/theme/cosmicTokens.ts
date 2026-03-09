@@ -90,6 +90,23 @@ export const CosmicTokens: ThemeTokens = {
     brand: brandScale,
     semantic: semanticColors,
     utility: utilityColors,
+    text: textColors,
+    success: {
+      main: semanticColors.success,
+      subtle: 'rgba(45, 212, 191, 0.12)',
+    },
+    warning: {
+      main: semanticColors.warning,
+      subtle: 'rgba(246, 193, 119, 0.12)',
+    },
+    error: {
+      main: semanticColors.error,
+      subtle: 'rgba(244, 114, 182, 0.12)',
+    },
+    info: {
+      main: semanticColors.info,
+      subtle: 'rgba(185, 194, 217, 0.12)',
+    },
     cosmic: cosmicColors, // Direct access to raw cosmic colors
   },
   spacing: cosmicSpacing,
