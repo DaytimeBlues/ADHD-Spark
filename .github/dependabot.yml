@@ -1,0 +1,83 @@
+# Dependabot configuration for ADHD-CADDI
+# Keeps npm, GitHub Actions, and Gradle dependencies up to date.
+# Secret scanning is handled separately by gitleaks + GitHub secret scanning.
+# See docs/GOOGLE_SYNC_SETUP.md and docs/GOOGLE_PROJECT_SETUP.md for
+# secrets that must NEVER be committed.
+
+version: 2
+
+updates:
+  # -----------------------------------------------------------------------
+  # npm / JavaScript (React Native, Expo, web dependencies)
+  # -----------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "javascript"
+    ignore:
+      # Expo SDK updates are breaking - do manually
+      - dependency-name: "expo"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "expo-*"
+        update-types: ["version-update:semver-major"]
+      # React Native major versions are breaking - do manually
+      - dependency-name: "react-native"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@react-native/*"
+        update-types: ["version-update:semver-major"]
+      # Google Sign-In library - test manually before merging
+      - dependency-name: "@react-native-google-signin/google-signin"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(dev-deps)"
+      include: "scope"
+
+  # -----------------------------------------------------------------------
+  # GitHub Actions workflows
+  # -----------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(actions)"
+      include: "scope"
+
+  # -----------------------------------------------------------------------
+  # Gradle / Android (Java/Kotlin dependencies)
+  # -----------------------------------------------------------------------
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Australia/Brisbane"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "android"
+    ignore:
+      # Firebase / Google Play Services - keep in sync with google-services.json manually
+      - dependency-name: "com.google.firebase:*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "com.google.android.gms:*"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: "chore(android-deps)"
+      include: "scope"
