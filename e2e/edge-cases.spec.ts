@@ -4,7 +4,7 @@ import { gotoAppRoot } from './helpers/navigation';
 
 /**
  * Edge Case and Error Handling Tests
- * Tests offline mode, API failures, storage corruption, etc.
+ * Tests disconnected local behavior, API failures, storage corruption, etc.
  */
 
 const goToTab = async (
@@ -24,18 +24,20 @@ test.describe('Edge Cases and Error Handling', () => {
     await expect(page.getByTestId('home-title')).toBeVisible();
   });
 
-  test.describe('Offline Mode', () => {
-    test('app works offline - local features functional', async ({ page }) => {
-      // Go offline
+  test.describe('Disconnected Local Behavior', () => {
+    test('local features remain usable while disconnected without implying full PWA support', async ({
+      page,
+    }) => {
+      // Simulate a disconnected session
       await page.context().setOffline(true);
 
-      // Navigate to tasks
+      // Navigate to the Tasks tab
       await goToTab(page, 'tasks');
-      await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
+      await expect(page.getByText('NEBULA QUEUE')).toBeVisible();
 
-      // Add item offline
-      await page.getByPlaceholder('> INPUT_DATA...').fill('Offline task');
-      await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
+      // Add a task through the canonical Tasks screen
+      await page.getByPlaceholder('New objective...').fill('Offline task');
+      await page.getByRole('button', { name: '+' }).click();
       await expect(page.getByText('Offline task')).toBeVisible();
 
       // Timer should work offline
@@ -78,8 +80,8 @@ test.describe('Edge Cases and Error Handling', () => {
       await page.getByPlaceholder('> INPUT_DATA...').fill('Test item');
       await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
 
-      // App should not crash
-      await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
+      // App should not crash and the Tasks screen should stay mounted
+      await expect(page.getByText('NEBULA QUEUE')).toBeVisible();
     });
 
     test('handles 500 server error', async ({ page }) => {
@@ -155,7 +157,7 @@ test.describe('Edge Cases and Error Handling', () => {
 
       // Navigate to tasks - should handle gracefully
       await goToTab(page, 'tasks');
-      await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
+      await expect(page.getByText('NEBULA QUEUE')).toBeVisible();
     });
 
     test('handles localStorage quota exceeded', async ({ page }) => {
@@ -188,10 +190,10 @@ test.describe('Edge Cases and Error Handling', () => {
       await page.reload();
       await expect(page.getByTestId('home-title')).toBeVisible();
 
-      // Should be able to use app without storage
+      // Should be able to use the Tasks screen without storage
       await goToTab(page, 'tasks');
-      await page.getByPlaceholder('> INPUT_DATA...').fill('No storage test');
-      await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
+      await page.getByPlaceholder('New objective...').fill('No storage test');
+      await page.getByRole('button', { name: '+' }).click();
     });
   });
 
@@ -288,8 +290,8 @@ test.describe('Edge Cases and Error Handling', () => {
 
       // Local features should still work
       await goToTab(page, 'tasks');
-      await page.getByPlaceholder('> INPUT_DATA...').fill('Slow network test');
-      await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
+      await page.getByPlaceholder('New objective...').fill('Slow network test');
+      await page.getByRole('button', { name: '+' }).click();
       await expect(page.getByText('Slow network test')).toBeVisible();
     });
   });
@@ -310,8 +312,8 @@ test.describe('Edge Cases and Error Handling', () => {
 
       // Perform various actions
       await goToTab(page, 'tasks');
-      await page.getByPlaceholder('> INPUT_DATA...').fill('Test');
-      await page.getByPlaceholder('> INPUT_DATA...').press('Enter');
+      await page.getByPlaceholder('New objective...').fill('Test');
+      await page.getByRole('button', { name: '+' }).click();
 
       await goToTab(page, 'focus');
       await page.getByTestId('mode-pomodoro').click({ force: true });

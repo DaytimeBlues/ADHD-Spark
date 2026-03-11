@@ -2,6 +2,11 @@
 
 _Verified against source: 2026-02-27_
 
+> **⚠️ HISTORICAL DOCUMENT - ARCHIVED**
+>
+> This review predates the repository's current workflows and command results.
+> Treat it as historical context only and verify any operational claim against the current repo before relying on it.
+
 ---
 
 ## Overall Health Scorecard

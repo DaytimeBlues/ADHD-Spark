@@ -26,7 +26,7 @@ A behavioral activation tool for ADHD, designed primarily for the browser with a
 
 This is the recommended way to run and test the app.
 
-Offline/PWA status: service worker registration is intentionally disabled right now. Treat the deployed site as an online web app until a dedicated offline verification pass is completed.
+Offline/PWA status: the app is currently web-first and online-first. Service worker registration is intentionally disabled, so treat the deployed site as an online web app rather than a supported PWA or offline surface.
 
 ### Prerequisites
 

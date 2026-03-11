@@ -12,6 +12,7 @@ export type RootStackParamList = {
   [ROUTES.CHECK_IN]: undefined;
   [ROUTES.CBT_GUIDE]: undefined;
   [ROUTES.DIAGNOSTICS]: undefined;
+  [ROUTES.BRAIN_DUMP]: { autoRecord?: boolean } | undefined;
   [ROUTES.FOG_CUTTER]: undefined;
   [ROUTES.POMODORO]: undefined;
   [ROUTES.ANCHOR]: undefined;
@@ -25,7 +26,7 @@ export type OverlayIntentPayload = {
 
 const OVERLAY_ROUTE_ALIASES: Record<string, string> = {
   Ignite: ROUTES.FOCUS,
-  BrainDump: ROUTES.TASKS,
+  BrainDump: ROUTES.BRAIN_DUMP,
   FogCutter: ROUTES.FOG_CUTTER,
   CheckIn: ROUTES.CHECK_IN,
 };
@@ -33,6 +34,7 @@ const OVERLAY_ROUTE_ALIASES: Record<string, string> = {
 const ALLOWED_OVERLAY_ROUTES = new Set<string>([
   ROUTES.FOCUS,
   ROUTES.CBT_GUIDE,
+  ROUTES.BRAIN_DUMP,
   ROUTES.FOG_CUTTER,
   ROUTES.POMODORO,
   ROUTES.TASKS,
@@ -60,8 +62,11 @@ function processOverlayIntent(payload: OverlayIntentPayload): boolean {
     return false;
   }
 
-  if (normalizedRoute === ROUTES.TASKS) {
-    navigationRef.navigate(ROUTES.TASKS, {
+  if (
+    normalizedRoute === ROUTES.TASKS ||
+    normalizedRoute === ROUTES.BRAIN_DUMP
+  ) {
+    navigationRef.navigate(normalizedRoute, {
       autoRecord: payload.autoRecord === true,
     });
     return true;

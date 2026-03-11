@@ -7,9 +7,9 @@ test.describe('Chat Flow', () => {
     await enableCosmicTheme(page);
     await page.goto('/');
     await expect(page.getByTestId('home-title')).toBeVisible();
-    await page.getByTestId('nav-focus').click({ force: true });
-    await page.getByText('CHAT', { exact: true }).click({ force: true });
-    await expect(page.getByText('SPARK_ASSISTANT')).toBeVisible();
+    await page.getByTestId('nav-chat').click({ force: true });
+    await expect(page.getByText('CADDI_ASSISTANT')).toBeVisible();
+    await expect(page.getByPlaceholder('TYPE_YOUR_THOUGHTS...')).toBeVisible();
   });
 
   test('send a message and show assistant response', async ({ page }) => {
@@ -41,6 +41,9 @@ test.describe('Chat Flow', () => {
     await page.getByText('SEND', { exact: true }).click();
 
     await expect(page.getByText('will fail')).toBeVisible();
+    await expect(
+      page.getByText('I am having trouble connecting to my brain. Please try again.'),
+    ).toBeVisible({ timeout: 12000 });
     await expect(page.getByPlaceholder('TYPE_YOUR_THOUGHTS...')).toBeVisible();
   });
 });

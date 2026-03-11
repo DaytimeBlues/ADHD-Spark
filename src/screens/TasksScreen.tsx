@@ -14,6 +14,7 @@ import Animated, {
   SlideInRight,
 } from 'react-native-reanimated';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
+import { ROUTES } from '../navigation/routes';
 import { useTaskStore } from '../store/useTaskStore';
 import { TASK_PRIORITY_COLORS } from './TasksScreen.constants';
 import { FilterTab } from './TasksScreen.FilterTab';
@@ -75,6 +76,10 @@ export const TasksScreen = memo(function TasksScreen() {
     setTimeout(() => setIsSyncing(false), 1500);
   }, []);
 
+  const handleOpenBrainDump = useCallback(() => {
+    navigation.navigate(ROUTES.BRAIN_DUMP as never);
+  }, [navigation]);
+
   return (
     <CosmicBackground variant="ridge">
       <View
@@ -105,6 +110,16 @@ export const TasksScreen = memo(function TasksScreen() {
           style={styles.syncButton}
         >
           {isSyncing ? 'SYNCING' : 'SYNC'}
+        </RuneButton>
+
+        <RuneButton
+          variant="secondary"
+          size="sm"
+          onPress={handleOpenBrainDump}
+          style={styles.syncButton}
+          testID="open-brain-dump"
+        >
+          BRAIN DUMP
         </RuneButton>
       </View>
 

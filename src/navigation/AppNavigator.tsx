@@ -16,14 +16,32 @@ import AppIcon from '../components/AppIcon';
 
 import { isWeb } from '../utils/PlatformUtils';
 
+const screenModuleLoaders = {
+  '../screens/HomeScreen': () => require('../screens/HomeScreen'),
+  '../screens/IgniteScreen': () => require('../screens/IgniteScreen'),
+  '../screens/TasksScreen': () => require('../screens/TasksScreen'),
+  '../screens/BrainDumpScreen': () => require('../screens/BrainDumpScreen'),
+  '../screens/ChatScreen': () => require('../screens/ChatScreen'),
+  '../screens/FogCutterScreen': () => require('../screens/FogCutterScreen'),
+  '../screens/PomodoroScreen': () => require('../screens/PomodoroScreen'),
+  '../screens/CalendarScreen': () => require('../screens/CalendarScreen'),
+  '../screens/AnchorScreen': () => require('../screens/AnchorScreen'),
+  '../screens/InboxScreen': () => require('../screens/InboxScreen'),
+  '../screens/CheckInScreen': () => require('../screens/CheckInScreen'),
+  '../screens/CBTGuideScreen': () => require('../screens/CBTGuideScreen'),
+  '../screens/DiagnosticsScreen': () => require('../screens/DiagnosticsScreen'),
+} as const;
+
+type ScreenModulePath = keyof typeof screenModuleLoaders;
+
 const loadScreen = <P extends object>(
-  modulePath: string,
+  modulePath: ScreenModulePath,
   lazyFactory: () => Promise<{ default: React.ComponentType<P> }>,
 ): React.ComponentType<P> => {
   if (process.env.NODE_ENV === 'test') {
     // Jest does not support these lazy dynamic imports without extra VM flags.
     // Using require in tests keeps the production bundle lazy-loaded.
-    return require(modulePath).default as React.ComponentType<P>;
+    return screenModuleLoaders[modulePath]().default as React.ComponentType<P>;
   }
 
   return lazy(lazyFactory) as unknown as React.ComponentType<P>;
@@ -37,6 +55,10 @@ const HomeScreen = loadScreen(
 const IgniteScreen = loadScreen(
   '../screens/IgniteScreen',
   () => import('../screens/IgniteScreen'),
+);
+const TasksScreen = loadScreen(
+  '../screens/TasksScreen',
+  () => import('../screens/TasksScreen'),
 );
 const BrainDumpScreen = loadScreen(
   '../screens/BrainDumpScreen',
@@ -142,12 +164,14 @@ const LazyDiagnostics = withSuspense(DiagnosticsScreen);
 
 const LazyHome = withSuspense(HomeScreen);
 const LazyIgnite = withSuspense(IgniteScreen);
+const LazyTasks = withSuspense(TasksScreen);
 const LazyBrainDump = withSuspense(BrainDumpScreen);
 const LazyChat = withSuspense(ChatScreen);
 
 // Phase 6: Wrapped Cosmic screens for primary tabs (with ErrorBoundary)
 const SafeHomeScreen = withErrorBoundary(LazyHome);
 const SafeIgniteScreen = withErrorBoundary(LazyIgnite);
+const SafeTasksScreen = withErrorBoundary(LazyTasks);
 const SafeBrainDumpScreen = withErrorBoundary(LazyBrainDump);
 const SafeChatScreen = withErrorBoundary(LazyChat);
 const SafeLazyFogCutter = withErrorBoundary(LazyFogCutter);
@@ -213,27 +237,42 @@ const TabNavigator = () => {
       <Tab.Screen
         name={ROUTES.HOME}
         component={SafeHomeScreen}
-        options={{ tabBarIcon: HomeTabIcon }}
+        options={{
+          tabBarIcon: HomeTabIcon,
+          tabBarButtonTestID: 'nav-home',
+        }}
       />
       <Tab.Screen
         name={ROUTES.FOCUS}
         component={SafeIgniteScreen}
-        options={{ tabBarIcon: FocusTabIcon }}
+        options={{
+          tabBarIcon: FocusTabIcon,
+          tabBarButtonTestID: 'nav-focus',
+        }}
       />
       <Tab.Screen
         name={ROUTES.TASKS}
-        component={SafeBrainDumpScreen}
-        options={{ tabBarIcon: TasksTabIcon }}
+        component={SafeTasksScreen}
+        options={{
+          tabBarIcon: TasksTabIcon,
+          tabBarButtonTestID: 'nav-tasks',
+        }}
       />
       <Tab.Screen
         name={ROUTES.CALENDAR}
         component={SafeLazyCalendar}
-        options={{ tabBarIcon: CalendarTabIcon }}
+        options={{
+          tabBarIcon: CalendarTabIcon,
+          tabBarButtonTestID: 'nav-calendar',
+        }}
       />
       <Tab.Screen
         name={ROUTES.CHAT}
         component={SafeChatScreen}
-        options={{ tabBarIcon: ChatTabIcon }}
+        options={{
+          tabBarIcon: ChatTabIcon,
+          tabBarButtonTestID: 'nav-chat',
+        }}
       />
     </Tab.Navigator>
   );
@@ -282,6 +321,7 @@ const AppNavigatorContent = () => (
     <Stack.Screen name={ROUTES.CHECK_IN} component={SafeLazyCheckIn} />
     <Stack.Screen name={ROUTES.CBT_GUIDE} component={SafeLazyCBTGuide} />
     <Stack.Screen name={ROUTES.DIAGNOSTICS} component={SafeLazyDiagnostics} />
+    <Stack.Screen name={ROUTES.BRAIN_DUMP} component={SafeBrainDumpScreen} />
     <Stack.Screen name={ROUTES.FOG_CUTTER} component={SafeLazyFogCutter} />
     <Stack.Screen name={ROUTES.POMODORO} component={SafeLazyPomodoro} />
     <Stack.Screen name={ROUTES.ANCHOR} component={SafeLazyAnchor} />

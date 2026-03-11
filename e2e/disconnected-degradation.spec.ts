@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { enableE2ETestMode, enableCosmicTheme } from './helpers/seed';
 
-test.describe('Offline Resilience', () => {
+test.describe('Disconnected Degradation (Non-PWA)', () => {
   test.beforeEach(async ({ page }) => {
     await enableE2ETestMode(page);
     await enableCosmicTheme(page);
   });
 
-  test('chat degrades gracefully while local tools still work', async ({
+  test('chat API failure degrades gracefully while local tools keep working without claiming offline/PWA support', async ({
     page,
   }) => {
     await page.route('**/api/chat', async (route) => route.abort('failed'));
@@ -24,6 +24,8 @@ test.describe('Offline Resilience', () => {
     await expect(page.getByPlaceholder('TYPE_YOUR_THOUGHTS...')).toBeVisible();
 
     await page.getByTestId('nav-tasks').click({ force: true });
+    await expect(page.getByText('NEBULA QUEUE')).toBeVisible();
+    await page.getByTestId('open-brain-dump').click();
     await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
     await page
       .getByPlaceholder('> INPUT_DATA...')

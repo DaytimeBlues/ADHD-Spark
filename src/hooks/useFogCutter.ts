@@ -4,8 +4,9 @@ import StorageService from '../services/StorageService';
 import UXMetricsService from '../services/UXMetricsService';
 import { LoggerService } from '../services/LoggerService';
 import HapticsService from '../services/HapticsService';
-import { generateId } from '../utils/helpers';
 import { isAndroid } from '../utils/PlatformUtils';
+import { useTaskStore } from '../store/useTaskStore';
+import type { Task as CanonicalTask } from '../types/task';
 import {
   MicroStep,
   advanceTaskProgress,
@@ -69,32 +70,6 @@ const loadGuideDismissedState = async (): Promise<boolean> => {
   return guideState ? !!guideState.fogCutterDismissed : false;
 };
 
-const loadFogCutterState = async () => {
-  const [storedTasks, guideDismissed] = await Promise.all([
-    StorageService.getJSON<Task[]>(StorageService.STORAGE_KEYS.tasks),
-    loadGuideDismissedState(),
-  ]);
-
-  return {
-    tasks: normalizeStoredTasks(storedTasks),
-    guideDismissed,
-  };
-};
-
-const persistTasks = async (tasks: Task[]) => {
-  await StorageService.setJSON(StorageService.STORAGE_KEYS.tasks, tasks);
-};
-
-const createFogCutterTask = (
-  taskText: string,
-  microStepTexts: string[],
-): Task => ({
-  id: generateId(),
-  text: taskText,
-  completed: false,
-  microSteps: normalizeMicroSteps(microStepTexts),
-});
-
 const shouldShowGuide = ({
   guideDismissed,
   showGuide,
@@ -119,41 +94,40 @@ const saveGuideDismissedState = async () => {
   );
 };
 
-const toggleTaskCollection = (tasks: Task[], id: string) => {
-  const targetTask = tasks.find((task) => task.id === id);
-
-  if (!targetTask) {
-    return { nextTasks: tasks, status: 'missing' as const };
-  }
-
-  const wasCompleted = targetTask.completed;
-  const updatedTask = advanceTaskProgress(targetTask);
-
-  return {
-    nextTasks: tasks.map((task) => (task.id === id ? updatedTask : task)),
-    status: wasCompleted
-      ? ('already-complete' as const)
-      : updatedTask.completed
-        ? ('completed' as const)
-        : ('progressed' as const),
-  };
-};
-
 export const useFogCutter = (
   onTaskSaved?: (taskId: string) => void,
 ): UseFogCutterReturn => {
   const [task, setTask] = useState('');
   const [microSteps, setMicroSteps] = useState<string[]>([]);
   const [newStep, setNewStep] = useState('');
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isGuideLoading, setIsGuideLoading] = useState(true);
   const [showGuide, setShowGuide] = useState(false);
   const [guideDismissed, setGuideDismissed] = useState(true);
   const [latestSavedTaskId, setLatestSavedTaskId] = useState<string | null>(
     null,
   );
   const hasTrackedFirstTask = useRef(false);
+  const storeTasks = useTaskStore((state) => state.tasks);
+  const addTaskStore = useTaskStore((state) => state.addTask);
+  const updateTaskStore = useTaskStore((state) => state.updateTask);
+  const hasHydrated = useTaskStore((state) => state._hasHydrated);
+
+  const tasks = normalizeStoredTasks(
+    storeTasks
+      .filter(
+        (item) => Array.isArray(item.microSteps) && item.microSteps.length > 0,
+      )
+      .map(
+        (item): Task => ({
+          id: item.id,
+          text: item.title,
+          completed: item.completed,
+          microSteps: item.microSteps ?? [],
+        }),
+      ),
+  );
+  const isLoading = !hasHydrated || isGuideLoading;
 
   useEffect(() => {
     enableAndroidLayoutAnimation();
@@ -161,9 +135,7 @@ export const useFogCutter = (
 
   const loadTasks = useCallback(async () => {
     try {
-      const loadedState = await loadFogCutterState();
-      setGuideDismissed(loadedState.guideDismissed);
-      setTasks(loadedState.tasks);
+      setGuideDismissed(await loadGuideDismissedState());
     } catch (error) {
       LoggerService.error({
         service: 'FogCutter',
@@ -172,26 +144,13 @@ export const useFogCutter = (
         error,
       });
     } finally {
-      setIsLoading(false);
+      setIsGuideLoading(false);
     }
   }, []);
 
   useEffect(() => {
     loadTasks();
   }, [loadTasks]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      persistTasks(tasks).catch((error) => {
-        LoggerService.warn({
-          service: 'FogCutter',
-          operation: 'persistTasks',
-          message: 'Failed to persist tasks',
-          error,
-        });
-      });
-    }
-  }, [tasks, isLoading]);
 
   const addMicroStep = useCallback(() => {
     if (newStep.trim()) {
@@ -204,9 +163,12 @@ export const useFogCutter = (
   const addTask = useCallback(() => {
     if (task.trim() && microSteps.length > 0) {
       HapticsService.mediumTap();
-      const newTask = createFogCutterTask(task, microSteps);
-
-      setTasks((prevTasks) => [...prevTasks, newTask]);
+      const newTask = addTaskStore({
+        title: task.trim(),
+        priority: 'normal',
+        source: 'manual',
+        microSteps: normalizeMicroSteps(microSteps),
+      });
       setLatestSavedTaskId(newTask.id);
 
       if (
@@ -226,7 +188,7 @@ export const useFogCutter = (
       setMicroSteps([]);
       onTaskSaved?.(newTask.id);
     }
-  }, [guideDismissed, microSteps, onTaskSaved, showGuide, task]);
+  }, [addTaskStore, guideDismissed, microSteps, onTaskSaved, showGuide, task]);
 
   const dismissGuide = useCallback(async () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -235,19 +197,35 @@ export const useFogCutter = (
     await saveGuideDismissedState();
   }, []);
 
-  const toggleTask = useCallback((id: string) => {
-    setTasks((prevTasks) => {
-      const { nextTasks, status } = toggleTaskCollection(prevTasks, id);
+  const toggleTask = useCallback(
+    (id: string) => {
+      const targetTask = storeTasks.find(
+        (item): item is CanonicalTask & { microSteps: MicroStep[] } =>
+          item.id === id &&
+          Array.isArray(item.microSteps) &&
+          item.microSteps.length > 0,
+      );
 
-      if (status === 'completed') {
+      if (!targetTask) {
+        return;
+      }
+
+      const updatedTask = advanceTaskProgress(targetTask);
+
+      if (updatedTask.completed && !targetTask.completed) {
         HapticsService.success();
-      } else if (status === 'progressed') {
+      } else if (!updatedTask.completed) {
         HapticsService.mediumTap();
       }
 
-      return nextTasks;
-    });
-  }, []);
+      updateTaskStore(id, {
+        completed: updatedTask.completed,
+        completedAt: updatedTask.completed ? Date.now() : undefined,
+        microSteps: updatedTask.microSteps,
+      });
+    },
+    [storeTasks, updateTaskStore],
+  );
 
   return {
     task,

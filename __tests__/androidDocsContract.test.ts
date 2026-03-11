@@ -49,7 +49,9 @@ describe('Android APK-ready docs contract', () => {
     expect(testMatrix).toContain('Android APK-Ready Acceptance');
     expect(testMatrix).toContain('Clean install launch');
     expect(testMatrix).toContain('Returning-user local data launch');
-    expect(testMatrix).toContain('Offline startup');
+    expect(testMatrix).toContain(
+      'No-signal launch degrades gracefully without PWA assumptions',
+    );
     expect(testMatrix).toContain('Tutorial visibility');
     expect(testMatrix).toContain('Capture entry');
     expect(testMatrix).toContain('Tab navigation survivability');

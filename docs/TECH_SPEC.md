@@ -10,9 +10,11 @@
 | ----------------------- | ----------------------------------------------- |
 | **Repo Name**           | `ADHD-CADDI`                                    |
 | **Goal**                | Speed of delivery (not learning a new stack)    |
-| **Primary Platforms**   | Web/PWA first (Android Chrome priority)         |
+| **Primary Platforms**   | Web-first, online-first (Android Chrome priority) |
 | **Secondary Platforms** | Native Android bridge (optional, feature-gated) |
-| **Deployment**          | GitHub Pages (responsive PWA)                   |
+| **Deployment**          | GitHub Pages web app                            |
+
+Current web product stance: offline/PWA support is intentionally disabled until a dedicated verification pass re-enables it. Do not treat service-worker-backed offline behavior as part of the current release surface.
 
 ### Android Release Scope
 

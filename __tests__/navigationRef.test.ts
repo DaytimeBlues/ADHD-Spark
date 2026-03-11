@@ -90,7 +90,7 @@ describe('handleOverlayIntent', () => {
     expect(mockNavigate).toHaveBeenCalledWith(ROUTES.FOCUS);
   });
 
-  it('normalizes legacy "BrainDump" route to ROUTES.TASKS', () => {
+  it('normalizes legacy "BrainDump" route to ROUTES.BRAIN_DUMP', () => {
     const { handleOverlayIntent } = loadNavigationRefModule();
     const result = handleOverlayIntent({
       route: 'BrainDump',
@@ -98,7 +98,7 @@ describe('handleOverlayIntent', () => {
     });
 
     expect(result).toBe(true);
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.TASKS, {
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.BRAIN_DUMP, {
       autoRecord: true,
     });
   });

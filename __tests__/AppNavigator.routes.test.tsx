@@ -1,13 +1,16 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { Text, View } from 'react-native';
 import AppNavigator from '../src/navigation/AppNavigator';
+
+let consoleErrorSpy: ReturnType<typeof jest.spyOn>;
+
+const getActWarnings = () =>
+  consoleErrorSpy.mock.calls.filter(
+    ([message]: Parameters<typeof console.error>) =>
+      typeof message === 'string' && message.includes('not wrapped in act'),
+  );
 
 jest.mock('react-native-gesture-handler', () => {
   const { View: MockView } = require('react-native');
@@ -25,6 +28,13 @@ jest.mock('@sentry/react-native', () => ({
 }));
 
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon');
+
+jest.mock('../src/utils/PlatformUtils', () => ({
+  __esModule: true,
+  isWeb: true,
+  isAndroid: false,
+  isIOS: false,
+}));
 
 jest.mock('../src/components/capture', () => ({
   __esModule: true,
@@ -91,7 +101,11 @@ jest.mock('../src/screens/IgniteScreen', () => ({
 }));
 jest.mock('../src/screens/BrainDumpScreen', () => ({
   __esModule: true,
-  default: createScreen('TASKS'),
+  default: createScreen('BRAIN_DUMP'),
+}));
+jest.mock('../src/screens/TasksScreen', () => ({
+  __esModule: true,
+  default: createScreen('TASKS_SCREEN'),
 }));
 jest.mock('../src/screens/ChatScreen', () => ({
   __esModule: true,
@@ -119,6 +133,19 @@ jest.mock('../src/screens/InboxScreen', () => ({
 }));
 
 describe('AppNavigator route registration', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    const actWarnings = getActWarnings();
+    consoleErrorSpy.mockRestore();
+    jest.clearAllTimers();
+    jest.useRealTimers();
+    expect(actWarnings).toHaveLength(0);
+  });
+
   const renderNavigator = async () => {
     render(
       <NavigationContainer>
@@ -126,38 +153,52 @@ describe('AppNavigator route registration', () => {
       </NavigationContainer>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('home-title')).toBeTruthy();
+    act(() => {
+      jest.runOnlyPendingTimers();
     });
+
+    expect(screen.getByTestId('home-title')).toBeTruthy();
   };
 
   it('opens Check In from the Home card', async () => {
     await renderNavigator();
 
     fireEvent.press(screen.getByTestId('mode-checkin'));
-
-    await waitFor(() => {
-      expect(screen.getByText('CHECK IN')).toBeTruthy();
+    act(() => {
+      jest.advanceTimersByTime(250);
     });
+
+    expect(screen.getByText('CHECK IN')).toBeTruthy();
   });
 
   it('opens CBT Guide from the Home card', async () => {
     await renderNavigator();
 
     fireEvent.press(screen.getByTestId('mode-cbtguide'));
-
-    await waitFor(() => {
-      expect(screen.getByText('CBT FOR ADHD')).toBeTruthy();
+    act(() => {
+      jest.advanceTimersByTime(250);
     });
+
+    expect(screen.getByText('CBT FOR ADHD')).toBeTruthy();
   });
 
   it('opens Diagnostics from the Home settings action', async () => {
     await renderNavigator();
 
     fireEvent.press(screen.getByLabelText('Settings and Diagnostics'));
-
-    await waitFor(() => {
-      expect(screen.getByText('DIAGNOSTICS')).toBeTruthy();
+    act(() => {
+      jest.advanceTimersByTime(250);
     });
+
+    expect(screen.getByText('DIAGNOSTICS')).toBeTruthy();
+  });
+
+  it('opens the canonical task screen from the Tasks tab', async () => {
+    await renderNavigator();
+
+    fireEvent.press(screen.getByTestId('nav-tasks'));
+
+    expect(screen.getByText('TASKS_SCREEN')).toBeTruthy();
+    expect(screen.queryByText('BRAIN_DUMP')).toBeNull();
   });
 });

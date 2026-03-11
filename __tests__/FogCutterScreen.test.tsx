@@ -1,19 +1,24 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import FogCutterScreen from '../src/screens/FogCutterScreen';
+import { useTaskStore } from '../src/store/useTaskStore';
 
 const mockGetJSON = jest.fn();
-const mockSetJSON = jest.fn();
 
 jest.mock('../src/services/StorageService', () => ({
   __esModule: true,
   default: {
     getJSON: (...args: unknown[]) => mockGetJSON(...args),
-    setJSON: (...args: unknown[]) => mockSetJSON(...args),
+    setJSON: jest.fn(),
     STORAGE_KEYS: {
       tasks: 'tasks',
       firstSuccessGuideState: 'firstSuccessGuideState',
     },
+  },
+  zustandStorage: {
+    getItem: jest.fn().mockResolvedValue(null),
+    setItem: jest.fn().mockResolvedValue(undefined),
+    removeItem: jest.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -25,22 +30,30 @@ describe('FogCutterScreen', () => {
   beforeEach(() => {
     jest.useRealTimers();
     mockGetJSON.mockReset();
-    mockSetJSON.mockReset();
+    useTaskStore.setState({ tasks: [], _hasHydrated: true });
   });
 
-  it('loads tasks from storage and renders them', async () => {
-    mockGetJSON.mockImplementation((key: string) => {
-      if (key === 'tasks') {
-        return Promise.resolve([
-          {
-            id: 'task-1',
-            text: 'Draft outline',
-            completed: false,
-            microSteps: ['Step 1', 'Step 2'],
-          },
-        ]);
-      }
+  it('loads canonical tasks and renders them', async () => {
+    mockGetJSON.mockImplementation((_key: string) => {
       return Promise.resolve(null);
+    });
+    useTaskStore.setState({
+      tasks: [
+        {
+          id: 'task-1',
+          title: 'Draft outline',
+          priority: 'normal',
+          completed: false,
+          source: 'manual',
+          microSteps: [
+            { id: 'step-1', text: 'Step 1', status: 'in_progress' },
+            { id: 'step-2', text: 'Step 2', status: 'next' },
+          ],
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+        },
+      ],
+      _hasHydrated: true,
     });
 
     render(<FogCutterScreen />);

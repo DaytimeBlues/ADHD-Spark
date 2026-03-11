@@ -6,11 +6,11 @@ import AISortService, {
 
 export type SortedItem = AISortServiceSortedItem;
 import { GoogleTasksSyncService } from '../services/GoogleTasksSyncService';
-import StorageService from '../services/StorageService';
-
+import { useTaskStore } from '../store/useTaskStore';
+import type { MicroStep } from '../utils/fogCutter';
 import { normalizeMicroSteps } from '../utils/fogCutter';
-import { generateId } from '../utils/helpers';
 import { isWeb } from '../utils/PlatformUtils';
+import type { TaskPriority } from '../types/task';
 
 export const CATEGORY_ORDER: Array<AISortServiceSortedItem['category']> = [
   'task',
@@ -20,13 +20,6 @@ export const CATEGORY_ORDER: Array<AISortServiceSortedItem['category']> = [
   'thought',
   'idea',
 ];
-
-export interface StoredFogCutterTask {
-  id: string;
-  text: string;
-  completed: boolean;
-  microSteps: Array<{ id: string; text: string; status: string }>;
-}
 
 interface UseBrainDumpSortingReturn {
   sortedItems: AISortServiceSortedItem[];
@@ -45,9 +38,15 @@ interface UseBrainDumpSortingReturn {
   getPriorityStyle: (priority: AISortServiceSortedItem['priority']) => object;
 }
 
-const toFogCutterTask = (
+const toCanonicalTaskInput = (
   item: AISortServiceSortedItem,
-): StoredFogCutterTask | null => {
+): {
+  title: string;
+  dueDate?: string;
+  category: string;
+  priority: TaskPriority;
+  microSteps: MicroStep[];
+} | null => {
   if (
     item.category !== 'task' &&
     item.category !== 'reminder' &&
@@ -72,9 +71,10 @@ const toFogCutterTask = (
   }
 
   return {
-    id: generateId(),
-    text: title,
-    completed: false,
+    title,
+    dueDate: item.dueDate,
+    category: item.category,
+    priority: item.priority === 'high' ? 'important' : 'normal',
     microSteps: normalizeMicroSteps(stepHints),
   };
 };
@@ -94,39 +94,39 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
     setSortingError(null);
   }, []);
 
-  const saveSortedItemsToFogCutter = useCallback(
+  const saveSortedItemsToTaskStore = useCallback(
     async (nextSortedItems: AISortServiceSortedItem[]): Promise<number> => {
-      const existingTasks =
-        (await StorageService.getJSON<StoredFogCutterTask[]>(
-          StorageService.STORAGE_KEYS.tasks,
-        )) ?? [];
+      const taskStore = useTaskStore.getState();
+      const existingTasks = taskStore.tasks;
 
       const existingTextSet = new Set(
-        existingTasks.map((task) => task.text.trim().toLowerCase()),
+        existingTasks.map((task) => task.title.trim().toLowerCase()),
       );
 
-      const newTasks: StoredFogCutterTask[] = [];
+      let createdCount = 0;
       nextSortedItems.forEach((item) => {
-        const task = toFogCutterTask(item);
+        const task = toCanonicalTaskInput(item);
         if (!task) {
           return;
         }
-        const key = task.text.trim().toLowerCase();
+        const key = task.title.trim().toLowerCase();
         if (existingTextSet.has(key)) {
           return;
         }
 
         existingTextSet.add(key);
-        newTasks.push(task);
+        taskStore.addTask({
+          title: task.title,
+          dueDate: task.dueDate,
+          category: task.category,
+          priority: task.priority,
+          source: 'manual',
+          microSteps: task.microSteps,
+        });
+        createdCount += 1;
       });
 
-      if (newTasks.length > 0) {
-        await StorageService.setJSON(StorageService.STORAGE_KEYS.tasks, [
-          ...existingTasks,
-          ...newTasks,
-        ]);
-      }
-      return newTasks.length;
+      return createdCount;
     },
     [],
   );
@@ -141,7 +141,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
       setSortedItems(sorted);
 
       const [createdTaskCount, exportResult] = await Promise.all([
-        saveSortedItemsToFogCutter(sorted),
+        saveSortedItemsToTaskStore(sorted),
         GoogleTasksSyncService.syncSortedItemsToGoogle(sorted),
       ]);
 
@@ -172,7 +172,7 @@ export const useBrainDumpSorting = (): UseBrainDumpSortingReturn => {
         );
       }
     },
-    [saveSortedItemsToFogCutter],
+    [saveSortedItemsToTaskStore],
   );
 
   const handleConnectGoogle = useCallback(async () => {

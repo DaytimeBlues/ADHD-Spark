@@ -17,6 +17,8 @@ test.describe('Tutorial And Bubble Smoke', () => {
     page,
   }) => {
     await page.getByTestId('nav-tasks').click({ force: true });
+    await expect(page.getByText('NEBULA QUEUE')).toBeVisible();
+    await page.getByTestId('open-brain-dump').click();
     await expect(page.getByText('BRAIN_DUMP')).toBeVisible();
 
     await expect(page.getByTestId('tutorial-overlay')).toBeVisible();

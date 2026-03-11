@@ -6,10 +6,12 @@
 
 **Code Quality:**
 
-- [ ] All tests passing (`npm test`, `npm run e2e`)
 - [ ] Lint clean (`npm run lint`)
+- [ ] TypeScript compilation successful (`npx tsc --noEmit`)
+- [ ] Unit tests passing (`npm test -- --runInBand --watch=false`)
+- [ ] Web production build succeeds (`npm run build:web`)
+- [ ] Required web release E2E slices pass (`npm run e2e:smoke`, `npm run e2e:core`)
 - [ ] No console errors in development build
-- [ ] TypeScript compilation successful (`tsc --noEmit`)
 
 **Functional Validation:**
 
@@ -24,7 +26,7 @@
 
 ---
 
-## Web/PWA Release (Primary)
+## Web Release (Primary)
 
 ### GitHub Pages Deployment
 
@@ -36,10 +38,14 @@
    git checkout -b fix/my-change
    npm run lint
    npx tsc --noEmit
-   npm test -- --runInBand
+   npm test -- --runInBand --watch=false
+   npm run build:web
    npm run e2e:smoke
+   npm run e2e:core
    git push origin fix/my-change
    ```
+
+   `npm run e2e` remains available for broader manual or deeper browser coverage, but it is not the core web release gate.
 
 2. **Merge to main branch:**
 
@@ -63,7 +69,7 @@
 - Test core features (Ignite, Fog Cutter, etc.)
 - Test at least one direct route reload, such as `https://daytimeblues.github.io/ADHD-CADDI/tasks`
 - Check browser console for errors
-- Verify service worker updates (if PWA)
+- Confirm the deployed site still matches the current web-first, online-first stance and does not rely on service-worker-backed offline support
 
 **Rollback:**
 

@@ -20,6 +20,7 @@ export const ROUTES = {
   CHECK_IN: 'CheckIn' as const,
   CBT_GUIDE: 'CBTGuide' as const,
   DIAGNOSTICS: 'Diagnostics' as const,
+  BRAIN_DUMP: 'BrainDump' as const,
 
   // Modal Screens (Root Stack)
   FOG_CUTTER: 'FogCutter' as const,

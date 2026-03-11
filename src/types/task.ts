@@ -1,3 +1,5 @@
+import type { MicroStep } from '../utils/fogCutter';
+
 export type TaskPriority = 'urgent' | 'important' | 'normal';
 export type TaskSource = 'manual' | 'capture' | 'google';
 
@@ -12,6 +14,7 @@ export interface Task {
   category?: string;
   source: TaskSource;
   googleTaskId?: string;
+  microSteps?: MicroStep[];
   createdAt: number;
   updatedAt: number;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { CosmicBackground, GlowCard, RuneButton } from '../ui/cosmic';
 import { EvidenceBadge } from '../components/ui/EvidenceBadge';
 import ActivationService from '../services/ActivationService';
@@ -82,9 +82,16 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
         accessibilityRole="summary"
       >
         <View style={styles.webContainer}>
-          <View style={styles.content}>
-            <Text style={styles.title}>CHECK IN</Text>
-            <Text style={styles.subtitle}>HOW ARE YOU FEELING RIGHT NOW?</Text>
+          <ScrollView
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps="handled"
+          >
+            <Text style={styles.title} testID="checkin-title">
+              CHECK IN
+            </Text>
+            <Text style={styles.subtitle} testID="checkin-subtitle">
+              HOW ARE YOU FEELING RIGHT NOW?
+            </Text>
 
             <GlowCard
               glow="soft"
@@ -129,7 +136,10 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 <Text style={styles.recommendationTitle}>
                   {recommendation.title}
                 </Text>
-                <Text style={styles.recommendationSubtitle}>
+                <Text
+                  style={styles.recommendationSubtitle}
+                  testID="recommendation-subtitle"
+                >
                   RECOMMENDED FOR YOU
                 </Text>
                 <Text style={styles.recommendationText}>
@@ -151,11 +161,11 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 >
                   {mood !== null && energy !== null
                     ? getRecommendationAction(mood, energy).cta
-                    : 'CONTINUE'}
+                  : 'CONTINUE'}
                 </RuneButton>
               </GlowCard>
             )}
-          </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </CosmicBackground>

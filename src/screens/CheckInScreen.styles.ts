@@ -29,7 +29,7 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
       alignSelf: 'center',
     },
     content: {
-      flex: 1,
+      flexGrow: 1,
       padding: Tokens.spacing[6],
     },
     title: {

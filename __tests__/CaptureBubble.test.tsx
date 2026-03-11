@@ -2,6 +2,14 @@ import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { CaptureBubble } from '../src/components/capture/CaptureBubble';
 
+let consoleErrorSpy: ReturnType<typeof jest.spyOn>;
+
+const getActWarnings = () =>
+  consoleErrorSpy.mock.calls.filter(
+    ([message]: Parameters<typeof console.error>) =>
+      typeof message === 'string' && message.includes('not wrapped in act'),
+  );
+
 const mockNavigate = jest.fn();
 const mockUpdateCount = jest.fn();
 
@@ -67,11 +75,21 @@ jest.mock('../src/components/capture/CaptureDrawer', () => ({
 
 describe('CaptureBubble', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     jest.clearAllMocks();
     checkInSubscriber = null;
     captureSubscriber = null;
     mockCaptureCount = 0;
     mockCheckInPending = false;
+  });
+
+  afterEach(() => {
+    const actWarnings = getActWarnings();
+    consoleErrorSpy.mockRestore();
+    jest.clearAllTimers();
+    jest.useRealTimers();
+    expect(actWarnings).toHaveLength(0);
   });
 
   it('opens the drawer from the idle bubble state', () => {

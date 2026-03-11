@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { ROUTES } from '../navigation/routes';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground } from '../ui/cosmic';
 import { isWeb } from '../utils/PlatformUtils';
@@ -23,6 +24,7 @@ import {
 } from '../components/brain-dump';
 import { TutorialBubble } from '../components/tutorial/TutorialBubble';
 import useBrainDump from '../hooks/useBrainDump';
+import { useTaskStore } from '../store/useTaskStore';
 import useBrainDumpTutorial from './brain-dump/useBrainDumpTutorial';
 import { getBrainDumpStyles } from './brain-dump/brainDumpStyles';
 import { BrainDumpSortedSection } from './brain-dump/BrainDumpSortedSection';
@@ -31,12 +33,20 @@ type BrainDumpRouteParams = {
   autoRecord?: boolean;
 };
 
-type BrainDumpRoute = RouteProp<Record<'Tasks', BrainDumpRouteParams>, 'Tasks'>;
+type BrainDumpRoute = RouteProp<
+  Record<typeof ROUTES.BRAIN_DUMP, BrainDumpRouteParams>,
+  typeof ROUTES.BRAIN_DUMP
+>;
 
 const BrainDumpScreen = () => {
   const { isCosmic, t } = useTheme();
   const styles = getBrainDumpStyles(isCosmic, t);
   const route = useRoute<BrainDumpRoute>();
+  const storeTasks = useTaskStore((state) => state.tasks);
+  const activeTasks = useMemo(
+    () => storeTasks.filter((task) => !task.completed),
+    [storeTasks],
+  );
   const {
     brainDumpOnboardingFlow,
     currentTutorialStep,
@@ -164,6 +174,17 @@ const BrainDumpScreen = () => {
 
           {/* Integration Panel */}
           <IntegrationPanel />
+
+          {activeTasks.length > 0 && (
+            <View style={styles.sortedSection}>
+              <Text style={styles.sortedHeader}>ACTIVE_TASKS</Text>
+              {activeTasks.map((taskItem) => (
+                <View key={taskItem.id} style={styles.sortedItemRow}>
+                  <Text style={styles.sortedItemText}>{taskItem.title}</Text>
+                </View>
+              ))}
+            </View>
+          )}
 
           <FlatList
             data={items}
