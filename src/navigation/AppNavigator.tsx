@@ -239,7 +239,7 @@ const TabNavigator = () => {
         component={SafeHomeScreen}
         options={{
           tabBarIcon: HomeTabIcon,
-          tabBarButtonTestID: 'nav-home',
+          tabBarTestID: 'nav-home',
         }}
       />
       <Tab.Screen
@@ -247,7 +247,7 @@ const TabNavigator = () => {
         component={SafeIgniteScreen}
         options={{
           tabBarIcon: FocusTabIcon,
-          tabBarButtonTestID: 'nav-focus',
+          tabBarTestID: 'nav-focus',
         }}
       />
       <Tab.Screen
@@ -255,7 +255,7 @@ const TabNavigator = () => {
         component={SafeTasksScreen}
         options={{
           tabBarIcon: TasksTabIcon,
-          tabBarButtonTestID: 'nav-tasks',
+          tabBarTestID: 'nav-tasks',
         }}
       />
       <Tab.Screen
@@ -263,7 +263,7 @@ const TabNavigator = () => {
         component={SafeLazyCalendar}
         options={{
           tabBarIcon: CalendarTabIcon,
-          tabBarButtonTestID: 'nav-calendar',
+          tabBarTestID: 'nav-calendar',
         }}
       />
       <Tab.Screen
@@ -271,7 +271,7 @@ const TabNavigator = () => {
         component={SafeChatScreen}
         options={{
           tabBarIcon: ChatTabIcon,
-          tabBarButtonTestID: 'nav-chat',
+          tabBarTestID: 'nav-chat',
         }}
       />
     </Tab.Navigator>
