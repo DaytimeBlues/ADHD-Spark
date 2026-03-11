@@ -1,4 +1,5 @@
 import Sound from 'react-native-sound';
+import { getBundledAudioFileName } from '../config/audioAssets';
 import { LoggerService } from './LoggerService';
 
 let brownNoise: Sound | null = null;
@@ -29,7 +30,10 @@ const loadSound = (
 const SoundService = {
   async initBrownNoise() {
     brownNoise?.release();
-    brownNoise = await loadSound('brown_noise.mp3', 'initBrownNoise');
+    brownNoise = await loadSound(
+      getBundledAudioFileName('brownNoise'),
+      'initBrownNoise',
+    );
     brownNoiseAvailable = brownNoise !== null;
     return brownNoiseAvailable;
   },
@@ -82,7 +86,7 @@ const SoundService = {
 
   async playNotificationSound() {
     const notification = await loadSound(
-      'notification.mp3',
+      getBundledAudioFileName('notification'),
       'playNotificationSound',
     );
     if (!notification) {
@@ -104,7 +108,10 @@ const SoundService = {
   },
 
   async playCompletionSound() {
-    const completion = await loadSound('completion.mp3', 'playCompletionSound');
+    const completion = await loadSound(
+      getBundledAudioFileName('completion'),
+      'playCompletionSound',
+    );
     if (!completion) {
       return false;
     }

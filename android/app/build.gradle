@@ -9,6 +9,12 @@ applyNativeModulesAppBuildGradle(project)
 
 project.ext.hermesEnabled = true
 def useReleaseSigning = System.getenv('ANDROID_SIGNING_ENABLED') != 'false'
+def generatedAudioResDir = file("$buildDir/generated/res/audio")
+
+tasks.register("syncBundledAudioAssets", Exec) {
+    workingDir rootProject.projectDir.parentFile
+    commandLine "node", file("../../scripts/android/sync-audio-assets.js")
+}
 
 android {
     namespace "com.adhdcaddi"
@@ -28,6 +34,12 @@ android {
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs += [generatedAudioResDir]
+        }
     }
 
     signingConfigs {
@@ -62,6 +74,8 @@ android {
         }
     }
 }
+
+preBuild.dependsOn(syncBundledAudioAssets)
 
 dependencies {
     implementation "com.facebook.react:react-android"
