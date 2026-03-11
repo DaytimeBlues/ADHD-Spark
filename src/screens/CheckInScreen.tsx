@@ -161,7 +161,7 @@ const CheckInScreen = ({ navigation }: { navigation?: CheckInNavigation }) => {
                 >
                   {mood !== null && energy !== null
                     ? getRecommendationAction(mood, energy).cta
-                  : 'CONTINUE'}
+                    : 'CONTINUE'}
                 </RuneButton>
               </GlowCard>
             )}

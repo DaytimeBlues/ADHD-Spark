@@ -42,7 +42,9 @@ test.describe('Chat Flow', () => {
 
     await expect(page.getByText('will fail')).toBeVisible();
     await expect(
-      page.getByText('I am having trouble connecting to my brain. Please try again.'),
+      page.getByText(
+        'I am having trouble connecting to my brain. Please try again.',
+      ),
     ).toBeVisible({ timeout: 12000 });
     await expect(page.getByPlaceholder('TYPE_YOUR_THOUGHTS...')).toBeVisible();
   });
