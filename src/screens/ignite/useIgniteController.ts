@@ -199,11 +199,10 @@ export const useIgniteController = () => {
     setIsPlaying((prev) => {
       if (prev) {
         SoundService.pauseBrownNoise();
-      } else {
-        SoundService.playBrownNoise();
+        return false;
       }
 
-      return !prev;
+      return SoundService.playBrownNoise();
     });
   };
 

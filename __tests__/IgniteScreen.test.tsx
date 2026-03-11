@@ -64,7 +64,8 @@ jest.mock('../src/services/ActivationService', () => ({
 
 jest.mock('../src/services/LoggerService', () => ({
   __esModule: true,
-  LoggerService: { error: jest.fn() },
+  default: { error: jest.fn(), debug: jest.fn() },
+  LoggerService: { error: jest.fn(), debug: jest.fn() },
 }));
 
 jest.mock('../src/store/useTimerStore', () => ({
@@ -104,15 +105,26 @@ describe('IgniteScreen', () => {
     jest.clearAllMocks();
   });
 
-  it('renders and starts timer', async () => {
+  it('renders and starts timer', () => {
     render(<IgniteScreen />);
 
     expect(screen.getByText('IGNITE_PROTOCOL')).toBeTruthy();
+    return waitFor(() => {
+      fireEvent.press(screen.getByText('INITIATE_FOCUS'));
+      expect(mockStart).toHaveBeenCalled();
+    });
+  });
+
+  it('keeps the audio toggle off when brown noise playback is unavailable', async () => {
+    render(<IgniteScreen />);
+
     await waitFor(() => {
-      expect(screen.getByText('INITIATE_FOCUS')).toBeTruthy();
+      expect(screen.getByText('NOISE: OFF')).toBeTruthy();
     });
 
-    fireEvent.press(screen.getByText('INITIATE_FOCUS'));
-    expect(mockStart).toHaveBeenCalled();
+    fireEvent.press(screen.getByText('NOISE: OFF'));
+
+    expect(screen.getByText('NOISE: OFF')).toBeTruthy();
+    expect(screen.queryByText('NOISE: ON')).toBeNull();
   });
 });
