@@ -1,6 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
+import { Pressable, Text } from 'react-native';
 import { RuneButton } from '../ui/cosmic';
 import { getTasksScreenStyles } from './TasksScreen.styles';
+import { useTheme } from '../theme/useTheme';
 
 interface FilterTabProps {
   label: string;
@@ -13,7 +15,32 @@ export const FilterTab = memo(function FilterTab({
   active,
   onPress,
 }: FilterTabProps) {
-  const styles = getTasksScreenStyles();
+  const { isNightAwe, t, variant } = useTheme();
+  const styles = useMemo(() => getTasksScreenStyles(variant, t), [t, variant]);
+
+  if (isNightAwe) {
+    return (
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={`${label} tasks`}
+        style={({ pressed }) => [
+          styles.filterTabButton,
+          active && styles.filterTabButtonActive,
+          pressed && { opacity: 0.88 },
+        ]}
+      >
+        <Text
+          style={[
+            styles.filterTabButtonText,
+            active && styles.filterTabButtonTextActive,
+          ]}
+        >
+          {label}
+        </Text>
+      </Pressable>
+    );
+  }
 
   return (
     <RuneButton

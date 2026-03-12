@@ -1,8 +1,46 @@
-import { StyleSheet } from 'react-native';
-import { CosmicTokens } from '../theme/cosmicTokens';
+import { Platform, StyleSheet } from 'react-native';
+import { Tokens } from '../theme/tokens';
+import type { ThemeTokens } from '../theme/types';
+import type { ThemeVariant } from '../theme/themeVariant';
 
-export const getTasksScreenStyles = () =>
-  StyleSheet.create({
+export const getTasksScreenStyles = (variant: ThemeVariant, t: ThemeTokens) => {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+  const textPrimary = isNightAwe
+    ? t.colors.text?.primary || Tokens.colors.text.primary
+    : isCosmic
+      ? '#EEF2FF'
+      : Tokens.colors.text.primary;
+  const textSecondary = isNightAwe
+    ? t.colors.text?.secondary || Tokens.colors.text.secondary
+    : isCosmic
+      ? 'rgba(238, 242, 255, 0.5)'
+      : Tokens.colors.text.secondary;
+  const textMuted = isNightAwe
+    ? t.colors.text?.muted || Tokens.colors.text.tertiary
+    : isCosmic
+      ? 'rgba(238, 242, 255, 0.4)'
+      : Tokens.colors.text.tertiary;
+  const surfaceBase = isNightAwe
+    ? t.colors.nightAwe?.surface?.base || Tokens.colors.neutral.darkest
+    : isCosmic
+      ? '#0B1022'
+      : Tokens.colors.neutral.darkest;
+  const surfaceRaised = isNightAwe
+    ? t.colors.nightAwe?.surface?.raised || Tokens.colors.neutral.darker
+    : isCosmic
+      ? '#111A33'
+      : Tokens.colors.neutral.darkest;
+  const surfaceBorder = isNightAwe
+    ? t.colors.nightAwe?.surface?.border || 'rgba(217, 228, 242, 0.14)'
+    : isCosmic
+      ? 'rgba(185, 194, 217, 0.18)'
+      : Tokens.colors.neutral.border;
+  const accent = isNightAwe
+    ? t.colors.nightAwe?.feature?.tasks || t.colors.semantic.primary
+    : t.colors.semantic.primary;
+
+  return StyleSheet.create({
     header: {
       paddingHorizontal: 24,
       paddingBottom: 16,
@@ -14,16 +52,21 @@ export const getTasksScreenStyles = () =>
       flexDirection: 'row',
       alignItems: 'center',
     },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
     headerTitle: {
       fontSize: 24,
       fontWeight: '700',
-      color: '#EEF2FF',
+      color: textPrimary,
       letterSpacing: 2,
     },
     headerSubtitle: {
       fontSize: 10,
       fontWeight: '600',
-      color: CosmicTokens.colors.semantic.primary,
+      color: accent,
       letterSpacing: 3,
       marginTop: -2,
     },
@@ -35,11 +78,28 @@ export const getTasksScreenStyles = () =>
       justifyContent: 'center',
     },
     backIcon: {
-      color: '#EEF2FF',
+      color: textPrimary,
       fontSize: 24,
     },
     syncButton: {
       paddingHorizontal: 12,
+    },
+    utilityButton: {
+      minHeight: 36,
+      paddingHorizontal: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: surfaceBase,
+      borderWidth: 1,
+      borderColor: surfaceBorder,
+    },
+    utilityButtonText: {
+      fontSize: 10,
+      fontWeight: '700',
+      color: textPrimary,
+      letterSpacing: 1.2,
+      textTransform: 'uppercase',
     },
     scrollView: {
       flex: 1,
@@ -56,23 +116,39 @@ export const getTasksScreenStyles = () =>
       flex: 1,
       alignItems: 'center',
     },
+    statCardSurface: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: 16,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: surfaceBorder,
+      backgroundColor: surfaceRaised,
+    },
     statValue: {
       fontSize: 28,
       fontWeight: '700',
     },
     statValueCompleted: {
-      color: '#EEF2FF',
+      color: textPrimary,
     },
     statLabel: {
       fontSize: 9,
       fontWeight: '700',
-      color: 'rgba(238, 242, 255, 0.5)',
+      color: textSecondary,
       letterSpacing: 1.5,
       marginTop: 4,
     },
     addTaskCard: {
       marginTop: 24,
       borderRadius: 16,
+    },
+    addTaskCardSurface: {
+      marginTop: 24,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: surfaceBorder,
+      backgroundColor: surfaceRaised,
     },
     addTaskContent: {
       flexDirection: 'row',
@@ -83,7 +159,7 @@ export const getTasksScreenStyles = () =>
     },
     addTaskInput: {
       flex: 1,
-      color: '#EEF2FF',
+      color: textPrimary,
       fontSize: 16,
       paddingVertical: 8,
     },
@@ -91,6 +167,22 @@ export const getTasksScreenStyles = () =>
       width: 40,
       height: 40,
       borderRadius: 20,
+    },
+    addTaskButtonSurface: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: accent,
+      borderWidth: 1,
+      borderColor: accent,
+    },
+    addTaskButtonText: {
+      color: t.colors.text?.onAccent || '#08111E',
+      fontSize: 18,
+      fontWeight: '700',
+      lineHeight: 18,
     },
     filterTabs: {
       flexDirection: 'row',
@@ -101,8 +193,49 @@ export const getTasksScreenStyles = () =>
     filterTab: {
       flex: 1,
     },
+    filterTabButton: {
+      flex: 1,
+      minHeight: 38,
+      borderRadius: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: surfaceBorder,
+      backgroundColor: surfaceBase,
+    },
+    filterTabButtonActive: {
+      backgroundColor: accent,
+      borderColor: accent,
+    },
+    filterTabButtonText: {
+      fontSize: 11,
+      fontWeight: '700',
+      letterSpacing: 1.2,
+      textTransform: 'uppercase',
+      color: textPrimary,
+    },
+    filterTabButtonTextActive: {
+      color: t.colors.text?.onAccent || '#08111E',
+    },
     taskCard: {
       marginTop: 12,
+    },
+    taskCardSurface: {
+      marginTop: 12,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: surfaceBorder,
+      backgroundColor: surfaceRaised,
+      padding: 16,
+      ...Platform.select({
+        web: {
+          transition: 'border-color 0.2s ease, transform 0.2s ease',
+        },
+      }),
+    },
+    taskCardSurfaceCompleted: {
+      opacity: 0.72,
+      backgroundColor: surfaceBase,
     },
     taskContent: {
       flexDirection: 'row',
@@ -118,7 +251,7 @@ export const getTasksScreenStyles = () =>
       marginRight: 16,
     },
     checkboxDefault: {
-      borderColor: 'rgba(185, 194, 217, 0.3)',
+      borderColor: surfaceBorder,
     },
     checkmark: {
       color: '#FFFFFF',
@@ -131,11 +264,11 @@ export const getTasksScreenStyles = () =>
     taskTitle: {
       fontSize: 16,
       fontWeight: '500',
-      color: '#EEF2FF',
+      color: textPrimary,
     },
     taskTitleCompleted: {
       textDecorationLine: 'line-through',
-      color: 'rgba(238, 242, 255, 0.4)',
+      color: textMuted,
     },
     taskMeta: {
       flexDirection: 'row',
@@ -155,7 +288,7 @@ export const getTasksScreenStyles = () =>
     dueDate: {
       fontSize: 11,
       fontWeight: '400',
-      color: 'rgba(238, 242, 255, 0.4)',
+      color: textMuted,
       marginLeft: 8,
     },
     deleteButton: {
@@ -165,7 +298,7 @@ export const getTasksScreenStyles = () =>
       justifyContent: 'center',
     },
     deleteIcon: {
-      color: 'rgba(238, 242, 255, 0.3)',
+      color: textMuted,
       fontSize: 18,
     },
     emptyState: {
@@ -179,13 +312,14 @@ export const getTasksScreenStyles = () =>
     emptyText: {
       fontSize: 20,
       fontWeight: '700',
-      color: '#EEF2FF',
+      color: textPrimary,
     },
     emptySubtext: {
       fontSize: 14,
       fontWeight: '400',
-      color: 'rgba(238, 242, 255, 0.5)',
+      color: textSecondary,
       marginTop: 4,
       textAlign: 'center',
     },
   });
+};

@@ -1,11 +1,21 @@
 import type { TaskPriority } from '../types/task';
-import { CosmicTokens } from '../theme/cosmicTokens';
+import type { ThemeTokens } from '../theme/types';
+import type { ThemeVariant } from '../theme/themeVariant';
 
-export const TASK_PRIORITY_COLORS: Record<TaskPriority, string> = {
-  urgent: CosmicTokens.colors.semantic.error,
-  important: CosmicTokens.colors.semantic.warning,
-  normal: CosmicTokens.colors.semantic.primary,
-};
+export const getTaskPriorityColors = (
+  t: ThemeTokens,
+  variant: ThemeVariant,
+): Record<TaskPriority, string> => ({
+  urgent: t.colors.semantic.error,
+  important:
+    variant === 'nightAwe'
+      ? t.colors.nightAwe?.feature?.tasks || t.colors.semantic.warning
+      : t.colors.semantic.warning,
+  normal:
+    variant === 'nightAwe'
+      ? t.colors.nightAwe?.feature?.tasks || t.colors.semantic.primary
+      : t.colors.semantic.primary,
+});
 
 export const TASK_PRIORITY_LABELS: Record<TaskPriority, string> = {
   urgent: 'URGENT',
