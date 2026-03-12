@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { EmptyStateExamples } from '../../components/ui/EmptyStateExamples';
@@ -6,10 +6,12 @@ import { ProgressBar } from '../../components/ui/ProgressBar';
 import { getTaskProgressSummary } from '../../utils/fogCutter';
 import { getFogCutterScreenStyles } from '../FogCutterScreen.styles';
 import type { Task } from '../../hooks/useFogCutter';
+import { useTheme } from '../../theme/useTheme';
 
 interface Props {
   isCosmic: boolean;
   isLoading: boolean;
+  isNightAwe: boolean;
   onDismissGuide: () => void;
   onExamplePress: (example: string) => void;
   onFocusTaskInput: () => void;
@@ -19,7 +21,6 @@ interface Props {
 }
 
 export const FogCutterTaskList = ({
-  isCosmic,
   isLoading,
   onDismissGuide,
   onExamplePress,
@@ -28,7 +29,13 @@ export const FogCutterTaskList = ({
   showGuide,
   tasks,
 }: Props) => {
-  const styles = getFogCutterScreenStyles(isCosmic);
+  const { t, variant } = useTheme();
+  const styles = useMemo(
+    () => getFogCutterScreenStyles(variant, t),
+    [t, variant],
+  );
+  const spinnerColor =
+    t.colors.text?.primary || t.colors.semantic.primary || '#EEF2FF';
 
   return (
     <>
@@ -60,7 +67,7 @@ export const FogCutterTaskList = ({
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#EEF2FF" />
+          <ActivityIndicator size="small" color={spinnerColor} />
           <Text style={styles.loadingText}>LOADING...</Text>
         </View>
       ) : (
@@ -141,7 +148,7 @@ export const FogCutterTaskList = ({
             {tasks.length === 0 && (
               <View>
                 <EmptyState
-                  icon="◈"
+                  icon="*"
                   title="NO_ACTIVE_TASKS."
                   primaryActionLabel="CREATE FIRST TASK"
                   onPrimaryAction={onFocusTaskInput}

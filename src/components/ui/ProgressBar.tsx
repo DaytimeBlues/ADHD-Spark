@@ -17,7 +17,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   color = 'default',
   style,
 }) => {
-  const { isCosmic, t } = useTheme();
+  const { isCosmic, isNightAwe, t } = useTheme();
   const progress = total > 0 ? current / total : 0;
   const percentage = Math.round(progress * 100);
 
@@ -47,9 +47,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const barColor = getColor();
   const backgroundStyle: ViewStyle = {
     height,
-    backgroundColor: isCosmic
-      ? 'rgba(185, 194, 217, 0.2)'
-      : t.colors.neutral.dark,
+    backgroundColor: isNightAwe
+      ? t.colors.nightAwe?.surface?.border || 'rgba(217, 228, 242, 0.14)'
+      : isCosmic
+        ? 'rgba(185, 194, 217, 0.2)'
+        : t.colors.neutral.dark,
     borderRadius: height / 2,
   };
   const fillStyle: ViewStyle = {

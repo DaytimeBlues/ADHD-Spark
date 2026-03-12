@@ -1,9 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import ActivationService from '../services/ActivationService';
 import { ROUTES } from '../navigation/routes';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground } from '../ui/cosmic';
+import { NightAweBackground } from '../ui/nightAwe';
 import { useFogCutter } from '../hooks/useFogCutter';
 import { useFogCutterAI } from '../hooks/useFogCutterAI';
 import { getFogCutterScreenStyles } from './FogCutterScreen.styles';
@@ -19,8 +20,11 @@ interface FogCutterScreenProps {
 }
 
 const FogCutterScreen = ({ navigation }: FogCutterScreenProps) => {
-  const { isCosmic } = useTheme();
-  const styles = getFogCutterScreenStyles(isCosmic);
+  const { isCosmic, isNightAwe, t, variant } = useTheme();
+  const styles = useMemo(
+    () => getFogCutterScreenStyles(variant, t),
+    [t, variant],
+  );
   const taskInputRef = useRef<TextInput>(null);
 
   const handleTaskSaved = useCallback(
@@ -82,53 +86,71 @@ const FogCutterScreen = ({ navigation }: FogCutterScreenProps) => {
     navigation?.navigate(ROUTES.FOCUS);
   }, [dismissGuide, latestSavedTaskId, navigation]);
 
+  const content = (
+    <SafeAreaView
+      style={styles.container}
+      accessibilityLabel="Fog cutter screen"
+      accessibilityRole="summary"
+    >
+      <View style={styles.scrollContent}>
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.title}>FOG_CUTTER</Text>
+            <View style={styles.headerLine} />
+          </View>
+
+          <FogCutterTaskComposer
+            focusedInput={focusedInput}
+            isAiLoading={isAiLoading}
+            isCosmic={isCosmic}
+            isNightAwe={isNightAwe}
+            microSteps={microSteps}
+            newStep={newStep}
+            onAddMicroStep={addMicroStep}
+            onAddTask={addTask}
+            onAiBreakdownPress={() => handleAiBreakdown(task)}
+            onFocusInput={setFocusedInput}
+            onNewStepChange={setNewStep}
+            onTaskChange={setTask}
+            saveDisabled={microSteps.length === 0}
+            setTaskInputRef={taskInputRef}
+            task={task}
+          />
+
+          <FogCutterTaskList
+            isCosmic={isCosmic}
+            isLoading={isLoading}
+            isNightAwe={isNightAwe}
+            onDismissGuide={handleDismissGuide}
+            onExamplePress={(example) => {
+              setTask(example);
+              taskInputRef.current?.focus();
+            }}
+            onFocusTaskInput={() => taskInputRef.current?.focus()}
+            onToggleTask={toggleTask}
+            showGuide={showGuide}
+            tasks={tasks}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+
+  if (isNightAwe) {
+    return (
+      <NightAweBackground
+        variant="focus"
+        activeFeature="fogCutter"
+        motionMode="transition"
+      >
+        {content}
+      </NightAweBackground>
+    );
+  }
+
   return (
     <CosmicBackground variant="ridge" dimmer>
-      <SafeAreaView
-        style={styles.container}
-        accessibilityLabel="Fog cutter screen"
-        accessibilityRole="summary"
-      >
-        <View style={styles.scrollContent}>
-          <View style={styles.content}>
-            <View style={styles.header}>
-              <Text style={styles.title}>FOG_CUTTER</Text>
-              <View style={styles.headerLine} />
-            </View>
-
-            <FogCutterTaskComposer
-              focusedInput={focusedInput}
-              isAiLoading={isAiLoading}
-              isCosmic={isCosmic}
-              microSteps={microSteps}
-              newStep={newStep}
-              onAddMicroStep={addMicroStep}
-              onAddTask={addTask}
-              onAiBreakdownPress={() => handleAiBreakdown(task)}
-              onFocusInput={setFocusedInput}
-              onNewStepChange={setNewStep}
-              onTaskChange={setTask}
-              saveDisabled={microSteps.length === 0}
-              setTaskInputRef={taskInputRef}
-              task={task}
-            />
-
-            <FogCutterTaskList
-              isCosmic={isCosmic}
-              isLoading={isLoading}
-              onDismissGuide={handleDismissGuide}
-              onExamplePress={(example) => {
-                setTask(example);
-                taskInputRef.current?.focus();
-              }}
-              onFocusTaskInput={() => taskInputRef.current?.focus()}
-              onToggleTask={toggleTask}
-              showGuide={showGuide}
-              tasks={tasks}
-            />
-          </View>
-        </View>
-      </SafeAreaView>
+      {content}
     </CosmicBackground>
   );
 };

@@ -11,6 +11,7 @@ import useReducedMotion from '../../hooks/useReducedMotion';
 import { getCurrentNightAwePalette } from '../../theme/nightAwe/timeOfDay';
 import { isWeb } from '../../utils/PlatformUtils';
 import {
+  getNightAweTransitionTargets,
   NIGHT_AWE_CONSTELLATION_EDGES,
   NIGHT_AWE_CONSTELLATION_NODES,
   NightAweFeatureKey,
@@ -72,7 +73,15 @@ export const NightAweBackground = memo(function NightAweBackground({
   const [palette, setPalette] = useState(() => getCurrentNightAwePalette());
   const reduceMotion = useReducedMotion();
   const activePulse = useRef(new Animated.Value(1)).current;
-  const starDrift = useRef(new Animated.Value(0)).current;
+  const activeEdgeOpacity = useRef(new Animated.Value(0.3)).current;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPalette(getCurrentNightAwePalette());
+    }, 60_000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (reduceMotion || motionMode !== 'transition') {
@@ -101,20 +110,20 @@ export const NightAweBackground = memo(function NightAweBackground({
 
   useEffect(() => {
     if (reduceMotion || motionMode !== 'transition') {
-      starDrift.setValue(0);
+      activeEdgeOpacity.setValue(0.3);
       return;
     }
 
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(starDrift, {
+        Animated.timing(activeEdgeOpacity, {
           toValue: 1,
-          duration: 2600,
+          duration: 900,
           useNativeDriver: true,
         }),
-        Animated.timing(starDrift, {
-          toValue: 0,
-          duration: 2600,
+        Animated.timing(activeEdgeOpacity, {
+          toValue: 0.3,
+          duration: 1400,
           useNativeDriver: true,
         }),
       ]),
@@ -122,7 +131,7 @@ export const NightAweBackground = memo(function NightAweBackground({
 
     loop.start();
     return () => loop.stop();
-  }, [motionMode, reduceMotion, starDrift]);
+  }, [activeEdgeOpacity, motionMode, reduceMotion]);
 
   const webSkyStyle = useMemo((): WebStyle | null => {
     if (!isWeb) {
@@ -146,6 +155,10 @@ export const NightAweBackground = memo(function NightAweBackground({
 
   const shellTint =
     variant === 'focus' ? 'rgba(8, 17, 30, 0.2)' : 'rgba(8, 17, 30, 0.08)';
+  const transitionTargets = useMemo(
+    () => getNightAweTransitionTargets(activeFeature),
+    [activeFeature],
+  );
 
   return (
     <View
@@ -164,18 +177,6 @@ export const NightAweBackground = memo(function NightAweBackground({
         style={[
           styles.starField,
           { opacity: starOpacity },
-          !reduceMotion && motionMode === 'transition'
-            ? {
-                transform: [
-                  {
-                    translateY: starDrift.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, -3],
-                    }),
-                  },
-                ],
-              }
-            : null,
         ]}
       >
         {STAR_LAYOUT.map((star, index) => (
@@ -225,10 +226,13 @@ export const NightAweBackground = memo(function NightAweBackground({
               const lineWidth =
                 (Math.sqrt(dx * dx + dy * dy) / 100) * CONSTELLATION_WIDTH;
               const angle = `${(Math.atan2(dy, dx) * 180) / Math.PI}deg`;
+              const edgeId = `${fromId}-${toId}`;
+              const isActiveEdge =
+                motionMode === 'transition' &&
+                transitionTargets.activeEdgeIds.includes(edgeId);
 
-              return (
+              const line = (
                 <View
-                  key={`${fromId}-${toId}`}
                   style={[
                     styles.constellationLine,
                     {
@@ -236,7 +240,10 @@ export const NightAweBackground = memo(function NightAweBackground({
                       top: `${fromNode.y}%`,
                       width: lineWidth,
                       transform: [{ rotate: angle }],
-                      backgroundColor: palette.constellation.line,
+                      backgroundColor: isActiveEdge
+                        ? palette.constellation.active
+                        : palette.constellation.line,
+                      opacity: isActiveEdge ? 1 : 0.72,
                     },
                     isWeb
                       ? ({ transformOrigin: 'left center' } as ViewStyle)
@@ -244,10 +251,23 @@ export const NightAweBackground = memo(function NightAweBackground({
                   ]}
                 />
               );
+
+              if (!isActiveEdge || reduceMotion) {
+                return <React.Fragment key={edgeId}>{line}</React.Fragment>;
+              }
+
+              return (
+                <Animated.View key={edgeId} style={{ opacity: activeEdgeOpacity }}>
+                  {line}
+                </Animated.View>
+              );
             })}
 
             {NIGHT_AWE_CONSTELLATION_NODES.map((node) => {
               const isActive = node.id === activeFeature;
+              const isConnected =
+                motionMode === 'transition' &&
+                transitionTargets.connectedNodeIds.includes(node.id);
               const baseNode = (
                 <View
                   style={[
@@ -260,9 +280,16 @@ export const NightAweBackground = memo(function NightAweBackground({
                         : palette.constellation.node,
                       borderColor: isActive
                         ? palette.constellation.glow
-                        : 'rgba(217, 228, 242, 0.08)',
+                        : isConnected
+                          ? palette.constellation.line
+                          : 'rgba(217, 228, 242, 0.08)',
+                      opacity: isConnected ? 0.92 : 1,
                     },
-                    isActive ? styles.constellationNodeActive : null,
+                    isActive
+                      ? styles.constellationNodeActive
+                      : isConnected
+                        ? styles.constellationNodeConnected
+                        : null,
                   ]}
                 />
               );
@@ -375,6 +402,12 @@ const styles = StyleSheet.create({
     marginLeft: -5,
     marginTop: -5,
   },
+  constellationNodeConnected: {
+    width: 9,
+    height: 9,
+    marginLeft: -4.5,
+    marginTop: -4.5,
+  },
   horizonWrap: {
     position: 'absolute',
     left: 0,
@@ -427,10 +460,3 @@ const styles = StyleSheet.create({
 });
 
 export default NightAweBackground;
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setPalette(getCurrentNightAwePalette());
-    }, 60_000);
-
-    return () => clearInterval(timer);
-  }, []);

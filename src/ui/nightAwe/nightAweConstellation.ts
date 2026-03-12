@@ -8,6 +8,12 @@ export type ConstellationNode = {
   y: number;
 };
 
+export interface NightAweTransitionTargets {
+  activeNodeId: NightAweFeatureKey;
+  connectedNodeIds: NightAweFeatureKey[];
+  activeEdgeIds: string[];
+}
+
 export const NIGHT_AWE_CONSTELLATION_NODES: readonly ConstellationNode[] = [
   { id: 'home', x: 18, y: 58 },
   { id: 'tasks', x: 34, y: 34 },
@@ -28,3 +34,31 @@ export const NIGHT_AWE_CONSTELLATION_EDGES: readonly [
   ['fogCutter', 'checkIn'],
   ['brainDump', 'fogCutter'],
 ] as const;
+
+export function getNightAweTransitionTargets(
+  activeNodeId: NightAweFeatureKey,
+): NightAweTransitionTargets {
+  const connectedNodeIds = NIGHT_AWE_CONSTELLATION_EDGES.flatMap(
+    ([fromId, toId]) => {
+      if (fromId === activeNodeId) {
+        return [toId];
+      }
+
+      if (toId === activeNodeId) {
+        return [fromId];
+      }
+
+      return [];
+    },
+  );
+
+  const activeEdgeIds = NIGHT_AWE_CONSTELLATION_EDGES.filter(
+    ([fromId, toId]) => fromId === activeNodeId || toId === activeNodeId,
+  ).map(([fromId, toId]) => `${fromId}-${toId}`);
+
+  return {
+    activeNodeId,
+    connectedNodeIds,
+    activeEdgeIds,
+  };
+}
