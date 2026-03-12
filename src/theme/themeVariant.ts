@@ -13,8 +13,9 @@ import { LoggerService } from '../services/LoggerService';
  * Available theme variants
  * - 'linear': Original Nothing aesthetic (monochrome, sharp, technical)
  * - 'cosmic': New Cosmic-Mystic aesthetic (deep space, glows, ethereal)
+ * - 'nightAwe': Uluru-inspired horizon with restrained sky navigation
  */
-export type ThemeVariant = 'linear' | 'cosmic';
+export type ThemeVariant = 'linear' | 'cosmic' | 'nightAwe';
 
 // ============================================================================
 // CONSTANTS
@@ -26,6 +27,7 @@ export type ThemeVariant = 'linear' | 'cosmic';
 export const THEME_VARIANTS = {
   LINEAR: 'linear' as const,
   COSMIC: 'cosmic' as const,
+  NIGHT_AWE: 'nightAwe' as const,
 };
 
 /**
@@ -51,6 +53,7 @@ const LEGACY_THEME_MAP: Record<string, ThemeVariant> = {
   // Direct mappings
   linear: 'linear',
   cosmic: 'cosmic',
+  nightAwe: 'nightAwe',
 
   // Legacy/deprecated values (if any existed)
   phantom: 'cosmic',
@@ -80,7 +83,7 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
     return LEGACY_THEME_MAP[value];
   }
 
-  if (value === 'linear' || value === 'cosmic') {
+  if (value === 'linear' || value === 'cosmic' || value === 'nightAwe') {
     return value;
   }
 
@@ -98,7 +101,8 @@ export function migrateThemeVariant(value: string | null): ThemeVariant {
  */
 export function isValidThemeVariant(value: unknown): value is ThemeVariant {
   return (
-    typeof value === 'string' && (value === 'linear' || value === 'cosmic')
+    typeof value === 'string' &&
+    (value === 'linear' || value === 'cosmic' || value === 'nightAwe')
   );
 }
 
@@ -110,7 +114,7 @@ export function assertThemeVariant(
 ): asserts value is ThemeVariant {
   if (!isValidThemeVariant(value)) {
     throw new Error(
-      `Invalid theme variant: ${value}. Expected 'linear' or 'cosmic'.`,
+      `Invalid theme variant: ${value}. Expected 'linear', 'cosmic', or 'nightAwe'.`,
     );
   }
 }
@@ -151,6 +155,15 @@ export const THEME_METADATA: Record<
       background: '#070712',
       accent: '#8B5CF6',
       text: '#EEF2FF',
+    },
+  },
+  nightAwe: {
+    label: 'Night Awe',
+    description: 'Grounded horizon tones with a calm, natural sky',
+    preview: {
+      background: '#08111E',
+      accent: '#AFC7FF',
+      text: '#F6F1E7',
     },
   },
 };

@@ -4,7 +4,7 @@ import { useTheme } from '../../../theme/useTheme';
 import type { ThemeVariant } from '../../../theme/themeVariant';
 import type { ThemeOption } from '../types';
 
-const THEME_ORDER: ThemeVariant[] = ['linear', 'cosmic'];
+const THEME_ORDER: ThemeVariant[] = ['linear', 'cosmic', 'nightAwe'];
 
 export type UseThemeSwitcherResult = {
   variant: ThemeVariant;

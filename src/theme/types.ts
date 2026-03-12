@@ -14,6 +14,16 @@ interface ThemeSemanticColors {
   [key: string]: string | undefined;
 }
 
+interface NightAweColorCollections extends ThemeUnknownRecord {
+  raw?: ThemeStringScale;
+  sky?: ThemeUnknownRecord;
+  horizon?: ThemeStringScale;
+  stars?: ThemeStringScale;
+  constellation?: ThemeStringScale;
+  feature?: ThemeStringScale;
+  surface?: ThemeStringScale;
+}
+
 interface ThemeTypography extends ThemeUnknownRecord {
   fontFamily?: Record<string, string>;
   mono?: {
@@ -46,6 +56,7 @@ type ThemeColorValue =
   | ThemeStringScale
   | Record<number | string, string>
   | ThemeSemanticColors
+  | NightAweColorCollections
   | undefined;
 
 export interface ThemeTokens {
@@ -66,6 +77,7 @@ export interface ThemeTokens {
     semantic: ThemeSemanticColors;
     utility?: Record<string, string>;
     cosmic?: ThemeStringScale;
+    nightAwe?: NightAweColorCollections;
     text?: ThemeStringScale;
     indigo?: ThemeStringScale;
     success: ThemeStringScale;

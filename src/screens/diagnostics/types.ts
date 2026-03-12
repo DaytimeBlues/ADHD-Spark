@@ -1,3 +1,5 @@
+import type { ThemeVariant } from '../../theme/themeVariant';
+
 export type DiagnosticStatus = 'ok' | 'warning' | 'error' | 'info';
 
 export interface DiagnosticEntry {
@@ -16,7 +18,7 @@ export type BackupPayload = {
 };
 
 export type ThemeOption = {
-  variant: 'linear' | 'cosmic';
+  variant: ThemeVariant;
   label: string;
   description: string;
   preview: {

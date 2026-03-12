@@ -5,6 +5,9 @@ A behavioral activation tool for ADHD, designed primarily for the browser with a
 > [!IMPORTANT]
 > Primary workflow: most development should happen in the web path. It gives the full app experience in a browser and is the main deployment target.
 
+> [!NOTE]
+> `codex/night-awe` in `C:\dev\ADHD-CADDI-V1-NIGHT-AWE` is an isolated UI experiment worktree. Changes here should not influence the main app branch until the experiment is reviewed and explicitly approved as ready.
+
 ## Deployment Status
 
 - Live web app: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
