@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import GoogleTasksSyncService from '../src/services/GoogleTasksSyncService';
 import StorageService from '../src/services/StorageService';
 import OverlayService from '../src/services/OverlayService';
+import { config } from '../src/config';
 
 const fetchMock = jest.fn();
 global.fetch = fetchMock as unknown as typeof fetch;
@@ -48,6 +49,8 @@ describe('GoogleTasksSyncService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     Object.defineProperty(Platform, 'OS', { value: 'android' });
+    config.googleWebClientId = 'google-web-client';
+    config.googleIosClientId = 'google-ios-client';
     (StorageService.getJSON as jest.Mock).mockImplementation((key: string) => {
       if (key === 'googleTasksSyncState') {
         return Promise.resolve({ listId: 'list-1', syncToken: 'sync-1' });
@@ -68,6 +71,7 @@ describe('GoogleTasksSyncService', () => {
 
     const NetInfo = require('@react-native-community/netinfo');
     NetInfo.fetch.mockResolvedValue({ isConnected: true });
+    NetInfo.addEventListener.mockReturnValue(jest.fn());
 
     const {
       GoogleSignin,
@@ -163,5 +167,15 @@ describe('GoogleTasksSyncService', () => {
     expect(result.authRequired).toBe(true);
     expect(result.createdTasks).toBe(0);
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not start foreground polling when Google client IDs are missing', () => {
+    const NetInfo = require('@react-native-community/netinfo');
+    config.googleWebClientId = undefined;
+    config.googleIosClientId = undefined;
+
+    GoogleTasksSyncService.startForegroundPolling();
+
+    expect(NetInfo.addEventListener).not.toHaveBeenCalled();
   });
 });

@@ -31,9 +31,10 @@ allprojects {
 
 def isWindows = System.properties['os.name'].toLowerCase().contains('windows')
 def localAppData = System.getenv('LOCALAPPDATA')
+def windowsBuildRoot = null
 
 if (isWindows && localAppData != null && !localAppData.isEmpty()) {
-    def windowsBuildRoot = "${localAppData}/ADHD-CADDI-V1/android-build"
+    windowsBuildRoot = "${localAppData}/ADHD-CADDI-V1/android-build"
     rootProject.buildDir = file("${windowsBuildRoot}/build-root")
     subprojects { subproject ->
         subproject.buildDir = file("${windowsBuildRoot}/${subproject.name}")
@@ -42,6 +43,9 @@ if (isWindows && localAppData != null && !localAppData.isEmpty()) {
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
+    if (windowsBuildRoot != null) {
+        delete file(windowsBuildRoot)
+    }
 }
 
 apply plugin: "com.facebook.react.rootproject"

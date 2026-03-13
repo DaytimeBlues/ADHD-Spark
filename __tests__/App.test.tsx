@@ -15,6 +15,7 @@ const mockFlushOverlayIntentQueue = jest.fn();
 const mockHandleOverlayIntent = jest.fn();
 const mockHideDrift = jest.fn();
 const mockAddListener = jest.fn();
+const mockLoggerWarn = jest.fn();
 
 jest.mock('../src/init/bootstrap', () => ({
   bootstrapApp: () => mockBootstrapApp(),
@@ -36,6 +37,7 @@ jest.mock('../src/services/GoogleTasksSyncService', () => ({
   GoogleTasksSyncService: {
     startForegroundPolling: () => mockGoogleStart(),
     stopForegroundPolling: () => mockGoogleStop(),
+    syncToBrainDump: jest.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -50,6 +52,13 @@ jest.mock('../src/services/TimerService', () => ({
   TimerService: {
     start: () => mockTimerStart(),
     stop: () => mockTimerStop(),
+  },
+}));
+
+jest.mock('../src/config', () => ({
+  config: {
+    googleWebClientId: undefined,
+    googleIosClientId: undefined,
   },
 }));
 
@@ -144,6 +153,16 @@ jest.mock('../src/services/AgentEventBus', () => ({
   },
 }));
 
+jest.mock('../src/services/LoggerService', () => ({
+  LoggerService: {
+    warn: (...args: unknown[]) => mockLoggerWarn(...args),
+    error: jest.fn(),
+    fatal: jest.fn(),
+    info: jest.fn(),
+  },
+  withOperationContext: (value: unknown) => value,
+}));
+
 jest.mock('react-native', () => {
   return {
     View: 'View',
@@ -194,12 +213,32 @@ describe('App bootstrap', () => {
 
     expect(mockBootstrapApp).toHaveBeenCalled();
     expect(mockRegister).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'google-sync-polling' }),
-    );
-    expect(mockRegister).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'timer-service' }),
+    );
+    expect(mockRegister).not.toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'google-sync-polling' }),
     );
     expect(mockInitialize).toHaveBeenCalled();
     expect(mockFlushOverlayIntentQueue).toHaveBeenCalled();
+  });
+
+  it('does not emit a bootstrap timeout warning when bootstrap resolves immediately', async () => {
+    jest.useFakeTimers();
+
+    render(<App />);
+    await waitFor(() => {
+      expect(screen.getByText('APP_NAVIGATOR')).toBeTruthy();
+    });
+
+    jest.advanceTimersByTime(9000);
+
+    expect(mockLoggerWarn).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        service: 'bootstrap',
+        operation: 'bootstrapApp',
+      }),
+    );
+
+    jest.useRealTimers();
   });
 });

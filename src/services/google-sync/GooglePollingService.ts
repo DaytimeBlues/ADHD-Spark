@@ -1,4 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
+import { config } from '../../config';
 import { LoggerService, withOperationContext } from '../LoggerService';
 import { createOperationContext } from '../OperationContext';
 
@@ -11,13 +12,17 @@ interface GooglePollingServiceOptions {
 export class GooglePollingService {
   private pollTimer: ReturnType<typeof setInterval> | null = null;
   private netInfoUnsubscribe: (() => void) | null = null;
+  private lastConnectivityState: boolean | null = null;
 
   constructor(private readonly options: GooglePollingServiceOptions) {}
 
   startForegroundPolling(intervalMs = 15 * 60 * 1000): void {
-    if (this.options.isWeb || this.pollTimer) {
+    const hasGoogleClientIds =
+      Boolean(config.googleWebClientId) || Boolean(config.googleIosClientId);
+    if (this.options.isWeb || this.pollTimer || !hasGoogleClientIds) {
       return;
     }
+    this.lastConnectivityState = null;
 
     this.pollTimer = setInterval(() => {
       const operationContext = createOperationContext({
@@ -43,7 +48,18 @@ export class GooglePollingService {
     }
 
     this.netInfoUnsubscribe = NetInfo.addEventListener((state) => {
-      if (!state.isConnected) {
+      const isConnected = state.isConnected === true;
+      if (this.lastConnectivityState === null) {
+        this.lastConnectivityState = isConnected;
+        return;
+      }
+
+      if (this.lastConnectivityState === isConnected) {
+        return;
+      }
+
+      this.lastConnectivityState = isConnected;
+      if (!isConnected) {
         return;
       }
 
@@ -92,7 +108,9 @@ export class GooglePollingService {
 
     NetInfo.fetch()
       .then((state) => {
-        if (!state.isConnected) {
+        const isConnected = state.isConnected === true;
+        this.lastConnectivityState = isConnected;
+        if (!isConnected) {
           return;
         }
 
@@ -138,10 +156,12 @@ export class GooglePollingService {
     }
 
     if (!this.pollTimer) {
+      this.lastConnectivityState = null;
       return;
     }
 
     clearInterval(this.pollTimer);
     this.pollTimer = null;
+    this.lastConnectivityState = null;
   }
 }

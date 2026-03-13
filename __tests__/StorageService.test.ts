@@ -231,11 +231,35 @@ describe('StorageService (native SQLite path)', () => {
 
   it('reads value from SQLite store', async () => {
     const { StorageService: nativeStorageService, executeMock } =
-      loadNativeStorageService();
-    executeMock.mockResolvedValueOnce({ rows: [{ value: 'hello' }] });
+      loadNativeStorageService((asyncStorageMock) => {
+        asyncStorageMock.getItem.mockResolvedValueOnce('1');
+      });
+    executeMock
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ value: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ value: 'hello' }] });
 
     const value = await nativeStorageService.get('k');
 
+    expect(value).toBe('hello');
+  });
+
+  it('initializes native SQLite storage before first read', async () => {
+    const { StorageService: nativeStorageService, executeMock } =
+      loadNativeStorageService((asyncStorageMock) => {
+        asyncStorageMock.getItem.mockResolvedValueOnce('1');
+      });
+    executeMock
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [{ value: '1' }] })
+      .mockResolvedValueOnce({ rows: [{ value: 'hello' }] });
+
+    const value = await nativeStorageService.get('k');
+
+    expect(executeMock).toHaveBeenNthCalledWith(
+      1,
+      'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
+    );
     expect(value).toBe('hello');
   });
 

@@ -144,13 +144,17 @@ const App = () => {
       return;
     }
 
-    AppLifecycleService.register({
-      name: 'google-sync-polling',
-      start: () => GoogleTasksSyncService.startForegroundPolling(),
-      resume: () => GoogleTasksSyncService.startForegroundPolling(),
-      pause: () => GoogleTasksSyncService.stopForegroundPolling(),
-      stop: () => GoogleTasksSyncService.stopForegroundPolling(),
-    });
+    const hasGoogleClientIds =
+      Boolean(config.googleWebClientId) || Boolean(config.googleIosClientId);
+    if (hasGoogleClientIds) {
+      AppLifecycleService.register({
+        name: 'google-sync-polling',
+        start: () => GoogleTasksSyncService.startForegroundPolling(),
+        resume: () => GoogleTasksSyncService.startForegroundPolling(),
+        pause: () => GoogleTasksSyncService.stopForegroundPolling(),
+        stop: () => GoogleTasksSyncService.stopForegroundPolling(),
+      });
+    }
     AppLifecycleService.register({
       name: 'timer-service',
       start: () => TimerService.start(),

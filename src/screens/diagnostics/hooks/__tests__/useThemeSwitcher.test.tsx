@@ -39,10 +39,10 @@ describe('useThemeSwitcher', () => {
     jest.clearAllMocks();
   });
 
-  it('returns both theme options mapped from metadata', () => {
+  it('returns all theme options mapped from metadata', () => {
     render(<HookHost />);
 
-    expect(getLatest().themeOptions).toHaveLength(2);
+    expect(getLatest().themeOptions).toHaveLength(3);
 
     const linearOption = getLatest().themeOptions.find(
       (option) => option.variant === 'linear',
@@ -50,11 +50,16 @@ describe('useThemeSwitcher', () => {
     const cosmicOption = getLatest().themeOptions.find(
       (option) => option.variant === 'cosmic',
     );
+    const nightAweOption = getLatest().themeOptions.find(
+      (option) => option.variant === 'nightAwe',
+    );
 
     expect(linearOption?.label).toBe(THEME_METADATA.linear.label);
     expect(cosmicOption?.label).toBe(THEME_METADATA.cosmic.label);
+    expect(nightAweOption?.label).toBe(THEME_METADATA.nightAwe.label);
     expect(linearOption?.selected).toBe(true);
     expect(cosmicOption?.selected).toBe(false);
+    expect(nightAweOption?.selected).toBe(false);
   });
 
   it('delegates theme selection to setVariant', async () => {

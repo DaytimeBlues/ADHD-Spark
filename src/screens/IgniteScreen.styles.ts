@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { CosmicTokens, Tokens } from '../theme/tokens';
 import type { ThemeTokens } from '../theme/types';
 import type { ThemeVariant } from '../theme/themeVariant';
@@ -16,7 +16,10 @@ const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 };
 
-export const getIgniteScreenStyles = (variant: ThemeVariant, t: ThemeTokens) => {
+export const getIgniteScreenStyles = (
+  variant: ThemeVariant,
+  t: ThemeTokens,
+) => {
   const isCosmic = variant === 'cosmic';
   const isNightAwe = variant === 'nightAwe';
 
@@ -51,7 +54,9 @@ export const getIgniteScreenStyles = (variant: ThemeVariant, t: ThemeTokens) => 
       ? 'rgba(17, 26, 51, 0.8)'
       : Tokens.colors.neutral.dark;
   const accent = isNightAwe
-    ? t.colors.nightAwe?.feature?.ignite || t.colors.semantic.secondary
+    ? t.colors.nightAwe?.feature?.ignite ||
+      t.colors.semantic.secondary ||
+      Tokens.colors.indigo.primary
     : isCosmic
       ? CosmicTokens.colors.semantic.primary
       : Tokens.colors.brand[500];
@@ -270,7 +275,7 @@ export const getIgniteScreenStyles = (variant: ThemeVariant, t: ThemeTokens) => 
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       fontWeight: '700',
-      color: t.colors.text?.onAccent || '#08111E',
+      color: t.colors.text?.onAccent || Tokens.colors.neutral.darkest,
       letterSpacing: 1,
     },
     nightAweSecondaryButton: {

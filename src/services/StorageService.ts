@@ -14,6 +14,8 @@ type KVQueryResult = QueryResult & { rows: Array<Record<string, Scalar>> };
 let db: KVDatabase | undefined;
 const isJestRuntime =
   typeof process !== 'undefined' && !!process.env.JEST_WORKER_ID;
+let initPromise: Promise<void> | null = null;
+let isInitialized = false;
 
 if (!isWeb && !isJestRuntime) {
   const { open } = require('@op-engineering/op-sqlite');
@@ -107,47 +109,67 @@ const getDb = (): KVDatabase => {
   return db;
 };
 
-const StorageService = {
-  async init(): Promise<void> {
-    if (isWeb || isJestRuntime) {
-      return runMigrations();
-    }
+const performInit = async (): Promise<void> => {
+  if (isWeb || isJestRuntime) {
+    isInitialized = true;
+    await runMigrations();
+    return;
+  }
 
-    await getDb().execute(
-      'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
-    );
+  await getDb().execute(
+    'CREATE TABLE IF NOT EXISTS kv_store (key TEXT PRIMARY KEY, value TEXT)',
+  );
 
-    // Auto-migrate from AsyncStorage to op-sqlite
-    const isMigrated = await AsyncStorage.getItem('SQLITE_MIGRATED');
-    if (!isMigrated) {
-      try {
-        const keys = await AsyncStorage.getAllKeys();
-        if (keys.length > 0) {
-          const pairs = await AsyncStorage.multiGet(keys);
+  const isMigrated = await AsyncStorage.getItem('SQLITE_MIGRATED');
+  if (!isMigrated) {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      if (keys.length > 0) {
+        const pairs = await AsyncStorage.multiGet(keys);
 
-          await getDb().transaction(async (tx: Transaction) => {
-            for (const [key, value] of pairs) {
-              if (value) {
-                await tx.execute(
-                  'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
-                  [key, value],
-                );
-              }
+        await getDb().transaction(async (tx: Transaction) => {
+          for (const [key, value] of pairs) {
+            if (value) {
+              await tx.execute(
+                'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
+                [key, value],
+              );
             }
-          });
-        }
-        await AsyncStorage.setItem('SQLITE_MIGRATED', 'true');
-      } catch (e) {
-        LoggerService.error({
-          service: 'StorageService',
-          operation: 'init',
-          message: 'Migration to SQLite failed',
-          error: e,
+          }
         });
       }
+      await AsyncStorage.setItem('SQLITE_MIGRATED', 'true');
+    } catch (e) {
+      LoggerService.error({
+        service: 'StorageService',
+        operation: 'init',
+        message: 'Migration to SQLite failed',
+        error: e,
+      });
     }
+  }
 
-    await runMigrations();
+  isInitialized = true;
+  await runMigrations();
+};
+
+const ensureInitialized = async (): Promise<void> => {
+  if (isInitialized) {
+    return;
+  }
+
+  if (!initPromise) {
+    initPromise = performInit().finally(() => {
+      initPromise = null;
+    });
+  }
+
+  await initPromise;
+};
+
+const StorageService = {
+  async init(): Promise<void> {
+    await ensureInitialized();
   },
 
   async get(key: string): Promise<string | null> {
@@ -167,6 +189,7 @@ const StorageService = {
     }
 
     try {
+      await ensureInitialized();
       const res = (await getDb().execute(
         'SELECT value FROM kv_store WHERE key = ?',
         [key],
@@ -209,6 +232,7 @@ const StorageService = {
     }
 
     try {
+      await ensureInitialized();
       await getDb().execute(
         'INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)',
         [key, value],
@@ -244,6 +268,7 @@ const StorageService = {
     }
 
     try {
+      await ensureInitialized();
       await getDb().execute('DELETE FROM kv_store WHERE key = ?', [key]);
       return { success: true };
     } catch (error) {

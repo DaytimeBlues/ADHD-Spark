@@ -1,6 +1,7 @@
 import { LoggerService, withOperationContext } from '../LoggerService';
 import { GoogleAuthService } from '../GoogleAuthService';
 import { googleTasksApiClient } from '../GoogleTasksApiClient';
+import { config } from '../../config';
 import { isWeb } from '../../utils/PlatformUtils';
 import { GOOGLE_CALENDAR_SCOPE, GOOGLE_TASKS_SCOPE } from './constants';
 import { createOperationContext } from '../OperationContext';
@@ -43,6 +44,12 @@ class GoogleSyncCoordinator {
     processOfflineQueue: () => this.processOfflineQueue(),
   });
 
+  private hasGoogleClientIds(): boolean {
+    return (
+      Boolean(config.googleWebClientId) || Boolean(config.googleIosClientId)
+    );
+  }
+
   configureGoogleSignIn(webClientId?: string, iosClientId?: string): void {
     this.authService.configureGoogleSignIn(webClientId, iosClientId);
   }
@@ -78,6 +85,9 @@ class GoogleSyncCoordinator {
   }
 
   startForegroundPolling(intervalMs = 15 * 60 * 1000): void {
+    if (!this.hasGoogleClientIds()) {
+      return;
+    }
     this.pollingService.startForegroundPolling(intervalMs);
   }
 

@@ -22,6 +22,7 @@ import RetentionService, {
 import useReducedMotion from '../hooks/useReducedMotion';
 import useEntranceAnimation from '../hooks/useEntranceAnimation';
 import { useTheme } from '../theme/useTheme';
+import { Tokens } from '../theme/tokens';
 import { ModeCardMode } from './ModeCard';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground } from '../ui/cosmic';
@@ -100,7 +101,9 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         icon: 'fire',
         desc: 'START TASKS',
         accent: isNightAwe
-          ? t.colors.nightAwe?.feature?.ignite || t.colors.semantic.secondary
+          ? t.colors.nightAwe?.feature?.ignite ||
+            t.colors.semantic.secondary ||
+            Tokens.colors.indigo.primary
           : '#8B5CF6',
       },
       {
@@ -124,7 +127,9 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
         name: 'Anchor',
         icon: 'anchor',
         desc: 'REGULATE',
-        accent: isNightAwe ? t.colors.semantic.secondary : '#243BFF',
+        accent: isNightAwe
+          ? t.colors.semantic.secondary || Tokens.colors.indigo.primary
+          : '#243BFF',
       },
       {
         id: 'checkin',

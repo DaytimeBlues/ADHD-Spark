@@ -1,20 +1,60 @@
-import * as Notifications from 'expo-notifications';
 import { LoggerService } from './LoggerService';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+type NotificationsModule = typeof import('expo-notifications');
+
+let notificationsModule: NotificationsModule | null | undefined;
+let notificationHandlerConfigured = false;
+
+const getNotifications = (): NotificationsModule | null => {
+  if (notificationsModule !== undefined) {
+    return notificationsModule;
+  }
+
+  try {
+    notificationsModule = require('expo-notifications') as NotificationsModule;
+  } catch (error) {
+    LoggerService.warn({
+      service: 'NotificationService',
+      operation: 'getNotifications',
+      message:
+        'expo-notifications is unavailable; notification features are disabled.',
+      error,
+    });
+    notificationsModule = null;
+  }
+
+  return notificationsModule;
+};
+
+const ensureNotificationHandler = (
+  Notifications: NotificationsModule | null,
+): void => {
+  if (!Notifications || notificationHandlerConfigured) {
+    return;
+  }
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+  notificationHandlerConfigured = true;
+};
 
 class NotificationServiceClass {
   private currentTimerNotificationId: string | null = null;
 
   async requestPermissions() {
+    const Notifications = getNotifications();
+    if (!Notifications) {
+      return false;
+    }
+    ensureNotificationHandler(Notifications);
+
     const permissions = await Notifications.getPermissionsAsync();
     let finalStatus = permissions.status;
 
@@ -39,6 +79,12 @@ class NotificationServiceClass {
     );
 
     try {
+      const Notifications = getNotifications();
+      if (!Notifications) {
+        return;
+      }
+      ensureNotificationHandler(Notifications);
+
       const hasPermission = await this.requestPermissions();
       if (!hasPermission) {
         return;
@@ -70,6 +116,11 @@ class NotificationServiceClass {
   async cancelTimerNotification() {
     if (this.currentTimerNotificationId) {
       try {
+        const Notifications = getNotifications();
+        if (!Notifications) {
+          this.currentTimerNotificationId = null;
+          return;
+        }
         await Notifications.cancelScheduledNotificationAsync(
           this.currentTimerNotificationId,
         );

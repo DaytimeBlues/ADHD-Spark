@@ -12,14 +12,16 @@ import {
 } from '../scripts/android/sync-audio-assets';
 
 describe('android audio asset pipeline', () => {
-  it('reports the current repo is still waiting on the committed audio files', () => {
+  it('reports the committed audio files are available in the repo', () => {
     const repoRoot = path.join(__dirname, '..');
 
     const status = collectAudioAssetStatus(repoRoot);
 
     expect(status.sourceDirectory).toBe(path.join(repoRoot, 'assets', 'audio'));
-    expect(status.missingRequiredFiles).toEqual(REQUIRED_AUDIO_FILE_NAMES);
-    expect(status.availableFiles).toEqual([]);
+    expect(status.missingRequiredFiles).toEqual([]);
+    expect(status.availableFiles).toEqual(
+      expect.arrayContaining(REQUIRED_AUDIO_FILE_NAMES),
+    );
   });
 
   it('copies committed audio assets into the generated Android raw resource directory', () => {

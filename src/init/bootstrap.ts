@@ -76,19 +76,25 @@ async function initializeCriticalServices(): Promise<void> {
  */
 function initializeNonBlockingServices(): undefined {
   const operationContext = createOperationContext({ feature: 'bootstrap' });
-  GoogleTasksSyncService.syncToBrainDump(0, operationContext).catch((error) => {
-    LoggerService.error({
-      ...withOperationContext(
-        {
-          service: 'bootstrap',
-          operation: 'initializeNonBlockingServices',
-          message: 'Initial Google Tasks sync failed',
-          error,
-        },
-        operationContext,
-      ),
-    });
-  });
+  const hasGoogleClientIds =
+    Boolean(config.googleWebClientId) || Boolean(config.googleIosClientId);
+  if (hasGoogleClientIds) {
+    GoogleTasksSyncService.syncToBrainDump(0, operationContext).catch(
+      (error) => {
+        LoggerService.error({
+          ...withOperationContext(
+            {
+              service: 'bootstrap',
+              operation: 'initializeNonBlockingServices',
+              message: 'Initial Google Tasks sync failed',
+              error,
+            },
+            operationContext,
+          ),
+        });
+      },
+    );
+  }
   WebMCPService.init();
   CheckInService.start();
   DriftService.init();
@@ -142,29 +148,41 @@ function logStartupDiagnostics(): void {
 export async function bootstrapApp(): Promise<BootstrapResult> {
   const errors: Error[] = [];
   const operationContext = createOperationContext({ feature: 'bootstrap' });
+  let initTimeoutHandle: ReturnType<typeof setTimeout> | null = null;
 
   try {
     installUnhandledRejectionHandler();
     logStartupDiagnostics();
 
-    const initTimeout = wait(CRITICAL_INIT_TIMEOUT_MS).then(() => {
-      LoggerService.warn({
-        ...withOperationContext(
-          {
-            service: 'bootstrap',
-            operation: 'bootstrapApp',
-            message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
-          },
-          operationContext,
-        ),
-      });
+    const initTimeout = new Promise<void>((resolve) => {
+      initTimeoutHandle = setTimeout(() => {
+        LoggerService.warn({
+          ...withOperationContext(
+            {
+              service: 'bootstrap',
+              operation: 'bootstrapApp',
+              message: `Critical app initialization exceeded ${CRITICAL_INIT_TIMEOUT_MS}ms. Continuing app launch.`,
+            },
+            operationContext,
+          ),
+        });
+        resolve();
+      }, CRITICAL_INIT_TIMEOUT_MS);
     });
 
     await Promise.race([initializeCriticalServices(), initTimeout]);
+    if (initTimeoutHandle) {
+      clearTimeout(initTimeoutHandle);
+      initTimeoutHandle = null;
+    }
     initializeNonBlockingServices();
 
     return { success: true, errors };
   } catch (error) {
+    if (initTimeoutHandle) {
+      clearTimeout(initTimeoutHandle);
+      initTimeoutHandle = null;
+    }
     LoggerService.error({
       ...withOperationContext(
         {
