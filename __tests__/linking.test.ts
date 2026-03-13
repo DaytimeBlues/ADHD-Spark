@@ -8,20 +8,24 @@ import { appLinking } from '../src/navigation/linking';
 import { ROUTES } from '../src/navigation/routes';
 
 describe('web linking config', () => {
-  it('resolves Phase 1 stack routes from the base path', () => {
+  it('resolves root-hosted routes from the current origin', () => {
+    const homeState = appLinking.getStateFromPath?.('/', appLinking.config);
     const checkInState = appLinking.getStateFromPath?.(
-      '/ADHD-CADDI/check-in',
+      '/check-in',
       appLinking.config,
     );
     const cbtGuideState = appLinking.getStateFromPath?.(
-      '/ADHD-CADDI/cbt-guide',
+      '/cbt-guide',
       appLinking.config,
     );
     const diagnosticsState = appLinking.getStateFromPath?.(
-      '/ADHD-CADDI/diagnostics',
+      '/diagnostics',
       appLinking.config,
     );
 
+    expect(homeState).toMatchObject({
+      routes: [{ name: ROUTES.MAIN }],
+    });
     expect(checkInState).toMatchObject({
       routes: [{ name: ROUTES.CHECK_IN }],
     });
@@ -33,7 +37,7 @@ describe('web linking config', () => {
     });
   });
 
-  it('builds web urls for the registered Phase 1 stack routes', () => {
+  it('builds root-hosted web urls for the registered routes', () => {
     expect(
       appLinking.getPathFromState?.(
         {
@@ -46,7 +50,7 @@ describe('web linking config', () => {
         },
         appLinking.config,
       ),
-    ).toBe('/ADHD-CADDI/check-in');
+    ).toBe('/check-in');
 
     expect(
       appLinking.getPathFromState?.(
@@ -60,7 +64,7 @@ describe('web linking config', () => {
         },
         appLinking.config,
       ),
-    ).toBe('/ADHD-CADDI/cbt-guide');
+    ).toBe('/cbt-guide');
 
     expect(
       appLinking.getPathFromState?.(
@@ -74,6 +78,82 @@ describe('web linking config', () => {
         },
         appLinking.config,
       ),
-    ).toBe('/ADHD-CADDI/diagnostics');
+    ).toBe('/diagnostics');
+
+    expect(
+      appLinking.getPathFromState?.(
+        {
+          stale: false,
+          type: 'stack',
+          key: 'root',
+          index: 0,
+          routeNames: [ROUTES.MAIN],
+          routes: [{ key: 'main', name: ROUTES.MAIN }],
+        },
+        appLinking.config,
+      ),
+    ).toBe('/');
+
+    expect(
+      appLinking.getPathFromState?.(
+        {
+          stale: false,
+          type: 'stack',
+          key: 'root',
+          index: 0,
+          routeNames: [ROUTES.MAIN],
+          routes: [
+            {
+              key: 'main',
+              name: ROUTES.MAIN,
+              state: {
+                stale: false,
+                type: 'tab',
+                key: 'tabs',
+                index: 1,
+                routeNames: [ROUTES.HOME, ROUTES.TASKS, ROUTES.CHAT],
+                routes: [
+                  { key: 'home', name: ROUTES.HOME },
+                  { key: 'tasks', name: ROUTES.TASKS },
+                  { key: 'chat', name: ROUTES.CHAT },
+                ],
+              },
+            },
+          ],
+        },
+        appLinking.config,
+      ),
+    ).toBe('/tasks');
+
+    expect(
+      appLinking.getPathFromState?.(
+        {
+          stale: false,
+          type: 'stack',
+          key: 'root',
+          index: 0,
+          routeNames: [ROUTES.MAIN],
+          routes: [
+            {
+              key: 'main',
+              name: ROUTES.MAIN,
+              state: {
+                stale: false,
+                type: 'tab',
+                key: 'tabs',
+                index: 2,
+                routeNames: [ROUTES.HOME, ROUTES.TASKS, ROUTES.CHAT],
+                routes: [
+                  { key: 'home', name: ROUTES.HOME },
+                  { key: 'tasks', name: ROUTES.TASKS },
+                  { key: 'chat', name: ROUTES.CHAT },
+                ],
+              },
+            },
+          ],
+        },
+        appLinking.config,
+      ),
+    ).toBe('/chat');
   });
 });

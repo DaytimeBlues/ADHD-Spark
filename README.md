@@ -1,13 +1,22 @@
 # ADHD-CADDI - React Native and Android
 
 > [!IMPORTANT]
-> Active release path: Android is the authoritative deployment and verification target. Web tooling remains available for local/shared development, but GitHub Pages is not the production release path.
+> Active release paths: Android remains the primary native release target, and web now has a limited Firebase Hosting beta surface for friend testing. GitHub Pages is not a supported release path.
 
 ## Deployment Status
 
 - Release verification path: `.github/workflows/android.yml` builds debug and release APK artifacts on CI
 - Local install paths: `npm run install:android:dev` and `npm run install:android:preview`
-- Web remains available as a local development surface via `npm run web`
+- Web beta host: Firebase Hosting via `npm run deploy:firebase`
+- Web local development surface: `npm run web`
+
+## Web Beta Scope
+
+The current web beta is intentionally narrow so testers only see flows that are honest and supported.
+
+- Supported for friend testing: Home, Focus, Tasks, Brain Dump local capture flow, Check In, Chat, and Diagnostics
+- Limited or unsupported on web: Google sign-in driven sync, Google Calendar sync, and any feature that depends on native-only Android capabilities
+- Hosting model: root-hosted SPA on Firebase Hosting, so deep links should load from `/tasks`, `/chat`, `/check-in`, and `/diagnostics` without a repository subpath
 
 ## Features
 
@@ -22,9 +31,9 @@
 
 ## Getting Started (Web)
 
-Use this for local development and shared UI iteration.
+Use this for local development, shared UI iteration, and Firebase beta verification.
 
-Offline/PWA status: web remains a local development surface and is still online-first. Service worker registration is intentionally disabled, so do not treat web as a supported offline/PWA release surface.
+Offline/PWA status: web is still online-first. Service worker registration is intentionally disabled, so do not treat the Firebase beta as a supported offline/PWA release surface.
 
 ### Prerequisites
 
@@ -48,6 +57,21 @@ Useful direct routes during web development:
 
 - Diagnostics: `http://localhost:3000/diagnostics`
 - Pomodoro: `http://localhost:3000/pomodoro`
+
+### Serving The Built Web Beta
+
+```bash
+npm run build:web
+npx serve -s dist -l 4173
+```
+
+Then verify:
+
+- `http://127.0.0.1:4173/`
+- `http://127.0.0.1:4173/tasks`
+- `http://127.0.0.1:4173/chat`
+- `http://127.0.0.1:4173/check-in`
+- `http://127.0.0.1:4173/diagnostics`
 
 ### Running Checks
 

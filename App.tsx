@@ -32,7 +32,6 @@ import { BiometricService } from './src/services/BiometricService';
 import { LockScreen } from './src/components/LockScreen';
 import ErrorBoundary from './src/components/ErrorBoundary';
 import { appLinking } from './src/navigation/linking';
-import { WEB_APP_BASE_PATH } from './src/config/paths';
 import { AppLifecycleService } from './src/services/AppLifecycleService';
 
 if (config.environment === 'production') {
@@ -115,12 +114,7 @@ const syncWebUrlFromNavigation = () => {
     return;
   }
 
-  if (
-    currentPath.startsWith(WEB_APP_BASE_PATH) ||
-    targetPath.startsWith(WEB_APP_BASE_PATH)
-  ) {
-    window.history.replaceState(null, '', targetPath);
-  }
+  window.history.replaceState(null, '', targetPath);
 };
 
 const App = () => {

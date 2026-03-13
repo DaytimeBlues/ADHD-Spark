@@ -61,28 +61,6 @@
       window.process.env = window.process.env || {};
     </script>
 
-    <!-- SPA redirect handling for GitHub Pages -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      // This script checks to see if a redirect is present from the 404.html page
-      // and converts it back into the correct URL path.
-      (function (l) {
-        if (l.search[1] === '/') {
-          var repoName = '/ADHD-CADDI';
-          var decoded = l.search
-            .slice(1)
-            .split('&')
-            .map(function (s) {
-              return s.replace(/~and~/g, '&');
-            })
-            .join('?');
-          window.history.replaceState(null, null, repoName + decoded + l.hash);
-        }
-      })(window.location);
-    </script>
-
     <!-- Offline/PWA is intentionally disabled for the current online-first web release surface. -->
   </head>
 

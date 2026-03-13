@@ -2,38 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>ADHD-CADDI</title>
-    <script>
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      // This script takes the current URL and converts the path and query
-      // string into just a query string, and then redirects the browser
-      // to the new URL with only a query string and hash fragment.
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #111111;
+        color: #f5f5f5;
+        font-family: Arial, sans-serif;
+      }
 
-      // If you're creating a Project Pages site and NOT using a custom domain,
-      // then set pathPrefix = true.
-      // If you're creating a User or Organization Pages site, then set
-      // pathPrefix = false.
-      var pathPrefix = true;
+      main {
+        max-width: 420px;
+        text-align: center;
+      }
 
-      var l = window.location;
-      var repoName = '/ADHD-CADDI';
+      h1 {
+        margin-bottom: 12px;
+        font-size: 2rem;
+      }
 
-      l.replace(
-        l.protocol +
-          '//' +
-          l.hostname +
-          (l.port ? ':' + l.port : '') +
-          repoName +
-          '/?/' +
-          l.pathname.slice(repoName.length + 1).replace(/&/g, '~and~') +
-          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-          l.hash,
-      );
-    </script>
+      p {
+        margin: 0;
+        line-height: 1.5;
+      }
+    </style>
   </head>
   <body>
-    Redirecting...
+    <main>
+      <h1>Page not found</h1>
+      <p>The page you requested does not exist on this site.</p>
+    </main>
   </body>
 </html>
