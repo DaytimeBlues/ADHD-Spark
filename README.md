@@ -44,6 +44,11 @@ npm run web
 
 The app will be available at `http://localhost:3000`.
 
+Useful direct routes during web development:
+
+- Diagnostics: `http://localhost:3000/diagnostics`
+- Pomodoro: `http://localhost:3000/pomodoro`
+
 ### Running Checks
 
 ```bash

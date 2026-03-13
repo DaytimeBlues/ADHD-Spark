@@ -11,9 +11,8 @@ import {
   CHECK_IN_MOODS,
 } from '../src/screens/check-in/checkInData';
 
-const isLivePagesSmoke = (process.env.PLAYWRIGHT_BASE_URL ?? '').includes(
-  'github.io/ADHD-CADDI/',
-);
+const skipDynamicCheckInQuotes =
+  process.env.PLAYWRIGHT_SKIP_DYNAMIC_CHECKIN_QUOTES === 'true';
 
 test.describe('Bubble Features: Interruption & Vignette Check-ins', () => {
   test('main bubble opens inbox when review items are waiting', async ({
@@ -84,7 +83,7 @@ test.describe('Bubble Features: Interruption & Vignette Check-ins', () => {
     const checkInScreen = page.getByLabel('Check-in screen');
     await expect(checkInScreen).toBeVisible();
 
-    if (!isLivePagesSmoke) {
+    if (!skipDynamicCheckInQuotes) {
       await expect(
         checkInScreen.getByText(CHECK_IN_MOODS[0].quote, { exact: false }),
       ).toBeVisible();

@@ -22,12 +22,9 @@ import RetentionService, {
 import useReducedMotion from '../hooks/useReducedMotion';
 import useEntranceAnimation from '../hooks/useEntranceAnimation';
 import { useTheme } from '../theme/useTheme';
-import { Tokens } from '../theme/tokens';
-import { ModeCardMode } from './ModeCard';
 import { ROUTES } from '../navigation/routes';
 import { CosmicBackground } from '../ui/cosmic';
 import { NightAweBackground } from '../ui/nightAwe';
-import AppIcon from '../components/AppIcon';
 import { getStyles } from './HomeScreen.styles';
 import { isAndroid } from '../utils/PlatformUtils';
 import { useHomeMetrics } from './home/useHomeMetrics';
@@ -35,20 +32,15 @@ import { HomeActivationCard } from './home/HomeActivationCard';
 import { HomeOverlayCard } from './home/HomeOverlayCard';
 import { HomeDebugPanel } from './home/HomeDebugPanel';
 import { HomeModesGrid } from './home/HomeModesGrid';
+import { HomeHeader } from './home/HomeHeader';
+import { HOME_MODE_CARD_WIDTH } from './home/constants';
+import { useHomeModes } from './home/useHomeModes';
+import {
+  HomeNavigationNode,
+  useHomeNavigation,
+} from './home/useHomeNavigation';
 
-type NavigatorState = {
-  routeNames?: string[];
-};
-
-type Mode = { id: string } & ModeCardMode;
-
-type NavigationNode = {
-  navigate: (routeName: string) => void;
-  getState?: () => NavigatorState | undefined;
-  getParent?: () => NavigationNode | undefined;
-};
-
-const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
+const HomeScreen = ({ navigation }: { navigation: HomeNavigationNode }) => {
   const { isNightAwe, t, variant } = useTheme();
   const [streak, setStreak] = useState(0);
 
@@ -81,75 +73,8 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     activationTrend,
     reentryPromptLevel,
   );
-
-  const cardWidth = '49%';
-
-  const modes = useMemo<Mode[]>(
-    () => [
-      {
-        id: 'resume',
-        name: 'Resume',
-        icon: 'play-circle',
-        desc: 'CONTINUE',
-        accent: isNightAwe
-          ? t.colors.nightAwe?.feature?.home || t.colors.semantic.primary
-          : '#8B5CF6',
-      },
-      {
-        id: 'ignite',
-        name: 'Ignite',
-        icon: 'fire',
-        desc: 'START TASKS',
-        accent: isNightAwe
-          ? t.colors.nightAwe?.feature?.ignite ||
-            t.colors.semantic.secondary ||
-            Tokens.colors.indigo.primary
-          : '#8B5CF6',
-      },
-      {
-        id: 'fogcutter',
-        name: 'Fog Cutter',
-        icon: 'weather-windy',
-        desc: 'BREAK IT DOWN',
-        accent: isNightAwe
-          ? t.colors.nightAwe?.feature?.fogCutter || t.colors.semantic.primary
-          : '#8B5CF6',
-      },
-      {
-        id: 'pomodoro',
-        name: 'Pomodoro',
-        icon: 'timer-sand',
-        desc: 'STAY ON TRACK',
-        accent: isNightAwe ? t.colors.semantic.info : '#2DD4BF',
-      },
-      {
-        id: 'anchor',
-        name: 'Anchor',
-        icon: 'anchor',
-        desc: 'REGULATE',
-        accent: isNightAwe
-          ? t.colors.semantic.secondary || Tokens.colors.indigo.primary
-          : '#243BFF',
-      },
-      {
-        id: 'checkin',
-        name: 'Check In',
-        icon: 'chart-bar',
-        desc: 'TRACK MOOD',
-        accent: isNightAwe
-          ? t.colors.nightAwe?.feature?.checkIn || t.colors.semantic.info
-          : '#2DD4BF',
-      },
-      {
-        id: 'cbtguide',
-        name: 'CBT Guide',
-        icon: 'brain',
-        desc: 'LEARN',
-        accent: isNightAwe ? t.colors.semantic.primary : '#8B5CF6',
-      },
-    ],
-    [isNightAwe, t.colors.nightAwe, t.colors.semantic],
-  );
+  const modes = useHomeModes(variant, t);
+  const { navigateByRouteName, handlePress } = useHomeNavigation(navigation);
 
   const { fadeAnims, slideAnims } = useEntranceAnimation(
     modes.length,
@@ -194,91 +119,28 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
     loadStreak();
   }, [loadStreak]);
 
-  const navigateByRouteName = useCallback(
-    (routeName: string) => {
-      let currentNavigator: NavigationNode | undefined = navigation;
-
-      while (currentNavigator) {
-        const routeNames = currentNavigator.getState?.()?.routeNames;
-        if (Array.isArray(routeNames) && routeNames.includes(routeName)) {
-          currentNavigator.navigate(routeName);
-          return;
-        }
-        currentNavigator = currentNavigator.getParent?.();
-      }
-
-      navigation.navigate(routeName);
-    },
-    [navigation],
-  );
-
-  const handlePress = useCallback(
-    (modeId: string) => {
-      if (modeId === 'checkin') {
-        navigateByRouteName(ROUTES.CHECK_IN);
-      } else if (modeId === 'cbtguide') {
-        navigateByRouteName(ROUTES.CBT_GUIDE);
-      } else if (modeId === 'fogcutter') {
-        navigateByRouteName(ROUTES.FOG_CUTTER);
-      } else if (modeId === 'pomodoro') {
-        navigateByRouteName(ROUTES.POMODORO);
-      } else if (modeId === 'anchor') {
-        navigateByRouteName(ROUTES.ANCHOR);
-      } else {
-        navigateByRouteName(ROUTES.FOCUS);
-      }
-    },
-    [navigateByRouteName],
-  );
-
   const styles = useMemo(() => getStyles(variant, t), [t, variant]);
 
   const content = (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.maxWidthWrapper}>
-          <View style={styles.header}>
-            <View>
-              <Text
-                style={styles.title}
-                testID="home-title"
-                accessibilityLabel="home-title"
-              >
-                SPARK_PRO
-              </Text>
-              <View style={styles.systemStatusRow}>
-                <Text style={styles.systemStatusText}>SYS.ONLINE</Text>
-                <View style={styles.statusDot} />
-              </View>
-            </View>
-            <View style={styles.headerRight}>
-              <TouchableOpacity
-                onPress={() => navigateByRouteName(ROUTES.DIAGNOSTICS)}
-                style={styles.settingsButton}
-                accessibilityLabel="Settings and Diagnostics"
-              >
-                <AppIcon
-                  name="cog-outline"
-                  size={18}
-                  color={styles.settingsButtonText.color}
-                />
-              </TouchableOpacity>
-              <View
-                style={styles.streakBadge}
-                testID="home-streak-badge"
-                accessibilityRole="text"
-                accessibilityLabel={`Streak: ${streak} ${streak !== 1 ? 'days' : 'day'}`}
-              >
-                <Text
-                  style={styles.streakText}
-                  testID="home-streak"
-                  accessibilityLabel="home-streak"
-                >
-                  STREAK.{streak.toString().padStart(3, '0')}
-                </Text>
-              </View>
-            </View>
-          </View>
+          <HomeHeader
+            streak={streak}
+            styles={{
+              header: styles.header,
+              title: styles.title,
+              systemStatusRow: styles.systemStatusRow,
+              systemStatusText: styles.systemStatusText,
+              statusDot: styles.statusDot,
+              headerRight: styles.headerRight,
+              settingsButton: styles.settingsButton,
+              settingsButtonText: styles.settingsButtonText,
+              streakBadge: styles.streakBadge,
+              streakText: styles.streakText,
+            }}
+            onOpenDiagnostics={() => navigateByRouteName(ROUTES.DIAGNOSTICS)}
+          />
 
           {hasActivationData && activationSummary && (
             <HomeActivationCard
@@ -345,7 +207,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationNode }) => {
             modes={modes}
             fadeAnims={fadeAnims}
             slideAnims={slideAnims}
-            cardWidth={cardWidth}
+            cardWidth={HOME_MODE_CARD_WIDTH}
             styles={{
               modesGrid: styles.modesGrid,
               negativeMarginTop24: styles.negativeMarginTop24,

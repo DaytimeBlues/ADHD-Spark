@@ -1,13 +1,5 @@
 import React, { useMemo } from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-} from 'react-native';
+import { SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { ROUTES } from '../navigation/routes';
 import { useTheme } from '../theme/useTheme';
@@ -29,6 +21,9 @@ import { useTaskStore } from '../store/useTaskStore';
 import useBrainDumpTutorial from './brain-dump/useBrainDumpTutorial';
 import { getBrainDumpStyles } from './brain-dump/brainDumpStyles';
 import { BrainDumpSortedSection } from './brain-dump/BrainDumpSortedSection';
+import { BrainDumpHeader } from './brain-dump/BrainDumpHeader';
+import { BrainDumpStatusSection } from './brain-dump/BrainDumpStatusSection';
+import { BrainDumpActiveTasksSection } from './brain-dump/BrainDumpActiveTasksSection';
 
 type BrainDumpRouteParams = {
   autoRecord?: boolean;
@@ -42,10 +37,9 @@ type BrainDumpRoute = RouteProp<
 const BrainDumpScreen = () => {
   const { isCosmic, isNightAwe, t, variant } = useTheme();
   const styles = useMemo(() => getBrainDumpStyles(variant, t), [t, variant]);
-  const loadingSpinnerColor =
-    isNightAwe
-      ? t.colors.nightAwe?.feature?.brainDump || t.colors.semantic.primary
-      : t.colors.brand[500];
+  const loadingSpinnerColor = isNightAwe
+    ? t.colors.nightAwe?.feature?.brainDump || t.colors.semantic.primary
+    : t.colors.brand[500];
   const route = useRoute<BrainDumpRoute>();
   const storeTasks = useTaskStore((state) => state.tasks);
   const activeTasks = useMemo(
@@ -84,6 +78,17 @@ const BrainDumpScreen = () => {
     dismissGuide,
     getPriorityStyle,
   } = useBrainDump(route.params?.autoRecord);
+  const canConnectGoogle = googleAuthRequired && !isWeb;
+  const sortedSectionStyles = {
+    sortedSection: styles.sortedSection,
+    sortedHeader: styles.sortedHeader,
+    categorySection: styles.categorySection,
+    categoryTitle: styles.categoryTitle,
+    sortedItemRow: styles.sortedItemRow,
+    sortedItemText: styles.sortedItemText,
+    priorityBadge: styles.priorityBadge,
+    priorityText: styles.priorityText,
+  };
 
   const content = (
     <SafeAreaView
@@ -93,37 +98,25 @@ const BrainDumpScreen = () => {
     >
       <View style={styles.centerContainer}>
         <View style={styles.contentWrapper}>
-          <View style={styles.header}>
-            <Text style={styles.title}>BRAIN_DUMP</Text>
-            <View style={styles.headerLine} />
-            <Pressable
-              onPress={() => startTutorial(brainDumpOnboardingFlow)}
-              accessibilityRole="button"
-              accessibilityLabel="Start brain dump tutorial"
-              testID="brain-dump-tour-button"
-              style={({ pressed }) => [
-                styles.tourButton,
-                pressed && styles.tourButtonPressed,
-              ]}
-            >
-              <Text style={styles.tourButtonText}>TOUR</Text>
-            </Pressable>
-          </View>
-
-          {currentTutorialStep && (
-            <View style={styles.tutorialOverlay} testID="tutorial-overlay">
-              <TutorialBubble
-                step={currentTutorialStep}
-                stepIndex={currentStepIndex}
-                totalSteps={totalSteps}
-                isFirstStep={currentStepIndex === 0}
-                isLastStep={currentStepIndex === totalSteps - 1}
-                onNext={nextStep}
-                onPrevious={previousStep}
-                onSkip={skipTutorial}
-              />
-            </View>
-          )}
+          <BrainDumpHeader
+            styles={{
+              header: styles.header,
+              title: styles.title,
+              headerLine: styles.headerLine,
+              tourButton: styles.tourButton,
+              tourButtonPressed: styles.tourButtonPressed,
+              tourButtonText: styles.tourButtonText,
+              tutorialOverlay: styles.tutorialOverlay,
+            }}
+            currentTutorialStep={currentTutorialStep}
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            brainDumpOnboardingFlow={brainDumpOnboardingFlow}
+            startTutorial={startTutorial}
+            nextStep={nextStep}
+            previousStep={previousStep}
+            skipTutorial={skipTutorial}
+          />
 
           <BrainDumpRationale />
 
@@ -137,53 +130,41 @@ const BrainDumpScreen = () => {
             onRecordPress={handleRecordPress}
           />
 
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color={loadingSpinnerColor} />
-              <Text style={styles.loadingText}>LOADING...</Text>
-            </View>
-          ) : (
-            <BrainDumpActionBar
-              itemCount={items.length}
-              isSorting={isSorting}
-              onSort={handleAISort}
-              onClear={clearAll}
-            />
-          )}
-
-          {sortingError && (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{sortingError}</Text>
-              {googleAuthRequired && !isWeb && (
-                <Pressable
-                  onPress={handleConnectGoogle}
-                  disabled={isConnectingGoogle}
-                  style={({ pressed }) => [
-                    styles.connectButton,
-                    isConnectingGoogle && styles.connectButtonDisabled,
-                    pressed && styles.connectButtonPressed,
-                  ]}
-                >
-                  <Text style={styles.connectButtonText}>
-                    {isConnectingGoogle ? 'CONNECTING...' : 'CONNECT GOOGLE'}
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-          )}
+          <BrainDumpStatusSection
+            styles={{
+              loadingContainer: styles.loadingContainer,
+              loadingText: styles.loadingText,
+              errorContainer: styles.errorContainer,
+              errorText: styles.errorText,
+              connectButton: styles.connectButton,
+              connectButtonDisabled: styles.connectButtonDisabled,
+              connectButtonPressed: styles.connectButtonPressed,
+              connectButtonText: styles.connectButtonText,
+            }}
+            isLoading={isLoading}
+            isSorting={isSorting}
+            itemCount={items.length}
+            sortingError={sortingError}
+            googleAuthRequired={googleAuthRequired}
+            isConnectingGoogle={isConnectingGoogle}
+            canConnectGoogle={canConnectGoogle}
+            loadingSpinnerColor={loadingSpinnerColor}
+            onSort={handleAISort}
+            onClear={clearAll}
+            onConnectGoogle={handleConnectGoogle}
+          />
 
           <IntegrationPanel />
 
-          {activeTasks.length > 0 && (
-            <View style={styles.sortedSection}>
-              <Text style={styles.sortedHeader}>ACTIVE_TASKS</Text>
-              {activeTasks.map((taskItem) => (
-                <View key={taskItem.id} style={styles.sortedItemRow}>
-                  <Text style={styles.sortedItemText}>{taskItem.title}</Text>
-                </View>
-              ))}
-            </View>
-          )}
+          <BrainDumpActiveTasksSection
+            tasks={activeTasks}
+            styles={{
+              sortedSection: styles.sortedSection,
+              sortedHeader: styles.sortedHeader,
+              sortedItemRow: styles.sortedItemRow,
+              sortedItemText: styles.sortedItemText,
+            }}
+          />
 
           <FlatList
             data={items}
@@ -204,16 +185,7 @@ const BrainDumpScreen = () => {
               sortedItems.length > 0 ? (
                 <BrainDumpSortedSection
                   groupedSortedItems={groupedSortedItems}
-                  styles={{
-                    sortedSection: styles.sortedSection,
-                    sortedHeader: styles.sortedHeader,
-                    categorySection: styles.categorySection,
-                    categoryTitle: styles.categoryTitle,
-                    sortedItemRow: styles.sortedItemRow,
-                    sortedItemText: styles.sortedItemText,
-                    priorityBadge: styles.priorityBadge,
-                    priorityText: styles.priorityText,
-                  }}
+                  styles={sortedSectionStyles}
                   getPriorityStyle={getPriorityStyle}
                 />
               ) : null

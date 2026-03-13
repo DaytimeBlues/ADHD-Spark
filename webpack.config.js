@@ -29,6 +29,9 @@ const copyPublicAssets = {
   },
 };
 
+const GENERATED_OUTPUT_PATTERN =
+  /[\\/](dist|playwright-report|test-results|coverage|historical-reports)[\\/]/;
+
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   const disableDevOverlay = Boolean(process.env.CI);
@@ -177,11 +180,14 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: './public/index.html',
       }),
-      copyPublicAssets,
+      ...(isProduction ? [copyPublicAssets] : []),
     ],
     devServer: {
       static: {
         directory: path.join(__dirname, 'public'),
+        watch: {
+          ignored: GENERATED_OUTPUT_PATTERN,
+        },
       },
       headers: {
         'Cache-Control': 'no-store',
@@ -195,7 +201,8 @@ module.exports = (env, argv) => {
     },
     watchOptions: {
       poll: 1000,
-      ignored: /node_modules/,
+      ignored:
+        /node_modules|[\\/](dist|playwright-report|test-results|coverage|historical-reports)[\\/]/,
     },
   };
 };
