@@ -1,18 +1,13 @@
-# ADHD-CADDI - Web App and React Native
-
-A behavioral activation tool for ADHD, designed primarily for the browser with an optional React Native mobile bridge.
+# ADHD-CADDI - React Native and Android
 
 > [!IMPORTANT]
-> Primary workflow: most development should happen in the web path. It gives the full app experience in a browser and is the main deployment target.
-
-> [!NOTE]
-> `codex/night-awe` in `C:\dev\ADHD-CADDI-V1-NIGHT-AWE` is an isolated UI experiment worktree. Changes here should not influence the main app branch until the experiment is reviewed and explicitly approved as ready.
+> Active release path: Android is the authoritative deployment and verification target. Web tooling remains available for local/shared development, but GitHub Pages is not the production release path.
 
 ## Deployment Status
 
-- Live web app: [https://daytimeblues.github.io/ADHD-CADDI/](https://daytimeblues.github.io/ADHD-CADDI/)
-- Production deploy path: push reviewed changes to `main` and let `.github/workflows/pages.yml` publish GitHub Pages
-- Android verification path: `.github/workflows/android.yml` builds debug and release APK artifacts on CI
+- Release verification path: `.github/workflows/android.yml` builds debug and release APK artifacts on CI
+- Local install paths: `npm run install:android:dev` and `npm run install:android:preview`
+- Web remains available as a local development surface via `npm run web`
 
 ## Features
 
@@ -23,13 +18,13 @@ A behavioral activation tool for ADHD, designed primarily for the browser with a
 - Check In: mood and energy tracking
 - Brain Dump: quick capture for racing thoughts
 - Calendar: simple monthly view
-- Cosmic Theme: default deep-space visual treatment
+- Theme variants: Linear, Cosmic, and Night Awe
 
 ## Getting Started (Web)
 
-This is the recommended way to run and test the app.
+Use this for local development and shared UI iteration.
 
-Offline/PWA status: the app is currently web-first and online-first. Service worker registration is intentionally disabled, so treat the deployed site as an online web app rather than a supported PWA or offline surface.
+Offline/PWA status: web remains a local development surface and is still online-first. Service worker registration is intentionally disabled, so do not treat web as a supported offline/PWA release surface.
 
 ### Prerequisites
 
@@ -59,27 +54,16 @@ npm test
 npm run lint
 npx tsc --noEmit
 
-# Browser smoke test
-npm run e2e:smoke
-
 # Lightweight admin checks
 npm run admin:check
 ```
-
-### Deploying
-
-```bash
-git push origin main
-```
-
-`npm run deploy` still exists as a manual `gh-pages` helper, but the production site now deploys through the GitHub Actions Pages workflow instead of that script.
 
 ### Branch Workflow
 
 1. Create a branch from `main`.
 2. Run local checks.
 3. Push the branch for review.
-4. Merge to `main` only when ready for CI and Pages deployment.
+4. Merge to `main` only when ready for Android CI verification.
 
 If the change is isolated or experimental, do not push directly to `main`.
 
@@ -138,7 +122,7 @@ npm run test:e2e:android
 - Logic: TypeScript
 - State/Storage: AsyncStorage
 - Testing: Jest plus Playwright
-- Deployment: GitHub Pages
+- Release verification: Android CI / local Android install flows
 
 ## Config and Operations
 

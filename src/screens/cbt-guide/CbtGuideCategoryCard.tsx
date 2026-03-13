@@ -3,19 +3,25 @@ import { Pressable, Text, View } from 'react-native';
 import { GlowCard, RuneButton } from '../../ui/cosmic';
 import { getCbtGuideStyles } from './cbtGuideStyles';
 import type { CBTCategory } from './cbtGuideData';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 
 interface Props {
   category: CBTCategory;
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
   onFeaturePress: (route: string) => void;
 }
 
 export const CbtGuideCategoryCard = ({
   category,
-  isCosmic,
+  variant,
+  t,
   onFeaturePress,
 }: Props) => {
-  const styles = getCbtGuideStyles(isCosmic);
+  const styles = getCbtGuideStyles(variant, t);
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
 
   return (
     <GlowCard glow="none" tone="base" padding="lg" style={styles.categoryCard}>
@@ -39,6 +45,25 @@ export const CbtGuideCategoryCard = ({
             >
               {feature.name.toUpperCase()}
             </RuneButton>
+          ) : isNightAwe ? (
+            <Pressable
+              key={feature.route}
+              style={({ pressed }) => [
+                styles.featureButton,
+                styles.featureButtonNightAwe,
+                pressed && styles.featureButtonPressed,
+              ]}
+              onPress={() => onFeaturePress(feature.route)}
+            >
+              <Text
+                style={[
+                  styles.featureButtonText,
+                  styles.featureButtonTextNightAwe,
+                ]}
+              >
+                {feature.name.toUpperCase()}
+              </Text>
+            </Pressable>
           ) : (
             <Pressable
               key={feature.route}

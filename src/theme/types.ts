@@ -49,7 +49,7 @@ interface ThemeLayout extends ThemeUnknownRecord {
 
 interface ThemeMotion extends ThemeUnknownRecord {
   scales?: Record<string, number>;
-  transitions?: Record<string, string>;
+  transitions?: Record<string, string | undefined>;
 }
 
 type ThemeColorValue =

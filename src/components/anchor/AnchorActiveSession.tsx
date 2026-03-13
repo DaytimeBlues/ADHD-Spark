@@ -5,6 +5,7 @@ import { useTheme } from '../../theme/useTheme';
 import { ChronoDigits, HaloRing, RuneButton } from '../../ui/cosmic';
 import { LinearButton } from '../ui/LinearButton';
 import { PatternConfig } from '../../hooks/useAnchorSession';
+import type { ThemeTokens } from '../../theme/types';
 import { isWeb } from '../../utils/PlatformUtils';
 
 interface AnchorActiveSessionProps {
@@ -25,8 +26,8 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
   count,
   onStop,
 }) => {
-  const { isCosmic } = useTheme();
-  const styles = getStyles(isCosmic);
+  const { isCosmic, isNightAwe, t } = useTheme();
+  const styles = getStyles(isCosmic, isNightAwe, t);
 
   return (
     <View style={styles.activeContainer}>
@@ -87,14 +88,18 @@ export const AnchorActiveSession: React.FC<AnchorActiveSessionProps> = ({
   );
 };
 
-const getStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+const getStyles = (isCosmic: boolean, isNightAwe: boolean, t: ThemeTokens) => {
+  const type = t.type ?? Tokens.type;
+  const fontFamily = type.fontFamily ?? Tokens.type.fontFamily;
+  const textColors = t.colors.text ?? Tokens.colors.text;
+
+  return StyleSheet.create({
     activeContainer: {
       alignItems: 'center',
       justifyContent: 'space-between',
       width: '100%',
       flex: 1,
-      paddingVertical: Tokens.spacing[8],
+      paddingVertical: t.spacing[8],
     },
     activeHeader: {
       alignItems: 'center',
@@ -102,7 +107,11 @@ const getStyles = (isCosmic: boolean) =>
     },
     patternName: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[400],
+      color: isNightAwe
+        ? t.colors.nightAwe?.feature?.anchor || '#AFC7FF'
+        : isCosmic
+          ? '#8B5CF6'
+          : t.colors.brand[400],
       fontSize: Tokens.type['2xl'],
       fontWeight: '600',
       letterSpacing: 1,
@@ -113,7 +122,7 @@ const getStyles = (isCosmic: boolean) =>
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
-      marginVertical: Tokens.spacing[8],
+      marginVertical: t.spacing[8],
     },
     breathingOverlay: {
       position: 'absolute',
@@ -127,8 +136,8 @@ const getStyles = (isCosmic: boolean) =>
     circle: {
       width: INNER_CIRCLE_SIZE,
       height: INNER_CIRCLE_SIZE,
-      borderRadius: Tokens.radii.full,
-      backgroundColor: Tokens.colors.brand[600],
+      borderRadius: t.radii.full,
+      backgroundColor: isNightAwe ? '#AFC7FF' : t.colors.brand[600],
       position: 'absolute',
       opacity: 0.3,
       ...Platform.select({
@@ -136,17 +145,23 @@ const getStyles = (isCosmic: boolean) =>
       }),
     },
     phaseText: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      fontFamily: fontFamily.sans,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : textColors.primary,
       fontSize: Tokens.type['2xl'],
       fontWeight: '700',
       zIndex: 1,
-      marginBottom: Tokens.spacing[2],
+      marginBottom: t.spacing[2],
       letterSpacing: 1,
     },
     countText: {
-      fontFamily: Tokens.type.fontFamily.mono,
-      color: Tokens.colors.text.tertiary,
+      fontFamily: fontFamily.mono,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : textColors.tertiary,
       fontSize: Tokens.type['5xl'],
       fontWeight: '800',
       zIndex: 1,
@@ -155,3 +170,4 @@ const getStyles = (isCosmic: boolean) =>
       minWidth: 200,
     },
   });
+};

@@ -18,8 +18,8 @@ interface GoogleCalendarConnectionProps {
 export const GoogleCalendarConnection: React.FC<
   GoogleCalendarConnectionProps
 > = ({ statusText, buttonText, isButtonDisabled, onConnect }) => {
-  const { isCosmic } = useTheme();
-  const styles = calendarStyles(isCosmic);
+  const { variant, t } = useTheme();
+  const styles = calendarStyles(variant, t);
 
   return (
     <GlowCard glow="none" style={styles.googleCalendarCard}>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '../../../theme/useTheme';
 import { Tokens } from '../../../theme/tokens';
 import type { DiagnosticEntry } from '../types';
 
@@ -38,6 +39,13 @@ const getStatusIndicator = (status: DiagnosticEntry['status']) => {
 export const DiagnosticsStatusSection = ({
   diagnostics,
 }: DiagnosticsStatusSectionProps) => {
+  const { isNightAwe, t } = useTheme();
+  const styles = getStyles(
+    isNightAwe,
+    t.colors.text?.primary,
+    t.colors.text?.secondary,
+  );
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>SYSTEM STATUS</Text>
@@ -66,48 +74,57 @@ export const DiagnosticsStatusSection = ({
   );
 };
 
-const styles = StyleSheet.create({
-  section: {
-    marginBottom: Tokens.spacing[6],
-  },
-  sectionTitle: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    color: Tokens.colors.text.secondary,
-    letterSpacing: 1,
-    marginBottom: Tokens.spacing[2],
-  },
-  diagRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingVertical: Tokens.spacing[2],
-    borderBottomWidth: 1,
-    borderBottomColor: Tokens.colors.neutral.borderSubtle,
-  },
-  diagLabelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  diagIndicator: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: 12,
-    marginRight: Tokens.spacing[1],
-    width: 16,
-    textAlign: 'center',
-  },
-  diagLabel: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: 13,
-    color: Tokens.colors.text.primary,
-    flex: 1,
-  },
-  diagValue: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: 11,
-    textAlign: 'right',
-    maxWidth: '50%',
-  },
-});
+const getStyles = (
+  isNightAwe: boolean,
+  primaryText: string | undefined = Tokens.colors.text.primary,
+  secondaryText: string | undefined = Tokens.colors.text.secondary,
+) =>
+  StyleSheet.create({
+    section: {
+      marginBottom: Tokens.spacing[6],
+    },
+    sectionTitle: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: 10,
+      fontWeight: '700',
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.secondary,
+      letterSpacing: 1,
+      marginBottom: Tokens.spacing[2],
+    },
+    diagRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      paddingVertical: Tokens.spacing[2],
+      borderBottomWidth: 1,
+      borderBottomColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.12)'
+        : Tokens.colors.neutral.borderSubtle,
+    },
+    diagLabelContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
+    diagIndicator: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: 12,
+      marginRight: Tokens.spacing[1],
+      width: 16,
+      textAlign: 'center',
+    },
+    diagLabel: {
+      fontFamily: Tokens.type.fontFamily.sans,
+      fontSize: 13,
+      color: isNightAwe ? primaryText || '#F6F1E7' : Tokens.colors.text.primary,
+      flex: 1,
+    },
+    diagValue: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: 11,
+      textAlign: 'right',
+      maxWidth: '50%',
+    },
+  });

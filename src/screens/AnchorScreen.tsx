@@ -7,11 +7,13 @@ import { AnchorRationale } from '../components/anchor/AnchorRationale';
 import { PATTERNS, useAnchorSession } from '../hooks/useAnchorSession';
 import { Tokens } from '../theme/tokens';
 import { useTheme } from '../theme/useTheme';
+import type { ThemeTokens } from '../theme/types';
 import { CosmicBackground } from '../ui/cosmic';
+import { NightAweBackground } from '../ui/nightAwe';
 
 const AnchorScreen = () => {
-  const { isCosmic } = useTheme();
-  const styles = getStyles(isCosmic);
+  const { isCosmic, isNightAwe, variant, t } = useTheme();
+  const styles = getStyles(variant, t);
   const {
     pattern,
     count,
@@ -59,14 +61,28 @@ const AnchorScreen = () => {
     );
   }
 
+  if (isNightAwe) {
+    return (
+      <NightAweBackground
+        variant="focus"
+        activeFeature="anchor"
+        motionMode="idle"
+      >
+        {content}
+      </NightAweBackground>
+    );
+  }
+
   return content;
 };
 
-const getStyles = (isCosmic: boolean) =>
+const getStyles = (variant: 'linear' | 'cosmic' | 'nightAwe', t: ThemeTokens) =>
   StyleSheet.create({
+    // ThemeTokens keeps layout optional for migration safety, so screens resolve to shared base values.
     container: {
       flex: 1,
-      backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darkest,
+      backgroundColor:
+        variant === 'linear' ? Tokens.colors.neutral.darkest : 'transparent',
     },
     scrollContent: {
       flex: 1,
@@ -75,10 +91,12 @@ const getStyles = (isCosmic: boolean) =>
     content: {
       flex: 1,
       width: '100%',
-      maxWidth: Tokens.layout.maxWidth.prose,
-      paddingHorizontal: Tokens.spacing[6],
-      paddingTop: Tokens.spacing[12],
-      paddingBottom: Tokens.spacing[8],
+      maxWidth:
+        (t.layout?.maxWidth?.prose as number | undefined) ??
+        Tokens.layout.maxWidth.prose,
+      paddingHorizontal: t.spacing[6],
+      paddingTop: t.spacing[12],
+      paddingBottom: t.spacing[8],
       alignItems: 'center',
     },
   });

@@ -95,4 +95,9 @@ export const featureColors = {
   tasks: nightAweColors.tasksAccent,
   brainDump: nightAweColors.brainDumpAccent,
   checkIn: nightAweColors.checkInAccent,
+  anchor: nightAweColors.checkInAccent,
+  calendar: nightAweColors.homeAccent,
+  cbtGuide: nightAweColors.tasksAccent,
+  chat: nightAweColors.brainDumpAccent,
+  pomodoro: nightAweColors.igniteAccent,
 } as const;

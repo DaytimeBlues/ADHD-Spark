@@ -16,7 +16,7 @@ import { isWeb } from '../utils/PlatformUtils';
 
 export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
   const { width } = useWindowDimensions();
-  const { isCosmic } = useTheme();
+  const { isCosmic, isNightAwe, t } = useTheme();
   const isSmallScreen = width < 450;
 
   const cosmicColors = useMemo(
@@ -34,6 +34,21 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
     }),
     [],
   );
+  const nightAweColors = useMemo(
+    () => ({
+      bg: '#08111E',
+      border: t.colors.nightAwe?.surface?.border || 'rgba(175, 199, 255, 0.16)',
+      textPrimary: t.colors.text?.primary || '#F6F1E7',
+      textSecondary: t.colors.text?.secondary || '#C9D5E8',
+      accent: t.colors.nightAwe?.feature?.home || '#AFC7FF',
+      logoGlow: isWeb
+        ? ({
+            textShadow: '0 0 18px rgba(175, 199, 255, 0.28)',
+          } as unknown as TextStyle)
+        : undefined,
+    }),
+    [t],
+  );
 
   return (
     <View
@@ -42,10 +57,14 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
         {
           backgroundColor: isCosmic
             ? cosmicColors.bg
-            : Tokens.colors.neutral.darkest,
+            : isNightAwe
+              ? nightAweColors.bg
+              : Tokens.colors.neutral.darkest,
           borderBottomColor: isCosmic
             ? cosmicColors.border
-            : Tokens.colors.neutral.borderSubtle,
+            : isNightAwe
+              ? nightAweColors.border
+              : Tokens.colors.neutral.borderSubtle,
           paddingHorizontal: isSmallScreen
             ? Tokens.spacing[3]
             : Tokens.spacing[6],
@@ -61,9 +80,15 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
             {
               color: isCosmic
                 ? cosmicColors.textPrimary
-                : Tokens.colors.text.primary,
+                : isNightAwe
+                  ? nightAweColors.textPrimary
+                  : Tokens.colors.text.primary,
             },
-            isCosmic ? cosmicColors.logoGlow : undefined,
+            isCosmic
+              ? cosmicColors.logoGlow
+              : isNightAwe
+                ? nightAweColors.logoGlow
+                : undefined,
           ]}
         >
           CADDI
@@ -97,7 +122,9 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
 
           const accentColor = isCosmic
             ? cosmicColors.accent
-            : Tokens.colors.indigo.primary;
+            : isNightAwe
+              ? nightAweColors.accent
+              : Tokens.colors.indigo.primary;
 
           return (
             <Pressable
@@ -128,10 +155,14 @@ export const WebNavBar = ({ state, navigation }: BottomTabBarProps) => {
                     color: isFocused
                       ? isCosmic
                         ? cosmicColors.textPrimary
-                        : Tokens.colors.text.primary
+                        : isNightAwe
+                          ? nightAweColors.textPrimary
+                          : Tokens.colors.text.primary
                       : isCosmic
                         ? cosmicColors.textSecondary
-                        : Tokens.colors.text.secondary,
+                        : isNightAwe
+                          ? nightAweColors.textSecondary
+                          : Tokens.colors.text.secondary,
                   },
                   isFocused ? styles.textBold : styles.textMedium,
                 ]}

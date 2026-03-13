@@ -1,11 +1,17 @@
 import { Platform, StyleSheet } from 'react-native';
 import { Tokens } from '../../theme/tokens';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 
-export const getCbtGuideStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+export const getCbtGuideStyles = (variant: ThemeVariant, t: ThemeTokens) => {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+
+  return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: isCosmic ? 'transparent' : Tokens.colors.neutral.darkest,
+      backgroundColor:
+        variant === 'linear' ? Tokens.colors.neutral.darkest : 'transparent',
     },
     scrollContent: {
       flexGrow: 1,
@@ -26,13 +32,19 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type['4xl'],
       fontWeight: '800',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? t.colors.text?.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       letterSpacing: 2,
     },
     headerSubtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.base,
-      color: Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? t.colors.text?.secondary || '#C9D5E8'
+        : Tokens.colors.text.secondary,
       marginTop: 2,
       letterSpacing: 1,
     },
@@ -40,16 +52,20 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       marginRight: Tokens.spacing[4],
       width: 44,
       height: 44,
-      borderRadius: isCosmic ? 8 : Tokens.radii.none,
-      backgroundColor: isCosmic
-        ? 'rgba(42, 53, 82, 0.3)'
-        : Tokens.colors.neutral.darker,
+      borderRadius: variant === 'linear' ? Tokens.radii.none : 8,
+      backgroundColor: isNightAwe
+        ? '#16283F'
+        : isCosmic
+          ? 'rgba(42, 53, 82, 0.3)'
+          : Tokens.colors.neutral.darker,
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(42, 53, 82, 0.3)'
-        : Tokens.colors.neutral.borderSubtle,
+      borderColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.16)'
+        : isCosmic
+          ? 'rgba(42, 53, 82, 0.3)'
+          : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           transition: Tokens.motion.transitions.base,
@@ -58,10 +74,16 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       }),
     },
     backButtonHovered: {
-      backgroundColor: isCosmic
-        ? 'rgba(42, 53, 82, 0.5)'
-        : Tokens.colors.neutral.dark,
-      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.text.tertiary,
+      backgroundColor: isNightAwe
+        ? '#21344D'
+        : isCosmic
+          ? 'rgba(42, 53, 82, 0.5)'
+          : Tokens.colors.neutral.dark,
+      borderColor: isNightAwe
+        ? t.colors.nightAwe?.feature?.cbtGuide || '#AFC7FF'
+        : isCosmic
+          ? '#8B5CF6'
+          : Tokens.colors.text.tertiary,
       transform: [{ scale: Tokens.motion.scales.hover }],
     },
     backButtonPressed: {
@@ -71,7 +93,11 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       transform: [{ scale: Tokens.motion.scales.press }],
     },
     backButtonText: {
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? t.colors.text?.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       fontSize: Tokens.type.h3,
       fontWeight: 'bold',
       marginTop: -2,
@@ -108,7 +134,11 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
     evidenceBullet: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: 10,
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[400],
+      color: isNightAwe
+        ? t.colors.nightAwe?.feature?.cbtGuide || '#AFC7FF'
+        : isCosmic
+          ? '#8B5CF6'
+          : Tokens.colors.brand[400],
       textTransform: 'uppercase',
     },
     linksRow: {
@@ -149,7 +179,9 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
     linkButtonText: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: 10,
-      color: Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? t.colors.text?.secondary || '#C9D5E8'
+        : Tokens.colors.text.secondary,
       fontWeight: '600',
     },
     linkBadge: {
@@ -199,14 +231,16 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       gap: Tokens.spacing[2],
     },
     featureButton: {
-      backgroundColor: Tokens.colors.neutral.dark,
+      backgroundColor: isNightAwe ? '#16283F' : Tokens.colors.neutral.dark,
       paddingVertical: Tokens.spacing[2],
       paddingHorizontal: Tokens.spacing[4],
-      borderRadius: isCosmic ? 8 : Tokens.radii.none,
+      borderRadius: variant === 'linear' ? Tokens.radii.none : 8,
       borderWidth: 1,
-      borderColor: isCosmic
-        ? 'rgba(42, 53, 82, 0.3)'
-        : Tokens.colors.neutral.borderSubtle,
+      borderColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.16)'
+        : isCosmic
+          ? 'rgba(42, 53, 82, 0.3)'
+          : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           cursor: 'pointer',
@@ -215,7 +249,11 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
       }),
     },
     featureButtonHovered: {
-      borderColor: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      borderColor: isNightAwe
+        ? t.colors.nightAwe?.feature?.cbtGuide || '#AFC7FF'
+        : isCosmic
+          ? '#8B5CF6'
+          : Tokens.colors.brand[500],
       transform: [{ translateY: -2 }],
     },
     featureButtonPressed: {
@@ -225,8 +263,21 @@ export const getCbtGuideStyles = (isCosmic: boolean) =>
     featureButtonText: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? t.colors.text?.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       fontWeight: '600',
       letterSpacing: 0.5,
     },
+    featureButtonNightAwe: {
+      backgroundColor: '#16283F',
+      borderColor: 'rgba(175, 199, 255, 0.16)',
+      borderRadius: 10,
+    },
+    featureButtonTextNightAwe: {
+      color: t.colors.text?.primary || '#F6F1E7',
+    },
   });
+};

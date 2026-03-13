@@ -4,14 +4,17 @@ import { CADDI_OVERVIEW, CADDI_SOURCES } from '../../config/caddi';
 import { EvidenceBadge } from '../../components/ui/EvidenceBadge';
 import { GlowCard } from '../../ui/cosmic';
 import { getCbtGuideStyles } from './cbtGuideStyles';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 
 interface Props {
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
   onOpenSource: (url: string) => void;
 }
 
-export const CbtGuideOverviewCard = ({ isCosmic, onOpenSource }: Props) => {
-  const styles = getCbtGuideStyles(isCosmic);
+export const CbtGuideOverviewCard = ({ variant, t, onOpenSource }: Props) => {
+  const styles = getCbtGuideStyles(variant, t);
 
   return (
     <GlowCard glow="soft" tone="raised" padding="md" style={styles.compactCard}>

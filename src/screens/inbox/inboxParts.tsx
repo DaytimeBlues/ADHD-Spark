@@ -8,7 +8,9 @@ import {
   View,
 } from 'react-native';
 import type { CaptureItem, CaptureStatus } from '../../services/CaptureService';
-import { styles } from './inboxStyles';
+import type { ThemeVariant } from '../../theme/themeVariant';
+import type { ThemeTokens } from '../../theme/types';
+import { getInboxStyles } from './inboxStyles';
 
 export type FilterTab = 'all' | CaptureStatus;
 
@@ -27,9 +29,18 @@ const SOURCE_LABELS: Record<string, string> = {
   meeting: 'Meeting',
 };
 
-export function CaptureSkeleton({ isCosmic }: { isCosmic: boolean }) {
+export function CaptureSkeleton({
+  variant,
+  t,
+}: {
+  variant: ThemeVariant;
+  t: ThemeTokens;
+}) {
+  const styles = getInboxStyles(variant, t);
   const opacity = React.useRef(new Animated.Value(0.3)).current;
   const useNativeDriver = Platform.OS !== 'web';
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
 
   React.useEffect(() => {
     const anim = Animated.loop(
@@ -53,10 +64,16 @@ export function CaptureSkeleton({ isCosmic }: { isCosmic: boolean }) {
     return () => anim.stop();
   }, [opacity, useNativeDriver]);
 
-  const bgStyle = isCosmic ? styles.skeletonBgCosmic : styles.skeletonBgLinear;
-  const blockStyle = isCosmic
-    ? styles.skeletonBlockCosmic
-    : styles.skeletonBlockLinear;
+  const bgStyle = isNightAwe
+    ? styles.skeletonBgNightAwe
+    : isCosmic
+      ? styles.skeletonBgCosmic
+      : styles.skeletonBgLinear;
+  const blockStyle = isNightAwe
+    ? styles.skeletonBlockNightAwe
+    : isCosmic
+      ? styles.skeletonBlockCosmic
+      : styles.skeletonBlockLinear;
 
   return (
     <View style={[styles.row, bgStyle]}>
@@ -89,7 +106,8 @@ interface CaptureRowProps {
   onPromoteTask: (id: string) => void;
   onPromoteNote: (id: string) => void;
   onDiscard: (id: string) => void;
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
 }
 
 export function CaptureRow({
@@ -97,33 +115,53 @@ export function CaptureRow({
   onPromoteTask,
   onPromoteNote,
   onDiscard,
-  isCosmic,
+  variant,
+  t,
 }: CaptureRowProps): JSX.Element {
+  const styles = getInboxStyles(variant, t);
   const isUnreviewed = item.status === 'unreviewed';
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
 
   return (
     <View
       testID={`capture-row-${item.id}`}
       style={[
         styles.row,
-        isCosmic ? styles.rowCosmic : styles.rowLinear,
+        isNightAwe
+          ? styles.rowNightAwe
+          : isCosmic
+            ? styles.rowCosmic
+            : styles.rowLinear,
         !isUnreviewed && styles.rowReviewed,
       ]}
     >
       <View style={styles.rowMeta}>
         <Text
-          style={[styles.sourceBadge, isCosmic && styles.sourceBadgeCosmic]}
+          style={[
+            styles.sourceBadge,
+            isNightAwe
+              ? styles.sourceBadgeNightAwe
+              : isCosmic && styles.sourceBadgeCosmic,
+          ]}
         >
           {SOURCE_LABELS[item.source] ?? item.source}
         </Text>
-        <Text style={[styles.timestamp, isCosmic && styles.timestampCosmic]}>
+        <Text
+          style={[
+            styles.timestamp,
+            isNightAwe
+              ? styles.timestampNightAwe
+              : isCosmic && styles.timestampCosmic,
+          ]}
+        >
           {formatRelativeTime(item.createdAt)}
         </Text>
         {item.status !== 'unreviewed' && (
           <Text
             style={[
               styles.statusBadge,
-              getStatusBadgeStyle(item.status, isCosmic),
+              getStatusBadgeStyle(item.status, variant, styles),
             ]}
           >
             {item.status.toUpperCase()}
@@ -132,7 +170,12 @@ export function CaptureRow({
       </View>
 
       <Text
-        style={[styles.rawText, isCosmic && styles.rawTextCosmic]}
+        style={[
+          styles.rawText,
+          isNightAwe
+            ? styles.rawTextNightAwe
+            : isCosmic && styles.rawTextCosmic,
+        ]}
         numberOfLines={3}
       >
         {item.transcript ?? item.raw}
@@ -147,7 +190,9 @@ export function CaptureRow({
               styles.actionBtn,
               isCosmic
                 ? styles.actionBtnTaskCosmic
-                : styles.actionBtnTaskLinear,
+                : isNightAwe
+                  ? styles.actionBtnTaskNightAwe
+                  : styles.actionBtnTaskLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Promote to task"
@@ -155,7 +200,9 @@ export function CaptureRow({
             <Text
               style={[
                 styles.actionBtnText,
-                isCosmic && styles.actionBtnTextCosmic,
+                isNightAwe
+                  ? styles.actionBtnTextNightAwe
+                  : isCosmic && styles.actionBtnTextCosmic,
               ]}
             >
               {'->'} Task
@@ -169,7 +216,9 @@ export function CaptureRow({
               styles.actionBtn,
               isCosmic
                 ? styles.actionBtnNoteCosmic
-                : styles.actionBtnNoteLinear,
+                : isNightAwe
+                  ? styles.actionBtnNoteNightAwe
+                  : styles.actionBtnNoteLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Promote to note"
@@ -177,7 +226,9 @@ export function CaptureRow({
             <Text
               style={[
                 styles.actionBtnText,
-                isCosmic && styles.actionBtnTextCosmic,
+                isNightAwe
+                  ? styles.actionBtnTextNightAwe
+                  : isCosmic && styles.actionBtnTextCosmic,
               ]}
             >
               {'->'} Note
@@ -191,7 +242,9 @@ export function CaptureRow({
               styles.actionBtn,
               isCosmic
                 ? styles.actionBtnDiscardCosmic
-                : styles.actionBtnDiscardLinear,
+                : isNightAwe
+                  ? styles.actionBtnDiscardNightAwe
+                  : styles.actionBtnDiscardLinear,
               pressed && styles.actionBtnPressed,
             ]}
             accessibilityLabel="Discard"
@@ -225,14 +278,24 @@ function formatRelativeTime(ts: number): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-function getStatusBadgeStyle(status: CaptureStatus, isCosmic: boolean) {
+function getStatusBadgeStyle(
+  status: CaptureStatus,
+  variant: ThemeVariant,
+  styles: ReturnType<typeof getInboxStyles>,
+) {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
   if (status === 'promoted') {
-    return isCosmic
-      ? styles.statusBadgePromotedCosmic
-      : styles.statusBadgePromotedLinear;
+    return isNightAwe
+      ? styles.statusBadgePromotedNightAwe
+      : isCosmic
+        ? styles.statusBadgePromotedCosmic
+        : styles.statusBadgePromotedLinear;
   }
 
-  return isCosmic
-    ? styles.statusBadgeDiscardedCosmic
-    : styles.statusBadgeDiscardedLinear;
+  return isNightAwe
+    ? styles.statusBadgeDiscardedNightAwe
+    : isCosmic
+      ? styles.statusBadgeDiscardedCosmic
+      : styles.statusBadgeDiscardedLinear;
 }

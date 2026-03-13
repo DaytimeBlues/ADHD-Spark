@@ -16,13 +16,14 @@ import CaptureService, {
 } from '../services/CaptureService';
 import { LoggerService } from '../services/LoggerService';
 import { CosmicBackground } from '../ui/cosmic';
+import { NightAweBackground } from '../ui/nightAwe';
 import {
   CaptureRow,
   CaptureSkeleton,
   FILTER_TABS,
   type FilterTab,
 } from './inbox/inboxParts';
-import { styles } from './inbox/inboxStyles';
+import { getInboxStyles } from './inbox/inboxStyles';
 
 // ============================================================================
 // SCREEN
@@ -30,7 +31,8 @@ import { styles } from './inbox/inboxStyles';
 
 const InboxScreen = (): JSX.Element => {
   const navigation = useNavigation();
-  const { isCosmic } = useTheme();
+  const { isCosmic, isNightAwe, variant, t } = useTheme();
+  const styles = getInboxStyles(variant, t);
 
   const [items, setItems] = useState<CaptureItem[]>([]);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
@@ -130,108 +132,164 @@ const InboxScreen = (): JSX.Element => {
         onPromoteTask={handlePromoteTask}
         onPromoteNote={handlePromoteNote}
         onDiscard={handleDiscard}
-        isCosmic={isCosmic}
+        variant={variant}
+        t={t}
       />
     ),
-    [handlePromoteTask, handlePromoteNote, handleDiscard, isCosmic],
+    [handlePromoteTask, handlePromoteNote, handleDiscard, t, variant],
   );
 
-  return (
-    <CosmicBackground variant="ridge" style={styles.container}>
-      <SafeAreaView
-        style={[styles.container, isCosmic ? styles.bgCosmic : styles.bgLinear]}
-        testID="inbox-screen"
-        accessibilityLabel="Inbox screen"
-        accessibilityRole="summary"
+  const content = (
+    <SafeAreaView
+      style={[
+        styles.container,
+        isNightAwe
+          ? styles.bgNightAwe
+          : isCosmic
+            ? styles.bgCosmic
+            : styles.bgLinear,
+      ]}
+      testID="inbox-screen"
+      accessibilityLabel="Inbox screen"
+      accessibilityRole="summary"
+    >
+      {/* Header */}
+      <View
+        style={[
+          styles.header,
+          isNightAwe ? styles.headerNightAwe : isCosmic && styles.headerCosmic,
+        ]}
       >
-        {/* Header */}
-        <View style={[styles.header, isCosmic && styles.headerCosmic]}>
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={styles.closeBtn}
+          testID="inbox-close"
+          accessibilityLabel="Close inbox"
+          accessibilityRole="button"
+        >
+          <Text
+            style={[
+              styles.closeBtnText,
+              isNightAwe
+                ? styles.closeBtnTextNightAwe
+                : isCosmic && styles.closeBtnTextCosmic,
+            ]}
+          >
+            X
+          </Text>
+        </Pressable>
+        <Text
+          style={[
+            styles.title,
+            isNightAwe ? styles.titleNightAwe : isCosmic && styles.titleCosmic,
+          ]}
+        >
+          CAPTURE INBOX
+        </Text>
+        <View style={styles.closeBtnPlaceholder} />
+      </View>
+
+      {/* Filter tabs */}
+      <View
+        style={[
+          styles.tabs,
+          isNightAwe ? styles.tabsNightAwe : isCosmic && styles.tabsCosmic,
+        ]}
+        testID="inbox-filter-tabs"
+      >
+        {FILTER_TABS.map((tab) => (
           <Pressable
-            onPress={() => navigation.goBack()}
-            style={styles.closeBtn}
-            testID="inbox-close"
-            accessibilityLabel="Close inbox"
-            accessibilityRole="button"
+            key={tab.key}
+            onPress={() => setActiveFilter(tab.key)}
+            style={[
+              styles.tab,
+              activeFilter === tab.key &&
+                (isNightAwe
+                  ? styles.tabActiveNightAwe
+                  : isCosmic
+                    ? styles.tabActiveCosmic
+                    : styles.tabActiveLinear),
+            ]}
+            testID={`inbox-tab-${tab.key}`}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: activeFilter === tab.key }}
           >
             <Text
               style={[
-                styles.closeBtnText,
-                isCosmic && styles.closeBtnTextCosmic,
-              ]}
-            >
-              X
-            </Text>
-          </Pressable>
-          <Text style={[styles.title, isCosmic && styles.titleCosmic]}>
-            CAPTURE INBOX
-          </Text>
-          <View style={styles.closeBtnPlaceholder} />
-        </View>
-
-        {/* Filter tabs */}
-        <View
-          style={[styles.tabs, isCosmic && styles.tabsCosmic]}
-          testID="inbox-filter-tabs"
-        >
-          {FILTER_TABS.map((tab) => (
-            <Pressable
-              key={tab.key}
-              onPress={() => setActiveFilter(tab.key)}
-              style={[
-                styles.tab,
+                styles.tabText,
+                isNightAwe
+                  ? styles.tabTextNightAwe
+                  : isCosmic && styles.tabTextCosmic,
                 activeFilter === tab.key &&
-                  (isCosmic ? styles.tabActiveCosmic : styles.tabActiveLinear),
-              ]}
-              testID={`inbox-tab-${tab.key}`}
-              accessibilityRole="tab"
-              accessibilityState={{ selected: activeFilter === tab.key }}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  isCosmic && styles.tabTextCosmic,
-                  activeFilter === tab.key &&
-                    (isCosmic
+                  (isNightAwe
+                    ? styles.tabTextActiveNightAwe
+                    : isCosmic
                       ? styles.tabTextActiveCosmic
                       : styles.tabTextActiveLinear),
-                ]}
-              >
-                {tab.label}
-              </Text>
-            </Pressable>
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      {/* Content */}
+      {isLoading ? (
+        <View style={styles.listContent}>
+          {[1, 2, 3].map((key) => (
+            <CaptureSkeleton key={key} variant={variant} t={t} />
           ))}
         </View>
-
-        {/* Content */}
-        {isLoading ? (
-          <View style={styles.listContent}>
-            {[1, 2, 3].map((key) => (
-              <CaptureSkeleton key={key} isCosmic={isCosmic} />
-            ))}
-          </View>
-        ) : items.length === 0 ? (
-          <View style={styles.centered} testID="inbox-empty">
-            <Text
-              style={[styles.emptyText, isCosmic && styles.emptyTextCosmic]}
-            >
-              {activeFilter === 'unreviewed'
-                ? 'Nothing to review.\nCapture something with the bubble!'
-                : 'No items here yet.'}
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            data={items}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            contentContainerStyle={styles.listContent}
-            testID="inbox-list"
-            showsVerticalScrollIndicator={false}
-          />
-        )}
-      </SafeAreaView>
-    </CosmicBackground>
+      ) : items.length === 0 ? (
+        <View style={styles.centered} testID="inbox-empty">
+          <Text
+            style={[
+              styles.emptyText,
+              isNightAwe
+                ? styles.emptyTextNightAwe
+                : isCosmic && styles.emptyTextCosmic,
+            ]}
+          >
+            {activeFilter === 'unreviewed'
+              ? 'Nothing to review.\nCapture something with the bubble!'
+              : 'No items here yet.'}
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContent}
+          testID="inbox-list"
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </SafeAreaView>
   );
+
+  if (isNightAwe) {
+    return (
+      <NightAweBackground
+        variant="focus"
+        activeFeature="brainDump"
+        motionMode="idle"
+      >
+        {content}
+      </NightAweBackground>
+    );
+  }
+
+  if (isCosmic) {
+    return (
+      <CosmicBackground variant="ridge" style={styles.container}>
+        {content}
+      </CosmicBackground>
+    );
+  }
+
+  return content;
 };
 
 export default InboxScreen;

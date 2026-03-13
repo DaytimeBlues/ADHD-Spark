@@ -4,7 +4,7 @@
 
 Android scope is currently `APK-ready`, not Play Store release automation.
 
-The current automated source of truth is [`.github/workflows/android.yml`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/.github/workflows/android.yml), which now defines Android readiness as:
+The current automated source of truth is [`.github/workflows/android.yml`](/C:/dev/ADHD-CADDI-V1/.github/workflows/android.yml), which now defines Android readiness as:
 
 - release APK assembles on `main`
 - CI smoke artifact is uploaded
@@ -28,9 +28,7 @@ The current automated source of truth is [`.github/workflows/android.yml`](/C:/U
   - `CI`: success
   - `CodeQL Security Analysis`: success
   - `Secret Scanning (Gitleaks)`: success
-  - `Deploy to GitHub Pages`: success
   - `Android CI`: still running at the time of this audit update, with `Android Build and E2E Tests` already green and `Android Release Build Check` still in progress
-- GitHub Pages deploy is no longer blocked by the feature branch living only off `main`
 
 ### `CI release smoke`
 
@@ -50,10 +48,10 @@ Meaning:
 
 ## Evidence
 
-- Release workflow: [android.yml](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/.github/workflows/android.yml)
-- Emulator verifier: [verify-android-release.sh](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/scripts/ci/verify-android-release.sh)
-- App-ready signal: [App.tsx](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/App.tsx)
-- Signed sideload helper: [build-sideload-release.js](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/scripts/android/build-sideload-release.js)
+- Release workflow: [android.yml](/C:/dev/ADHD-CADDI-V1/.github/workflows/android.yml)
+- Emulator verifier: [verify-android-release.sh](/C:/dev/ADHD-CADDI-V1/scripts/ci/verify-android-release.sh)
+- App-ready signal: [App.tsx](/C:/dev/ADHD-CADDI-V1/App.tsx)
+- Signed sideload helper: [build-sideload-release.js](/C:/dev/ADHD-CADDI-V1/scripts/android/build-sideload-release.js)
 
 ## Android Release Checklist
 

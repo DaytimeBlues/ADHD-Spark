@@ -1,11 +1,14 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { LinearButton } from '../../components/ui/LinearButton';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 import { Tokens } from '../../theme/tokens';
 import { RuneButton } from '../../ui/cosmic';
 
 interface PomodoroControlsProps {
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
   isRunning: boolean;
   isWorking: boolean;
   onStart: () => void;
@@ -14,14 +17,28 @@ interface PomodoroControlsProps {
 }
 
 export const PomodoroControls = ({
-  isCosmic,
+  variant,
+  t,
   isRunning,
   isWorking,
   onStart,
   onPause,
   onReset,
 }: PomodoroControlsProps) => {
-  const styles = getStyles(isCosmic);
+  const styles = getStyles(variant, t);
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+
+  const renderNightAweButton = (
+    label: string,
+    onPress: () => void,
+    buttonStyle: object,
+    textStyle?: object,
+  ) => (
+    <RuneButton onPress={onPress} style={[styles.controlBtn, buttonStyle]}>
+      <Text style={[styles.nightAweButtonText, textStyle]}>{label}</Text>
+    </RuneButton>
+  );
 
   return (
     <View style={styles.controls}>
@@ -36,6 +53,12 @@ export const PomodoroControls = ({
           >
             Start Timer
           </RuneButton>
+        ) : isNightAwe ? (
+          renderNightAweButton(
+            'Start Timer',
+            onStart,
+            styles.nightAwePrimaryButton,
+          )
         ) : (
           <LinearButton
             title="Start Timer"
@@ -54,6 +77,13 @@ export const PomodoroControls = ({
         >
           Pause
         </RuneButton>
+      ) : isNightAwe ? (
+        renderNightAweButton(
+          'Pause',
+          onPause,
+          styles.nightAweSecondaryButton,
+          styles.nightAweSecondaryButtonText,
+        )
       ) : (
         <LinearButton
           title="Pause"
@@ -64,7 +94,14 @@ export const PomodoroControls = ({
         />
       )}
 
-      {isCosmic ? (
+      {isNightAwe ? (
+        renderNightAweButton(
+          'Reset',
+          onReset,
+          styles.nightAweGhostButton,
+          styles.nightAweGhostButtonText,
+        )
+      ) : isCosmic ? (
         <RuneButton
           variant="ghost"
           size="md"
@@ -85,8 +122,12 @@ export const PomodoroControls = ({
   );
 };
 
-const getStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+const getStyles = (variant: ThemeVariant, t: ThemeTokens) => {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+  const textColors = t.colors.text ?? Tokens.colors.text;
+
+  return StyleSheet.create({
     controls: {
       width: '100%',
       maxWidth: 320,
@@ -95,6 +136,31 @@ const getStyles = (isCosmic: boolean) =>
     },
     controlBtn: {
       width: '100%',
-      borderRadius: isCosmic ? 8 : 0,
+      borderRadius: isCosmic || isNightAwe ? 8 : 0,
+    },
+    nightAwePrimaryButton: {
+      backgroundColor: t.colors.nightAwe?.feature?.pomodoro || '#E8B66B',
+      borderColor: t.colors.nightAwe?.feature?.pomodoro || '#E8B66B',
+    },
+    nightAweSecondaryButton: {
+      backgroundColor: 'rgba(175, 199, 255, 0.12)',
+      borderColor: 'rgba(175, 199, 255, 0.36)',
+    },
+    nightAweGhostButton: {
+      backgroundColor: 'transparent',
+      borderColor: 'rgba(175, 199, 255, 0.16)',
+    },
+    nightAweButtonText: {
+      fontFamily: Tokens.type.fontFamily.sans,
+      fontSize: 16,
+      fontWeight: '700',
+      color: Tokens.colors.neutral.darkest,
+    },
+    nightAweSecondaryButtonText: {
+      color: textColors.primary || '#F6F1E7',
+    },
+    nightAweGhostButtonText: {
+      color: textColors.secondary || '#C9D5E8',
     },
   });
+};

@@ -35,8 +35,8 @@ describe('screen style factories', () => {
   });
 
   it('returns native check-in styles for both themes', () => {
-    const cosmicStyles = getCheckInScreenStyles(true);
-    const linearStyles = getCheckInScreenStyles(false);
+    const cosmicStyles = getCheckInScreenStyles('cosmic');
+    const linearStyles = getCheckInScreenStyles('linear');
 
     expect(cosmicStyles.title.fontFamily).toBe('Space Grotesk');
     expect(linearStyles.title.fontFamily).toBe(Tokens.type.fontFamily.sans);
@@ -48,14 +48,25 @@ describe('screen style factories', () => {
     mockIsWeb = true;
     mockWebPlatform();
 
-    const cosmicStyles = getCheckInScreenStyles(true);
-    const linearStyles = getCheckInScreenStyles(false);
+    const cosmicStyles = getCheckInScreenStyles('cosmic');
+    const linearStyles = getCheckInScreenStyles('linear');
 
     expect(cosmicStyles.title.textShadow).toContain('rgba');
     expect(cosmicStyles.option.backdropFilter).toBe('blur(8px)');
     expect(linearStyles.option.transition).toBe('all 0.2s ease');
     expect(linearStyles.option.backdropFilter).toBeUndefined();
     expect(linearStyles.selected.boxShadow).toBe('0 0 0 0');
+  });
+
+  it('returns night awe check-in styles', () => {
+    const nightAweStyles = getCheckInScreenStyles(
+      'nightAwe',
+      NightAweTokens as unknown as ThemeTokens,
+    );
+
+    expect(nightAweStyles.selected.borderTopWidth).toBe(2);
+    expect(nightAweStyles.rationaleCard.backgroundColor).toBe('#16283F');
+    expect(nightAweStyles.label.color).toBe('#AFC7FF');
   });
 
   it('returns native fog cutter styles for both themes', () => {

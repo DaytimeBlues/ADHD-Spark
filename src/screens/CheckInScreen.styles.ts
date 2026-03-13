@@ -1,4 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
+import type { ThemeTokens } from '../theme/types';
+import type { ThemeVariant } from '../theme/themeVariant';
 import { CosmicTokens, Tokens } from '../theme/tokens';
 import { isWeb } from '../utils/PlatformUtils';
 
@@ -16,8 +18,15 @@ const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 };
 
-export const getCheckInScreenStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+export const getCheckInScreenStyles = (
+  variant: ThemeVariant,
+  t: ThemeTokens = Tokens,
+) => {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+  const textColors = t.colors.text ?? Tokens.colors.text;
+
+  return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'transparent',
@@ -33,18 +42,23 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
       padding: Tokens.spacing[6],
     },
     title: {
-      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
+      fontFamily:
+        isCosmic || isNightAwe ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type['4xl'],
       fontWeight: '800',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
-      ...(isCosmic && isWeb
+      ...((isCosmic || isNightAwe) && isWeb
         ? {
             textShadow: `0 0 20px ${hexToRgba(
-              CosmicTokens.colors.semantic.primary,
-              0.3,
+              isNightAwe ? '#AFC7FF' : CosmicTokens.colors.semantic.primary,
+              isNightAwe ? 0.18 : 0.3,
             )}`,
           }
         : {}),
@@ -52,21 +66,31 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.base,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.secondary,
       marginBottom: Tokens.spacing[4],
       textAlign: 'center',
       letterSpacing: 1,
     },
     rationaleCard: {
       marginBottom: Tokens.spacing[8],
+      backgroundColor: isNightAwe ? '#16283F' : undefined,
+      borderColor: isNightAwe ? 'rgba(175, 199, 255, 0.16)' : undefined,
+      borderWidth: isNightAwe ? 1 : 0,
+      borderRadius: isNightAwe ? 16 : undefined,
     },
     rationaleTitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       fontWeight: '700',
-      color: isCosmic
-        ? CosmicTokens.colors.semantic.success
-        : Tokens.colors.brand[500],
+      color: isNightAwe
+        ? t.colors.nightAwe?.feature?.checkIn || '#E8B66B'
+        : isCosmic
+          ? CosmicTokens.colors.semantic.success
+          : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: Tokens.spacing[2],
       textTransform: 'uppercase',
@@ -74,7 +98,11 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     rationaleText: {
       fontFamily: Tokens.type.fontFamily.body,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.secondary,
       lineHeight: 22,
       flexWrap: 'wrap',
     },
@@ -83,7 +111,11 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     },
     sectionTitle: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       fontSize: Tokens.type.sm,
       fontWeight: '600',
       marginBottom: Tokens.spacing[4],
@@ -98,16 +130,20 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
       borderRadius: isCosmic ? 20 : Tokens.radii.none,
       backgroundColor: isCosmic
         ? 'rgba(14, 20, 40, 0.6)'
-        : Tokens.colors.neutral.darker,
+        : isNightAwe
+          ? '#16283F'
+          : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic
         ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.borderSubtle,
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.16)'
+          : Tokens.colors.neutral.borderSubtle,
       ...Platform.select({
         web: {
           transition: 'all 0.2s ease',
           cursor: 'pointer',
-          ...(isCosmic
+          ...(isCosmic || isNightAwe
             ? {
                 backdropFilter: 'blur(8px)',
               }
@@ -118,7 +154,9 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     optionHovered: {
       borderColor: isCosmic
         ? hexToRgba(CosmicTokens.colors.semantic.primary, 0.5)
-        : Tokens.colors.text.tertiary,
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.32)'
+          : Tokens.colors.text.tertiary,
       transform: [{ translateY: -2 }],
       ...Platform.select({
         web: {
@@ -128,17 +166,29 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     },
     optionPressed: {
       transform: [{ scale: Tokens.motion.scales.press }],
-      backgroundColor: isCosmic ? '#111A33' : Tokens.colors.neutral.dark,
+      backgroundColor: isNightAwe
+        ? '#1D3150'
+        : isCosmic
+          ? '#111A33'
+          : Tokens.colors.neutral.dark,
     },
     selected: {
       borderColor: isCosmic
         ? CosmicTokens.colors.semantic.primary
-        : Tokens.colors.brand[500],
-      borderTopColor: isCosmic ? CosmicTokens.colors.brand[400] : undefined,
-      borderTopWidth: isCosmic ? 2 : 1,
+        : isNightAwe
+          ? '#AFC7FF'
+          : Tokens.colors.brand[500],
+      borderTopColor: isCosmic
+        ? CosmicTokens.colors.brand[400]
+        : isNightAwe
+          ? '#E8B66B'
+          : undefined,
+      borderTopWidth: isCosmic || isNightAwe ? 2 : 1,
       backgroundColor: isCosmic
         ? hexToRgba(CosmicTokens.colors.semantic.primary, 0.18)
-        : Tokens.colors.brand[900],
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.14)'
+          : Tokens.colors.brand[900],
       transform: [{ translateY: -4 }, { scale: 1.01 }],
       ...Tokens.elevation.none,
       ...Platform.select({
@@ -152,9 +202,14 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
                 0.25,
               )}`,
             }
-          : {
-              boxShadow: '0 0 0 0',
-            },
+          : isNightAwe
+            ? {
+                boxShadow:
+                  '0 0 0 2px rgba(175, 199, 255, 0.22), 0 0 18px rgba(175, 199, 255, 0.12)',
+              }
+            : {
+                boxShadow: '0 0 0 0',
+              },
       }),
     },
     optionContent: {
@@ -164,38 +219,54 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     quote: {
       fontFamily: isCosmic
         ? '"Space Grotesk", sans-serif'
-        : Tokens.type.fontFamily.sans,
+        : isNightAwe
+          ? 'Space Grotesk'
+          : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
       fontStyle: 'italic',
-      color: isCosmic
-        ? 'rgba(238, 242, 255, 0.78)'
-        : Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? 'rgba(238, 242, 255, 0.78)'
+          : Tokens.colors.text.secondary,
       lineHeight: 22,
       marginTop: Tokens.spacing[2],
       marginBottom: Tokens.spacing[1],
     },
     selectedQuote: {
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
     },
     author: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.xs,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.tertiary,
       alignSelf: 'flex-end',
     },
     label: {
       fontFamily: Tokens.type.fontFamily.mono,
-      color: isCosmic
-        ? CosmicTokens.colors.semantic.primary
-        : Tokens.colors.brand[500],
+      color: isNightAwe
+        ? '#AFC7FF'
+        : isCosmic
+          ? CosmicTokens.colors.semantic.primary
+          : Tokens.colors.brand[500],
       fontSize: Tokens.type.xs,
       fontWeight: '700',
       letterSpacing: 1,
     },
     selectedLabel: {
-      color: isCosmic
-        ? CosmicTokens.colors.semantic.success
-        : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? '#F6F1E7'
+        : isCosmic
+          ? CosmicTokens.colors.semantic.success
+          : Tokens.colors.text.primary,
     },
     recommendation: {
       marginTop: Tokens.spacing[4],
@@ -204,20 +275,32 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.lg,
       fontWeight: '700',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[1],
     },
     recommendationSubtitle: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       fontWeight: '600',
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.tertiary,
       letterSpacing: 1,
       marginBottom: Tokens.spacing[3],
     },
     recommendationText: {
       fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.primary,
       fontSize: Tokens.type.base,
       lineHeight: Tokens.type.base * 1.5,
       marginBottom: Tokens.spacing[2],
@@ -229,21 +312,27 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
     insightBox: {
       backgroundColor: isCosmic
         ? hexToRgba(CosmicTokens.colors.semantic.primary, 0.1)
-        : Tokens.colors.neutral.darkest,
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.08)'
+          : Tokens.colors.neutral.darkest,
       borderLeftWidth: 2,
       borderLeftColor: isCosmic
         ? CosmicTokens.colors.semantic.primary
-        : Tokens.colors.brand[500],
+        : isNightAwe
+          ? '#AFC7FF'
+          : Tokens.colors.brand[500],
       padding: Tokens.spacing[3],
       marginVertical: Tokens.spacing[4],
-      borderRadius: isCosmic ? 4 : 0,
+      borderRadius: isCosmic || isNightAwe ? 4 : 0,
     },
     insightLabel: {
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xxs,
-      color: isCosmic
-        ? CosmicTokens.colors.semantic.primary
-        : Tokens.colors.brand[500],
+      color: isNightAwe
+        ? '#AFC7FF'
+        : isCosmic
+          ? CosmicTokens.colors.semantic.primary
+          : Tokens.colors.brand[500],
       marginBottom: 4,
       letterSpacing: 1,
     },
@@ -251,7 +340,12 @@ export const getCheckInScreenStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.sm,
       fontStyle: 'italic',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       lineHeight: 20,
     },
   });
+};

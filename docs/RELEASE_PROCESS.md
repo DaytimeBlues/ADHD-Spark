@@ -9,13 +9,11 @@
 - [ ] Lint clean (`npm run lint`)
 - [ ] TypeScript compilation successful (`npx tsc --noEmit`)
 - [ ] Unit tests passing (`npm test -- --runInBand --watch=false`)
-- [ ] Web production build succeeds (`npm run build:web`)
-- [ ] Required web release E2E slices pass (`npm run e2e:smoke`, `npm run e2e:core`)
 - [ ] No console errors in development build
 
 **Functional Validation:**
 
-- [ ] Core user flows tested manually (web + Android if applicable)
+- [ ] Core user flows tested manually on Android
 - [ ] No regressions in existing features
 - [ ] New features documented in `CHANGELOG.md`
 
@@ -26,64 +24,7 @@
 
 ---
 
-## Web Release (Primary)
-
-### GitHub Pages Deployment
-
-**Current source of truth: push to `main`**
-
-1. **Prepare and validate the release candidate on a branch first:**
-
-   ```bash
-   git checkout -b fix/my-change
-   npm run lint
-   npx tsc --noEmit
-   npm test -- --runInBand --watch=false
-   npm run build:web
-   npm run e2e:smoke
-   npm run e2e:core
-   git push origin fix/my-change
-   ```
-
-   `npm run e2e` remains available for broader manual or deeper browser coverage, but it is not the core web release gate.
-
-2. **Merge to main branch:**
-
-   ```bash
-   git checkout main
-   git merge feature-branch
-   git push origin main
-   ```
-
-3. **Wait for the Pages workflow to finish:**
-
-   - Workflow: `.github/workflows/pages.yml`
-   - URL: `https://daytimeblues.github.io/ADHD-CADDI/`
-   - Expected jobs: quality gates, web E2E smoke, build, deploy, post-deploy validation
-
-4. **Confirm the deployed site matches the latest `main` release commit.**
-
-**Validation:**
-
-- Open deployed URL in browser
-- Test core features (Ignite, Fog Cutter, etc.)
-- Test at least one direct route reload, such as `https://daytimeblues.github.io/ADHD-CADDI/tasks`
-- Check browser console for errors
-- Confirm the deployed site still matches the current web-first, online-first stance and does not rely on service-worker-backed offline support
-
-**Rollback:**
-
-```bash
-# Revert the bad change on main, then let Pages redeploy
-git checkout main
-git log  # Find the bad commit or last good point
-git revert <commit-hash>
-git push origin main
-```
-
----
-
-## Android Native Release (Secondary)
+## Android Native Release (Primary)
 
 ### Android Release Status
 
@@ -242,20 +183,6 @@ Immediately  (Fix in next release)
 
 ## Monitoring Post-Release
 
-### Web Metrics (via Analytics)
-
-If Google Analytics or similar integrated:
-
-- Page load time
-- JavaScript errors
-- User flow drop-offs
-
-**Manual checks (first 24 hours):**
-
-- Browser console errors (Chrome DevTools)
-- Network tab for failed requests
-- Lighthouse audit score
-
 ### Android Metrics
 
 **Google Play Console:**
@@ -300,7 +227,7 @@ If Google Analytics or similar integrated:
     git push origin main
    ```
 
-5. **Deploy immediately** (web via Actions, Android via manual build)
+5. **Deploy immediately** via the Android release path
 
 6. **Backport to feature branches if needed**
 
@@ -425,11 +352,11 @@ git checkout -b restore/<date> <last-good-commit-hash>
 
 ## Automation Opportunities
 
-**Current State:** Workflow-driven Pages deploys from `main`; Android artifacts are built in GitHub Actions and locally via Gradle/package scripts
+**Current State:** Android artifacts are built in GitHub Actions and locally via Gradle/package scripts
 
 **Future Enhancements:**
 
-- **CI/CD for Android:** GitHub Actions workflow for APK/AAB builds
+- **CI/CD for Android:** expand the existing GitHub Actions Android build/test workflow into fuller signed-release automation
 - **Automated version bumping:** Script to sync versions across files
 - **Release notes generation:** Auto-generate from commit messages
 - **Smoke test suite:** Run critical path tests before deploy

@@ -1,13 +1,13 @@
 # ADHD-CADDI Test Matrix
 
-> Current stance: the browser/web workflow is the primary verified path, and the shipped web app is web-first and online-first. Offline/PWA support is intentionally disabled; treat service-worker-driven offline behavior as out of scope unless a dedicated pass re-enables it.
+> Current stance: Android is the primary verified release path. Web remains useful for local development, but browser deployment is not the production release surface.
 
 ## Page/Button Inventory
 
 ### Navigation Structure (from AppNavigator.tsx)
 
 - **Tab Navigator**: HOME, FOCUS, TASKS, CALENDAR, CHAT
-- **Stack Screens**: MAIN, FOG_CUTTER, POMODORO, ANCHOR, INBOX
+- **Stack Screens**: MAIN, CHECK_IN, CBT_GUIDE, DIAGNOSTICS, BRAIN_DUMP, FOG_CUTTER, POMODORO, ANCHOR, INBOX
 
 ### All Screens & Components
 
@@ -35,7 +35,7 @@
 #### TasksScreen (TASKS tab)
 
 - [ ] TASKS header visible
-- [ ] NEBULA QUEUE subtitle visible
+- [ ] Queue subtitle visible for the active theme
 - [ ] Task list displays
 - [ ] Add new task
 - [ ] Toggle task completion
@@ -221,20 +221,11 @@
 - Overlay
 - OAuth native flow
 
-## Browser Coverage
+## Web Development Coverage
 
 ### Desktop
 
-- [ ] Chromium (primary)
-- [ ] Firefox
-- [ ] WebKit (Safari)
-
-### Mobile Viewports
-
-- [ ] iPhone SE (375x667)
-- [ ] iPhone 14 (390x844)
-- [ ] Pixel 7 (412x915)
-- [ ] iPad Mini (768x1024)
+- [ ] Chromium (local dev sanity)
 
 ## Error Scenarios
 

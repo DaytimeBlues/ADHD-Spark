@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { BreathingPattern, PatternConfig } from '../../hooks/useAnchorSession';
 import { Tokens } from '../../theme/tokens';
 import { useTheme } from '../../theme/useTheme';
+import type { ThemeTokens } from '../../theme/types';
 import { GlowCard } from '../../ui/cosmic';
 
 interface AnchorPatternSelectorProps {
@@ -39,8 +40,8 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
   patterns,
   onSelectPattern,
 }) => {
-  const { isCosmic } = useTheme();
-  const styles = getStyles(isCosmic);
+  const { isCosmic, isNightAwe, t } = useTheme();
+  const styles = getStyles(isCosmic, isNightAwe, t);
 
   return (
     <View style={styles.patternsContainer}>
@@ -51,7 +52,7 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
           accessibilityLabel={`${patterns[pattern].name} breathing pattern`}
           accessibilityHint={`Double tap to select ${patterns[pattern].name} breathing exercise`}
           accessibilityRole="button"
-          glow="soft"
+          glow={isNightAwe ? 'none' : 'soft'}
           tone="base"
           padding="lg"
           onPress={() => onSelectPattern(pattern)}
@@ -80,27 +81,37 @@ export const AnchorPatternSelector: React.FC<AnchorPatternSelectorProps> = ({
   );
 };
 
-const getStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+const getStyles = (isCosmic: boolean, isNightAwe: boolean, t: ThemeTokens) => {
+  const type = t.type ?? Tokens.type;
+  const fontFamily = type.fontFamily ?? Tokens.type.fontFamily;
+  const textColors = t.colors.text ?? Tokens.colors.text;
+
+  return StyleSheet.create({
     patternsContainer: {
       width: '100%',
-      gap: Tokens.spacing[4],
+      gap: t.spacing[4],
       maxWidth: 500,
     },
     patternButton: {
       flexDirection: 'row',
       alignItems: 'center',
+      backgroundColor: isNightAwe ? '#16283F' : undefined,
+      borderColor: isNightAwe ? 'rgba(175, 199, 255, 0.16)' : undefined,
+      borderWidth: isNightAwe ? 1 : 0,
+      borderRadius: isNightAwe ? 16 : undefined,
     },
     patternIcon: {
-      width: Tokens.spacing[12],
-      height: Tokens.spacing[12],
-      borderRadius: isCosmic ? Tokens.radii.md : 0,
+      width: t.spacing[12],
+      height: t.spacing[12],
+      borderRadius: isCosmic || isNightAwe ? t.radii.md : 0,
       backgroundColor: isCosmic
         ? 'rgba(11, 16, 34, 0.5)'
-        : Tokens.colors.neutral.dark,
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.12)'
+          : t.colors.neutral.dark,
       alignItems: 'center',
       justifyContent: 'center',
-      marginRight: Tokens.spacing[4],
+      marginRight: t.spacing[4],
     },
     patternEmoji: {
       fontSize: Tokens.type['2xl'],
@@ -109,16 +120,25 @@ const getStyles = (isCosmic: boolean) =>
       flex: 1,
     },
     patternButtonText: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
-      fontSize: Tokens.type.lg,
+      fontFamily: fontFamily.sans,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : textColors.primary,
+      fontSize: type.lg ?? Tokens.type.lg,
       fontWeight: '600',
       marginBottom: 4,
       letterSpacing: 1,
     },
     patternDetails: {
-      fontFamily: Tokens.type.fontFamily.sans,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
-      fontSize: Tokens.type.sm,
+      fontFamily: fontFamily.sans,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : textColors.tertiary,
+      fontSize: type.sm ?? Tokens.type.sm,
     },
   });
+};

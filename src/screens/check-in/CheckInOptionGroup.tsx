@@ -1,10 +1,13 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 import type { CheckInOption } from './checkInData';
 import { getCheckInScreenStyles } from '../CheckInScreen.styles';
 
 interface Props {
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
   title: string;
   options: CheckInOption[];
   selectedValue: number | null;
@@ -13,14 +16,15 @@ interface Props {
 }
 
 export const CheckInOptionGroup = ({
-  isCosmic,
+  variant,
+  t,
   title,
   options,
   selectedValue,
   testIdPrefix,
   onSelect,
 }: Props) => {
-  const styles = getCheckInScreenStyles(isCosmic);
+  const styles = getCheckInScreenStyles(variant, t);
 
   return (
     <View style={styles.section}>

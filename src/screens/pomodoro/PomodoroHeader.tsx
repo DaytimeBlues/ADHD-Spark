@@ -1,18 +1,22 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
+import type { ThemeTokens } from '../../theme/types';
+import type { ThemeVariant } from '../../theme/themeVariant';
 import { Tokens } from '../../theme/tokens';
 import { isWeb } from '../../utils/PlatformUtils';
 
 interface PomodoroHeaderProps {
-  isCosmic: boolean;
+  variant: ThemeVariant;
+  t: ThemeTokens;
   isWorking: boolean;
 }
 
 export const PomodoroHeader = ({
-  isCosmic,
+  variant,
+  t,
   isWorking,
 }: PomodoroHeaderProps) => {
-  const styles = getStyles(isCosmic);
+  const styles = getStyles(variant, t);
 
   return (
     <>
@@ -36,30 +40,48 @@ export const PomodoroHeader = ({
   );
 };
 
-const getStyles = (isCosmic: boolean) =>
-  StyleSheet.create({
+const getStyles = (variant: ThemeVariant, t: ThemeTokens) => {
+  const isCosmic = variant === 'cosmic';
+  const isNightAwe = variant === 'nightAwe';
+  const textColors = t.colors.text ?? Tokens.colors.text;
+  const accent = isNightAwe
+    ? t.colors.nightAwe?.feature?.pomodoro || '#E8B66B'
+    : '#8B5CF6';
+
+  return StyleSheet.create({
     header: {
       alignItems: 'center',
       marginBottom: Tokens.spacing[10],
     },
     title: {
-      fontFamily: isCosmic ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
+      fontFamily:
+        isCosmic || isNightAwe ? 'Space Grotesk' : Tokens.type.fontFamily.sans,
       fontSize: Tokens.type['4xl'],
       fontWeight: '800',
-      color: isCosmic ? '#EEF2FF' : Tokens.colors.text.primary,
+      color: isNightAwe
+        ? textColors.primary || '#F6F1E7'
+        : isCosmic
+          ? '#EEF2FF'
+          : Tokens.colors.text.primary,
       marginBottom: Tokens.spacing[2],
       letterSpacing: 2,
       textAlign: 'center',
-      ...(isCosmic && isWeb
+      ...((isCosmic || isNightAwe) && isWeb
         ? {
-            textShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
+            textShadow: isNightAwe
+              ? '0 0 18px rgba(175, 199, 255, 0.18)'
+              : '0 0 20px rgba(139, 92, 246, 0.3)',
           }
         : {}),
     },
     subtitle: {
       fontFamily: Tokens.type.fontFamily.sans,
       fontSize: Tokens.type.base,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.tertiary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.tertiary,
       textAlign: 'center',
       letterSpacing: 1,
       ...Platform.select({
@@ -69,19 +91,24 @@ const getStyles = (isCosmic: boolean) =>
     rationaleCard: {
       backgroundColor: isCosmic
         ? 'rgba(17, 26, 51, 0.6)'
-        : Tokens.colors.neutral.darker,
+        : isNightAwe
+          ? '#16283F'
+          : Tokens.colors.neutral.darker,
       borderWidth: 1,
       borderColor: isCosmic
         ? 'rgba(185, 194, 217, 0.12)'
-        : Tokens.colors.neutral.borderSubtle,
+        : isNightAwe
+          ? 'rgba(175, 199, 255, 0.16)'
+          : Tokens.colors.neutral.borderSubtle,
       padding: Tokens.spacing[4],
       marginBottom: Tokens.spacing[6],
-      borderRadius: isCosmic ? 12 : 0,
-      ...(isCosmic && isWeb
+      borderRadius: isCosmic || isNightAwe ? 12 : 0,
+      ...((isCosmic || isNightAwe) && isWeb
         ? {
             backdropFilter: 'blur(12px)',
-            boxShadow:
-              '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
+            boxShadow: isNightAwe
+              ? '0 0 0 1px rgba(175, 199, 255, 0.08), 0 8px 20px rgba(8, 17, 30, 0.28)'
+              : '0 0 0 1px rgba(139, 92, 246, 0.08), 0 8px 20px rgba(7, 7, 18, 0.4)',
           }
         : {}),
     },
@@ -89,7 +116,11 @@ const getStyles = (isCosmic: boolean) =>
       fontFamily: Tokens.type.fontFamily.mono,
       fontSize: Tokens.type.xs,
       fontWeight: '700',
-      color: isCosmic ? '#8B5CF6' : Tokens.colors.brand[500],
+      color: isNightAwe
+        ? accent
+        : isCosmic
+          ? '#8B5CF6'
+          : Tokens.colors.brand[500],
       letterSpacing: 1,
       marginBottom: Tokens.spacing[2],
       textTransform: 'uppercase',
@@ -97,8 +128,13 @@ const getStyles = (isCosmic: boolean) =>
     rationaleText: {
       fontFamily: Tokens.type.fontFamily.body,
       fontSize: Tokens.type.sm,
-      color: isCosmic ? '#B9C2D9' : Tokens.colors.text.secondary,
+      color: isNightAwe
+        ? textColors.secondary || '#C9D5E8'
+        : isCosmic
+          ? '#B9C2D9'
+          : Tokens.colors.text.secondary,
       lineHeight: 22,
       flexWrap: 'wrap',
     },
   });
+};

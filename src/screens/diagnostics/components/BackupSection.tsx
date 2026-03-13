@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { LoggerService } from '../../../services/LoggerService';
+import { useTheme } from '../../../theme/useTheme';
 import { Tokens } from '../../../theme/tokens';
 import type { BackupImportMode } from '../types';
 
@@ -33,6 +34,13 @@ export const BackupSection = ({
   onExport,
   onImport,
 }: BackupSectionProps) => {
+  const { isNightAwe, t } = useTheme();
+  const styles = getStyles(
+    isNightAwe,
+    t.colors.text?.primary,
+    t.colors.text?.secondary,
+  );
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>DATA BACKUP</Text>
@@ -149,7 +157,11 @@ export const BackupSection = ({
         onChangeText={setBackupJson}
         multiline
         placeholder="Paste backup JSON here"
-        placeholderTextColor={Tokens.colors.text.placeholder}
+        placeholderTextColor={
+          isNightAwe
+            ? t.colors.text?.secondary || Tokens.colors.text.placeholder
+            : Tokens.colors.text.placeholder
+        }
         textAlignVertical="top"
         accessibilityLabel="Backup JSON input"
       />
@@ -161,100 +173,123 @@ export const BackupSection = ({
   );
 };
 
-const styles = StyleSheet.create({
-  section: {
-    marginBottom: Tokens.spacing[6],
-  },
-  sectionTitle: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    color: Tokens.colors.text.secondary,
-    letterSpacing: 1,
-    marginBottom: Tokens.spacing[2],
-  },
-  instructionText: {
-    fontFamily: Tokens.type.fontFamily.sans,
-    fontSize: 13,
-    color: Tokens.colors.text.secondary,
-    marginBottom: Tokens.spacing[2],
-    lineHeight: 20,
-  },
-  backupMetaText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.tertiary,
-    marginBottom: Tokens.spacing[2],
-    letterSpacing: 0.5,
-  },
-  modeSelectorContainer: {
-    flexDirection: 'row',
-    marginBottom: Tokens.spacing[2],
-    borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    backgroundColor: Tokens.colors.neutral.darker,
-  },
-  modeButton: {
-    flex: 1,
-    minHeight: Tokens.layout.minTapTarget,
-    paddingVertical: Tokens.spacing[1],
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  modeButtonActive: {
-    backgroundColor: Tokens.colors.neutral.dark,
-  },
-  modeButtonText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: 10,
-    color: Tokens.colors.text.secondary,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  modeButtonTextActive: {
-    color: Tokens.colors.text.primary,
-  },
-  backupActionsRow: {
-    flexDirection: 'row',
-    gap: Tokens.spacing[2],
-    marginBottom: Tokens.spacing[2],
-  },
-  backupButton: {
-    flex: 1,
-    minHeight: Tokens.layout.minTapTarget,
-    borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    backgroundColor: Tokens.colors.neutral.dark,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Tokens.spacing[1],
-    paddingHorizontal: Tokens.spacing[2],
-  },
-  backupButtonDisabled: {
-    opacity: 0.5,
-  },
-  backupButtonText: {
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.primary,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  backupInput: {
-    minHeight: Tokens.layout.minTapTargetComfortable * 4,
-    borderWidth: 1,
-    borderColor: Tokens.colors.neutral.border,
-    backgroundColor: Tokens.colors.neutral.darker,
-    color: Tokens.colors.text.primary,
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    padding: Tokens.spacing[2],
-  },
-  backupStatusText: {
-    marginTop: Tokens.spacing[2],
-    fontFamily: Tokens.type.fontFamily.mono,
-    fontSize: Tokens.type.xs,
-    color: Tokens.colors.text.secondary,
-  },
-});
+const getStyles = (
+  isNightAwe: boolean,
+  primaryText: string | undefined = Tokens.colors.text.primary,
+  secondaryText: string | undefined = Tokens.colors.text.secondary,
+) =>
+  StyleSheet.create({
+    section: {
+      marginBottom: Tokens.spacing[6],
+    },
+    sectionTitle: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: 10,
+      fontWeight: '700',
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.secondary,
+      letterSpacing: 1,
+      marginBottom: Tokens.spacing[2],
+    },
+    instructionText: {
+      fontFamily: Tokens.type.fontFamily.sans,
+      fontSize: 13,
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.secondary,
+      marginBottom: Tokens.spacing[2],
+      lineHeight: 20,
+    },
+    backupMetaText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.tertiary,
+      marginBottom: Tokens.spacing[2],
+      letterSpacing: 0.5,
+    },
+    modeSelectorContainer: {
+      flexDirection: 'row',
+      marginBottom: Tokens.spacing[2],
+      borderWidth: 1,
+      borderColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.16)'
+        : Tokens.colors.neutral.border,
+      backgroundColor: isNightAwe ? '#16283F' : Tokens.colors.neutral.darker,
+    },
+    modeButton: {
+      flex: 1,
+      minHeight: Tokens.layout.minTapTarget,
+      paddingVertical: Tokens.spacing[1],
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+    },
+    modeButtonActive: {
+      backgroundColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.12)'
+        : Tokens.colors.neutral.dark,
+    },
+    modeButtonText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: 10,
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.secondary,
+      fontWeight: '700',
+      letterSpacing: 1,
+    },
+    modeButtonTextActive: {
+      color: isNightAwe ? primaryText || '#F6F1E7' : Tokens.colors.text.primary,
+    },
+    backupActionsRow: {
+      flexDirection: 'row',
+      gap: Tokens.spacing[2],
+      marginBottom: Tokens.spacing[2],
+    },
+    backupButton: {
+      flex: 1,
+      minHeight: Tokens.layout.minTapTarget,
+      borderWidth: 1,
+      borderColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.16)'
+        : Tokens.colors.neutral.border,
+      backgroundColor: isNightAwe ? '#16283F' : Tokens.colors.neutral.dark,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: Tokens.spacing[1],
+      paddingHorizontal: Tokens.spacing[2],
+    },
+    backupButtonDisabled: {
+      opacity: 0.5,
+    },
+    backupButtonText: {
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: isNightAwe ? primaryText || '#F6F1E7' : Tokens.colors.text.primary,
+      fontWeight: '700',
+      letterSpacing: 1,
+    },
+    backupInput: {
+      minHeight: Tokens.layout.minTapTargetComfortable * 4,
+      borderWidth: 1,
+      borderColor: isNightAwe
+        ? 'rgba(175, 199, 255, 0.16)'
+        : Tokens.colors.neutral.border,
+      backgroundColor: isNightAwe ? '#16283F' : Tokens.colors.neutral.darker,
+      color: isNightAwe ? primaryText || '#F6F1E7' : Tokens.colors.text.primary,
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      padding: Tokens.spacing[2],
+    },
+    backupStatusText: {
+      marginTop: Tokens.spacing[2],
+      fontFamily: Tokens.type.fontFamily.mono,
+      fontSize: Tokens.type.xs,
+      color: isNightAwe
+        ? secondaryText || '#C9D5E8'
+        : Tokens.colors.text.secondary,
+    },
+  });

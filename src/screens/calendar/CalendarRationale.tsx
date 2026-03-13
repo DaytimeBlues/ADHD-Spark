@@ -9,8 +9,8 @@ import { useTheme } from '../../theme/useTheme';
 import { calendarStyles } from './calendarStyles';
 
 export const CalendarRationale: React.FC = () => {
-  const { isCosmic } = useTheme();
-  const styles = calendarStyles(isCosmic);
+  const { variant, t } = useTheme();
+  const styles = calendarStyles(variant, t);
 
   return (
     <GlowCard glow="none" style={styles.rationaleCard}>

@@ -1,10 +1,29 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import PomodoroScreen from '../src/screens/PomodoroScreen';
+import { NightAweTokens } from '../src/theme/tokens';
 
 const mockStart = jest.fn();
 const mockPause = jest.fn();
 const mockReset = jest.fn();
+const mockUseTheme = jest.fn(() => ({
+  variant: 'cosmic',
+  isCosmic: true,
+  isNightAwe: false,
+  isLinear: false,
+  isLoaded: true,
+  metadata: {
+    label: 'Cosmic',
+    description: 'Mystical deep space with ethereal glows',
+    preview: {
+      background: '#070712',
+      accent: '#8B5CF6',
+      text: '#EEF2FF',
+    },
+  },
+  setVariant: jest.fn(),
+  t: NightAweTokens,
+}));
 
 const mockStoreState = {
   activeMode: 'pomodoro',
@@ -45,6 +64,11 @@ jest.mock('../src/services/SoundService', () => ({
   },
 }));
 
+jest.mock('../src/theme/useTheme', () => ({
+  __esModule: true,
+  useTheme: () => mockUseTheme(),
+}));
+
 jest.mock('../src/ui/cosmic', () => {
   const { Text, View, Pressable } = require('react-native');
   return {
@@ -67,9 +91,36 @@ jest.mock('../src/ui/cosmic', () => {
   };
 });
 
+jest.mock('../src/ui/nightAwe', () => {
+  const { View } = require('react-native');
+  return {
+    NightAweBackground: ({ children }: { children: React.ReactNode }) => (
+      <View testID="night-awe-background">{children}</View>
+    ),
+  };
+});
+
 describe('PomodoroScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseTheme.mockReturnValue({
+      variant: 'cosmic',
+      isCosmic: true,
+      isNightAwe: false,
+      isLinear: false,
+      isLoaded: true,
+      metadata: {
+        label: 'Cosmic',
+        description: 'Mystical deep space with ethereal glows',
+        preview: {
+          background: '#070712',
+          accent: '#8B5CF6',
+          text: '#EEF2FF',
+        },
+      },
+      setVariant: jest.fn(),
+      t: NightAweTokens,
+    });
   });
 
   it('renders pomodoro timer and starts when button pressed', () => {
@@ -80,5 +131,31 @@ describe('PomodoroScreen', () => {
 
     fireEvent.press(screen.getByText('Start Timer'));
     expect(mockStart).toHaveBeenCalled();
+  });
+
+  it('renders night awe shell when that theme is active', () => {
+    mockUseTheme.mockReturnValue({
+      variant: 'nightAwe',
+      isCosmic: false,
+      isNightAwe: true,
+      isLinear: false,
+      isLoaded: true,
+      metadata: {
+        label: 'Night Awe',
+        description: 'Grounded horizon tones with a calm, natural sky',
+        preview: {
+          background: '#08111E',
+          accent: '#AFC7FF',
+          text: '#F6F1E7',
+        },
+      },
+      setVariant: jest.fn(),
+      t: NightAweTokens,
+    });
+
+    render(<PomodoroScreen />);
+
+    expect(screen.getByTestId('night-awe-background')).toBeTruthy();
+    expect(screen.getByText('Start Timer')).toBeTruthy();
   });
 });

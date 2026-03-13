@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from '../theme/useTheme';
 import { CosmicBackground, GlowCard } from '../ui/cosmic';
+import { NightAweBackground } from '../ui/nightAwe';
 import { calendarStyles } from './calendar/calendarStyles';
 import { useCalendarMonth } from './calendar/useCalendarMonth';
 import { useCalendarConnection } from './calendar/useCalendarConnection';
@@ -15,8 +16,8 @@ import { CalendarRationale } from './calendar/CalendarRationale';
 import { GoogleCalendarConnection } from './calendar/GoogleCalendarConnection';
 
 const CalendarScreen = () => {
-  const { isCosmic } = useTheme();
-  const styles = calendarStyles(isCosmic);
+  const { isCosmic, isNightAwe, variant, t } = useTheme();
+  const styles = calendarStyles(variant, t);
 
   const {
     currentMonthName,
@@ -32,15 +33,17 @@ const CalendarScreen = () => {
   const { statusText, buttonText, isButtonDisabled, handleConnect } =
     useCalendarConnection();
 
-  return (
+  const content = (
     <SafeAreaView
       style={styles.container}
       accessibilityLabel="Calendar screen"
       accessibilityRole="summary"
     >
-      <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>
-        {null}
-      </CosmicBackground>
+      {isCosmic && (
+        <CosmicBackground variant="moon" dimmer style={StyleSheet.absoluteFill}>
+          {null}
+        </CosmicBackground>
+      )}
       <View style={styles.webContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -85,6 +88,20 @@ const CalendarScreen = () => {
       </View>
     </SafeAreaView>
   );
+
+  if (isNightAwe) {
+    return (
+      <NightAweBackground
+        variant="focus"
+        activeFeature="calendar"
+        motionMode="idle"
+      >
+        {content}
+      </NightAweBackground>
+    );
+  }
+
+  return content;
 };
 
 export default CalendarScreen;

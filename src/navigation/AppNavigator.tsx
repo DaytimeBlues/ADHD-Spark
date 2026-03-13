@@ -196,29 +196,41 @@ const crossFadeOptions = {
 };
 
 const TabNavigator = () => {
-  const { isCosmic } = useTheme();
-  const webSceneContainerStyle = isCosmic
-    ? styles.webSceneContainerCosmic
-    : styles.webSceneContainerLinear;
+  const { isCosmic, isNightAwe } = useTheme();
+  const webSceneContainerStyle = isNightAwe
+    ? styles.webSceneContainerNightAwe
+    : isCosmic
+      ? styles.webSceneContainerCosmic
+      : styles.webSceneContainerLinear;
 
   return (
     <Tab.Navigator
       tabBar={isWeb ? renderWebTabBar : undefined}
       sceneContainerStyle={isWeb ? webSceneContainerStyle : undefined}
       screenOptions={{
-        tabBarActiveTintColor: isCosmic
-          ? '#8B5CF6'
-          : Tokens.colors.indigo.primary,
-        tabBarInactiveTintColor: isCosmic
-          ? '#B9C2D9'
-          : Tokens.colors.text.tertiary,
+        tabBarActiveTintColor: isNightAwe
+          ? '#AFC7FF'
+          : isCosmic
+            ? '#8B5CF6'
+            : Tokens.colors.indigo.primary,
+        tabBarInactiveTintColor: isNightAwe
+          ? '#C9D5E8'
+          : isCosmic
+            ? '#B9C2D9'
+            : Tokens.colors.text.tertiary,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: isCosmic ? '#070712' : Tokens.colors.neutral.darker,
+          backgroundColor: isNightAwe
+            ? '#08111E'
+            : isCosmic
+              ? '#070712'
+              : Tokens.colors.neutral.darker,
           borderTopWidth: 1,
-          borderTopColor: isCosmic
-            ? 'rgba(42, 53, 82, 0.3)'
-            : Tokens.colors.neutral.borderSubtle,
+          borderTopColor: isNightAwe
+            ? 'rgba(175, 199, 255, 0.16)'
+            : isCosmic
+              ? 'rgba(42, 53, 82, 0.3)'
+              : Tokens.colors.neutral.borderSubtle,
           height: 60,
           paddingBottom: 8,
           elevation: 0,
@@ -303,6 +315,11 @@ const styles = StyleSheet.create({
   webSceneContainerCosmic: {
     paddingTop: 64,
     backgroundColor: '#070712',
+    height: '100%',
+  },
+  webSceneContainerNightAwe: {
+    paddingTop: 64,
+    backgroundColor: '#08111E',
     height: '100%',
   },
   webSceneContainerLinear: {

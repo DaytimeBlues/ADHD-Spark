@@ -10,9 +10,9 @@
 | ----------------------- | ----------------------------------------------- |
 | **Repo Name**           | `ADHD-CADDI`                                    |
 | **Goal**                | Speed of delivery (not learning a new stack)    |
-| **Primary Platforms**   | Web-first, online-first (Android Chrome priority) |
-| **Secondary Platforms** | Native Android bridge (optional, feature-gated) |
-| **Deployment**          | GitHub Pages web app                            |
+| **Primary Platforms**   | Native Android + shared React Native surfaces |
+| **Secondary Platforms** | Local web development surface |
+| **Deployment**          | Android APK / sideload-oriented release path |
 
 Current web product stance: offline/PWA support is intentionally disabled until a dedicated verification pass re-enables it. Do not treat service-worker-backed offline behavior as part of the current release surface.
 
@@ -26,9 +26,9 @@ Android release scope is `APK-ready`.
 
 Current Android release source of truth:
 
-- [`.github/workflows/android.yml`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/.github/workflows/android.yml)
-- [`docs/RELEASE_PROCESS.md`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/docs/RELEASE_PROCESS.md)
-- [`docs/ANDROID_AUDIT_2026-03-09.md`](/C:/Users/Steve/.config/superpowers/worktrees/ADHD-CADDI-V1/android-apk-release/docs/ANDROID_AUDIT_2026-03-09.md)
+- [`.github/workflows/android.yml`](/C:/dev/ADHD-CADDI-V1/.github/workflows/android.yml)
+- [`docs/RELEASE_PROCESS.md`](/C:/dev/ADHD-CADDI-V1/docs/RELEASE_PROCESS.md)
+- [`docs/ANDROID_AUDIT_2026-03-09.md`](/C:/dev/ADHD-CADDI-V1/docs/ANDROID_AUDIT_2026-03-09.md)
 
 ### Tech Stack
 
@@ -41,7 +41,7 @@ Current Android release source of truth:
 | **Persistence**   | AsyncStorage on web/tests, `@op-engineering/op-sqlite` on native Android |
 | **Bundler (Web)** | Webpack                                                                  |
 | **Testing**       | Jest + RTL (unit), Playwright (web E2E), Detox (native E2E)              |
-| **CI/CD**         | GitHub Actions -> GitHub Pages                                           |
+| **CI/CD**         | GitHub Actions Android build/test workflows                              |
 
 > Native Android testing and Android Studio workflows are only required when changing native modules (`android/`, overlay bridge/services, or native permissions/build logic).
 
@@ -50,7 +50,7 @@ Current Android release source of truth:
 - Public client config lives in `.env` / CI env vars via `EXPO_PUBLIC_*`
 - Real secrets must stay server-side (backend env vars, CI secrets, keystore storage)
 - `android/app/google-services.json` is local/CI provisioned and must not be committed
-- Direct client AI keys are development-only and should not be used for production Pages/mobile builds
+- Direct client AI keys are development-only and should not be used for production Android/mobile builds
 
 **Required Google API Scopes**:
 
@@ -197,7 +197,7 @@ Since we're using `AsyncStorage`, this is a key-value store with JSON serializat
 ```typescript
 const STORAGE_KEYS = {
   // User preferences
-  theme: 'theme', // 'light' | 'dark'
+  theme: 'theme', // 'linear' | 'cosmic' | 'nightAwe'
 
   // Feature data
   tasks: 'tasks', // FogCutterTask[]
@@ -282,15 +282,22 @@ interface PomodoroState extends TimerState {
 ### Page Hierarchy
 
 ```
-/ (HomeScreen)
-├── /ignite (IgniteScreen)
-├── /fog-cutter (FogCutterScreen)
-├── /pomodoro (PomodoroScreen)
-├── /anchor (AnchorScreen)
-├── /check-in (CheckInScreen)
-├── /brain-dump (BrainDumpScreen)
-├── /calendar (CalendarScreen)
-└── /crisis (CrisisScreen)
+Main tab routes:
+- HomeScreen
+- IgniteScreen
+- TasksScreen
+- CalendarScreen
+- ChatScreen
+
+Stack and modal routes:
+- CheckInScreen
+- CBTGuideScreen
+- DiagnosticsScreen
+- BrainDumpScreen
+- FogCutterScreen
+- PomodoroScreen
+- AnchorScreen
+- InboxScreen
 ```
 
 ### Reusable Components
@@ -326,7 +333,7 @@ Rules:
 # Development
 npm run web          # Webpack dev server
 
-# Production Build
+# Web build (local/browser verification only)
 npm run build:web    # Outputs to /dist
 
 # Testing
@@ -334,31 +341,26 @@ npm test             # Jest unit tests
 npm run e2e          # Playwright E2E (web)
 ```
 
-### GitHub Pages Deployment
+### Android Release Validation
 
 1. **Source of truth**: `main`
-2. **Workflow**: `.github/workflows/pages.yml`
-3. **Build**: `npm run build:web` -> outputs to `dist/`
-4. **Publish**: GitHub Actions uploads `dist/` plus `dist/404.html` to GitHub Pages
-5. **URL**: `https://daytimeblues.github.io/ADHD-CADDI/`
+2. **Workflow**: `.github/workflows/android.yml`
+3. **Build**: Android debug and release artifacts are assembled in CI
+4. **Verification**: emulator launch smoke and Android test reports remain the release gate
 
 ### Deployment Notes
 
-- GitHub Pages is configured for `build_type: workflow`
-- The Pages workflow runs lint, typecheck, unit tests, smoke E2E, then deploys
-- Failure logs are uploaded as artifacts to make failed runs diagnosable
-- Android validation runs separately in `.github/workflows/android.yml`
+- Android validation runs in `.github/workflows/android.yml`
 - Android `CI release smoke` is the automated contract for APK-ready status
 - Android `sideload release` is the keystore-signed manual packaging path for testers
 
 ### Verification Checklist
 
-- [ ] `npm run build:web` completes without errors
-- [ ] `dist/index.html` loads locally
-- [ ] `dist/404.html` exists for SPA refresh/deep-link fallback
-- [ ] Responsive: Works on mobile viewport (375px) and desktop (1440px)
-- [ ] All screens navigate correctly
-- [ ] AsyncStorage persists data across refreshes (via localStorage polyfill on web)
+- [ ] `npm run build:android:preview` or CI Android build succeeds
+- [ ] Android install/launch succeeds on a target device or emulator
+- [ ] App reaches `APP_READY` in Android smoke validation
+- [ ] All release-critical screens navigate correctly
+- [ ] Local persistence survives app restart on Android
 
 ---
 
@@ -375,7 +377,7 @@ npm run e2e          # Playwright E2E (web)
 | Offline-first sync          | CRDTs for eventual consistency     |
 | Habit streaks visualization | Calendar heatmap                   |
 | Export data to JSON         | User data portability              |
-| Dark/Light theme toggle     | Already have `theme` storage key   |
+| Additional theme experiments | Current app already ships Linear, Cosmic, and Night Awe |
 | Notification reminders      | "Time for a Check-In" push         |
 
 ---

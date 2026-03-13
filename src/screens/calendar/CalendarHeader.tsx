@@ -22,8 +22,8 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   onPrevMonth,
   onNextMonth,
 }) => {
-  const { isCosmic } = useTheme();
-  const styles = calendarStyles(isCosmic);
+  const { variant, t } = useTheme();
+  const styles = calendarStyles(variant, t);
 
   return (
     <>
